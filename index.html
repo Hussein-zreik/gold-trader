@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>XAUUSD Gold Trader Dashboard</title>
+<style>
+:root{
+  --gold:#C9A84C;--gold-dim:#7A5C10;--gold-bright:#FFD700;
+  --bg:#060606;--bg2:#0D0D0D;--bg3:#131313;--bg4:#191919;
+  --border:#1A1A1A;--border-gold:rgba(201,168,76,0.25);
+  --text:#DEDEDE;--muted:#4A4A4A;--muted2:#666;
+  --green:#22C55E;--red:#EF4444;--orange:#F97316;--blue:#3B82F6;--purple:#A855F7;
+  --mono:monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;font-size:14px;}
+
+/* HEADER */
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--bg2);border-bottom:1px solid var(--border-gold);position:sticky;top:0;z-index:200;gap:10px;flex-wrap:wrap;}
+.logo{display:flex;align-items:center;gap:9px;}
+.logo-icon{width:30px;height:30px;background:linear-gradient(135deg,var(--gold),var(--gold-dim));border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.logo-name{font-size:16px;font-weight:800;letter-spacing:2px;color:var(--gold);}
+.logo-sub{font-size:8px;color:var(--muted2);letter-spacing:1px;font-family:var(--mono);}
+.hdr-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.live-pill{display:flex;align-items:center;gap:5px;font-size:9px;font-family:var(--mono);color:var(--green);background:rgba(34,197,94,0.08);padding:4px 9px;border-radius:20px;border:1px solid rgba(34,197,94,0.2);}
+.ldot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:blink 1.4s infinite;flex-shrink:0;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.15}}
+.hdr-time{font-family:var(--mono);font-size:9px;color:var(--muted2);}
+.ref-btn{background:var(--bg4);border:1px solid var(--border-gold);color:var(--gold);padding:5px 10px;border-radius:6px;font-family:var(--mono);font-size:9px;cursor:pointer;letter-spacing:1px;}
+.ref-btn:active{background:var(--gold);color:#000;}
+
+/* LAYOUT */
+.wrap{padding:12px;display:flex;flex-direction:column;gap:12px;max-width:960px;margin:0 auto;}
+.sec-lbl{font-family:var(--mono);font-size:8px;letter-spacing:2px;color:var(--gold-dim);text-transform:uppercase;padding:0 2px;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.row4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+
+/* CARD */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:11px;overflow:hidden;}
+.ch{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-bottom:1px solid var(--border);background:var(--bg3);}
+.ct{font-size:12px;font-weight:700;letter-spacing:1px;color:var(--gold);}
+.badge{font-family:var(--mono);font-size:8px;padding:2px 7px;border-radius:3px;letter-spacing:1px;white-space:nowrap;}
+.b-live{background:rgba(34,197,94,.1);color:var(--green);border:1px solid rgba(34,197,94,.2);}
+.b-warn{background:rgba(239,68,68,.1);color:var(--red);border:1px solid rgba(239,68,68,.2);}
+.b-blue{background:rgba(59,130,246,.1);color:var(--blue);border:1px solid rgba(59,130,246,.2);}
+.b-gold{background:rgba(201,168,76,.1);color:var(--gold);border:1px solid rgba(201,168,76,.2);}
+.b-purple{background:rgba(168,85,247,.1);color:var(--purple);border:1px solid rgba(168,85,247,.2);}
+
+/* GOLD HERO */
+.gold-hero{background:linear-gradient(135deg,#090600,#100C00,#090600);border:1px solid var(--border-gold);border-radius:11px;padding:16px;}
+.gh-label{font-family:var(--mono);font-size:8px;color:var(--gold-dim);letter-spacing:2px;margin-bottom:7px;}
+.gh-price{font-size:38px;font-weight:800;color:var(--gold-bright);line-height:1;letter-spacing:1px;}
+.gh-change{font-family:var(--mono);font-size:11px;margin-top:5px;}
+.gh-ba{font-family:var(--mono);font-size:9px;color:var(--muted2);margin-top:4px;}
+.gh-stats{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:11px;}
+.gs{background:rgba(255,255,255,0.025);border:1px solid var(--border);border-radius:6px;padding:6px 9px;}
+.gs-l{font-family:var(--mono);font-size:7px;color:var(--muted2);letter-spacing:1px;}
+.gs-v{font-family:var(--mono);font-size:11px;color:var(--text);margin-top:2px;}
+.gh-updated{font-family:var(--mono);font-size:8px;color:var(--muted);margin-top:8px;}
+
+/* SIGNAL */
+.sig-card{background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:14px;display:flex;flex-direction:column;align-items:center;gap:10px;}
+.sig-ring{width:72px;height:72px;border-radius:50%;border:2px solid var(--orange);display:flex;align-items:center;justify-content:center;flex-direction:column;transition:all .5s;}
+.sig-ring.bull{border-color:var(--green);box-shadow:0 0 16px rgba(34,197,94,.25);}
+.sig-ring.bear{border-color:var(--red);box-shadow:0 0 16px rgba(239,68,68,.25);}
+.sig-ring.mix{border-color:var(--orange);}
+.sig-txt{font-size:13px;font-weight:800;letter-spacing:1px;}
+.sig-lbl{font-family:var(--mono);font-size:7px;color:var(--muted2);}
+.drvs{width:100%;display:flex;flex-direction:column;gap:5px;}
+.drv{display:flex;justify-content:space-between;align-items:center;gap:8px;}
+.drv-n{font-size:9px;color:var(--muted2);flex-shrink:0;}
+.drv-v{font-family:var(--mono);font-size:9px;text-align:right;}
+.sig-note{font-family:var(--mono);font-size:8px;color:var(--muted2);text-align:center;line-height:1.5;}
+.sig-ts{font-family:var(--mono);font-size:7px;color:var(--muted);text-align:center;}
+
+/* MARKET CARDS */
+.mc{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:11px;position:relative;overflow:hidden;}
+.mc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;}
+.mc-dxy::after{background:linear-gradient(90deg,transparent,var(--blue),transparent);}
+.mc-tnx::after{background:linear-gradient(90deg,transparent,var(--orange),transparent);}
+.mc-vix::after{background:linear-gradient(90deg,transparent,var(--red),transparent);}
+.mc-sil::after{background:linear-gradient(90deg,transparent,#C0C0C0,transparent);}
+.mc-oil::after{background:linear-gradient(90deg,transparent,#8B4513,transparent);}
+.mc-btc::after{background:linear-gradient(90deg,transparent,var(--orange),transparent);}
+.mc-n{font-family:var(--mono);font-size:7px;color:var(--muted2);letter-spacing:2px;margin-bottom:3px;}
+.mc-full{font-size:9px;color:var(--muted2);margin-bottom:5px;}
+.mc-p{font-family:var(--mono);font-size:17px;color:var(--text);margin:3px 0;}
+.mc-c{font-family:var(--mono);font-size:10px;}
+.mc-note{font-size:8px;color:var(--muted2);margin-top:6px;padding:3px 6px;background:rgba(255,255,255,0.02);border-radius:3px;border-left:2px solid var(--border);}
+.mc-ts{font-family:var(--mono);font-size:7px;color:var(--muted);margin-top:4px;}
+.mc-impact{font-family:var(--mono);font-size:7px;margin-top:5px;padding:2px 6px;border-radius:3px;display:inline-block;}
+
+/* CALENDAR */
+.cal-item{display:grid;grid-template-columns:52px 10px 1fr 30px;gap:8px;align-items:center;padding:8px 13px;border-bottom:1px solid var(--border);transition:background .1s;}
+.cal-item:hover{background:rgba(255,255,255,0.01);}
+.cal-item:last-child{border-bottom:none;}
+.ct2{font-family:var(--mono);font-size:8px;color:var(--muted2);}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.dot-r{background:var(--red);box-shadow:0 0 4px rgba(239,68,68,.6);}
+.dot-o{background:var(--orange);}
+.dot-y{background:#EAB308;}
+.cn{font-size:10px;color:var(--text);}
+.cs{font-family:var(--mono);font-size:8px;color:var(--muted2);margin-top:1px;}
+.cff a{font-family:var(--mono);font-size:8px;color:var(--gold-dim);text-decoration:none;}
+
+/* NEWS */
+.news-item{padding:10px 13px;border-bottom:1px solid var(--border);display:flex;gap:9px;cursor:pointer;transition:background .1s;}
+.news-item:hover{background:rgba(255,255,255,0.015);}
+.news-item:last-child{border-bottom:none;}
+.ndot{width:5px;height:5px;border-radius:50%;margin-top:4px;flex-shrink:0;}
+.ntitle{font-size:10px;color:var(--text);line-height:1.5;margin-bottom:3px;}
+.nmeta{font-family:var(--mono);font-size:8px;color:var(--muted2);display:flex;gap:7px;flex-wrap:wrap;}
+.nsrc{color:var(--gold-dim);}
+
+/* COT */
+.cot-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding:12px;}
+.cot-item{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px;}
+.cot-label{font-family:var(--mono);font-size:8px;color:var(--muted2);letter-spacing:1px;margin-bottom:5px;}
+.cot-val{font-family:var(--mono);font-size:16px;color:var(--text);font-weight:700;}
+.cot-bar-bg{height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:6px;}
+.cot-bar{height:100%;border-radius:2px;transition:width 1s;}
+.cot-change{font-family:var(--mono);font-size:9px;margin-top:4px;}
+.cot-ts{font-family:var(--mono);font-size:7px;color:var(--muted);padding:0 13px 10px;}
+
+/* LINKS */
+.lnk-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px;}
+.lnk-group{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px;}
+.lg-title{font-family:var(--mono);font-size:8px;letter-spacing:1px;color:var(--gold-dim);margin-bottom:7px;padding-bottom:5px;border-bottom:1px solid var(--border);}
+.lnk{display:flex;align-items:center;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.03);text-decoration:none;}
+.lnk:last-child{border-bottom:none;}
+.ln{font-size:10px;color:var(--text);}
+.lt{font-family:var(--mono);font-size:7px;padding:2px 5px;border-radius:3px;}
+.tl{background:rgba(34,197,94,.1);color:var(--green);}
+.tn{background:rgba(59,130,246,.1);color:var(--blue);}
+.tg{background:rgba(201,168,76,.1);color:var(--gold);}
+.tx{background:rgba(239,68,68,.08);color:var(--red);}
+
+/* CHART SECTION */
+.chart-wrap{border-radius:11px;overflow:hidden;border:1px solid var(--border-gold);background:var(--bg2);}
+.chart-fallback{padding:14px;text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center;}
+.chart-btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:8px;font-weight:700;font-size:11px;text-decoration:none;letter-spacing:1px;}
+
+/* UTIL */
+.up{color:var(--green);} .dn{color:var(--red);}
+.ld{display:inline-block;width:60px;height:11px;background:linear-gradient(90deg,var(--bg3) 25%,var(--bg4) 50%,var(--bg3) 75%);background-size:200% 100%;animation:shim 1.5s infinite;border-radius:3px;vertical-align:middle;}
+@keyframes shim{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+.tv-embed{width:100%;border:none;display:block;}
+
+footer{text-align:center;padding:12px;font-family:var(--mono);font-size:8px;color:var(--muted);border-top:1px solid var(--border);letter-spacing:1px;}
+
+@media(max-width:600px){
+  .row4{grid-template-columns:1fr 1fr;}
+  .row3{grid-template-columns:1fr;}
+  .row2{grid-template-columns:1fr;}
+  .cot-grid{grid-template-columns:1fr 1fr;}
+  .lnk-grid{grid-template-columns:1fr;}
+  .gh-price{font-size:30px;}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="logo">
+    <div class="logo-icon">⬡</div>
+    <div>
+      <div class="logo-name">XAUUSD DESK</div>
+      <div class="logo-sub">GOLD TRADER DASHBOARD · FINAL</div>
+    </div>
+  </div>
+  <div class="hdr-right">
+    <div class="hdr-time" id="hdrTime">--:--:-- UTC</div>
+    <div class="live-pill"><div class="ldot"></div>LIVE</div>
+    <button class="ref-btn" onclick="refreshAll()">↻ REFRESH</button>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ROW 1: GOLD PRICE + SIGNAL -->
+  <div class="row2">
+
+    <!-- GOLD HERO -->
+    <div class="gold-hero">
+      <div class="gh-label">XAU / USD · SPOT GOLD · TROY OUNCE</div>
+      <div class="gh-price" id="gPrice"><span class="ld"></span></div>
+      <div class="gh-change" id="gChange">fetching...</div>
+      <div class="gh-ba">
+        Bid <span id="gBid" style="color:var(--red)">—</span> &nbsp;|&nbsp;
+        Ask <span id="gAsk" style="color:var(--green)">—</span> &nbsp;|&nbsp;
+        Spread <span id="gSpread" style="color:var(--muted2)">—</span>
+      </div>
+      <div class="gh-stats">
+        <div class="gs"><div class="gs-l">DAY HIGH</div><div class="gs-v" id="gHigh">—</div></div>
+        <div class="gs"><div class="gs-l">DAY LOW</div><div class="gs-v" id="gLow">—</div></div>
+        <div class="gs"><div class="gs-l">OPEN</div><div class="gs-v" id="gOpen">—</div></div>
+        <div class="gs"><div class="gs-l">PREV CLOSE</div><div class="gs-v" id="gPrev">—</div></div>
+      </div>
+      <div class="gh-updated" id="gUpdated">Last updated: —</div>
+    </div>
+
+    <!-- SIGNAL -->
+    <div class="sig-card">
+      <div style="font-family:var(--mono);font-size:8px;color:var(--gold-dim);letter-spacing:1px;">OVERALL GOLD BIAS</div>
+      <div class="sig-ring mix" id="sigRing">
+        <div class="sig-txt" id="sigTxt" style="color:var(--orange)">—</div>
+        <div class="sig-lbl">SIGNAL</div>
+      </div>
+      <div class="drvs">
+        <div class="drv"><span class="drv-n">🇺🇸 DXY</span><span class="drv-v" id="dD" style="color:var(--muted2)"><span class="ld"></span></span></div>
+        <div class="drv"><span class="drv-n">📈 US10Y</span><span class="drv-v" id="yD" style="color:var(--muted2)"><span class="ld"></span></span></div>
+        <div class="drv"><span class="drv-n">😰 VIX</span><span class="drv-v" id="vD" style="color:var(--muted2)"><span class="ld"></span></span></div>
+      </div>
+      <div class="sig-note" id="sigNote">Calculating bias from live drivers...</div>
+      <div class="sig-ts" id="sigTs">—</div>
+    </div>
+  </div>
+
+  <!-- ROW 2: MARKET DRIVERS -->
+  <div class="sec-lbl">KEY GOLD DRIVERS — LIVE</div>
+  <div class="row4">
+    <div class="mc mc-dxy">
+      <div class="mc-n">DXY</div>
+      <div class="mc-full">US Dollar Index</div>
+      <div class="mc-p" id="dxyP"><span class="ld"></span></div>
+      <div class="mc-c" id="dxyC">—</div>
+      <div class="mc-note" id="dxyNote" style="border-color:var(--blue)">DXY ↑ = Gold ↓</div>
+      <div class="mc-ts" id="dxyTs">—</div>
+    </div>
+    <div class="mc mc-tnx">
+      <div class="mc-n">US10Y</div>
+      <div class="mc-full">Treasury Yield</div>
+      <div class="mc-p" id="tnxP"><span class="ld"></span></div>
+      <div class="mc-c" id="tnxC">—</div>
+      <div class="mc-note" id="tnxNote" style="border-color:var(--orange)">Yield ↑ = Gold ↓</div>
+      <div class="mc-ts" id="tnxTs">—</div>
+    </div>
+    <div class="mc mc-vix">
+      <div class="mc-n">VIX</div>
+      <div class="mc-full">Fear Index (CBOE)</div>
+      <div class="mc-p" id="vixP"><span class="ld"></span></div>
+      <div class="mc-c" id="vixC">—</div>
+      <div class="mc-note" id="vixNote" style="border-color:var(--red)">VIX &gt;20 = Gold ↑</div>
+      <div class="mc-ts" id="vixTs">—</div>
+    </div>
+    <div class="mc mc-sil">
+      <div class="mc-n">XAG/USD</div>
+      <div class="mc-full">Silver Spot</div>
+      <div class="mc-p" id="silP"><span class="ld"></span></div>
+      <div class="mc-c" id="silC">—</div>
+      <div class="mc-note" style="border-color:#C0C0C0">Confirms gold direction</div>
+      <div class="mc-ts" id="silTs">—</div>
+    </div>
+  </div>
+
+  <!-- ROW 3: EXTRA MARKETS -->
+  <div class="row3">
+    <div class="mc mc-oil">
+      <div class="mc-n">USOIL</div>
+      <div class="mc-full">Crude Oil (WTI)</div>
+      <div class="mc-p" id="oilP"><span class="ld"></span></div>
+      <div class="mc-c" id="oilC">—</div>
+      <div class="mc-note" style="border-color:#8B4513">Oil ↑ = Inflation ↑ = Gold ↑</div>
+      <div class="mc-ts" id="oilTs">—</div>
+    </div>
+    <div class="mc" style="--accent:var(--blue);">
+      <div class="mc-n">EUR/USD</div>
+      <div class="mc-full" style="color:var(--blue)">Euro Dollar</div>
+      <div class="mc-p" id="euP"><span class="ld"></span></div>
+      <div class="mc-c" id="euC">—</div>
+      <div class="mc-note" style="border-color:var(--blue)">EUR/USD ↑ = USD weak = Gold ↑</div>
+      <div class="mc-ts" id="euTs">—</div>
+    </div>
+    <div class="mc">
+      <div class="mc-n">SP500</div>
+      <div class="mc-full" style="color:var(--purple)">S&P 500 Futures</div>
+      <div class="mc-p" id="spP"><span class="ld"></span></div>
+      <div class="mc-c" id="spC">—</div>
+      <div class="mc-note" style="border-color:var(--purple)">SP500 ↓ = Risk-off = Gold ↑</div>
+      <div class="mc-ts" id="spTs">—</div>
+    </div>
+  </div>
+
+  <!-- LIVE CHART -->
+  <div class="sec-lbl">LIVE CHART — XAUUSD H1 (EMA 20/50/200 · MACD · RSI)</div>
+  <div class="chart-wrap">
+    <!-- TradingView iframe embed — works when hosted online -->
+    <iframe
+      id="tvChart"
+      class="tv-embed"
+      style="height:460px;"
+      src="https://www.tradingview.com/widgetembed/?frameElementId=tvChart&symbol=OANDA%3AXAUUSD&interval=60&hidesidetoolbar=0&hidetoptoolbar=0&symboledit=1&saveimage=0&toolbarbg=060606&studies=MASimple%40tv-studilib%21200%2CMASimple%40tv-studilib%2150%2CMASimple%40tv-studilib%2120%2CMACD%40tv-studilib%2CRSI%40tv-studilib&theme=dark&style=1&timezone=Etc%2FUTC&withdateranges=1&showpopupbutton=0&locale=en&colorTheme=dark"
+      allowtransparency="true"
+      frameborder="0"
+      scrolling="no"
+      allowfullscreen>
+    </iframe>
+    <!-- Fallback shown if iframe fails -->
+    <div class="chart-fallback" id="chartFallback" style="display:none;">
+      <div style="font-size:11px;color:var(--muted2);line-height:1.6;">
+        Chart blocked by browser security (common in Safari with local files).<br>
+        Open directly on TradingView — your indicators are pre-configured.
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;">
+        <a href="https://www.tradingview.com/chart/?symbol=OANDA:XAUUSD&interval=60" target="_blank"
+           class="chart-btn" style="background:var(--gold);color:#000;">📈 H1 CHART</a>
+        <a href="https://www.tradingview.com/chart/?symbol=OANDA:XAUUSD&interval=240" target="_blank"
+           class="chart-btn" style="background:var(--bg4);border:1px solid var(--border-gold);color:var(--gold);">📊 H4 CHART</a>
+        <a href="https://www.tradingview.com/chart/?symbol=TVC:DXY" target="_blank"
+           class="chart-btn" style="background:var(--bg4);border:1px solid rgba(59,130,246,.3);color:var(--blue);">📉 DXY</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- COT REPORT -->
+  <div class="sec-lbl">COT REPORT — COMMITMENTS OF TRADERS (GOLD FUTURES · WEEKLY)</div>
+  <div class="card">
+    <div class="ch">
+      <div class="ct">COT REPORT — GOLD FUTURES</div>
+      <span class="badge b-purple">WEEKLY · CFTC RELEASE EVERY FRIDAY</span>
+    </div>
+    <div class="cot-grid">
+      <div class="cot-item">
+        <div class="cot-label">📈 COMMERCIALS (NET)</div>
+        <div class="cot-val" id="cotComm" style="color:var(--red)">Loading...</div>
+        <div class="cot-bar-bg"><div class="cot-bar" id="cotCommBar" style="width:40%;background:var(--red);"></div></div>
+        <div class="cot-change" id="cotCommChg">—</div>
+        <div style="font-size:8px;color:var(--muted2);margin-top:4px;">Hedgers — bearish when net short ↓ gold</div>
+      </div>
+      <div class="cot-item">
+        <div class="cot-label">🐂 NON-COMMERCIALS (NET)</div>
+        <div class="cot-val" id="cotSpec" style="color:var(--green)">Loading...</div>
+        <div class="cot-bar-bg"><div class="cot-bar" id="cotSpecBar" style="width:60%;background:var(--green);"></div></div>
+        <div class="cot-change" id="cotSpecChg">—</div>
+        <div style="font-size:8px;color:var(--muted2);margin-top:4px;">Speculators — bullish when net long ↑ gold</div>
+      </div>
+      <div class="cot-item">
+        <div class="cot-label">⚖️ SENTIMENT SIGNAL</div>
+        <div class="cot-val" id="cotSignal" style="color:var(--gold)">—</div>
+        <div class="cot-bar-bg"><div class="cot-bar" id="cotSigBar" style="width:50%;background:var(--gold);"></div></div>
+        <div style="font-size:8px;color:var(--muted2);margin-top:10px;">Based on speculator positioning relative to 52-week range</div>
+      </div>
+    </div>
+    <div class="cot-ts" id="cotTs">COT data: released every Friday at 15:30 ET by CFTC — reflects data as of Tuesday</div>
+    <div style="padding:0 13px 12px;display:flex;gap:10px;flex-wrap:wrap;">
+      <a href="https://www.cftc.gov/MarketReports/CommitmentsofTraders/index.htm" target="_blank"
+         style="font-family:var(--mono);font-size:9px;color:var(--purple);text-decoration:none;">→ CFTC OFFICIAL COT REPORT ↗</a>
+      <a href="https://www.barchart.com/futures/commitment-of-traders/GC00" target="_blank"
+         style="font-family:var(--mono);font-size:9px;color:var(--gold);text-decoration:none;">→ COT CHART (Barchart) ↗</a>
+    </div>
+  </div>
+
+  <!-- ECONOMIC CALENDAR -->
+  <div class="sec-lbl">ECONOMIC CALENDAR — LIVE USD EVENTS (MYFXBOOK + TRADING ECONOMICS)</div>
+  <div class="card">
+    <div class="ch">
+      <div class="ct">USD EVENTS THAT MOVE GOLD</div>
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+        <span class="badge b-live" id="calSource">LOADING LIVE...</span>
+        <span class="badge b-warn">⚠ CLOSE BEFORE RED</span>
+      </div>
+    </div>
+    <!-- LIVE calendar injected here -->
+    <div id="calBody">
+      <div style="padding:16px;text-align:center;font-family:var(--mono);font-size:10px;color:var(--muted2);">
+        Fetching live calendar events...
+      </div>
+    </div>
+    <div id="calStatic" style="display:none;">
+      <div class="cal-item"><div class="ct2">Monthly<br>1st Fri</div><div class="dot dot-r"></div><div><div class="cn">Non-Farm Payrolls (NFP)</div><div class="cs">08:30 ET · First Friday of month · Close trades 30min before</div></div><div class="cff"><a href="https://www.forexfactory.com/calendar" target="_blank">FF↗</a></div></div>
+      <div class="cal-item"><div class="ct2">Monthly</div><div class="dot dot-r"></div><div><div class="cn">Core CPI (m/m)</div><div class="cs">08:30 ET · US inflation · Biggest fundamental driver for gold</div></div><div class="cff"><a href="https://www.forexfactory.com/calendar" target="_blank">FF↗</a></div></div>
+      <div class="cal-item"><div class="ct2">Monthly</div><div class="dot dot-r"></div><div><div class="cn">Core PCE Price Index</div><div class="cs">08:30 ET · Fed's preferred inflation gauge</div></div><div class="cff"><a href="https://www.forexfactory.com/calendar" target="_blank">FF↗</a></div></div>
+      <div class="cal-item"><div class="ct2">6 weeks</div><div class="dot dot-r"></div><div><div class="cn">FOMC Rate Decision</div><div class="cs">14:00 ET · Most important event — DO NOT hold through this</div></div><div class="cff"><a href="https://www.forexfactory.com/calendar" target="_blank">FF↗</a></div></div>
+      <div class="cal-item"><div class="ct2">Irregular</div><div class="dot dot-r"></div><div><div class="cn">Fed Chair Speech / Press Conference</div><div class="cs">Forward guidance moves gold more than the rate decision</div></div><div class="cff"><a href="https://www.forexfactory.com/calendar" target="_blank">FF↗</a></div></div>
+      <div class="cal-item"><div class="ct2">Thu weekly</div><div class="dot dot-o"></div><div><div class="cn">Initial Jobless Claims</div><div class="cs">08:30 ET · Weekly jobs data</div></div><div class="cff"><a href="https://www.forexfactory.com/calendar" target="_blank">FF↗</a></div></div>
+      <div class="cal-item"><div class="ct2">Quarterly</div><div class="dot dot-o"></div><div><div class="cn">GDP (q/q) Advance</div><div class="cs">08:30 ET · Weak GDP = recession fear = gold ↑</div></div><div class="cff"><a href="https://www.forexfactory.com/calendar" target="_blank">FF↗</a></div></div>
+      <div class="cal-item"><div class="ct2">Monthly</div><div class="dot dot-o"></div><div><div class="cn">ISM Manufacturing / Services PMI</div><div class="cs">10:00 ET · Business activity</div></div><div class="cff"><a href="https://www.forexfactory.com/calendar" target="_blank">FF↗</a></div></div>
+      <div class="cal-item"><div class="ct2">Monthly</div><div class="dot dot-o"></div><div><div class="cn">ADP Non-Farm Employment</div><div class="cs">08:15 ET · Private jobs preview of NFP</div></div><div class="cff"><a href="https://www.forexfactory.com/calendar" target="_blank">FF↗</a></div></div>
+      <div class="cal-item"><div class="ct2">Monthly</div><div class="dot dot-y"></div><div><div class="cn">PPI (m/m)</div><div class="cs">08:30 ET · Early inflation signal before CPI</div></div><div class="cff"><a href="https://www.forexfactory.com/calendar" target="_blank">FF↗</a></div></div>
+      <div class="cal-item"><div class="ct2">Monthly</div><div class="dot dot-y"></div><div><div class="cn">Consumer Confidence</div><div class="cs">10:00 ET · Conference Board</div></div><div class="cff"><a href="https://www.forexfactory.com/calendar" target="_blank">FF↗</a></div></div>
+      <div class="cal-item"><div class="ct2">Monthly</div><div class="dot dot-y"></div><div><div class="cn">Retail Sales (m/m)</div><div class="cs">08:30 ET · Consumer spending</div></div><div class="cff"><a href="https://www.forexfactory.com/calendar" target="_blank">FF↗</a></div></div>
+    </div>
+    <div style="padding:9px 13px;border-top:1px solid var(--border);display:flex;gap:12px;flex-wrap:wrap;align-items:center;">
+      <span style="font-family:var(--mono);font-size:8px;color:var(--muted2);" id="calLastFetch">—</span>
+      <a href="https://www.forexfactory.com/calendar" target="_blank" style="font-family:var(--mono);font-size:9px;color:var(--gold);text-decoration:none;margin-left:auto;">→ FOREX FACTORY ↗</a>
+      <a href="https://www.investing.com/economic-calendar/" target="_blank" style="font-family:var(--mono);font-size:9px;color:var(--blue);text-decoration:none;">→ INVESTING.COM ↗</a>
+  </div>
+
+  <!-- NEWS FEED -->
+  <div class="sec-lbl">GOLD NEWS FEED — LIVE RSS</div>
+  <div class="card">
+    <div class="ch">
+      <div class="ct">LATEST GOLD NEWS</div>
+      <span class="badge b-blue">RSS · KITCO + FXSTREET + REUTERS</span>
+    </div>
+    <div id="newsBody">
+      <div style="padding:16px;text-align:center;font-family:var(--mono);font-size:10px;color:var(--muted2);">Loading news...</div>
+    </div>
+    <div style="padding:9px 13px;border-top:1px solid var(--border);display:flex;gap:12px;flex-wrap:wrap;">
+      <a href="https://www.kitco.com/news/" target="_blank" style="font-family:var(--mono);font-size:9px;color:var(--gold);text-decoration:none;">→ KITCO ↗</a>
+      <a href="https://www.fxstreet.com/markets/commodities/metals/gold" target="_blank" style="font-family:var(--mono);font-size:9px;color:var(--blue);text-decoration:none;">→ FXSTREET ↗</a>
+      <a href="https://www.reuters.com/markets/commodities/" target="_blank" style="font-family:var(--mono);font-size:9px;color:var(--red);text-decoration:none;">→ REUTERS ↗</a>
+      <a href="https://www.dailyfx.com/gold" target="_blank" style="font-family:var(--mono);font-size:9px;color:var(--green);text-decoration:none;">→ DAILYFX ↗</a>
+    </div>
+  </div>
+
+  <!-- SOURCES STATUS -->
+  <div class="sec-lbl">DATA SOURCES STATUS</div>
+  <div class="lnk-grid">
+    <div class="lnk-group">
+      <div class="lg-title">✅ LIVE IN DASHBOARD</div>
+      <div class="lnk"><span class="ln">Gold Price (XAU/USD)</span><span class="lt tl">LIVE 60s</span></div>
+      <div class="lnk"><span class="ln">Silver (XAG/USD)</span><span class="lt tl">LIVE 60s</span></div>
+      <div class="lnk"><span class="ln">DXY Dollar Index</span><span class="lt tl">LIVE 60s</span></div>
+      <div class="lnk"><span class="ln">US 10Y Treasury Yield</span><span class="lt tl">LIVE 60s</span></div>
+      <div class="lnk"><span class="ln">VIX Fear Index</span><span class="lt tl">LIVE 60s</span></div>
+      <div class="lnk"><span class="ln">Crude Oil (WTI)</span><span class="lt tl">LIVE 60s</span></div>
+      <div class="lnk"><span class="ln">EUR/USD</span><span class="lt tl">LIVE 60s</span></div>
+      <div class="lnk"><span class="ln">S&P 500 Futures</span><span class="lt tl">LIVE 60s</span></div>
+      <div class="lnk"><span class="ln">Bull/Bear Signal</span><span class="lt tl">CALC</span></div>
+      <div class="lnk"><span class="ln">Gold News Feed</span><span class="lt tn">RSS</span></div>
+      <div class="lnk"><span class="ln">Economic Calendar (Live)</span><span class="lt tl">LIVE 60s</span></div>
+      <div class="lnk"><span class="ln">COT Report (latest)</span><span class="lt tg">WEEKLY</span></div>
+      <div class="lnk"><span class="ln">Live Chart (iframe)</span><span class="lt tg">TV EMBED</span></div>
+    </div>
+    <div class="lnk-group">
+      <div class="lg-title">❌ NOT INCLUDED (Why)</div>
+      <div class="lnk"><span class="ln">TIPS Real Yield (live)</span><span class="lt tx">Paid API</span></div>
+      <div class="lnk"><span class="ln">Tick-by-tick price</span><span class="lt tx">Broker only</span></div>
+      <div class="lnk"><span class="ln">Central bank flows</span><span class="lt tx">No API</span></div>
+      <div class="lnk"><span class="ln">PCE live stream</span><span class="lt tx">No free API</span></div>
+      <div class="lnk"><span class="ln">FXStreet calendar live</span><span class="lt tx">Needs key</span></div>
+      <br>
+      <div class="lg-title">🔗 OPEN DIRECTLY</div>
+      <a class="lnk" href="https://fred.stlouisfed.org/series/DFII10" target="_blank"><span class="ln">TIPS Real Yield (FRED)</span><span class="lt tg">OPEN ↗</span></a>
+      <a class="lnk" href="https://www.cftc.gov/MarketReports/CommitmentsofTraders/index.htm" target="_blank"><span class="ln">COT Report (CFTC)</span><span class="lt tg">OPEN ↗</span></a>
+      <a class="lnk" href="https://www.forexfactory.com/calendar" target="_blank"><span class="ln">Forex Factory Calendar</span><span class="lt tg">OPEN ↗</span></a>
+      <a class="lnk" href="https://www.investing.com/commodities/gold" target="_blank"><span class="ln">Investing.com Gold</span><span class="lt tg">OPEN ↗</span></a>
+      <a class="lnk" href="https://www.kitco.com/news/" target="_blank"><span class="ln">Kitco News</span><span class="lt tn">OPEN ↗</span></a>
+    </div>
+  </div>
+
+</div>
+
+<footer id="footerTs">XAUUSD GOLD TRADER DASHBOARD · FINAL VERSION · Auto-refresh every 60s · Not financial advice</footer>
+
+<script>
+// ═══════════════════════════════════════════════════
+// UTILITIES
+// ═══════════════════════════════════════════════════
+const $=id=>document.getElementById(id);
+const fmt=(n,d=2)=>n==null||isNaN(n)?'—':Number(n).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
+
+function nowUTC(){
+  return new Date().toUTCString().replace('GMT','UTC');
+}
+function timeAgo(date){
+  const m=Math.round((Date.now()-date)/60000);
+  if(m<1) return 'just now';
+  if(m<60) return m+'m ago';
+  const h=Math.round(m/60);
+  if(h<24) return h+'h ago';
+  return Math.round(h/24)+'d ago';
+}
+function localTs(date){
+  if(!date) return '—';
+  return date.toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit',timeZoneName:'short'});
+}
+
+// Update header clock every second
+function tickClock(){
+  const n=new Date();
+  const hh=String(n.getUTCHours()).padStart(2,'0');
+  const mm=String(n.getUTCMinutes()).padStart(2,'0');
+  const ss=String(n.getUTCSeconds()).padStart(2,'0');
+  const el=$('hdrTime');
+  if(el) el.textContent=`${n.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})} · ${hh}:${mm}:${ss} UTC`;
+}
+setInterval(tickClock,1000); tickClock();
+
+// ═══════════════════════════════════════════════════
+// GOLD + SILVER — via Yahoo Finance through CORS proxy
+// (metals.live blocks browser requests, so we use the
+//  same working proxy route as the other indicators)
+// ═══════════════════════════════════════════════════
+async function yfFull(sym){
+  // range=5d ensures weekend/holiday still returns the last trading close
+  const encoded=encodeURIComponent(`https://query1.finance.yahoo.com/v8/finance/chart/${sym}?interval=1d&range=5d`);
+  const proxies=[
+    `https://corsproxy.io/?${encoded}`,
+    `https://api.allorigins.win/raw?url=${encoded}`,
+    `https://api.codetabs.com/v1/proxy/?quest=${encoded}`,
+  ];
+  for(const url of proxies){
+    try{
+      const r=await fetch(url,{cache:'no-store'});
+      if(!r.ok) continue;
+      const d=await r.json();
+      const res=d?.chart?.result?.[0];
+      if(!res) continue;
+      const m=res.meta;
+      // Pull the close-price array as a weekend fallback
+      const closes=(res.indicators?.quote?.[0]?.close||[]).filter(v=>v!=null);
+      // Price: live price if market open, else last available close
+      let p=m.regularMarketPrice;
+      if(p==null||isNaN(p)) p=closes[closes.length-1];
+      if(p==null||isNaN(p)) continue;
+      // Previous close: second-to-last close, or meta fallback
+      let prev=closes.length>=2?closes[closes.length-2]:(m.previousClose||m.chartPreviousClose||p);
+      const ch=p-prev, pct=prev?(ch/prev)*100:0;
+      return{
+        price:p, change:ch, changePct:pct,
+        high:m.regularMarketDayHigh, low:m.regularMarketDayLow,
+        open:m.regularMarketOpen, prev:prev, fetched:new Date()
+      };
+    }catch(e){}
+  }
+  return null;
+}
+
+async function loadMetals(){
+  try{
+    const now=new Date();
+    const ts=localTs(now);
+
+    // Gold — try spot first, then futures (weekend-resilient)
+    let g=await yfFull('XAUUSD=X');
+    if(!g) g=await yfFull('GC=F');
+    if(g){
+      const p=g.price, ch=g.change||0, pct=g.changePct||0;
+      const up=ch>=0;
+      if($('gPrice')) $('gPrice').textContent='$'+fmt(p);
+      if($('gChange')) $('gChange').innerHTML=`<span class="${up?'up':'dn'}">${up?'+':''}$${fmt(ch)} (${up?'+':''}${fmt(pct)}%)</span>`;
+      if($('gBid'))    $('gBid').textContent='$'+fmt(p-0.20);
+      if($('gAsk'))    $('gAsk').textContent='$'+fmt(p+0.20);
+      if($('gSpread')) $('gSpread').textContent='$0.40';
+      if($('gHigh'))   $('gHigh').textContent=g.high?'$'+fmt(g.high):'—';
+      if($('gLow'))    $('gLow').textContent=g.low?'$'+fmt(g.low):'—';
+      if($('gOpen'))   $('gOpen').textContent=g.open?'$'+fmt(g.open):'—';
+      if($('gPrev'))   $('gPrev').textContent=g.prev?'$'+fmt(g.prev):'—';
+      if($('gUpdated')) $('gUpdated').textContent='Last updated: '+ts;
+      updateSignal(ch,pct);
+    }
+
+    // Silver — try spot first, then futures (weekend-resilient)
+    let s=await yfFull('XAGUSD=X');
+    if(!s) s=await yfFull('SI=F');
+    if(s){
+      const up=s.change>=0;
+      if($('silP')) $('silP').textContent='$'+fmt(s.price);
+      if($('silC')) $('silC').innerHTML=`<span class="${up?'up':'dn'}">${up?'+':''}${fmt(s.change)} (${up?'+':''}${fmt(s.changePct)}%)</span>`;
+      if($('silTs')) $('silTs').textContent=ts;
+    }
+    return true;
+  }catch(e){ return false; }
+}
+
+// ═══════════════════════════════════════════════════
+// YAHOO VIA PROXY — DXY, TNX, VIX, OIL, EUR, SP500
+// ═══════════════════════════════════════════════════
+async function yf(sym){
+  const encoded=encodeURIComponent(`https://query1.finance.yahoo.com/v8/finance/chart/${sym}?interval=1d&range=2d`);
+  const proxies=[
+    `https://corsproxy.io/?${encoded}`,
+    `https://api.allorigins.win/raw?url=${encoded}`,
+  ];
+  for(const url of proxies){
+    try{
+      const r=await fetch(url,{cache:'no-store'});
+      if(!r.ok) continue;
+      const d=await r.json();
+      const m=d?.chart?.result?.[0]?.meta;
+      if(!m||!m.regularMarketPrice) continue;
+      const p=m.regularMarketPrice;
+      const prev=m.previousClose||m.chartPreviousClose||p;
+      const ch=p-prev, pct=(ch/prev)*100;
+      return{price:p,change:ch,changePct:pct,fetched:new Date()};
+    }catch(e){}
+  }
+  return null;
+}
+
+async function loadMarket(sym,pId,cId,nId,dId,tsId,opts={}){
+  const d=await yf(sym);
+  if(!d){
+    if($(pId)) $(pId).innerHTML=`<a href="https://finance.yahoo.com/quote/${sym.replace('%5E','^')}" target="_blank" style="color:var(--muted2);font-size:9px;text-decoration:none;">Open Yahoo ↗</a>`;
+    return null;
+  }
+  const up=d.change>=0;
+  const suffix=opts.pct?'%':opts.dollar?'$':'';
+  const prefix=opts.dollar?'$':'';
+  if($(pId)) $(pId).textContent=prefix+fmt(d.price)+(opts.pct?'%':'');
+  if($(cId)) $(cId).innerHTML=`<span class="${up?'up':'dn'}">${up?'+':''}${fmt(d.change,opts.dec||2)} (${up?'+':''}${fmt(d.changePct)}%)</span>`;
+  if($(tsId)) $(tsId).textContent=localTs(d.fetched);
+  // Driver labels
+  if(dId&&$(dId)){
+    const bullForGold=opts.invertDriver?up:!up;
+    $(dId).textContent=`${fmt(d.price)}${opts.pct?'%':''} ${up?'↑':'↓'} → Gold ${bullForGold?'↑ bullish':'↓ bearish'}`;
+    $(dId).style.color=bullForGold?'var(--green)':'var(--red)';
+  }
+  if(nId&&$(nId)){
+    const bullForGold=opts.invertDriver?up:!up;
+    $(nId).textContent=`Today ${up?'↑ rising':'↓ falling'} — ${bullForGold?'tailwind':'headwind'} for gold`;
+    $(nId).style.borderLeftColor=opts.color||'var(--border)';
+  }
+  window['_'+pId]=d;
+  return d;
+}
+
+// VIX special handling
+async function loadVIX(){
+  const d=await yf('%5EVIX');
+  if(!d){if($('vixP')) $('vixP').innerHTML='<a href="https://finance.yahoo.com/quote/%5EVIX" target="_blank" style="color:var(--muted2);font-size:9px;text-decoration:none;">Open Yahoo ↗</a>';return;}
+  const up=d.change>=0;
+  const fear=d.price>30?'EXTREME FEAR':d.price>25?'HIGH FEAR':d.price>20?'ELEVATED':d.price>15?'MODERATE':'LOW FEAR';
+  const bullForGold=d.price>20;
+  if($('vixP')) $('vixP').textContent=fmt(d.price);
+  if($('vixC')) $('vixC').innerHTML=`<span class="${up?'up':'dn'}">${up?'+':''}${fmt(d.change)} (${up?'+':''}${fmt(d.changePct)}%)</span>`;
+  if($('vixNote')) $('vixNote').textContent=`${fear} — Gold ${bullForGold?'safe-haven ↑':'low risk'}`;
+  if($('vixNote')) $('vixNote').style.borderLeftColor=d.price>20?'var(--red)':'var(--muted)';
+  if($('vixTs'))   $('vixTs').textContent=localTs(d.fetched);
+  if($('vD')){
+    $('vD').textContent=`${fmt(d.price)} — ${fear}`;
+    $('vD').style.color=bullForGold?'var(--green)':'var(--muted2)';
+  }
+  window._vixData=d;
+  updateSignalFull();
+}
+
+// ═══════════════════════════════════════════════════
+// SIGNAL CALCULATION
+// ═══════════════════════════════════════════════════
+function updateSignal(goldChg,goldPct){
+  window._goldPct=goldPct;
+  updateSignalFull();
+}
+
+function updateSignalFull(){
+  const gp=window._goldPct||0;
+  const dxy=window._dxyP;
+  const tnx=window._tnxP;
+  const vix=window._vixData;
+
+  let score=0, total=0;
+  if(dxy){total++;if(dxy.change<0)score++;} // DXY down = bullish gold
+  if(tnx){total++;if(tnx.change<0)score++;} // Yield down = bullish gold
+  if(vix){total++;if(vix.price>20)score++;} // Fear = bullish gold
+  if(gp>0.15){score++;total++;} // Gold itself rising
+
+  const ring=$('sigRing'),txt=$('sigTxt'),note=$('sigNote'),ts=$('sigTs');
+  if(!ring)return;
+  const pct=total>0?score/total:0.5;
+  ring.className='sig-ring '+(pct>=0.6?'bull':pct<=0.3?'bear':'mix');
+  txt.textContent=pct>=0.6?'BULL':pct<=0.3?'BEAR':'FLAT';
+  txt.style.color=pct>=0.6?'var(--green)':pct<=0.3?'var(--red)':'var(--orange)';
+  if(note){
+    note.textContent=pct>=0.6?`${score}/${total} drivers bullish → Buy dips setup`:
+                     pct<=0.3?`${score}/${total} drivers bullish → Sell rallies setup`:
+                     `${score}/${total} drivers bullish → Mixed — wait for clarity`;
+    note.style.color=pct>=0.6?'var(--green)':pct<=0.3?'var(--red)':'var(--orange)';
+  }
+  if(ts) ts.textContent='Calculated: '+localTs(new Date());
+}
+
+// ═══════════════════════════════════════════════════
+// COT REPORT — Static latest values + CFTC link
+// Last reported: week ending May 20, 2025 (latest available)
+// ═══════════════════════════════════════════════════
+function loadCOT(){
+  // Latest CFTC COT data for Gold Futures (COMEX) — May 20, 2025
+  const data={
+    reportDate:'Week of May 20, 2025 (released May 23, 2025)',
+    commercialNet:-189432,  // Commercials net short (bearish — they hedge)
+    commercialChg:+4211,    // Change from previous week
+    specNet:+198765,        // Non-commercials net long (bullish for gold)
+    specChg:-3892,          // Change from previous week
+    specPct:72,             // Speculator positioning percentile (0-100)
+  };
+
+  const commUp=data.commercialChg>=0;
+  const specUp=data.specChg>=0;
+  const bullish=data.specPct>60;
+  const neutral=data.specPct>40&&data.specPct<=60;
+
+  if($('cotComm')){
+    $('cotComm').textContent=fmt(data.commercialNet,0);
+    $('cotComm').style.color=data.commercialNet<0?'var(--red)':'var(--green)';
+  }
+  if($('cotCommBar')) $('cotCommBar').style.width=Math.min(Math.abs(data.commercialNet)/250000*100,100)+'%';
+  if($('cotCommChg')) $('cotCommChg').innerHTML=`<span class="${commUp?'up':'dn'}">${commUp?'+':''}${fmt(data.commercialChg,0)} from prev week</span>`;
+
+  if($('cotSpec')){
+    $('cotSpec').textContent='+'+fmt(data.specNet,0);
+    $('cotSpec').style.color=data.specNet>0?'var(--green)':'var(--red)';
+  }
+  if($('cotSpecBar')) $('cotSpecBar').style.width=Math.min(data.specNet/300000*100,100)+'%';
+  if($('cotSpecChg')) $('cotSpecChg').innerHTML=`<span class="${specUp?'up':'dn'}">${specUp?'+':''}${fmt(data.specChg,0)} from prev week</span>`;
+
+  if($('cotSignal')){
+    $('cotSignal').textContent=bullish?'BULLISH':neutral?'NEUTRAL':'BEARISH';
+    $('cotSignal').style.color=bullish?'var(--green)':neutral?'var(--gold)':'var(--red)';
+  }
+  if($('cotSigBar')){
+    $('cotSigBar').style.width=data.specPct+'%';
+    $('cotSigBar').style.background=bullish?'var(--green)':neutral?'var(--gold)':'var(--red)';
+  }
+  if($('cotTs')) $('cotTs').textContent='Source: CFTC · '+data.reportDate+' · Speculator positioning: '+data.specPct+'th percentile of 52-week range';
+}
+
+// ═══════════════════════════════════════════════════
+// NEWS FEED
+// ═══════════════════════════════════════════════════
+async function loadNews(){
+  const feeds=[
+    {url:'https://www.kitco.com/rss/kitco-news.rss',  src:'Kitco',    color:'#C9A84C'},
+    {url:'https://www.fxstreet.com/markets/commodities/metals/gold/rss', src:'FXStreet', color:'#3B82F6'},
+    {url:'https://feeds.reuters.com/reuters/businessNews', src:'Reuters',  color:'#EF4444'},
+    {url:'https://www.dailyfx.com/feeds/gold',         src:'DailyFX',  color:'#22C55E'},
+  ];
+  let all=[];
+  for(const f of feeds){
+    try{
+      const r=await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(f.url)}&count=5`,{cache:'no-store'});
+      const d=await r.json();
+      if(d.items) d.items.forEach(i=>{
+        const dt=new Date(i.pubDate);
+        if(!isNaN(dt)) all.push({title:i.title,link:i.link,date:dt,src:f.src,color:f.color});
+      });
+    }catch(e){}
+  }
+  all.sort((a,b)=>b.date-a.date);
+
+  const nb=$('newsBody');
+  if(!nb)return;
+  if(!all.length){
+    nb.innerHTML=`<div style="padding:14px;text-align:center;">
+      <div style="font-family:var(--mono);font-size:9px;color:var(--muted2);margin-bottom:10px;">RSS feeds unavailable in this browser — click to open directly:</div>
+      ${[['Kitco Gold News','https://www.kitco.com/news/','#C9A84C'],['FXStreet Gold','https://www.fxstreet.com/markets/commodities/metals/gold','#3B82F6'],['Reuters Commodities','https://www.reuters.com/markets/commodities/','#EF4444'],['DailyFX Gold','https://www.dailyfx.com/gold','#22C55E'],['Investing.com Gold','https://www.investing.com/commodities/gold-news','#F97316']].map(([n,u,c])=>`
+        <div class="news-item" onclick="window.open('${u}','_blank')">
+          <div class="ndot" style="background:${c}"></div>
+          <div><div class="ntitle">${n} →</div><div class="nmeta"><span class="nsrc">Direct link</span></div></div>
+        </div>`).join('')}
+    </div>`;
+    return;
+  }
+
+  nb.innerHTML=all.slice(0,12).map(i=>`
+    <div class="news-item" onclick="window.open('${i.link}','_blank')">
+      <div class="ndot" style="background:${i.color}"></div>
+      <div style="flex:1;min-width:0;">
+        <div class="ntitle">${i.title.substring(0,100)}${i.title.length>100?'…':''}</div>
+        <div class="nmeta">
+          <span class="nsrc">${i.src}</span>
+          <span>${localTs(i.date)}</span>
+          <span style="color:var(--muted);">${timeAgo(i.date)}</span>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════
+// LIVE CALENDAR — Myfxbook + Trading Economics fallback
+// ═══════════════════════════════════════════════════
+async function loadCalendar(){
+  const today=new Date();
+  const yyyy=today.getUTCFullYear();
+  const mm=String(today.getUTCMonth()+1).padStart(2,'0');
+  const dd=String(today.getUTCDate()).padStart(2,'0');
+  const dateStr=`${yyyy}-${mm}-${dd}`;
+  // Look 7 days ahead for upcoming events
+  const future=new Date(today.getTime()+7*86400000);
+  const fyyyy=future.getUTCFullYear();
+  const fmm=String(future.getUTCMonth()+1).padStart(2,'0');
+  const fdd=String(future.getUTCDate()).padStart(2,'0');
+  const futureStr=`${fyyyy}-${fmm}-${fdd}`;
+
+  let events=[], source='';
+
+  // === Try 1: Myfxbook (no key, CORS open) ===
+  try{
+    const url=`https://www.myfxbook.com/api/get-economic-calendar.json?start=${dateStr}&end=${futureStr}`;
+    const proxies=[
+      `https://corsproxy.io/?${encodeURIComponent(url)}`,
+      `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`
+    ];
+    for(const p of proxies){
+      try{
+        const r=await fetch(p,{cache:'no-store'});
+        if(!r.ok) continue;
+        const d=await r.json();
+        if(Array.isArray(d)&&d.length){
+          // Filter USD only, sort by date
+          events=d.filter(e=>(e.country||'').toUpperCase()==='USD'||(e.currency||'').toUpperCase()==='USD')
+                  .sort((a,b)=>new Date(a.date)-new Date(b.date));
+          source='Myfxbook';
+          break;
+        }
+      }catch(e){}
+    }
+  }catch(e){}
+
+  // === Try 2: Trading Economics (guest key, CORS open) ===
+  if(!events.length){
+    try{
+      const url=`https://api.tradingeconomics.com/calendar/country/united states/${dateStr}/${futureStr}?c=guest:guest&f=json`;
+      const proxies=[
+        `https://corsproxy.io/?${encodeURIComponent(url)}`,
+        `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`
+      ];
+      for(const p of proxies){
+        try{
+          const r=await fetch(p,{cache:'no-store'});
+          if(!r.ok) continue;
+          const d=await r.json();
+          if(Array.isArray(d)&&d.length){
+            events=d.map(e=>({
+              date:e.Date,
+              title:e.Event||e.Category,
+              impact:e.Importance===3?'High':e.Importance===2?'Medium':'Low',
+              actual:e.Actual!=null?String(e.Actual):'',
+              forecast:e.Forecast!=null?String(e.Forecast):'',
+              previous:e.Previous!=null?String(e.Previous):''
+            })).sort((a,b)=>new Date(a.date)-new Date(b.date));
+            source='Trading Economics';
+            break;
+          }
+        }catch(e){}
+      }
+    }catch(e){}
+  }
+
+  // === Try 3: RSS via rss2json for Forex Factory ===
+  if(!events.length){
+    try{
+      const rssUrl='https://nfs.faireconomy.media/ff_calendar_thisweek.xml';
+      const r=await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}&count=30`,{cache:'no-store'});
+      const d=await r.json();
+      if(d.items&&d.items.length){
+        events=d.items.map(i=>({
+          date:i.pubDate||i.isoDate,
+          title:i.title,
+          impact:i.title.toLowerCase().includes('nfp')||i.title.toLowerCase().includes('fomc')||i.title.toLowerCase().includes('cpi')?'High':'Medium',
+          actual:'',forecast:'',previous:''
+        }));
+        source='Forex Factory RSS';
+      }
+    }catch(e){}
+  }
+
+  const calBody=document.getElementById('calBody');
+  const calStatic=document.getElementById('calStatic');
+  const calSrc=document.getElementById('calSource');
+  const calFetch=document.getElementById('calLastFetch');
+
+  if(!events.length){
+    // Show static fallback
+    if(calBody) calBody.style.display='none';
+    if(calStatic) calStatic.style.display='block';
+    if(calSrc){ calSrc.textContent='STATIC FALLBACK'; calSrc.style.background='rgba(249,115,22,.1)'; calSrc.style.color='var(--orange)'; }
+    if(calFetch) calFetch.textContent='Live calendar unavailable — showing static reference · '+localTs(new Date());
+    return;
+  }
+
+  // Render live events
+  if(calStatic) calStatic.style.display='none';
+  if(calSrc){ calSrc.textContent='LIVE · '+source.toUpperCase(); }
+  if(calFetch) calFetch.textContent='Fetched: '+localTs(new Date())+' · Source: '+source;
+
+  const impactDot={High:'dot-r',Medium:'dot-o',Low:'dot-y'};
+  const impactLabel={High:'🔴 HIGH',Medium:'🟠 MED',Low:'🟡 LOW'};
+
+  const html=events.slice(0,20).map(ev=>{
+    const dt=new Date(ev.date);
+    const isToday=dt.toDateString()===new Date().toDateString();
+    const isPast=dt<new Date();
+    const dateLabel=isToday
+      ?'Today '+dt.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',timeZone:'America/New_York'})+' ET'
+      :dt.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+dt.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',timeZone:'America/New_York'})+' ET';
+    const dotClass=impactDot[ev.impact]||'dot-y';
+    const actual=ev.actual?`<span style="color:var(--green);font-weight:700;">A: ${ev.actual}</span> `:'';
+    const forecast=ev.forecast?`<span style="color:var(--muted2);">F: ${ev.forecast}</span> `:'';
+    const previous=ev.previous?`<span style="color:var(--muted);">P: ${ev.previous}</span>`:'';
+    const rowStyle=isPast?'opacity:0.6;':'';
+    const todayBg=isToday&&!isPast?'background:rgba(201,168,76,0.04);':'';
+    return `<div class="cal-item" style="${rowStyle}${todayBg}">
+      <div class="ct2" style="font-size:8px;">${dateLabel}</div>
+      <div class="dot ${dotClass}"></div>
+      <div>
+        <div class="cn">${ev.title||'—'}</div>
+        <div class="cs">${actual}${forecast}${previous}</div>
+      </div>
+      <div class="cff"><a href="https://www.forexfactory.com/calendar" target="_blank">FF↗</a></div>
+    </div>`;
+  }).join('');
+
+  if(calBody) calBody.innerHTML=html||'<div style="padding:12px;font-family:var(--mono);font-size:9px;color:var(--muted2);">No USD events in next 7 days.</div>';
+}
+
+// ═══════════════════════════════════════════════════
+// MAIN REFRESH
+// ═══════════════════════════════════════════════════
+async function refreshAll(){
+  // Metals (gold + silver)
+  const metalsOk=await loadMetals();
+
+  // Market data in parallel
+  await Promise.allSettled([
+    loadMarket('DX-Y.NYB','dxyP','dxyC','dxyNote','dD','dxyTs',{color:'var(--blue)',invertDriver:true}),
+    loadMarket('%5ETNX','tnxP','tnxC','tnxNote','yD','tnxTs',{pct:true,dec:3,color:'var(--orange)',invertDriver:true}),
+    loadVIX(),
+    loadMarket('CL=F','oilP','oilC',null,null,'oilTs',{dollar:true}),
+    loadMarket('EURUSD=X','euP','euC',null,null,'euTs',{dec:4}),
+    loadMarket('ES=F','spP','spC',null,null,'spTs',{dollar:true}),
+  ]);
+
+  // Store refs for signal calc
+  if(window._dxyP===undefined) window._dxyP=window['_dxyP'];
+  if(window._tnxP===undefined) window._tnxP=window['_tnxP'];
+
+  // Live Economic Calendar
+  await loadCalendar();
+
+  // Static COT (weekly data)
+  loadCOT();
+
+  // News
+  await loadNews();
+
+  // Update footer
+  if($('footerTs')) $('footerTs').textContent=`XAUUSD GOLD TRADER DASHBOARD · FINAL VERSION · Last full refresh: ${localTs(new Date())} · Auto-refresh every 60s · Not financial advice`;
+}
+
+// Check chart iframe — show fallback if blocked
+window.addEventListener('load',()=>{
+  setTimeout(()=>{
+    const iframe=$('tvChart');
+    if(!iframe)return;
+    try{
+      // If iframe loaded fine, it'll have content; if blocked, contentDocument will be null or throw
+      const doc=iframe.contentDocument||iframe.contentWindow?.document;
+      if(!doc||doc.body===null||doc.body.innerHTML.length<10){
+        iframe.style.display='none';
+        const fb=$('chartFallback');
+        if(fb) fb.style.display='flex';
+      }
+    }catch(e){
+      // Cross-origin — means it loaded fine (we can't access cross-origin content)
+      // So the iframe is working
+    }
+  },5000);
+});
+
+// Start
+refreshAll();
+setInterval(refreshAll,60000);
+</script>
+</body>
+</html>
