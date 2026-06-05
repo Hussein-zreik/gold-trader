@@ -758,8 +758,7 @@ select:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px soli
       <button class="tab-btn active" role="tab" aria-selected="true"  onclick="switchTab('tabCot',this)">📋 COT REPORT</button>
       <button class="tab-btn"        role="tab" aria-selected="false" onclick="switchTab('tabCal',this)">📅 CALENDAR</button>
       <button class="tab-btn"        role="tab" aria-selected="false" onclick="switchTab('tabNews',this)">📰 NEWS</button>
-      <button class="tab-btn"        role="tab" aria-selected="false" onclick="switchTab('tabCrypto',this)">₿ CRYPTO</button>
-      <button class="tab-btn"        role="tab" aria-selected="false" onclick="switchTab('tabFG',this)">😱 FEAR &amp; GREED</button>
+      <button class="tab-btn"        role="tab" aria-selected="false" onclick="switchTab('tabCrypto',this)">₿ CRYPTO &amp; SENTIMENT</button>
     </div>
 
     <!-- TAB: COT -->
@@ -884,23 +883,11 @@ select:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px soli
     <div style="padding:8px 12px;border-top:1px solid var(--border);display:flex;gap:12px;flex-wrap:wrap;">
       <a href="https://coinmarketcap.com" target="_blank" rel="noopener noreferrer" style="font-family:var(--mono);font-size:9px;color:var(--blue);text-decoration:none;">→ COINMARKETCAP ↗</a>
       <a href="https://www.coingecko.com" target="_blank" rel="noopener noreferrer" style="font-family:var(--mono);font-size:9px;color:var(--green);text-decoration:none;">→ COINGECKO ↗</a>
-      <a href="https://alternative.me/crypto/fear-and-greed-index/" target="_blank" rel="noopener noreferrer" style="font-family:var(--mono);font-size:9px;color:var(--orange);text-decoration:none;">→ CRYPTO FEAR & GREED ↗</a>
     </div>
-  </div>
   </div>
 
-  <!-- ══════════════════════════════════════════════════ -->
-  <!-- FEAR & GREED INDEX WIDGET -->
-  <!-- ══════════════════════════════════════════════════ -->
-  <div class="widget" data-widget="feargreed" data-title="Fear & Greed Index" draggable="false">
-    <div class="w-handle">
-      <button type="button" class="w-btn w-up" onclick="moveWidget('feargreed',-1)" aria-label="Move widget up">↑</button>
-      <button type="button" class="w-btn w-down" onclick="moveWidget('feargreed',1)" aria-label="Move widget down">↓</button>
-      <button type="button" class="w-btn w-remove" onclick="removeWidget('feargreed')" aria-label="Remove widget">✕</button>
-    </div>
-  <h2 class="sec-lbl">FEAR &amp; GREED INDEX — MARKET SENTIMENT</h2>
-  <div class="row2">
-    <!-- CNN Fear & Greed (Equity) -->
+  <!-- FEAR & GREED — inside Crypto tab -->
+  <div class="row2" style="padding:8px 10px 10px;">
     <div class="card">
       <div class="ch">
         <div class="ct">CNN FEAR &amp; GREED — S&amp;P 500</div>
@@ -928,7 +915,6 @@ select:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px soli
         <div style="margin-top:8px;text-align:center;"><a href="https://edition.cnn.com/markets/fear-and-greed" target="_blank" rel="noopener noreferrer" style="font-family:var(--mono);font-size:10px;color:var(--blue);text-decoration:none;">→ CNN FEAR &amp; GREED ↗</a></div>
       </div>
     </div>
-    <!-- Crypto Fear & Greed -->
     <div class="card">
       <div class="ch">
         <div class="ct">CRYPTO FEAR &amp; GREED — BITCOIN</div>
@@ -955,9 +941,8 @@ select:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px soli
       </div>
     </div>
   </div>
-  </div>
 
-    </div><!-- /tabFG -->
+  </div><!-- /tabCrypto -->
 
   </div><!-- /tabbed widget -->
 
@@ -1624,7 +1609,7 @@ const LAYOUT_KEY='fxdesk_layout_v1';
 let editMode=false;
 
 function getWrap(){ return document.getElementById('mainCol') || document.querySelector('.wrap'); }
-const STUB_WIDGETS=['euhero','goldrow']; // permanently moved to sidebar
+const STUB_WIDGETS=['euhero','goldrow','crypto']; // live inside tabs, not main column
 function allWidgets(){ const c=document.getElementById('mainCol'); return Array.from((c||document).querySelectorAll('.widget')).filter(w=>!STUB_WIDGETS.includes(w.getAttribute('data-widget'))); }
 
 // Load saved layout (order + hidden) and apply
