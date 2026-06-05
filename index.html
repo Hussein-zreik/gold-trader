@@ -1607,7 +1607,7 @@ async function loadCalendar(){
 // ═══════════════════════════════════════════════════
 // WIDGET MANAGEMENT ENGINE (move/sort/add/remove + save)
 // ═══════════════════════════════════════════════════
-const LAYOUT_KEY='fxdesk_layout_v1';
+const LAYOUT_KEY='fxdesk_layout_v2';
 let editMode=false;
 
 function getWrap(){ return document.getElementById('mainCol') || document.querySelector('.wrap'); }
@@ -1616,6 +1616,8 @@ function allWidgets(){ const c=document.getElementById('mainCol'); return Array.
 
 // Load saved layout (order + hidden) and apply
 function applyLayout(){
+  // Clean up stale layout keys from old versions
+  try{ localStorage.removeItem('fxdesk_layout_v1'); }catch(e){}
   let saved=null;
   try{ saved=JSON.parse(localStorage.getItem(LAYOUT_KEY)); }catch(e){}
   if(!saved||!saved.order) return;
@@ -1632,6 +1634,13 @@ function applyLayout(){
     if(saved.hidden&&saved.hidden.includes(id)) w.classList.add('hidden-widget');
     else w.classList.remove('hidden-widget');
   });
+  // Restore first tab active state after DOM move
+  if(!document.querySelector('.tab-pane.active')){
+    const firstPane = document.getElementById('tabCot');
+    if(firstPane) firstPane.classList.add('active');
+    const firstBtn = document.querySelector('.tab-btn');
+    if(firstBtn) firstBtn.classList.add('active');
+  }
 }
 
 function saveLayout(){
@@ -2300,10 +2309,14 @@ function syncSidebar(goldData, eurData, dxy, tnx, vixD, oil, sp, gbp, jpy, aud, 
 // TABS — switch between tab panes
 // ═══════════════════════════════════════════════════
 function switchTab(paneId, btn){
-  // Scope to the parent tab widget only
   const pane = document.getElementById(paneId);
   if(!pane) return;
-  const tabWidget = pane.closest('.widget, [role="tablist"]')?.closest('.widget') || pane.parentElement;
+  // Walk up to the nearest .widget ancestor
+  let tabWidget = pane.parentElement;
+  while(tabWidget && !tabWidget.classList.contains('widget')){
+    tabWidget = tabWidget.parentElement;
+  }
+  if(!tabWidget) return;
   tabWidget.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
   tabWidget.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
   pane.classList.add('active');
