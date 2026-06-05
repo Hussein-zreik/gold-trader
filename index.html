@@ -316,8 +316,8 @@ html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-hei
 .sess-note{font-family:var(--sans);font-size:10px;color:var(--muted);margin-left:6px;}
 
 /* ── SIDEBAR LAYOUT ── */
-.dashboard-layout{display:grid;grid-template-columns:240px 1fr;gap:12px;align-items:start;}
-.sidebar{position:sticky;top:110px;max-height:calc(100vh - 120px);overflow-y:auto;display:flex;flex-direction:column;gap:8px;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+.dashboard-layout{display:grid;grid-template-columns:240px 1fr;gap:16px;align-items:start;}
+.sidebar{position:sticky;top:125px;max-height:calc(100vh - 130px);overflow-y:auto;display:flex;flex-direction:column;gap:8px;scrollbar-width:thin;scrollbar-color:var(--muted) transparent;padding-right:4px;}
 .sidebar::-webkit-scrollbar{width:4px;}
 .sidebar::-webkit-scrollbar-track{background:transparent;}
 .sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
@@ -950,9 +950,6 @@ select:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px soli
 
   </div><!-- /tabbed widget -->
 
-  </div><!-- /main-col -->
-  </div><!-- /dashboard-layout -->
-
   <!-- ══════════════════════════════════════════════════ -->
   <!-- PORTFOLIO TRACKER WIDGET -->
   <!-- ══════════════════════════════════════════════════ -->
@@ -1076,7 +1073,8 @@ select:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px soli
   </div>
   </div>
 
-
+  </div><!-- /main-col -->
+  </div><!-- /dashboard-layout -->
 
 <script>
 // ═══════════════════════════════════════════════════
