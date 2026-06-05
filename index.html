@@ -345,6 +345,7 @@ html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-hei
 .widget-body{transition:none;}
 .widget-body.collapsed{display:none;}
 .collapse-btn.collapsed{transform:rotate(-90deg);}
+.widget.w-collapsed > *:not(.w-handle):not(.sec-lbl):not(.widget-hdr){display:none!important;}
 
 /* ── TABS ── */
 .tab-bar{display:flex;gap:0;border-bottom:1px solid var(--border);background:var(--bg3);overflow-x:auto;scrollbar-width:none;}
@@ -1142,7 +1143,7 @@ function _parseYF(txt, full){
   if(p==null||isNaN(p)) throw new Error('no price');
   const prev=closes.length>=2?closes[closes.length-2]:(m.chartPreviousClose||m.previousClose||p);
   const ch=p-prev, pct=prev?(ch/prev)*100:0;
-  const base={price:p,change:ch,changePct:pct,fetched:new Date()};
+  const base={price:p,change:ch,changePct:pct,fetched:new Date(),_closes:closes};
   if(full) Object.assign(base,{high:m.regularMarketDayHigh,low:m.regularMarketDayLow,open:m.regularMarketOpen,prev});
   return base;
 }
@@ -1191,6 +1192,15 @@ async function loadMetals(){
       if($('gPrev'))   $('gPrev').textContent=g.prev?'$'+fmt(g.prev):'—';
       if($('gUpdated')) $('gUpdated').textContent='Last updated: '+ts;
       updateSignal(ch,pct);
+      // Sidebar sync
+      if($('sbGoldPrice')) $('sbGoldPrice').textContent='$'+fmt(p);
+      if($('sbGoldChg')) $('sbGoldChg').innerHTML=`<span class="${up?'up':'dn'}">${up?'+':''}$${fmt(ch)} (${up?'+':''}${fmt(pct)}%)</span>`;
+      if($('sbGoldH')) $('sbGoldH').textContent=g.high?'$'+fmt(g.high):'—';
+      if($('sbGoldL')) $('sbGoldL').textContent=g.low?'$'+fmt(g.low):'—';
+      if($('sbGoldBA')) $('sbGoldBA').textContent='$'+fmt(p-0.20)+' / $'+fmt(p+0.20);
+      if(g._closes) drawSparkline('sbGoldSpark', g._closes, up);
+      updateTicker([['tkGold','tkGoldC'],['tkGold2','tkGoldC2']], '$'+fmt(p), pct, up);
+      window._gPrice=g;
     } else {
       if($('gPrice')) $('gPrice').innerHTML='<a href="https://www.tradingview.com/symbols/XAUUSD/" target="_blank" rel="noopener noreferrer" style="color:var(--gold);font-size:13px;text-decoration:none;">Tap for live price ↗</a>';
       if($('gChange')) $('gChange').textContent='Feed temporarily unavailable';
@@ -1231,6 +1241,12 @@ async function loadEUHero(){
       if($('euheroOpen'))   $('euheroOpen').textContent=d.open?fmt(d.open,4):'—';
       if($('euheroPrev'))   $('euheroPrev').textContent=d.prev?fmt(d.prev,4):'—';
       if($('euheroUpdated')) $('euheroUpdated').textContent='Last updated: '+ts;
+      // Sidebar sync
+      if($('sbEurPrice')) $('sbEurPrice').textContent=fmt(p,4);
+      if($('sbEurChg')) $('sbEurChg').innerHTML=`<span class="${up?'up':'dn'}">${up?'+':''}${fmt(ch,4)} (${up?'+':''}${fmt(pct)}%)</span>`;
+      if(d._closes) drawSparkline('sbEurSpark', d._closes, up);
+      updateTicker([['tkEur','tkEurC'],['tkEur2','tkEurC2']], fmt(p,4), pct, up);
+      window._euP=d;
     } else {
       if($('euheroPrice')) $('euheroPrice').innerHTML='<a href="https://www.tradingview.com/symbols/EURUSD/" target="_blank" rel="noopener noreferrer" style="color:#60A5FA;font-size:13px;text-decoration:none;">Tap for live price ↗</a>';
       if($('euheroChange')) $('euheroChange').textContent='Feed temporarily unavailable';
@@ -1282,6 +1298,21 @@ async function loadMarket(sym,pId,cId,nId,dId,tsId,opts={}){
     $(nId).style.borderLeftColor=opts.color||'var(--border)';
   }
   window['_'+pId]=d;
+  // Ticker sync
+  const tkMap={'dxyP':[['tkDxy','tkDxyC'],['tkDxy2','tkDxyC2']],'tnxP':[['tkTnx','tkTnxC'],['tkTnx2','tkTnxC2']],'gbpP':[['tkGbp','tkGbpC'],['tkGbp2','tkGbpC2']],'jpyP':[['tkJpy','tkJpyC'],['tkJpy2','tkJpyC2']]};
+  if(tkMap[pId]){
+    const pr=opts.dollar?'$'+fmt(d.price):(opts.pct?fmt(d.price,3)+'%':fmt(d.price));
+    updateTicker(tkMap[pId], pr, d.changePct, d.change>=0);
+  }
+  // Sidebar sync
+  const sbMap={'dxyP':'sbDxy','tnxP':'sbTnx','oilP':'sbOil','spP':'sbSp','gbpP':'sbGbp','jpyP':'sbJpy','audP':'sbAud','cadP':'sbCad'};
+  if(sbMap[pId]&&$(sbMap[pId])){
+    const el=$(sbMap[pId]);
+    el.textContent=opts.dollar?'$'+fmt(d.price):(opts.pct?fmt(d.price,3)+'%':fmt(d.price,4));
+    el.className='sb-row-val '+(d.change>=0?'up':'dn');
+  }
+  // Sparkline
+  if(d._closes){const sparkId=pId.replace('P','Spark');drawSparkline(sparkId,d._closes,d.change>=0);}
   return d;
 }
 
@@ -1302,6 +1333,8 @@ async function loadVIX(){
     $('vD').style.color=bullForGold?'var(--green)':'var(--muted2)';
   }
   window._vixData=d;
+  if($('sbVix')){$('sbVix').textContent=fmt(d.price);$('sbVix').className='sb-row-val '+(d.price>20?'up':'dn');}
+  updateTicker([['tkVix','tkVixC'],['tkVix2','tkVixC2']], fmt(d.price), d.changePct, d.change>=0);
   updateSignalFull();
 }
 
@@ -1338,6 +1371,12 @@ function updateSignalFull(){
     note.style.color=pct>=0.6?'var(--green)':pct<=0.3?'var(--red)':'var(--orange)';
   }
   if(ts) ts.textContent='Calculated: '+localTs(new Date());
+  // Sidebar signal pill
+  const sbSig=$('sbSignal');
+  if(sbSig){
+    sbSig.className='sb-signal '+(pct>=0.6?'bull':pct<=0.3?'bear':'mix');
+    sbSig.textContent=(pct>=0.6?'BULL':pct<=0.3?'BEAR':'FLAT')+' SIGNAL';
+  }
 }
 
 // ═══════════════════════════════════════════════════
@@ -1866,6 +1905,8 @@ async function loadCrypto(){
       if($(c.pId)) $(c.pId).textContent=c.prefix+fmt(d.price,c.dec);
       if($(c.cId)) $(c.cId).innerHTML=`<span class="${up?'up':'dn'}">${up?'+':''}${fmt(d.changePct)}%</span>`;
       if($(c.tsId)) $(c.tsId).textContent=ts;
+      // BTC ticker
+      if(c.sym==='BTC-USD') updateTicker([['tkBtc','tkBtcC'],['tkBtc2','tkBtcC2']], '$'+fmt(d.price,0), d.changePct, d.change>=0);
     }catch(e){}
   }));
 }
@@ -2280,141 +2321,42 @@ function switchTab(paneId, btn){
 // COLLAPSIBLE WIDGET HEADERS
 // ═══════════════════════════════════════════════════
 function initCollapsibles(){
-  document.querySelectorAll('.sec-lbl').forEach(lbl => {
-    const widget = lbl.closest('.widget');
-    if(!widget) return;
-    // Wrap label in a clickable header
-    const body = document.createElement('div');
-    body.className = 'widget-body';
-    // Move all siblings after the label into body
-    let next = lbl.nextSibling;
-    while(next){ const n = next.nextSibling; body.appendChild(next); next = n; }
-    const colBtn = document.createElement('button');
-    colBtn.type = 'button'; colBtn.className = 'collapse-btn'; colBtn.setAttribute('aria-label','Toggle widget'); colBtn.textContent = '▾';
-    const hdr = document.createElement('div');
-    hdr.className = 'widget-hdr';
-    hdr.appendChild(lbl);
-    hdr.appendChild(colBtn);
-    hdr.addEventListener('click', () => {
-      const collapsed = body.classList.toggle('collapsed');
-      colBtn.classList.toggle('collapsed', collapsed);
-      // save state
-      const wid = widget.getAttribute('data-widget');
-      try{ const s=JSON.parse(localStorage.getItem('fxdesk_collapsed')||'{}'); s[wid]=collapsed; localStorage.setItem('fxdesk_collapsed',JSON.stringify(s)); }catch(e){}
-    });
-    widget.insertBefore(hdr, widget.firstChild);
-    widget.appendChild(body);
-    // Restore saved collapse state
+  // Safe: just add a click toggle on existing .widget elements using .sec-lbl as the trigger
+  // Does NOT move DOM nodes (which breaks the widget edit system)
+  document.querySelectorAll('.widget[data-widget]').forEach(widget => {
+    const lbl = widget.querySelector('.sec-lbl');
+    if(!lbl) return;
     const wid = widget.getAttribute('data-widget');
+    // Create collapse btn inline next to label
+    const colBtn = document.createElement('button');
+    colBtn.type = 'button';
+    colBtn.className = 'collapse-btn';
+    colBtn.setAttribute('aria-label','Toggle widget');
+    colBtn.innerHTML = '▾';
+    colBtn.style.cssText = 'background:none;border:none;cursor:pointer;font-size:13px;color:var(--muted2);margin-left:8px;line-height:1;vertical-align:middle;';
+    lbl.appendChild(colBtn);
+    // Find all siblings after the lbl to toggle
+    const toggleContent = () => {
+      const collapsed = widget.classList.toggle('w-collapsed');
+      colBtn.innerHTML = collapsed ? '▸' : '▾';
+      colBtn.style.color = collapsed ? 'var(--muted)' : 'var(--muted2)';
+      try{
+        const s = JSON.parse(localStorage.getItem('fxdesk_collapsed')||'{}');
+        s[wid] = collapsed;
+        localStorage.setItem('fxdesk_collapsed', JSON.stringify(s));
+      }catch(e){}
+    };
+    lbl.style.cursor = 'pointer';
+    lbl.addEventListener('click', toggleContent);
+    colBtn.addEventListener('click', e => { e.stopPropagation(); toggleContent(); });
+    // Restore state
     try{
-      const s=JSON.parse(localStorage.getItem('fxdesk_collapsed')||'{}');
-      if(s[wid]){ body.classList.add('collapsed'); colBtn.classList.add('collapsed'); }
+      const s = JSON.parse(localStorage.getItem('fxdesk_collapsed')||'{}');
+      if(s[wid]){ widget.classList.add('w-collapsed'); colBtn.innerHTML='▸'; }
     }catch(e){}
   });
 }
 
-// Patch refreshAll to also sync sidebar + sparklines + ticker for BTC
-const _origRefreshAll = refreshAll;
-refreshAll = async function(){
-  await _origRefreshAll();
-  // After refresh, sync sidebar from cached window data
-  syncSidebar(
-    window._gPrice ? {price:window._gPrice.price,change:window._gPrice.change,changePct:window._gPrice.changePct,high:window._gPrice.high,low:window._gPrice.low} : null,
-    window._euP,
-    window._dxyP, window._tnxP, window._vixData,
-    window._oilP, window._spP,
-    window._gbpP, window._jpyP, window._audP, window._cadP
-  );
-  // BTC ticker
-  const btc = window._btcP;
-  if(btc) updateTicker([['tkBtc','tkBtcC'],['tkBtc2','tkBtcC2']], '$'+fmt(btc.price,0), btc.changePct, btc.change>=0);
-};
-
-// Store data refs when loadMarket runs (patch window storage key)
-const _origLoadMarket = loadMarket;
-loadMarket = async function(sym, pId, cId, nId, dId, tsId, opts){
-  const d = await _origLoadMarket(sym, pId, cId, nId, dId, tsId, opts);
-  if(d){
-    // Store by price element id for sidebar sync
-    window['_'+pId] = d;
-    // Draw sparkline if available
-    const sparkId = pId.replace('P','Spark');
-    if(document.getElementById(sparkId) && d._closes){
-      drawSparkline(sparkId, d._closes, d.change >= 0);
-    }
-  }
-  return d;
-};
-
-// Patch yfFull to also expose closes for sparklines
-const _origYfFull = yfFull;
-yfFull = async function(sym){
-  const encoded=encodeURIComponent(`https://query1.finance.yahoo.com/v8/finance/chart/${sym}?interval=1d&range=5d&includePrePost=true`);
-  const proxies=[
-    `https://corsproxy.io/?url=${encoded}`,
-    `https://corsproxy.io/?${encoded}`,
-    `https://api.allorigins.win/raw?url=${encoded}`,
-    `https://api.codetabs.com/v1/proxy/?quest=${encoded}`,
-  ];
-  const tryProxy=async url=>{
-    const r=await Promise.race([fetch(url,{cache:'no-store'}),_fetchTimeout(7000)]);
-    if(!r.ok) throw new Error('not ok');
-    const txt=await r.text();
-    const d=JSON.parse(txt);
-    const res=d?.chart?.result?.[0];
-    if(!res) throw new Error('no result');
-    const m=res.meta||{};
-    const closes=(res.indicators?.quote?.[0]?.close||[]).filter(v=>v!=null);
-    let p=m.regularMarketPrice;
-    if(p==null||isNaN(p)) p=closes[closes.length-1];
-    if(p==null||isNaN(p)) throw new Error('no price');
-    const prev=closes.length>=2?closes[closes.length-2]:(m.chartPreviousClose||m.previousClose||p);
-    const ch=p-prev, pct=prev?(ch/prev)*100:0;
-    return {price:p,change:ch,changePct:pct,high:m.regularMarketDayHigh,low:m.regularMarketDayLow,open:m.regularMarketOpen,prev,fetched:new Date(),_closes:closes};
-  };
-  try{ return await Promise.any(proxies.map(tryProxy)); }catch(e){ return null; }
-};
-
-// Patch loadMetals to update sidebar + sparklines
-const _origLoadMetals = loadMetals;
-loadMetals = async function(){
-  const result = await _origLoadMetals();
-  // Sync gold sidebar from gPrice element content (re-fetch from Yahoo directly)
-  try{
-    const g = await yfFull('GC=F').then(d=>d||yfFull('XAUUSD=X'));
-    if(g){
-      window._gPrice = g;
-      const up = g.change >= 0;
-      if($('sbGoldPrice')) $('sbGoldPrice').textContent='$'+fmt(g.price);
-      if($('sbGoldChg')) $('sbGoldChg').innerHTML=`<span class="${up?'up':'dn'}">${up?'+':''}$${fmt(g.change)} (${up?'+':''}${fmt(g.changePct)}%)</span>`;
-      if($('sbGoldH')) $('sbGoldH').textContent=g.high?'$'+fmt(g.high):'—';
-      if($('sbGoldL')) $('sbGoldL').textContent=g.low?'$'+fmt(g.low):'—';
-      if($('sbGoldBA')) $('sbGoldBA').textContent='$'+fmt(g.price-0.20)+' / $'+fmt(g.price+0.20);
-      if(g._closes) drawSparkline('sbGoldSpark', g._closes, up);
-      updateTicker([['tkGold','tkGoldC'],['tkGold2','tkGoldC2']], '$'+fmt(g.price), g.changePct, up);
-    }
-    const eu = await yfFull('EURUSD=X').then(d=>d||yfFull('EUR=X'));
-    if(eu){
-      window._euP = eu;
-      const up = eu.change >= 0;
-      if($('sbEurPrice')) $('sbEurPrice').textContent=fmt(eu.price,4);
-      if($('sbEurChg')) $('sbEurChg').innerHTML=`<span class="${up?'up':'dn'}">${up?'+':''}${fmt(eu.change,4)} (${up?'+':''}${fmt(eu.changePct)}%)</span>`;
-      if(eu._closes) drawSparkline('sbEurSpark', eu._closes, up);
-      updateTicker([['tkEur','tkEurC'],['tkEur2','tkEurC2']], fmt(eu.price,4), eu.changePct, up);
-    }
-  }catch(e){}
-  // Update signal pill in sidebar
-  setTimeout(()=>{
-    const sigTxt=$('sigTxt');
-    const ring=$('sbSignal');
-    if(sigTxt&&ring){
-      const state=sigTxt.textContent||'—';
-      ring.className='sb-signal '+(state==='BULL'?'bull':state==='BEAR'?'bear':'mix');
-      ring.textContent=state+' SIGNAL';
-    }
-  }, 2000);
-  return result;
-};
   applyLayout();
   initCollapsibles();
   restoreChart();
