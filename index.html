@@ -1212,6 +1212,7 @@ async function loadMetals(){
       if($('silP')) $('silP').textContent='$'+fmt(s.price);
       if($('silC')) $('silC').innerHTML=`<span class="${up?'up':'dn'}">${up?'+':''}${fmt(s.change)} (${up?'+':''}${fmt(s.changePct)}%)</span>`;
       if($('silTs')) $('silTs').textContent=ts;
+      if(s._closes) drawSparkline('silSpark', s._closes, up);
     } else {
       if($('silP')) $('silP').innerHTML='<a href="https://www.tradingview.com/symbols/XAGUSD/" target="_blank" rel="noopener noreferrer" style="color:#C0C0C0;font-size:12px;text-decoration:none;">Tap ↗</a>';
     }
@@ -1622,8 +1623,9 @@ async function loadCalendar(){
 const LAYOUT_KEY='fxdesk_layout_v1';
 let editMode=false;
 
-function getWrap(){ return document.querySelector('.wrap'); }
-function allWidgets(){ return Array.from(document.querySelectorAll('.widget')); }
+function getWrap(){ return document.getElementById('mainCol') || document.querySelector('.wrap'); }
+const STUB_WIDGETS=['euhero','goldrow']; // permanently moved to sidebar
+function allWidgets(){ const c=document.getElementById('mainCol'); return Array.from((c||document).querySelectorAll('.widget')).filter(w=>!STUB_WIDGETS.includes(w.getAttribute('data-widget'))); }
 
 // Load saved layout (order + hidden) and apply
 function applyLayout(){
@@ -1633,6 +1635,7 @@ function applyLayout(){
   const wrap=getWrap();
   // Reorder
   saved.order.forEach(id=>{
+    if(STUB_WIDGETS.includes(id)) return; // skip sidebar stubs
     const w=document.querySelector(`.widget[data-widget="${id}"]`);
     if(w) wrap.appendChild(w);
   });
@@ -2357,6 +2360,8 @@ function initCollapsibles(){
   });
 }
 
+// Init on page load
+window.addEventListener('load', () => {
   applyLayout();
   initCollapsibles();
   restoreChart();
