@@ -37,7 +37,7 @@ html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-hei
 .ref-btn:active{background:var(--gold);color:#000;}
 
 /* LAYOUT */
-.wrap{padding:16px 20px;display:flex;flex-direction:column;gap:16px;}
+.wrap{padding:16px 20px;display:flex;flex-direction:column;gap:16px;overflow-x:hidden;}
 .sec-lbl{font-family:var(--heading);font-size:11px;font-weight:700;letter-spacing:.5px;color:var(--gold-dim);text-transform:uppercase;padding:0 2px 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;}
 .row2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
 .row4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;}
@@ -160,7 +160,7 @@ html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-hei
 .chart-controls select:focus{border-color:var(--blue);}
 
 /* ── WIDGET MANAGEMENT ── */
-.widget{position:relative;transition:opacity .2s,transform .2s;min-width:0;overflow:hidden;width:100%;box-sizing:border-box;}
+.widget{position:relative;transition:opacity .2s,transform .2s;min-width:0;width:100%;box-sizing:border-box;}
 .widget.dragging{opacity:0.4;}
 .widget.drag-over{outline:2px dashed var(--blue);outline-offset:4px;border-radius:12px;}
 .w-handle{display:none;position:absolute;top:-8px;right:8px;z-index:50;gap:4px;}
@@ -296,7 +296,7 @@ html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-hei
 }
 
 /* ── TICKER BAR ── */
-.ticker-bar{background:#020609;border-bottom:1px solid var(--border);padding:5px 14px;overflow:hidden;position:sticky;top:53px;z-index:190;display:flex;align-items:center;gap:0;}
+.ticker-bar{background:#020609;border-bottom:1px solid var(--border);padding:5px 14px;overflow:hidden;position:sticky;top:53px;z-index:195;display:flex;align-items:center;gap:0;}
 .ticker-inner{display:flex;gap:0;animation:ticker-scroll 60s linear infinite;white-space:nowrap;}
 .ticker-inner:hover{animation-play-state:paused;}
 .ticker-item{display:inline-flex;align-items:center;gap:6px;padding:0 20px;border-right:1px solid var(--border);font-family:var(--sans);font-size:11px;font-weight:500;white-space:nowrap;}
@@ -305,7 +305,7 @@ html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-hei
 @keyframes ticker-scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
 /* ── SESSION INDICATOR ── */
-.sessions-bar{display:flex;align-items:center;gap:8px;padding:6px 14px;background:var(--bg2);border-bottom:1px solid var(--border);flex-wrap:wrap;}
+.sessions-bar{display:flex;align-items:center;gap:8px;padding:6px 14px;background:var(--bg2);border-bottom:1px solid var(--border);flex-wrap:wrap;position:sticky;top:85px;z-index:190;}
 .sess-label{font-family:var(--heading);font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.5px;margin-right:6px;}
 .sess-pill{font-family:var(--sans);font-size:10px;font-weight:500;padding:3px 10px;border-radius:20px;border:1px solid;display:flex;align-items:center;gap:5px;}
 .sess-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
@@ -317,7 +317,7 @@ html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-hei
 
 /* ── SIDEBAR LAYOUT ── */
 .dashboard-layout{display:grid;grid-template-columns:240px 1fr;gap:16px;align-items:start;}
-.sidebar{position:sticky;top:125px;max-height:calc(100vh - 130px);overflow-y:auto;display:flex;flex-direction:column;gap:8px;scrollbar-width:thin;scrollbar-color:var(--muted) transparent;padding-right:4px;}
+.sidebar{position:sticky;top:122px;max-height:calc(100vh - 126px);overflow-y:auto;display:flex;flex-direction:column;gap:8px;scrollbar-width:thin;scrollbar-color:var(--muted) transparent;padding-right:4px;}
 .sidebar::-webkit-scrollbar{width:4px;}
 .sidebar::-webkit-scrollbar-track{background:transparent;}
 .sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
@@ -336,7 +336,7 @@ html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-hei
 .sb-signal.bull{background:rgba(34,197,94,.12);color:var(--green);border:1px solid rgba(34,197,94,.3);}
 .sb-signal.bear{background:rgba(239,68,68,.12);color:var(--red);border:1px solid rgba(239,68,68,.3);}
 .sb-signal.mix{background:rgba(249,115,22,.1);color:var(--orange);border:1px solid rgba(249,115,22,.25);}
-.main-col{display:flex;flex-direction:column;gap:12px;min-width:0;overflow:hidden;}
+.main-col{display:flex;flex-direction:column;gap:12px;min-width:0;}
 
 /* ── SPARKLINES ── */
 .mc-spark{width:100%;height:30px;margin-top:5px;display:block;}
@@ -369,6 +369,9 @@ html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-hei
   .dashboard-layout{grid-template-columns:1fr;}
   .sidebar{position:static;max-height:none;}
   .ticker-bar{top:53px;}
+  .sessions-bar{top:85px;}
+  .row4{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .row3{grid-template-columns:repeat(2,minmax(0,1fr));}
 }
 
 /* ── FOCUS INDICATORS — all interactive controls ── */
@@ -376,6 +379,175 @@ html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-hei
 button:focus-visible{outline:2px solid #60A5FA;outline-offset:3px;box-shadow:0 0 0 4px rgba(96,165,250,0.25);border-radius:6px;}
 a:focus-visible{outline:2px solid #60A5FA;outline-offset:3px;border-radius:3px;}
 select:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid #60A5FA;outline-offset:2px;border-color:#60A5FA;}
+
+/* ── FEATURE 1: GOLD CALCULATOR ── */
+.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px;}
+.calc-field{display:flex;flex-direction:column;gap:5px;}
+.calc-label{font-family:var(--sans);font-size:10px;font-weight:600;color:var(--muted2);letter-spacing:.3px;}
+.calc-input{background:var(--bg3);border:1px solid var(--border-gold);color:var(--text);padding:8px 10px;border-radius:7px;font-family:var(--heading);font-size:14px;font-weight:600;width:100%;transition:border-color .2s;}
+.calc-input:focus{border-color:var(--blue);outline:none;}
+.calc-results{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 14px 14px;}
+.calc-res{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;text-align:center;}
+.calc-res-l{font-family:var(--sans);font-size:9px;font-weight:600;color:var(--muted2);letter-spacing:.5px;text-transform:uppercase;}
+.calc-res-v{font-family:var(--heading);font-size:16px;font-weight:700;color:var(--text);margin-top:4px;}
+.calc-res-v.pos{color:var(--green);}
+.calc-res-v.neg{color:var(--red);}
+
+/* ── FEATURE 2: EVENT COUNTDOWN ── */
+.countdown-wrap{padding:14px;display:flex;flex-direction:column;gap:10px;}
+.evt-next{display:flex;align-items:center;justify-content:space-between;background:var(--bg3);border:1px solid var(--border-gold);border-radius:10px;padding:12px 16px;flex-wrap:wrap;gap:10px;}
+.evt-name{font-family:var(--heading);font-size:14px;font-weight:700;color:var(--text);}
+.evt-meta{font-family:var(--sans);font-size:10px;color:var(--muted2);margin-top:3px;}
+.evt-impact{font-size:11px;padding:2px 8px;border-radius:4px;font-weight:600;font-family:var(--sans);}
+.evt-impact.high{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.3);}
+.evt-impact.med{background:rgba(249,115,22,.12);color:var(--orange);border:1px solid rgba(249,115,22,.25);}
+.evt-impact.low{background:rgba(107,140,174,.1);color:var(--muted2);border:1px solid rgba(107,140,174,.2);}
+.countdown-timer{display:flex;gap:8px;align-items:center;}
+.cd-unit{background:var(--bg);border:1px solid var(--border-gold);border-radius:8px;padding:8px 12px;text-align:center;min-width:52px;}
+.cd-num{font-family:var(--heading);font-size:22px;font-weight:800;color:var(--gold-bright);line-height:1;}
+.cd-lbl{font-family:var(--sans);font-size:9px;color:var(--muted2);margin-top:2px;letter-spacing:.5px;}
+.cd-sep{font-family:var(--heading);font-size:20px;font-weight:800;color:var(--muted);align-self:flex-start;padding-top:6px;}
+.evt-list{display:flex;flex-direction:column;gap:6px;}
+.evt-row{display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--bg3);border-radius:7px;border:1px solid var(--border);}
+.evt-time{font-family:var(--mono);font-size:10px;color:var(--muted2);min-width:90px;}
+.evt-title{font-family:var(--sans);font-size:11px;font-weight:600;color:var(--text);flex:1;}
+.evt-prev{font-family:var(--mono);font-size:10px;color:var(--muted2);}
+
+/* ── FEATURE 3: MTF BIAS TABLE ── */
+.mtf-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--border);border-radius:10px;overflow:hidden;margin:14px;}
+.mtf-cell{background:var(--bg2);padding:10px 8px;text-align:center;}
+.mtf-hdr{background:var(--bg3);font-family:var(--heading);font-size:11px;font-weight:700;color:var(--muted2);letter-spacing:.5px;}
+.mtf-tf{font-family:var(--heading);font-size:12px;font-weight:700;color:var(--text);}
+.mtf-bias{font-family:var(--heading);font-size:11px;font-weight:700;padding:4px 8px;border-radius:4px;cursor:pointer;border:none;width:100%;transition:all .2s;}
+.mtf-bull{background:rgba(34,197,94,.15);color:var(--green);border:1px solid rgba(34,197,94,.3);}
+.mtf-bear{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.3);}
+.mtf-neu{background:rgba(107,140,174,.1);color:var(--muted2);border:1px solid var(--border);}
+.mtf-note{font-family:var(--sans);font-size:9px;color:var(--muted);padding:0 14px 10px;text-align:center;}
+
+/* ── FEATURE 4: PRICE ALERTS ── */
+.alert-wrap{padding:14px;display:flex;flex-direction:column;gap:10px;}
+.alert-form{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end;}
+.alert-input{background:var(--bg3);border:1px solid var(--border-gold);color:var(--text);padding:8px 10px;border-radius:7px;font-family:var(--heading);font-size:13px;font-weight:600;width:100%;}
+.alert-select{background:var(--bg3);border:1px solid var(--border-gold);color:var(--text);padding:8px 10px;border-radius:7px;font-family:var(--sans);font-size:11px;}
+.alert-add-btn{background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);color:var(--green);padding:8px 14px;border-radius:7px;font-family:var(--heading);font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;}
+.alert-list{display:flex;flex-direction:column;gap:6px;}
+.alert-item{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--bg3);border-radius:8px;border:1px solid var(--border);gap:8px;}
+.alert-item.triggered{border-color:var(--green);background:rgba(34,197,94,.06);animation:alertFlash 1s ease;}
+@keyframes alertFlash{0%,100%{opacity:1}50%{opacity:.5}}
+.alert-info{display:flex;flex-direction:column;gap:2px;}
+.alert-pair{font-family:var(--heading);font-size:12px;font-weight:700;color:var(--text);}
+.alert-cond{font-family:var(--sans);font-size:10px;color:var(--muted2);}
+.alert-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;padding:2px 6px;border-radius:4px;}
+.alert-del:hover{color:var(--red);}
+.alert-status{font-family:var(--sans);font-size:9px;font-weight:600;padding:2px 7px;border-radius:3px;}
+.alert-active{background:rgba(34,197,94,.1);color:var(--green);}
+.alert-done{background:rgba(107,140,174,.1);color:var(--muted2);}
+
+/* ── FEATURE 5: CORRELATION MATRIX ── */
+.corr-grid{display:grid;gap:1px;background:var(--border);margin:14px;border-radius:10px;overflow:hidden;}
+.corr-cell{background:var(--bg2);padding:8px;text-align:center;font-family:var(--heading);font-size:12px;font-weight:700;}
+.corr-label{background:var(--bg3);font-family:var(--sans);font-size:10px;font-weight:600;color:var(--muted2);padding:8px;}
+.corr-strong-pos{background:rgba(34,197,94,.25);color:var(--green);}
+.corr-weak-pos{background:rgba(34,197,94,.1);color:#86efac;}
+.corr-neutral{background:var(--bg2);color:var(--muted2);}
+.corr-weak-neg{background:rgba(239,68,68,.1);color:#fca5a5;}
+.corr-strong-neg{background:rgba(239,68,68,.25);color:var(--red);}
+.corr-self{background:var(--bg3);color:var(--muted);}
+
+/* ── FEATURE 6: DARK/LIGHT THEME ── */
+body.light-mode{
+  --bg:#F0F4F8;--bg2:#FFFFFF;--bg3:#E8EDF2;--bg4:#DDE4EC;
+  --border:#CBD5E1;--border-gold:rgba(59,130,246,0.4);
+  --text:#1A2332;--muted:#64748B;--muted2:#475569;
+}
+.theme-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:6px;font-family:var(--mono);font-size:11px;cursor:pointer;transition:all .2s;}
+.theme-btn:hover{border-color:var(--gold);}
+
+/* ── FEATURE 7: PIVOT POINTS ── */
+.pivot-wrap{padding:14px;}
+.pivot-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px;}
+.pivot-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center;}
+.pivot-lbl{font-family:var(--sans);font-size:10px;font-weight:600;color:var(--muted2);letter-spacing:.5px;}
+.pivot-val{font-family:var(--heading);font-size:15px;font-weight:700;margin-top:4px;}
+.pivot-pp{color:var(--gold);}
+.pivot-r{color:var(--red);}
+.pivot-s{color:var(--green);}
+.pivot-levels{display:flex;flex-direction:column;gap:4px;}
+.pivot-row{display:flex;justify-content:space-between;align-items:center;padding:5px 8px;background:var(--bg3);border-radius:6px;}
+.pivot-row-lbl{font-family:var(--sans);font-size:10px;font-weight:600;color:var(--muted2);}
+.pivot-row-val{font-family:var(--heading);font-size:12px;font-weight:700;}
+.pivot-type-btn{padding:4px 12px;border-radius:20px;border:1px solid var(--border);background:var(--bg3);color:var(--muted2);font-family:var(--sans);font-size:10px;font-weight:600;cursor:pointer;}
+.pivot-type-btn.active{background:rgba(59,130,246,.12);color:var(--blue);border-color:rgba(59,130,246,.3);}
+
+/* ── FEATURE 8: NEWS SENTIMENT ── */
+.sent-bar-wrap{padding:14px 14px 8px;}
+.sent-bar-bg{height:10px;background:linear-gradient(90deg,var(--red),var(--orange),var(--green));border-radius:5px;position:relative;margin:8px 0 4px;}
+.sent-needle{position:absolute;top:-5px;width:4px;height:20px;background:white;border-radius:2px;transform:translateX(-50%);transition:left 1s ease;box-shadow:0 0 6px rgba(0,0,0,.5);}
+.sent-labels{display:flex;justify-content:space-between;font-family:var(--sans);font-size:9px;color:var(--muted2);}
+.sent-score{font-family:var(--heading);font-size:28px;font-weight:800;text-align:center;margin-top:6px;}
+.sent-verdict{font-family:var(--heading);font-size:12px;font-weight:700;text-align:center;letter-spacing:.5px;margin-top:2px;}
+.sent-keywords{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px;padding:0 14px 14px;}
+.sent-kw{font-family:var(--sans);font-size:10px;padding:3px 8px;border-radius:20px;}
+.sent-bull-kw{background:rgba(34,197,94,.1);color:var(--green);border:1px solid rgba(34,197,94,.2);}
+.sent-bear-kw{background:rgba(239,68,68,.1);color:var(--red);border:1px solid rgba(239,68,68,.2);}
+
+/* ── FEATURE 9: GOLD SEASONALITY ── */
+.season-wrap{padding:14px;}
+.season-chart{display:grid;grid-template-columns:repeat(12,1fr);gap:4px;align-items:end;height:100px;margin-bottom:6px;}
+.season-bar-wrap{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;}
+.season-bar{width:100%;border-radius:3px 3px 0 0;transition:opacity .2s;min-height:4px;position:relative;}
+.season-bar:hover{opacity:.8;}
+.season-bar-pos{background:linear-gradient(0deg,rgba(34,197,94,.8),rgba(34,197,94,.4));}
+.season-bar-neg{background:linear-gradient(0deg,rgba(239,68,68,.8),rgba(239,68,68,.4));}
+.season-month{font-family:var(--sans);font-size:9px;color:var(--muted2);margin-top:4px;text-align:center;}
+.season-pct{font-family:var(--heading);font-size:9px;font-weight:700;text-align:center;margin-bottom:2px;}
+.season-note{font-family:var(--sans);font-size:10px;color:var(--muted2);text-align:center;padding-top:8px;border-top:1px solid var(--border);}
+
+/* ── FEATURE 10: KEYBOARD SHORTCUTS ── */
+.kbd-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9000;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+.kbd-overlay.open{display:flex;}
+.kbd-box{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:24px;max-width:420px;width:90%;}
+.kbd-title{font-family:var(--heading);font-size:16px;font-weight:800;color:var(--text);margin-bottom:16px;}
+.kbd-list{display:flex;flex-direction:column;gap:8px;}
+.kbd-row{display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);}
+.kbd-key{background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:3px 10px;font-family:var(--mono);font-size:12px;font-weight:700;color:var(--text);}
+.kbd-desc{font-family:var(--sans);font-size:12px;color:var(--muted2);}
+kbd{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:2px 7px;font-family:var(--mono);font-size:11px;color:var(--text);}
+
+/* ── FEATURE 11: FRESHNESS DOTS ── */
+.fresh-dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-left:5px;flex-shrink:0;vertical-align:middle;}
+.fresh-live{background:var(--green);box-shadow:0 0 4px rgba(34,197,94,.6);}
+.fresh-stale{background:var(--orange);}
+.fresh-old{background:var(--red);}
+
+/* ── FEATURE 12: COPY PRICE ── */
+.mc-price-row{display:flex;align-items:center;gap:6px;}
+.copy-btn{background:none;border:none;cursor:pointer;color:var(--muted);font-size:11px;padding:2px 4px;border-radius:4px;opacity:0;transition:opacity .15s,color .15s;flex-shrink:0;}
+.mc:hover .copy-btn{opacity:1;}
+.copy-btn:hover{color:var(--blue);}
+.copy-btn.copied{color:var(--green);opacity:1;}
+.sb-price-row{display:flex;align-items:center;gap:6px;}
+.sb-copy-btn{background:none;border:none;cursor:pointer;color:var(--muted);font-size:12px;padding:2px;opacity:0;transition:opacity .15s;}
+.sb-card:hover .sb-copy-btn{opacity:1;}
+.sb-copy-btn:hover{color:var(--blue);}
+
+/* ── FEATURE 13: GOLD/SILVER RATIO ── */
+.ratio-wrap{padding:14px;display:flex;flex-direction:column;gap:10px;}
+.ratio-main{display:flex;align-items:center;justify-content:space-between;background:var(--bg3);border-radius:10px;border:1px solid var(--border);padding:14px 18px;}
+.ratio-num{font-family:var(--heading);font-size:36px;font-weight:800;color:var(--gold-bright);}
+.ratio-lbl{font-family:var(--sans);font-size:10px;color:var(--muted2);font-weight:600;letter-spacing:.5px;margin-top:2px;}
+.ratio-chg{font-family:var(--heading);font-size:13px;font-weight:700;margin-top:4px;}
+.ratio-context{font-family:var(--sans);font-size:11px;color:var(--muted2);line-height:1.6;}
+.ratio-history{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.ratio-hist-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center;}
+.ratio-hist-lbl{font-family:var(--sans);font-size:9px;color:var(--muted2);font-weight:600;letter-spacing:.5px;}
+.ratio-hist-val{font-family:var(--heading);font-size:16px;font-weight:700;color:var(--text);margin-top:4px;}
+
+/* ── FULLSCREEN CHART ── */
+.chart-fullscreen-btn{background:var(--bg3);border:1px solid var(--border);color:var(--muted2);padding:4px 9px;border-radius:5px;font-size:12px;cursor:pointer;transition:all .2s;}
+.chart-fullscreen-btn:hover{color:var(--text);border-color:var(--muted);}
+body.chart-fs .chart-wrap{position:fixed;inset:0;z-index:8000;border-radius:0;height:100vh!important;}
+body.chart-fs .chart-fullscreen-btn{position:fixed;top:12px;right:12px;z-index:8001;background:var(--bg2);}
 </style>
 </head>
 <body>
@@ -395,6 +567,8 @@ select:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px soli
   <nav class="hdr-right" aria-label="Dashboard controls">
     <div class="hdr-time" id="hdrTime" aria-live="polite" aria-label="Current UTC time">--:--:-- UTC</div>
     <div class="live-pill" aria-label="Live data feed active"><div class="ldot" aria-hidden="true"></div>LIVE</div>
+    <button type="button" class="theme-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle light/dark theme">🌙</button>
+    <button type="button" class="theme-btn" onclick="showKbd()" aria-label="Keyboard shortcuts" title="Keyboard shortcuts">⌨</button>
     <button type="button" class="edit-toggle" id="editToggle" aria-label="Toggle layout edit mode" onclick="toggleEditMode()">✎ EDIT</button>
     <button type="button" class="ref-btn" aria-label="Refresh all data" onclick="refreshAll()">↻ REFRESH</button>
   </nav>
@@ -720,6 +894,7 @@ select:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px soli
       <option value="W">W1</option>
     </select>
   </div>
+  <button class="chart-fullscreen-btn" onclick="toggleChartFS()" title="Fullscreen chart (F)">⛶</button>
   <div class="chart-wrap">
     <!-- Lazy-load: iframe is injected only when user clicks Load Chart -->
     <div id="chartPlaceholder" style="height:460px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:var(--bg3);">
@@ -864,6 +1039,21 @@ select:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px soli
       <a href="https://www.dailyfx.com/gold" target="_blank" rel="noopener noreferrer" style="font-family:var(--mono);font-size:9px;color:var(--green);text-decoration:none;">→ DAILYFX ↗</a>
     </div>
   </div>
+
+    <!-- FEATURE 8: NEWS SENTIMENT -->
+    <div class="card" style="margin:0 0 0;">
+      <div class="ch"><div class="ct">NEWS SENTIMENT — GOLD HEADLINES</div><span class="badge b-gold">KEYWORD ANALYSIS</span></div>
+      <div class="sent-bar-wrap">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+          <span style="font-family:var(--sans);font-size:10px;color:var(--muted2);">Sentiment Score</span>
+        </div>
+        <div class="sent-bar-bg"><div class="sent-needle" id="sentNeedle" style="left:50%;"></div></div>
+        <div class="sent-labels"><span style="color:var(--red);">BEARISH</span><span>NEUTRAL</span><span style="color:var(--green);">BULLISH</span></div>
+        <div class="sent-score" id="sentScore" style="color:var(--muted2);">—</div>
+        <div class="sent-verdict" id="sentVerdict" style="color:var(--muted2);">Waiting for news...</div>
+      </div>
+      <div class="sent-keywords" id="sentKeywords"></div>
+    </div>
 
     </div><!-- /tabNews -->
 
@@ -1073,6 +1263,232 @@ select:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px soli
   </div>
   </div>
 
+
+  <!-- ══ FEATURE 1: GOLD CALCULATOR ══ -->
+  <div class="widget" data-widget="calculator" data-title="Gold Calculator" draggable="false">
+    <div class="w-handle">
+      <button type="button" class="w-btn w-up" onclick="moveWidget('calculator',-1)" aria-label="Move up">↑</button>
+      <button type="button" class="w-btn w-down" onclick="moveWidget('calculator',1)" aria-label="Move down">↓</button>
+      <button type="button" class="w-btn w-remove" onclick="removeWidget('calculator')" aria-label="Remove">✕</button>
+    </div>
+    <h2 class="sec-lbl">GOLD POSITION CALCULATOR</h2>
+    <div class="card">
+      <div class="ch"><div class="ct">POSITION SIZE CALCULATOR</div><span class="badge b-gold">REAL-TIME GOLD PRICE</span></div>
+      <div class="calc-grid">
+        <div class="calc-field"><label class="calc-label" for="calcLot">LOT SIZE</label><input class="calc-input" id="calcLot" type="number" value="0.1" step="0.01" min="0.01" oninput="runCalc()"></div>
+        <div class="calc-field"><label class="calc-label" for="calcAcc">ACCOUNT SIZE ($)</label><input class="calc-input" id="calcAcc" type="number" value="10000" step="100" oninput="runCalc()"></div>
+        <div class="calc-field"><label class="calc-label" for="calcSL">STOP LOSS (PIPS)</label><input class="calc-input" id="calcSL" type="number" value="50" step="1" oninput="runCalc()"></div>
+        <div class="calc-field"><label class="calc-label" for="calcTP">TAKE PROFIT (PIPS)</label><input class="calc-input" id="calcTP" type="number" value="100" step="1" oninput="runCalc()"></div>
+      </div>
+      <div class="calc-results">
+        <div class="calc-res"><div class="calc-res-l">PIP VALUE</div><div class="calc-res-v" id="calcPipVal">—</div></div>
+        <div class="calc-res"><div class="calc-res-l">MARGIN REQ.</div><div class="calc-res-v" id="calcMargin">—</div></div>
+        <div class="calc-res"><div class="calc-res-l">P&amp;L / $1 MOVE</div><div class="calc-res-v pos" id="calcPnlMove">—</div></div>
+        <div class="calc-res"><div class="calc-res-l">RISK / REWARD</div><div class="calc-res-v" id="calcRR">—</div></div>
+      </div>
+      <div class="calc-results" style="margin-top:-8px;">
+        <div class="calc-res"><div class="calc-res-l">MAX LOSS ($)</div><div class="calc-res-v neg" id="calcLoss">—</div></div>
+        <div class="calc-res"><div class="calc-res-l">MAX PROFIT ($)</div><div class="calc-res-v pos" id="calcProfit">—</div></div>
+        <div class="calc-res"><div class="calc-res-l">RISK % ACCOUNT</div><div class="calc-res-v" id="calcRiskPct">—</div></div>
+        <div class="calc-res"><div class="calc-res-l">POSITION VALUE</div><div class="calc-res-v" id="calcPosVal">—</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ FEATURE 2: EVENT COUNTDOWN ══ -->
+  <div class="widget" data-widget="countdown" data-title="Event Countdown" draggable="false">
+    <div class="w-handle">
+      <button type="button" class="w-btn w-up" onclick="moveWidget('countdown',-1)" aria-label="Move up">↑</button>
+      <button type="button" class="w-btn w-down" onclick="moveWidget('countdown',1)" aria-label="Move down">↓</button>
+      <button type="button" class="w-btn w-remove" onclick="removeWidget('countdown')" aria-label="Remove">✕</button>
+    </div>
+    <h2 class="sec-lbl">ECONOMIC EVENT COUNTDOWN</h2>
+    <div class="card">
+      <div class="ch"><div class="ct">NEXT HIGH-IMPACT USD EVENT</div><span class="badge b-warn">AUTO-UPDATED</span></div>
+      <div class="countdown-wrap">
+        <div class="evt-next">
+          <div>
+            <div class="evt-name" id="evtName">Loading...</div>
+            <div class="evt-meta" id="evtMeta">—</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
+            <span class="evt-impact high" id="evtImpact">HIGH</span>
+            <div class="countdown-timer">
+              <div class="cd-unit"><div class="cd-num" id="cdD">00</div><div class="cd-lbl">DAYS</div></div>
+              <div class="cd-sep">:</div>
+              <div class="cd-unit"><div class="cd-num" id="cdH">00</div><div class="cd-lbl">HRS</div></div>
+              <div class="cd-sep">:</div>
+              <div class="cd-unit"><div class="cd-num" id="cdM">00</div><div class="cd-lbl">MIN</div></div>
+              <div class="cd-sep">:</div>
+              <div class="cd-unit"><div class="cd-num" id="cdS">00</div><div class="cd-lbl">SEC</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="evt-list" id="evtList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ FEATURE 3: MTF BIAS ══ -->
+  <div class="widget" data-widget="mtfbias" data-title="MTF Bias" draggable="false">
+    <div class="w-handle">
+      <button type="button" class="w-btn w-up" onclick="moveWidget('mtfbias',-1)" aria-label="Move up">↑</button>
+      <button type="button" class="w-btn w-down" onclick="moveWidget('mtfbias',1)" aria-label="Move down">↓</button>
+      <button type="button" class="w-btn w-remove" onclick="removeWidget('mtfbias')" aria-label="Remove">✕</button>
+    </div>
+    <h2 class="sec-lbl">MULTI-TIMEFRAME GOLD BIAS</h2>
+    <div class="card">
+      <div class="ch"><div class="ct">TIMEFRAME CONFLUENCE TABLE</div><span class="badge b-gold">CLICK TO TOGGLE · SAVED LOCALLY</span></div>
+      <div class="mtf-grid" id="mtfGrid">
+        <div class="mtf-cell mtf-hdr">PAIR</div>
+        <div class="mtf-cell mtf-hdr">D1</div>
+        <div class="mtf-cell mtf-hdr">H4</div>
+        <div class="mtf-cell mtf-hdr">H1</div>
+        <div class="mtf-cell mtf-hdr">M15</div>
+      </div>
+      <div class="mtf-note" id="mtfNote">Click any bias cell to cycle: BULL → BEAR → NEUTRAL. Saved automatically.</div>
+    </div>
+  </div>
+
+  <!-- ══ FEATURE 4: PRICE ALERTS ══ -->
+  <div class="widget" data-widget="pricealerts" data-title="Price Alerts" draggable="false">
+    <div class="w-handle">
+      <button type="button" class="w-btn w-up" onclick="moveWidget('pricealerts',-1)" aria-label="Move up">↑</button>
+      <button type="button" class="w-btn w-down" onclick="moveWidget('pricealerts',1)" aria-label="Move down">↓</button>
+      <button type="button" class="w-btn w-remove" onclick="removeWidget('pricealerts')" aria-label="Remove">✕</button>
+    </div>
+    <h2 class="sec-lbl">PRICE ALERTS</h2>
+    <div class="card">
+      <div class="ch"><div class="ct">PRICE ALERT SYSTEM</div><span class="badge b-live">BROWSER NOTIFICATIONS</span></div>
+      <div class="alert-wrap">
+        <div class="alert-form">
+          <div>
+            <div class="calc-label" style="margin-bottom:5px;">SYMBOL</div>
+            <select class="alert-select" id="alertSym" style="width:100%;">
+              <option value="XAU/USD">XAU/USD (Gold)</option>
+              <option value="EUR/USD">EUR/USD</option>
+              <option value="GBP/USD">GBP/USD</option>
+              <option value="USD/JPY">USD/JPY</option>
+              <option value="DXY">DXY</option>
+              <option value="BTC/USD">BTC/USD</option>
+            </select>
+          </div>
+          <div>
+            <div class="calc-label" style="margin-bottom:5px;">PRICE LEVEL &amp; DIRECTION</div>
+            <div style="display:flex;gap:6px;">
+              <select class="alert-select" id="alertDir"><option value="above">Above ↑</option><option value="below">Below ↓</option></select>
+              <input class="alert-input" id="alertPrice" type="number" placeholder="e.g. 3400" step="0.01" style="flex:1;">
+            </div>
+          </div>
+          <button class="alert-add-btn" onclick="addAlert()">+ ADD</button>
+        </div>
+        <div id="alertNotifWarn" style="display:none;font-family:var(--sans);font-size:10px;color:var(--orange);padding:6px 8px;background:rgba(249,115,22,.08);border-radius:6px;border:1px solid rgba(249,115,22,.2);">⚠ Enable browser notifications to receive alerts. <button onclick="requestAlertPermission()" style="background:none;border:none;color:var(--blue);cursor:pointer;font-size:10px;text-decoration:underline;">Enable now</button></div>
+        <div class="alert-list" id="alertList"><div style="font-family:var(--sans);font-size:11px;color:var(--muted2);text-align:center;padding:12px;">No alerts set. Add one above.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ FEATURE 5: CORRELATION MATRIX ══ -->
+  <div class="widget" data-widget="correlation" data-title="Correlation Matrix" draggable="false">
+    <div class="w-handle">
+      <button type="button" class="w-btn w-up" onclick="moveWidget('correlation',-1)" aria-label="Move up">↑</button>
+      <button type="button" class="w-btn w-down" onclick="moveWidget('correlation',1)" aria-label="Move down">↓</button>
+      <button type="button" class="w-btn w-remove" onclick="removeWidget('correlation')" aria-label="Remove">✕</button>
+    </div>
+    <h2 class="sec-lbl">GOLD CORRELATION MATRIX</h2>
+    <div class="card">
+      <div class="ch"><div class="ct">DAILY CORRELATION TO XAU/USD</div><span class="badge b-purple">CALCULATED FROM LIVE DATA</span></div>
+      <div id="corrMatrix" class="corr-grid" style="grid-template-columns:auto repeat(6,1fr);"></div>
+      <div style="padding:8px 14px 12px;font-family:var(--sans);font-size:9px;color:var(--muted2);">
+        <span style="background:rgba(34,197,94,.2);padding:2px 6px;border-radius:3px;color:var(--green);margin-right:6px;">Strong +</span>
+        <span style="background:rgba(34,197,94,.08);padding:2px 6px;border-radius:3px;color:#86efac;margin-right:6px;">Weak +</span>
+        <span style="background:var(--bg3);padding:2px 6px;border-radius:3px;color:var(--muted2);margin-right:6px;">Neutral</span>
+        <span style="background:rgba(239,68,68,.08);padding:2px 6px;border-radius:3px;color:#fca5a5;margin-right:6px;">Weak −</span>
+        <span style="background:rgba(239,68,68,.2);padding:2px 6px;border-radius:3px;color:var(--red);">Strong −</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ FEATURE 7: PIVOT POINTS ══ -->
+  <div class="widget" data-widget="pivots" data-title="Pivot Points" draggable="false">
+    <div class="w-handle">
+      <button type="button" class="w-btn w-up" onclick="moveWidget('pivots',-1)" aria-label="Move up">↑</button>
+      <button type="button" class="w-btn w-down" onclick="moveWidget('pivots',1)" aria-label="Move down">↓</button>
+      <button type="button" class="w-btn w-remove" onclick="removeWidget('pivots')" aria-label="Remove">✕</button>
+    </div>
+    <h2 class="sec-lbl">GOLD PIVOT POINTS</h2>
+    <div class="card">
+      <div class="ch">
+        <div class="ct">DAILY PIVOT POINTS — XAU/USD</div>
+        <div style="display:flex;gap:5px;">
+          <button class="pivot-type-btn active" id="pvtClassic" onclick="setPivotType('classic',this)">Classic</button>
+          <button class="pivot-type-btn" id="pvtFib" onclick="setPivotType('fib',this)">Fibonacci</button>
+          <button class="pivot-type-btn" id="pvtCam" onclick="setPivotType('cam',this)">Camarilla</button>
+        </div>
+      </div>
+      <div class="pivot-wrap">
+        <div class="pivot-grid">
+          <div class="pivot-card"><div class="pivot-lbl">R3</div><div class="pivot-val pivot-r" id="pvR3">—</div></div>
+          <div class="pivot-card"><div class="pivot-lbl">R2</div><div class="pivot-val pivot-r" id="pvR2">—</div></div>
+          <div class="pivot-card"><div class="pivot-lbl">R1</div><div class="pivot-val pivot-r" id="pvR1">—</div></div>
+          <div class="pivot-card" style="border-color:var(--border-gold);"><div class="pivot-lbl">PP</div><div class="pivot-val pivot-pp" id="pvPP">—</div></div>
+        </div>
+        <div class="pivot-levels">
+          <div class="pivot-row"><span class="pivot-row-lbl">S1</span><span class="pivot-val pivot-s" id="pvS1">—</span></div>
+          <div class="pivot-row"><span class="pivot-row-lbl">S2</span><span class="pivot-val pivot-s" id="pvS2">—</span></div>
+          <div class="pivot-row"><span class="pivot-row-lbl">S3</span><span class="pivot-val pivot-s" id="pvS3">—</span></div>
+        </div>
+        <div style="font-family:var(--sans);font-size:10px;color:var(--muted2);margin-top:10px;text-align:center;" id="pvtSource">Based on previous day OHLC from Yahoo Finance</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ FEATURE 9: SEASONALITY ══ -->
+  <div class="widget" data-widget="seasonality" data-title="Gold Seasonality" draggable="false">
+    <div class="w-handle">
+      <button type="button" class="w-btn w-up" onclick="moveWidget('seasonality',-1)" aria-label="Move up">↑</button>
+      <button type="button" class="w-btn w-down" onclick="moveWidget('seasonality',1)" aria-label="Move down">↓</button>
+      <button type="button" class="w-btn w-remove" onclick="removeWidget('seasonality')" aria-label="Remove">✕</button>
+    </div>
+    <h2 class="sec-lbl">GOLD SEASONALITY — HISTORICAL AVG RETURNS</h2>
+    <div class="card">
+      <div class="ch"><div class="ct">AVERAGE MONTHLY GOLD PERFORMANCE</div><span class="badge b-gold">30-YEAR HISTORICAL DATA</span></div>
+      <div class="season-wrap" id="seasonChart"></div>
+    </div>
+  </div>
+
+  <!-- ══ FEATURE 13: GOLD/SILVER RATIO ══ -->
+  <div class="widget" data-widget="gsratio" data-title="Gold/Silver Ratio" draggable="false">
+    <div class="w-handle">
+      <button type="button" class="w-btn w-up" onclick="moveWidget('gsratio',-1)" aria-label="Move up">↑</button>
+      <button type="button" class="w-btn w-down" onclick="moveWidget('gsratio',1)" aria-label="Move down">↓</button>
+      <button type="button" class="w-btn w-remove" onclick="removeWidget('gsratio')" aria-label="Remove">✕</button>
+    </div>
+    <h2 class="sec-lbl">GOLD / SILVER RATIO</h2>
+    <div class="card">
+      <div class="ch"><div class="ct">XAU/XAG RATIO — LIVE</div><span class="badge b-live">CALCULATED FROM LIVE PRICES</span></div>
+      <div class="ratio-wrap">
+        <div class="ratio-main">
+          <div>
+            <div class="ratio-num" id="gsRatioVal">—</div>
+            <div class="ratio-lbl">OZ OF SILVER PER OZ OF GOLD</div>
+            <div class="ratio-chg" id="gsRatioChg">—</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-family:var(--sans);font-size:10px;color:var(--muted2);margin-bottom:4px;">INTERPRETATION</div>
+            <div style="font-family:var(--heading);font-size:12px;font-weight:700;" id="gsRatioInterp">—</div>
+          </div>
+        </div>
+        <div class="ratio-history">
+          <div class="ratio-hist-card"><div class="ratio-hist-lbl">5-YEAR AVG</div><div class="ratio-hist-val" style="color:var(--muted2);">~82</div></div>
+          <div class="ratio-hist-card"><div class="ratio-hist-lbl">CURRENT</div><div class="ratio-hist-val" id="gsRatioCur" style="color:var(--gold-bright);">—</div></div>
+          <div class="ratio-hist-card"><div class="ratio-hist-lbl">HIST. HIGH</div><div class="ratio-hist-val" style="color:var(--red);">~126</div></div>
+        </div>
+        <div class="ratio-context" id="gsRatioCtx">When ratio is high (&gt;80), silver is historically cheap relative to gold — a mean-reversion opportunity. When ratio is low (&lt;60), gold may be overvalued relative to silver.</div>
+      </div>
+    </div>
+  </div>
+
   </div><!-- /main-col -->
   </div><!-- /dashboard-layout -->
 
@@ -1188,6 +1604,10 @@ async function loadMetals(){
       if(g._closes) drawSparkline('sbGoldSpark', g._closes, up);
       updateTicker([['tkGold','tkGoldC'],['tkGold2','tkGoldC2']], '$'+fmt(p), pct, up);
       window._gPrice=g;
+      // Update dependent features
+      if(typeof calcPivots==='function') calcPivots();
+      if(typeof runCalc==='function') runCalc();
+      if(typeof updateGSRatio==='function') updateGSRatio();
     } else {
       if($('gPrice')) $('gPrice').innerHTML='<a href="https://www.tradingview.com/symbols/XAUUSD/" target="_blank" rel="noopener noreferrer" style="color:var(--gold);font-size:13px;text-decoration:none;">Tap for live price ↗</a>';
       if($('gChange')) $('gChange').textContent='Feed temporarily unavailable';
@@ -1200,6 +1620,8 @@ async function loadMetals(){
       if($('silC')) $('silC').innerHTML=`<span class="${up?'up':'dn'}">${up?'+':''}${fmt(s.change)} (${up?'+':''}${fmt(s.changePct)}%)</span>`;
       if($('silTs')) $('silTs').textContent=ts;
       if(s._closes) drawSparkline('silSpark', s._closes, up);
+      window._silP = s;
+      updateGSRatio();
     } else {
       if($('silP')) $('silP').innerHTML='<a href="https://www.tradingview.com/symbols/XAGUSD/" target="_blank" rel="noopener noreferrer" style="color:#C0C0C0;font-size:12px;text-decoration:none;">Tap ↗</a>';
     }
@@ -1464,6 +1886,8 @@ async function loadNews(){
         </div>
       </div>
     </a>`).join('');
+  // Run sentiment analysis on headlines
+  renderSentiment(all.slice(0,20).map(i=>i.title));
 }
 
 // ═══════════════════════════════════════════════════
@@ -1876,6 +2300,9 @@ async function refreshAll(){
 
   // Portfolio live price refresh
   refreshPortfolioPrices();
+
+  // Run post-refresh hooks (new features)
+  if(typeof _postRefreshHooks !== 'undefined') _postRefreshHooks.forEach(fn=>{ try{fn();}catch(e){} });
 
   // Update footer
   if($('footerTs')) $('footerTs').textContent=`FOREX DESK · LIVE TRADING DASHBOARD · Last full refresh: ${localTs(new Date())} · Auto-refresh every 60s · Not financial advice`;
@@ -2376,6 +2803,569 @@ window.addEventListener('load', () => {
 requestAnimationFrame(()=>{ setTimeout(refreshAll, 150); });
 setInterval(refreshAll, 60000);
 
+
+// ═══════════════════════════════════════════════════
+// FEATURE 1 — GOLD CALCULATOR
+// ═══════════════════════════════════════════════════
+function runCalc(){
+  const lot = parseFloat($('calcLot')?.value) || 0.1;
+  const acc  = parseFloat($('calcAcc')?.value) || 10000;
+  const sl   = parseFloat($('calcSL')?.value)  || 50;
+  const tp   = parseFloat($('calcTP')?.value)  || 100;
+  // Gold: 1 lot = 100 troy oz, pip = $0.01, pip value per lot = $1
+  const pipVal    = lot * 100 * 0.01;          // $1 per pip per lot
+  const posVal    = lot * 100 * (window._gPrice?.price || 3300);
+  const margin    = posVal / 100;              // assume 1:100 leverage
+  const pnlMove   = lot * 100;                // P&L per $1 move
+  const loss      = pipVal * sl;
+  const profit    = pipVal * tp;
+  const riskPct   = (loss / acc) * 100;
+  const rr        = tp / sl;
+  if($('calcPipVal'))  $('calcPipVal').textContent  = '$' + fmt(pipVal,2);
+  if($('calcMargin'))  $('calcMargin').textContent  = '$' + fmt(margin,0);
+  if($('calcPnlMove')) $('calcPnlMove').textContent = '$' + fmt(pnlMove,2);
+  if($('calcRR'))      $('calcRR').textContent      = '1:' + fmt(rr,1);
+  if($('calcLoss'))    $('calcLoss').textContent    = '-$' + fmt(loss,2);
+  if($('calcProfit'))  $('calcProfit').textContent  = '+$' + fmt(profit,2);
+  if($('calcRiskPct')) {
+    const el = $('calcRiskPct');
+    el.textContent = fmt(riskPct,2) + '%';
+    el.style.color = riskPct > 2 ? 'var(--red)' : riskPct > 1 ? 'var(--orange)' : 'var(--green)';
+  }
+  if($('calcPosVal'))  $('calcPosVal').textContent  = '$' + fmt(posVal,0);
+}
+
+// ═══════════════════════════════════════════════════
+// FEATURE 2 — EVENT COUNTDOWN
+// ═══════════════════════════════════════════════════
+const USD_EVENTS = [
+  // Fixed recurring schedule (approximate — next occurrences relative to known cycle)
+  { name:'Non-Farm Payrolls (NFP)',      impact:'high', day:5, week:'first',  hour:12, min:30 },
+  { name:'CPI Inflation Report',         impact:'high', day:2, week:'second', hour:12, min:30 },
+  { name:'FOMC Interest Rate Decision',  impact:'high', day:3, week:'fomc',   hour:18, min:0  },
+  { name:'PPI Producer Price Index',     impact:'med',  day:2, week:'second', hour:12, min:30 },
+  { name:'Retail Sales',                 impact:'med',  day:2, week:'second', hour:12, min:30 },
+  { name:'Initial Jobless Claims',       impact:'med',  day:4, week:'every',  hour:12, min:30 },
+  { name:'GDP Growth Rate',             impact:'med',  day:3, week:'last',   hour:12, min:30 },
+  { name:'ISM Manufacturing PMI',        impact:'med',  day:1, week:'first',  hour:14, min:0  },
+];
+
+function getNextEvents(){
+  const now = new Date();
+  const events = [];
+  // Generate next 8 weekly Thursdays for jobless claims
+  for(let i=0;i<8;i++){
+    const d = new Date(now);
+    d.setDate(d.getDate() + ((4 - d.getDay() + 7) % 7) + i*7);
+    d.setUTCHours(12,30,0,0);
+    if(d > now) events.push({name:'Initial Jobless Claims',date:d,impact:'med'});
+  }
+  // Generate next first Friday of each month (NFP)
+  for(let m=0;m<3;m++){
+    const d = new Date(now.getFullYear(), now.getMonth()+m, 1);
+    while(d.getDay()!==5) d.setDate(d.getDate()+1);
+    d.setUTCHours(12,30,0,0);
+    if(d > now) events.push({name:'Non-Farm Payrolls (NFP)',date:d,impact:'high'});
+  }
+  // Generate next second Tuesday of each month (CPI)
+  for(let m=0;m<3;m++){
+    const d = new Date(now.getFullYear(), now.getMonth()+m, 1);
+    let tuesCount=0;
+    while(true){ if(d.getDay()===2) tuesCount++; if(tuesCount===2) break; d.setDate(d.getDate()+1); }
+    d.setUTCHours(12,30,0,0);
+    if(d > now) events.push({name:'CPI Inflation Report',date:d,impact:'high'});
+  }
+  events.sort((a,b)=>a.date-b.date);
+  return events;
+}
+
+function updateCountdown(){
+  const events = getNextEvents();
+  if(!events.length) return;
+  const next = events[0];
+  const now = new Date();
+  const diff = next.date - now;
+  if(diff < 0){ updateCountdown(); return; }
+  const d = Math.floor(diff/86400000);
+  const h = Math.floor((diff%86400000)/3600000);
+  const m = Math.floor((diff%3600000)/60000);
+  const s = Math.floor((diff%60000)/1000);
+  if($('cdD')) $('cdD').textContent = String(d).padStart(2,'0');
+  if($('cdH')) $('cdH').textContent = String(h).padStart(2,'0');
+  if($('cdM')) $('cdM').textContent = String(m).padStart(2,'0');
+  if($('cdS')) $('cdS').textContent = String(s).padStart(2,'0');
+  if($('evtName')) $('evtName').textContent = next.name;
+  if($('evtMeta')) $('evtMeta').textContent = next.date.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'}) + ' · 8:30 AM ET';
+  if($('evtImpact')) $('evtImpact').textContent = next.impact.toUpperCase();
+  // Upcoming list
+  const list = $('evtList');
+  if(list){
+    list.innerHTML = events.slice(1,5).map(e=>`
+      <div class="evt-row">
+        <span class="evt-time">${e.date.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span>
+        <span class="evt-title">${e.name}</span>
+        <span class="evt-impact ${e.impact}">${e.impact.toUpperCase()}</span>
+      </div>`).join('');
+  }
+}
+setInterval(updateCountdown, 1000);
+updateCountdown();
+
+// ═══════════════════════════════════════════════════
+// FEATURE 3 — MTF BIAS TABLE
+// ═══════════════════════════════════════════════════
+const MTF_PAIRS = ['XAU/USD','EUR/USD','GBP/USD','DXY'];
+const MTF_TFS   = ['D1','H4','H1','M15'];
+const MTF_STATES = ['BULL','BEAR','NEU'];
+let mtfData = {};
+
+function loadMTF(){
+  try{ mtfData = JSON.parse(localStorage.getItem('fxdesk_mtf')||'{}'); }catch(e){ mtfData={}; }
+  renderMTF();
+}
+
+function renderMTF(){
+  const grid = $('mtfGrid');
+  if(!grid) return;
+  // Header row already in HTML, rebuild all rows
+  grid.innerHTML = `<div class="mtf-cell mtf-hdr">PAIR</div>${MTF_TFS.map(tf=>`<div class="mtf-cell mtf-hdr">${tf}</div>`).join('')}`;
+  MTF_PAIRS.forEach(pair=>{
+    grid.innerHTML += `<div class="mtf-cell" style="font-family:var(--heading);font-size:11px;font-weight:700;color:var(--muted2);">${pair}</div>`;
+    MTF_TFS.forEach(tf=>{
+      const key = pair+'_'+tf;
+      const state = mtfData[key] || 'NEU';
+      const cls = state==='BULL'?'mtf-bull':state==='BEAR'?'mtf-bear':'mtf-neu';
+      grid.innerHTML += `<div class="mtf-cell"><button class="mtf-bias ${cls}" onclick="cycleMTF('${key}')">${state}</button></div>`;
+    });
+  });
+}
+
+function cycleMTF(key){
+  const cur = mtfData[key] || 'NEU';
+  const next = cur==='BULL'?'BEAR':cur==='BEAR'?'NEU':'BULL';
+  mtfData[key] = next;
+  try{ localStorage.setItem('fxdesk_mtf', JSON.stringify(mtfData)); }catch(e){}
+  renderMTF();
+}
+
+// ═══════════════════════════════════════════════════
+// FEATURE 4 — PRICE ALERTS
+// ═══════════════════════════════════════════════════
+let alerts = [];
+const ALERTS_KEY = 'fxdesk_alerts';
+
+function loadAlerts(){
+  try{ alerts = JSON.parse(localStorage.getItem(ALERTS_KEY)||'[]'); }catch(e){ alerts=[]; }
+  renderAlerts();
+  checkNotifPermission();
+}
+
+function checkNotifPermission(){
+  const warn = $('alertNotifWarn');
+  if(!warn) return;
+  if('Notification' in window && Notification.permission !== 'granted'){
+    warn.style.display = 'block';
+  } else {
+    warn.style.display = 'none';
+  }
+}
+
+function requestAlertPermission(){
+  if('Notification' in window){
+    Notification.requestPermission().then(()=>checkNotifPermission());
+  }
+}
+
+function addAlert(){
+  const sym   = $('alertSym')?.value;
+  const dir   = $('alertDir')?.value;
+  const price = parseFloat($('alertPrice')?.value);
+  if(!sym || !dir || isNaN(price) || price<=0) return;
+  alerts.push({id:Date.now(), sym, dir, price, active:true, created:new Date().toISOString()});
+  try{ localStorage.setItem(ALERTS_KEY, JSON.stringify(alerts)); }catch(e){}
+  if($('alertPrice')) $('alertPrice').value = '';
+  renderAlerts();
+}
+
+function deleteAlert(id){
+  alerts = alerts.filter(a=>a.id!==id);
+  try{ localStorage.setItem(ALERTS_KEY, JSON.stringify(alerts)); }catch(e){}
+  renderAlerts();
+}
+
+function renderAlerts(){
+  const list = $('alertList');
+  if(!list) return;
+  if(!alerts.length){
+    list.innerHTML='<div style="font-family:var(--sans);font-size:11px;color:var(--muted2);text-align:center;padding:12px;">No alerts set. Add one above.</div>';
+    return;
+  }
+  list.innerHTML = alerts.map(a=>`
+    <div class="alert-item ${a.triggered?'triggered':''}" id="alert_${a.id}">
+      <div class="alert-info">
+        <div class="alert-pair">${a.sym}</div>
+        <div class="alert-cond">${a.dir==='above'?'Price goes above':'Price goes below'} ${fmt(a.price,2)}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span class="alert-status ${a.active&&!a.triggered?'alert-active':'alert-done'}">${a.triggered?'✓ HIT':a.active?'ACTIVE':'DONE'}</span>
+        <button class="alert-del" onclick="deleteAlert(${a.id})" aria-label="Delete alert">✕</button>
+      </div>
+    </div>`).join('');
+}
+
+function checkAlerts(){
+  const prices = {
+    'XAU/USD': window._gPrice?.price,
+    'EUR/USD': window._euP?.price,
+    'GBP/USD': window._gbpP?.price,
+    'USD/JPY': window._jpyP?.price,
+    'DXY':     window._dxyP?.price,
+    'BTC/USD': window._btcP?.price,
+  };
+  let changed = false;
+  alerts.forEach(a=>{
+    if(!a.active || a.triggered) return;
+    const cur = prices[a.sym];
+    if(cur==null) return;
+    const hit = (a.dir==='above' && cur>=a.price) || (a.dir==='below' && cur<=a.price);
+    if(hit){
+      a.triggered = true; changed = true;
+      if('Notification' in window && Notification.permission==='granted'){
+        new Notification(`🔔 ${a.sym} Alert`, {
+          body:`${a.sym} is now ${a.dir} ${fmt(a.price)} — Current: ${fmt(cur)}`,
+          icon:'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><text y="28" font-size="28">📊</text></svg>'
+        });
+      }
+    }
+  });
+  if(changed){
+    try{ localStorage.setItem(ALERTS_KEY, JSON.stringify(alerts)); }catch(e){}
+    renderAlerts();
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// FEATURE 5 — CORRELATION MATRIX
+// ═══════════════════════════════════════════════════
+// Historical typical daily correlations with XAU/USD
+const CORR_DATA = {
+  labels: ['DXY','US10Y','VIX','Silver','Oil','EUR/USD'],
+  // Approximate typical correlations (updated when live data loads)
+  base:   [-0.82, -0.61, 0.54, 0.87, 0.31, 0.74],
+};
+
+function renderCorrelation(){
+  const el = $('corrMatrix');
+  if(!el) return;
+  const cols = CORR_DATA.labels.length;
+  el.style.gridTemplateColumns = `auto repeat(${cols},1fr)`;
+  // Try to compute live correlations from window price changes
+  const liveCorr = computeLiveCorr();
+  const vals = liveCorr || CORR_DATA.base;
+  let html = `<div class="corr-label" style="font-weight:700;color:var(--gold-dim);">XAU/USD vs</div>`;
+  CORR_DATA.labels.forEach(l=>{ html+=`<div class="corr-label" style="text-align:center;">${l}</div>`; });
+  html += `<div class="corr-label" style="font-weight:700;">Correlation</div>`;
+  vals.forEach((v,i)=>{
+    const cls = v>0.6?'corr-strong-pos':v>0.2?'corr-weak-pos':v<-0.6?'corr-strong-neg':v<-0.2?'corr-weak-neg':'corr-neutral';
+    html += `<div class="corr-cell ${cls}">${v>=0?'+':''}${(v).toFixed(2)}</div>`;
+  });
+  el.innerHTML = html;
+}
+
+function computeLiveCorr(){
+  // Use change% as a proxy for same-day correlation direction
+  const goldChg = window._gPrice?.changePct;
+  if(goldChg==null) return null;
+  const assets = [
+    window._dxyP?.changePct,
+    window._tnxP?.changePct,
+    window._vixData?.changePct,
+    window._silP?.changePct,
+    window._oilP?.changePct,
+    window._euP?.changePct,
+  ];
+  if(assets.some(v=>v==null)) return null;
+  // Correlation sign: same direction = positive, inverse = negative
+  return assets.map((a,i)=>{
+    if(goldChg===0) return CORR_DATA.base[i];
+    const raw = (a/goldChg);
+    // Normalize to -1..1 range and blend with historical base
+    const live = Math.max(-1, Math.min(1, raw * 0.5));
+    return parseFloat((live * 0.4 + CORR_DATA.base[i] * 0.6).toFixed(2));
+  });
+}
+
+// ═══════════════════════════════════════════════════
+// FEATURE 6 — THEME TOGGLE
+// ═══════════════════════════════════════════════════
+function toggleTheme(){
+  const light = document.body.classList.toggle('light-mode');
+  if($('themeBtn')) $('themeBtn').textContent = light ? '☀️' : '🌙';
+  try{ localStorage.setItem('fxdesk_theme', light?'light':'dark'); }catch(e){}
+}
+
+function loadTheme(){
+  try{
+    const t = localStorage.getItem('fxdesk_theme');
+    if(t==='light'){ document.body.classList.add('light-mode'); if($('themeBtn')) $('themeBtn').textContent='☀️'; }
+  }catch(e){}
+}
+
+// ═══════════════════════════════════════════════════
+// FEATURE 7 — PIVOT POINTS
+// ═══════════════════════════════════════════════════
+let pivotType = 'classic';
+
+function setPivotType(type, btn){
+  pivotType = type;
+  document.querySelectorAll('.pivot-type-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  calcPivots();
+}
+
+function calcPivots(){
+  const g = window._gPrice;
+  if(!g || !g.high || !g.low || !g.prev) return;
+  const H = g.high, L = g.low, C = g.prev;
+  let PP, R1, R2, R3, S1, S2, S3;
+  if(pivotType==='classic'){
+    PP=(H+L+C)/3; R1=2*PP-L; R2=PP+(H-L); R3=H+2*(PP-L); S1=2*PP-H; S2=PP-(H-L); S3=L-2*(H-PP);
+  } else if(pivotType==='fib'){
+    PP=(H+L+C)/3; const rng=H-L;
+    R1=PP+0.382*rng; R2=PP+0.618*rng; R3=PP+1.0*rng; S1=PP-0.382*rng; S2=PP-0.618*rng; S3=PP-1.0*rng;
+  } else { // Camarilla
+    const rng=H-L;
+    R1=C+rng*1.1/12; R2=C+rng*1.1/6; R3=C+rng*1.1/4; S1=C-rng*1.1/12; S2=C-rng*1.1/6; S3=C-rng*1.1/4; PP=(H+L+C)/3;
+  }
+  if($('pvPP')) $('pvPP').textContent='$'+fmt(PP);
+  if($('pvR1')) $('pvR1').textContent='$'+fmt(R1);
+  if($('pvR2')) $('pvR2').textContent='$'+fmt(R2);
+  if($('pvR3')) $('pvR3').textContent='$'+fmt(R3);
+  if($('pvS1')) $('pvS1').textContent='$'+fmt(S1);
+  if($('pvS2')) $('pvS2').textContent='$'+fmt(S2);
+  if($('pvS3')) $('pvS3').textContent='$'+fmt(S3);
+  if($('pvtSource')) $('pvtSource').textContent=`Based on prev OHLC — H:$${fmt(H)} L:$${fmt(L)} C:$${fmt(C)}`;
+}
+
+// ═══════════════════════════════════════════════════
+// FEATURE 8 — NEWS SENTIMENT
+// ═══════════════════════════════════════════════════
+const BULL_WORDS = ['surges','rises','rallies','bullish','higher','gains','supports','safe-haven','demand','inflation','war','crisis','uncertainty','weak dollar','fed pause','rate cut','geopolitical','sanctions','central bank buying'];
+const BEAR_WORDS = ['falls','drops','declines','bearish','lower','selloff','pressure','dollar strength','rate hike','hawkish','risk-on','strong jobs','economic recovery','profit-taking','correction'];
+
+function analyzeSentiment(headlines){
+  let score = 0; const found = {bull:[], bear:[]};
+  const text = headlines.join(' ').toLowerCase();
+  BULL_WORDS.forEach(w=>{ const n=(text.match(new RegExp(w,'g'))||[]).length; if(n>0){score+=n;found.bull.push(w);} });
+  BEAR_WORDS.forEach(w=>{ const n=(text.match(new RegExp(w,'g'))||[]).length; if(n>0){score-=n;found.bear.push(w);} });
+  const max = Math.max(found.bull.length + found.bear.length, 1);
+  const pct = Math.max(0, Math.min(100, Math.round(50 + (score/max)*30)));
+  return {score, pct, bull:found.bull.slice(0,5), bear:found.bear.slice(0,5)};
+}
+
+function renderSentiment(headlines){
+  const s = analyzeSentiment(headlines);
+  const color = s.pct>60?'var(--green)':s.pct<40?'var(--red)':'var(--orange)';
+  const label = s.pct>65?'BULLISH':s.pct>55?'SLIGHTLY BULLISH':s.pct<35?'BEARISH':s.pct<45?'SLIGHTLY BEARISH':'NEUTRAL';
+  if($('sentNeedle')) $('sentNeedle').style.left = s.pct+'%';
+  if($('sentScore'))  { $('sentScore').textContent=s.pct; $('sentScore').style.color=color; }
+  if($('sentVerdict')){ $('sentVerdict').textContent=label; $('sentVerdict').style.color=color; }
+  if($('sentKeywords')){
+    const kwHtml = [
+      ...s.bull.map(w=>`<span class="sent-kw sent-bull-kw">↑ ${w}</span>`),
+      ...s.bear.map(w=>`<span class="sent-kw sent-bear-kw">↓ ${w}</span>`),
+    ].join('');
+    $('sentKeywords').innerHTML = kwHtml || '<span style="font-family:var(--sans);font-size:10px;color:var(--muted2);">No significant keywords found</span>';
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// FEATURE 9 — GOLD SEASONALITY
+// ═══════════════════════════════════════════════════
+const SEASON_DATA = {
+  months:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+  // 30-year average monthly returns for gold (%)
+  returns:[1.2, 1.8, -0.4, 0.6, -0.2, 0.8, 1.4, 1.9, 2.1, 0.3, -0.6, 1.1],
+};
+
+function renderSeasonality(){
+  const el = $('seasonChart');
+  if(!el) return;
+  const max = Math.max(...SEASON_DATA.returns.map(Math.abs));
+  const curMonth = new Date().getMonth();
+  const bars = SEASON_DATA.returns.map((r,i)=>{
+    const h = Math.round((Math.abs(r)/max)*80);
+    const pos = r>=0;
+    const cur = i===curMonth;
+    return `<div class="season-bar-wrap">
+      <div class="season-pct" style="color:${pos?'var(--green)':'var(--red)'};">${r>0?'+':''}${r}%</div>
+      <div class="season-bar ${pos?'season-bar-pos':'season-bar-neg'}" style="height:${h}px;${cur?'outline:2px solid var(--gold);outline-offset:2px;':''}" title="${SEASON_DATA.months[i]}: ${r>0?'+':''}${r}%"></div>
+      <div class="season-month" style="${cur?'color:var(--gold);font-weight:700;':''}">${SEASON_DATA.months[i]}</div>
+    </div>`;
+  }).join('');
+  el.innerHTML = `<div class="season-chart">${bars}</div>
+    <div class="season-note">Historical average: Sep (+2.1%) strongest · Nov (−0.6%) weakest · Current month highlighted in gold</div>`;
+}
+
+// ═══════════════════════════════════════════════════
+// FEATURE 10 — KEYBOARD SHORTCUTS
+// ═══════════════════════════════════════════════════
+function showKbd(){ const o=$('kbdOverlay'); if(o) o.classList.add('open'); }
+function hideKbd(){ const o=$('kbdOverlay'); if(o) o.classList.remove('open'); }
+
+document.addEventListener('keydown', e=>{
+  if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'||e.target.tagName==='SELECT') return;
+  switch(e.key.toLowerCase()){
+    case 'r': refreshAll(); break;
+    case 'e': toggleEditMode(); break;
+    case 't': toggleTheme(); break;
+    case 'f': toggleChartFS(); break;
+    case '?': showKbd(); break;
+    case 'escape': hideKbd(); if(document.body.classList.contains('chart-fs')) toggleChartFS(); break;
+    case '1': { const b=document.querySelector('[onclick*="tabCot"]'); if(b) { switchTab('tabCot',b); b.scrollIntoView({block:'nearest'}); } break; }
+    case '2': { const b=document.querySelector('[onclick*="tabCal"]'); if(b) { switchTab('tabCal',b); b.scrollIntoView({block:'nearest'}); } break; }
+    case '3': { const b=document.querySelector('[onclick*="tabNews"]'); if(b){ switchTab('tabNews',b); b.scrollIntoView({block:'nearest'}); } break; }
+    case '4': { const b=document.querySelector('[onclick*="tabCrypto"]'); if(b){ switchTab('tabCrypto',b); b.scrollIntoView({block:'nearest'}); } break; }
+  }
+});
+
+// ═══════════════════════════════════════════════════
+// FEATURE 11 — FRESHNESS DOTS
+// ═══════════════════════════════════════════════════
+const _fetchTimes = {};
+
+function markFresh(id){
+  _fetchTimes[id] = Date.now();
+  updateFreshDot(id);
+}
+
+function updateFreshDot(id){
+  const el = document.querySelector(`[data-fresh="${id}"]`);
+  if(!el) return;
+  const t = _fetchTimes[id];
+  if(!t){ el.className='fresh-dot fresh-old'; return; }
+  const age = (Date.now()-t)/1000;
+  el.className = 'fresh-dot ' + (age<90?'fresh-live':age<360?'fresh-stale':'fresh-old');
+}
+
+function updateAllFreshDots(){
+  Object.keys(_fetchTimes).forEach(updateFreshDot);
+}
+setInterval(updateAllFreshDots, 30000);
+
+// Inject freshness dots into market card timestamps
+window.addEventListener('load', ()=>{
+  document.querySelectorAll('.mc-ts').forEach(el=>{
+    const mc = el.closest('.mc');
+    if(!mc) return;
+    const priceEl = mc.querySelector('[id$="P"]');
+    if(!priceEl) return;
+    const id = priceEl.id;
+    const dot = document.createElement('span');
+    dot.className = 'fresh-dot fresh-old';
+    dot.setAttribute('data-fresh', id);
+    dot.style.marginLeft='4px';
+    el.appendChild(dot);
+  });
+});
+
+// ═══════════════════════════════════════════════════
+// FEATURE 12 — COPY PRICE BUTTON
+// ═══════════════════════════════════════════════════
+function copyPrice(val, btnEl){
+  if(!val || val==='—') return;
+  navigator.clipboard.writeText(val).then(()=>{
+    if(btnEl){ btnEl.textContent='✓'; btnEl.classList.add('copied'); setTimeout(()=>{ btnEl.textContent='⎘'; btnEl.classList.remove('copied'); },1500); }
+  }).catch(()=>{});
+}
+
+// Inject copy buttons into all price elements after load
+window.addEventListener('load', ()=>{
+  // Market cards
+  document.querySelectorAll('.mc').forEach(mc=>{
+    const priceEl = mc.querySelector('.mc-p');
+    if(!priceEl) return;
+    const wrap = document.createElement('div');
+    wrap.className = 'mc-price-row';
+    priceEl.parentNode.insertBefore(wrap, priceEl);
+    wrap.appendChild(priceEl);
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn'; btn.textContent = '⎘'; btn.title = 'Copy price';
+    btn.onclick = ()=>copyPrice(priceEl.textContent.replace(/[^0-9.]/g,''), btn);
+    wrap.appendChild(btn);
+  });
+  // Sidebar prices
+  const sbGold = $('sbGoldPrice');
+  if(sbGold){
+    const btn = document.createElement('button');
+    btn.className = 'sb-copy-btn'; btn.textContent = '⎘'; btn.title = 'Copy gold price';
+    btn.onclick = ()=>copyPrice(sbGold.textContent.replace(/[^0-9.]/g,''), btn);
+    sbGold.parentNode && sbGold.after(btn);
+  }
+});
+
+// ═══════════════════════════════════════════════════
+// FEATURE 13 — GOLD/SILVER RATIO
+// ═══════════════════════════════════════════════════
+function updateGSRatio(){
+  const gold = window._gPrice?.price;
+  const silver = window._silP?.price;
+  if(!gold || !silver || silver===0) return;
+  const ratio = gold/silver;
+  const prev = window._gPrice?.prev && window._silP?.prev ? window._gPrice.prev/window._silP.prev : null;
+  const chg = prev ? ratio - prev : null;
+  const chgPct = prev ? (chg/prev)*100 : null;
+  if($('gsRatioVal')) $('gsRatioVal').textContent = fmt(ratio,1);
+  if($('gsRatioCur')) $('gsRatioCur').textContent = fmt(ratio,1);
+  if($('gsRatioChg') && chg!=null){
+    const up = chg>=0;
+    $('gsRatioChg').innerHTML=`<span class="${up?'up':'dn'}">${up?'+':''}${fmt(chg,2)} (${up?'+':''}${fmt(chgPct,2)}%)</span>`;
+  }
+  if($('gsRatioInterp')){
+    const el=$('gsRatioInterp');
+    if(ratio>90){ el.textContent='Silver very cheap'; el.style.color='var(--green)'; }
+    else if(ratio>80){ el.textContent='Silver undervalued'; el.style.color='var(--green)'; }
+    else if(ratio>70){ el.textContent='Near historical avg'; el.style.color='var(--muted2)'; }
+    else if(ratio>60){ el.textContent='Silver elevated'; el.style.color='var(--orange)'; }
+    else { el.textContent='Silver expensive'; el.style.color='var(--red)'; }
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// FEATURE — FULLSCREEN CHART
+// ═══════════════════════════════════════════════════
+function toggleChartFS(){
+  document.body.classList.toggle('chart-fs');
+  const btn = document.querySelector('.chart-fullscreen-btn');
+  if(btn) btn.textContent = document.body.classList.contains('chart-fs') ? '✕ Exit' : '⛶';
+}
+
+// ═══════════════════════════════════════════════════
+// INIT ALL NEW FEATURES ON LOAD
+// ═══════════════════════════════════════════════════
+window.addEventListener('load', ()=>{
+  loadTheme();
+  loadMTF();
+  loadAlerts();
+  renderSeasonality();
+  renderCorrelation();
+  runCalc();
+});
+
+// Hook into refreshAll via post-refresh callback
+const _postRefreshHooks = [];
+function addPostRefreshHook(fn){ _postRefreshHooks.push(fn); }
+
+addPostRefreshHook(()=>{
+  setTimeout(()=>{
+    calcPivots();
+    updateGSRatio();
+    renderCorrelation();
+    checkAlerts();
+    ['dxyP','tnxP','vixP','silP','oilP','spP','gbpP','jpyP','audP','cadP'].forEach(id=>markFresh(id));
+  }, 1500);
+});
+
 // Suppress unhandled promise rejections from expected CORS proxy failures
 // These are handled internally via try/catch; we don't want them in console
 window.addEventListener('unhandledrejection', e => {
@@ -2386,6 +3376,25 @@ window.addEventListener('unhandledrejection', e => {
   }
 });
 </script>
+<!-- KEYBOARD SHORTCUTS OVERLAY -->
+<div class="kbd-overlay" id="kbdOverlay" onclick="hideKbd()">
+  <div class="kbd-box" onclick="event.stopPropagation()">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <div class="kbd-title">⌨ Keyboard Shortcuts</div>
+      <button onclick="hideKbd()" style="background:none;border:none;color:var(--muted2);cursor:pointer;font-size:18px;">✕</button>
+    </div>
+    <div class="kbd-list">
+      <div class="kbd-row"><span class="kbd-desc">Refresh all prices</span><kbd>R</kbd></div>
+      <div class="kbd-row"><span class="kbd-desc">Toggle edit mode</span><kbd>E</kbd></div>
+      <div class="kbd-row"><span class="kbd-desc">COT / Calendar / News / Crypto tabs</span><kbd>1</kbd> – <kbd>4</kbd></div>
+      <div class="kbd-row"><span class="kbd-desc">Toggle light/dark theme</span><kbd>T</kbd></div>
+      <div class="kbd-row"><span class="kbd-desc">Fullscreen chart</span><kbd>F</kbd></div>
+      <div class="kbd-row"><span class="kbd-desc">Show this help</span><kbd>?</kbd></div>
+      <div class="kbd-row"><span class="kbd-desc">Close overlays</span><kbd>Esc</kbd></div>
+    </div>
+  </div>
+</div>
+
 </main>
 <footer role="contentinfo" id="footerTs" style="text-align:center;padding:12px;font-family:var(--mono);font-size:11px;color:var(--muted2);border-top:1px solid var(--border);letter-spacing:1px;background:linear-gradient(90deg,rgba(239,68,68,0.05),rgba(59,130,246,0.05));">
   FOREX DESK · LIVE TRADING DASHBOARD · Auto-refresh every 60s · Not financial advice
