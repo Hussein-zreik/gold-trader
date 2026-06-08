@@ -21,7 +21,7 @@
   --heading:'Plus Jakarta Sans','Inter',system-ui,sans-serif;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;}
+html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
 
 /* HEADER */
 .hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--hdr-bg);border-bottom:2px solid transparent;border-image:linear-gradient(90deg,var(--accent-red),var(--accent-blue),var(--accent-red)) 1;position:sticky;top:0;z-index:200;gap:10px;flex-wrap:wrap;}
@@ -38,7 +38,7 @@ html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-hei
 .ref-btn:active{background:var(--gold);color:#000;}
 
 /* LAYOUT */
-.wrap{padding:16px 20px;display:flex;flex-direction:column;gap:16px;overflow-x:hidden;}
+.wrap{padding:16px 20px;display:flex;flex-direction:column;gap:16px;}
 .sec-lbl{font-family:var(--heading);font-size:11px;font-weight:700;letter-spacing:.5px;color:var(--gold-dim);text-transform:uppercase;padding:0 2px 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;}
 .row2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
 .row4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;}
@@ -86,6 +86,7 @@ html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-hei
 /* MARKET CARDS */
 .mc{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 13px 12px;position:relative;overflow:visible;min-width:0;box-sizing:border-box;}
 .mc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;overflow:hidden;}
+.mc:hover{border-color:rgba(59,130,246,0.4);box-shadow:0 0 0 1px rgba(59,130,246,0.1),0 2px 12px rgba(0,0,0,0.25);transition:border-color .2s,box-shadow .2s;}
 .mc-dxy::after{background:linear-gradient(90deg,transparent,var(--blue),transparent);}
 .mc-tnx::after{background:linear-gradient(90deg,transparent,var(--orange),transparent);}
 .mc-vix::after{background:linear-gradient(90deg,transparent,var(--red),transparent);}
@@ -323,7 +324,7 @@ html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-hei
 .sidebar::-webkit-scrollbar-track{background:transparent;}
 .sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
 .sidebar::-webkit-scrollbar-thumb:hover{background:var(--muted);}
-.sb-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+.sb-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:visible;transition:border-color .2s,box-shadow .2s;}
 .sb-hdr{padding:10px 12px;background:var(--bg3);border-bottom:1px solid var(--border);font-family:var(--heading);font-size:10px;font-weight:700;letter-spacing:.5px;color:var(--gold-dim);}
 .sb-body{padding:14px 12px;}
 .sb-price-main{font-family:var(--heading);font-size:26px;font-weight:800;color:var(--gold-bright);line-height:1.1;letter-spacing:-.3px;}
@@ -633,6 +634,7 @@ kbd{background:var(--bg3);border:1px solid var(--border);border-radius:4px;paddi
 .copy-btn.copied{color:var(--green);opacity:1;}
 .sb-price-row{display:flex;align-items:center;gap:6px;}
 .sb-copy-btn{background:none;border:none;cursor:pointer;color:var(--muted);font-size:12px;padding:2px;opacity:0;transition:opacity .15s;}
+.sb-card:hover{border-color:rgba(59,130,246,0.5);box-shadow:0 0 0 1px rgba(59,130,246,0.15),0 4px 16px rgba(0,0,0,0.3);}
 .sb-card:hover .sb-copy-btn{opacity:1;}
 .sb-copy-btn:hover{color:var(--blue);}
 
@@ -2421,7 +2423,7 @@ async function refreshAll(){
   if(typeof _postRefreshHooks !== 'undefined') _postRefreshHooks.forEach(fn=>{ try{fn();}catch(e){} });
 
   // Update footer
-  if($('footerTs')) $('footerTs').textContent=`FOREX DESK · LIVE TRADING DASHBOARD · Last full refresh: ${localTs(new Date())} · Auto-refresh every 60s · Not financial advice`;
+  if($('footerTs')) $('footerTs').textContent=`FOREX DESK · LIVE TRADING DASHBOARD · Last full refresh: ${localTs(new Date())} · Auto-refresh every 2s · Not financial advice`;
 }
 
 // ═══════════════════════════════════════════════════
@@ -2936,7 +2938,7 @@ window.addEventListener('load', () => {
 
 // Defer first refresh until after first paint so UI is visible fast
 requestAnimationFrame(()=>{ setTimeout(refreshAll, 150); });
-setInterval(refreshAll, 60000);
+setInterval(refreshAll, 2000);
 
 
 // ═══════════════════════════════════════════════════
