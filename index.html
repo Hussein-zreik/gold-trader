@@ -337,7 +337,7 @@ html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-hei
 .sb-signal.bull{background:rgba(34,197,94,.12);color:var(--green);border:1px solid rgba(34,197,94,.3);}
 .sb-signal.bear{background:rgba(239,68,68,.12);color:var(--red);border:1px solid rgba(239,68,68,.3);}
 .sb-signal.mix{background:rgba(249,115,22,.1);color:var(--orange);border:1px solid rgba(249,115,22,.25);}
-.main-col{display:flex;flex-direction:column;gap:12px;min-width:0;}
+.main-col{display:flex;flex-direction:column;gap:12px;min-width:0;} /* CSS order used for widget layout */
 
 /* ── SPARKLINES ── */
 .mc-spark{width:100%;height:30px;margin-top:5px;display:block;}
@@ -2136,7 +2136,7 @@ async function loadCalendar(){
 // ═══════════════════════════════════════════════════
 // WIDGET MANAGEMENT ENGINE (move/sort/add/remove + save)
 // ═══════════════════════════════════════════════════
-const LAYOUT_KEY='fxdesk_layout_v3';
+const LAYOUT_KEY='fxdesk_layout_v4';
 let editMode=false;
 
 function getWrap(){ return document.getElementById('mainCol') || document.querySelector('.wrap'); }
@@ -2144,45 +2144,47 @@ const STUB_WIDGETS=['euhero','goldrow','crypto']; // live inside tabs, not main 
 function allWidgets(){ const c=document.getElementById('mainCol'); return Array.from((c||document).querySelectorAll('.widget')).filter(w=>!STUB_WIDGETS.includes(w.getAttribute('data-widget'))); }
 
 // Load saved layout (order + hidden) and apply
-// Widgets that must always stay at the bottom, after the tab widget
+// Widgets pinned to bottom — never reordered
 const BOTTOM_WIDGETS = ['portfolio','journal'];
 
 function applyLayout(){
-  // Clean up stale layout keys from old versions
-  try{ localStorage.removeItem('fxdesk_layout_v1'); localStorage.removeItem('fxdesk_layout_v2'); }catch(e){}
+  // Clean up ALL old layout keys — use CSS order from now on, never DOM moves
+  try{
+    localStorage.removeItem('fxdesk_layout_v1');
+    localStorage.removeItem('fxdesk_layout_v2');
+    localStorage.removeItem('fxdesk_layout_v3');
+  }catch(e){}
+
   let saved=null;
   try{ saved=JSON.parse(localStorage.getItem(LAYOUT_KEY)); }catch(e){}
-  if(!saved||!saved.order) return;
-  const wrap=getWrap();
-  // Reorder only non-bottom, non-stub widgets
-  saved.order.forEach(id=>{
-    if(STUB_WIDGETS.includes(id)) return;
-    if(BOTTOM_WIDGETS.includes(id)) return; // keep portfolio/journal at bottom
+
+  // Apply CSS order instead of DOM appendChild (safe — never breaks tab structure)
+  // Portfolio and journal always get order 9000+ so they stay at bottom
+  const defaultOrder=['drivers','chart','cot','calculator','countdown','mtfbias','pricealerts','correlation','pivots','seasonality','gsratio'];
+  const order = (saved&&saved.order) ? saved.order.filter(id=>!STUB_WIDGETS.includes(id)&&!BOTTOM_WIDGETS.includes(id)) : defaultOrder;
+
+  order.forEach((id,i)=>{
     const w=document.querySelector(`.widget[data-widget="${id}"]`);
-    if(w) wrap.appendChild(w);
+    if(w) w.style.order = i;
   });
-  // Always append portfolio then journal last
-  BOTTOM_WIDGETS.forEach(id=>{
+  // Pin portfolio and journal to bottom
+  ['portfolio','journal'].forEach((id,i)=>{
     const w=document.querySelector(`.widget[data-widget="${id}"]`);
-    if(w) wrap.appendChild(w);
+    if(w) w.style.order = 9000+i;
   });
-  // Hide
+
+  // Apply hidden state
   allWidgets().forEach(w=>{
     const id=w.getAttribute('data-widget');
-    if(saved.hidden&&saved.hidden.includes(id)) w.classList.add('hidden-widget');
+    if(saved&&saved.hidden&&saved.hidden.includes(id)) w.classList.add('hidden-widget');
     else w.classList.remove('hidden-widget');
   });
-  // Restore first tab active state after DOM move
-  if(!document.querySelector('.tab-pane.active')){
-    const firstPane = document.getElementById('tabCot');
-    if(firstPane) firstPane.classList.add('active');
-    const firstBtn = document.querySelector('.tab-btn');
-    if(firstBtn) firstBtn.classList.add('active');
-  }
 }
 
 function saveLayout(){
-  const order=allWidgets().map(w=>w.getAttribute('data-widget'));
+  // Sort by CSS order value, not DOM position
+  const widgets = allWidgets().slice().sort((a,b)=>(parseInt(a.style.order)||0)-(parseInt(b.style.order)||0));
+  const order=widgets.map(w=>w.getAttribute('data-widget'));
   const hidden=allWidgets().filter(w=>w.classList.contains('hidden-widget')).map(w=>w.getAttribute('data-widget'));
   try{ localStorage.setItem(LAYOUT_KEY,JSON.stringify({order,hidden})); }catch(e){}
 }
