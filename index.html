@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
+  --hdr-bg:linear-gradient(90deg,#04080F,#07101E,#04080F);
   --gold:#3B82F6;--gold-dim:#60A5FA;--gold-bright:#93C5FD;
   --bg:#04080F;--bg2:#080F1A;--bg3:#0D1520;--bg4:#111C28;
   --border:#162032;--border-gold:rgba(59,130,246,0.35);
@@ -23,7 +24,7 @@
 html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;}
 
 /* HEADER */
-.hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:linear-gradient(90deg,#04080F,#07101E,#04080F);border-bottom:2px solid transparent;border-image:linear-gradient(90deg,var(--accent-red),var(--accent-blue),var(--accent-red)) 1;position:sticky;top:0;z-index:200;gap:10px;flex-wrap:wrap;}
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--hdr-bg);border-bottom:2px solid transparent;border-image:linear-gradient(90deg,var(--accent-red),var(--accent-blue),var(--accent-red)) 1;position:sticky;top:0;z-index:200;gap:10px;flex-wrap:wrap;}
 .logo{display:flex;align-items:center;gap:9px;}
 .logo-icon{width:30px;height:30px;background:linear-gradient(135deg,var(--accent-blue),var(--accent-red));border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;box-shadow:0 0 12px rgba(59,130,246,0.4);}
 .logo-name{font-size:17px;font-weight:800;letter-spacing:.5px;color:var(--gold);font-family:var(--heading);}
@@ -296,7 +297,7 @@ html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-hei
 }
 
 /* ── TICKER BAR ── */
-.ticker-bar{background:#020609;border-bottom:1px solid var(--border);padding:5px 14px;overflow:hidden;position:sticky;top:53px;z-index:195;display:flex;align-items:center;gap:0;}
+.ticker-bar{background:var(--bg);border-bottom:1px solid var(--border);padding:5px 14px;overflow:hidden;position:sticky;top:53px;z-index:195;display:flex;align-items:center;gap:0;}
 .ticker-inner{display:flex;gap:0;animation:ticker-scroll 60s linear infinite;white-space:nowrap;}
 .ticker-inner:hover{animation-play-state:paused;}
 .ticker-item{display:inline-flex;align-items:center;gap:6px;padding:0 20px;border-right:1px solid var(--border);font-family:var(--sans);font-size:11px;font-weight:500;white-space:nowrap;}
@@ -352,13 +353,13 @@ html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-hei
 
 /* ── TABS ── */
 .tab-bar{display:flex;gap:0;border-bottom:1px solid var(--border);background:var(--bg3);overflow-x:auto;scrollbar-width:none;}
-.widget.card{overflow:hidden;} /* tabbed widget clips to border-radius */
+.widget.card{border-radius:11px;} /* border-radius on widget.card */
 .tab-bar::-webkit-scrollbar{display:none;}
 .tab-btn{font-family:var(--heading);font-size:11px;font-weight:600;letter-spacing:.3px;padding:10px 16px;border:none;border-bottom:2px solid transparent;background:transparent;color:var(--muted2);cursor:pointer;white-space:nowrap;transition:color .15s,border-color .15s;}
 .tab-btn:hover{color:var(--text);}
 .tab-btn.active{color:var(--gold);border-bottom-color:var(--gold);}
-.tab-pane{display:none;}
-.tab-pane.active{display:block;}
+.tab-pane{display:none;min-height:0;}
+.tab-pane.active{display:block;min-height:100px;}
 
 /* ── SKIP LINK ── */
 .skip-link{position:absolute;top:-100px;left:8px;background:var(--blue);color:#fff;padding:10px 18px;border-radius:0 0 8px 8px;font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:1px;text-decoration:none;z-index:9999;transition:top .15s;}
@@ -456,9 +457,113 @@ select:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px soli
 
 /* ── FEATURE 6: DARK/LIGHT THEME ── */
 body.light-mode{
+  --hdr-bg:linear-gradient(90deg,#EFF6FF,#DBEAFE,#EFF6FF);
   --bg:#F0F4F8;--bg2:#FFFFFF;--bg3:#E8EDF2;--bg4:#DDE4EC;
+  --bg3:#EBF0F6;
   --border:#CBD5E1;--border-gold:rgba(59,130,246,0.4);
   --text:#1A2332;--muted:#64748B;--muted2:#475569;
+}
+body.light-mode .hdr{
+  border-image:linear-gradient(90deg,var(--accent-red),var(--accent-blue),var(--accent-red)) 1;
+  box-shadow:0 1px 0 rgba(0,0,0,.06);
+}
+body.light-mode .ticker-bar{
+  background:var(--bg3);
+}
+body.light-mode .sessions-bar{
+  background:var(--bg2);
+}
+body.light-mode .logo-name{
+  color:var(--blue);
+}
+body.light-mode .logo-sub{
+  color:var(--muted2);
+}
+body.light-mode .logo-icon{
+  box-shadow:0 0 12px rgba(59,130,246,0.25);
+}
+body.light-mode .hdr-time{
+  color:var(--muted);
+}
+body.light-mode .live-pill{
+  background:rgba(34,197,94,0.1);
+  border-color:rgba(34,197,94,0.3);
+}
+body.light-mode .ref-btn,
+body.light-mode .edit-toggle,
+body.light-mode .theme-btn{
+  background:var(--bg2);
+  border-color:var(--border);
+  color:var(--muted2);
+}
+body.light-mode .ref-btn:hover,
+body.light-mode .edit-toggle:hover,
+body.light-mode .theme-btn:hover{
+  border-color:var(--blue);
+  color:var(--blue);
+}
+body.light-mode .ticker-item{
+  border-color:var(--border);
+}
+body.light-mode .ticker-sym{
+  color:var(--muted);
+}
+body.light-mode .ticker-price{
+  color:var(--text);
+}
+body.light-mode .sb-card{
+  background:var(--bg2);
+  box-shadow:0 1px 4px rgba(0,0,0,.06);
+}
+body.light-mode .sb-hdr{
+  background:var(--bg3);
+  border-color:var(--border);
+}
+body.light-mode .mc{
+  background:var(--bg2);
+  box-shadow:0 1px 4px rgba(0,0,0,.05);
+}
+body.light-mode .card{
+  background:var(--bg2);
+  box-shadow:0 1px 4px rgba(0,0,0,.05);
+}
+body.light-mode .ch{
+  background:var(--bg3);
+}
+body.light-mode .widget.card{
+  background:var(--bg2);
+}
+body.light-mode .tab-bar{
+  background:var(--bg3);
+}
+body.light-mode .tab-btn{
+  color:var(--muted);
+}
+body.light-mode .tab-btn.active{
+  color:var(--blue);
+  border-bottom-color:var(--blue);
+}
+body.light-mode .edit-bar{
+  background:var(--bg2);
+  border-color:var(--border);
+}
+body.light-mode .add-menu{
+  background:var(--bg2);
+  border-color:var(--border);
+}
+body.light-mode .gold-hero,
+body.light-mode .eu-hero{
+  background:var(--bg2);
+}
+body.light-mode .sig-card{
+  background:var(--bg2);
+}
+body.light-mode .kbd-box{
+  background:var(--bg2);
+}
+body.light-mode html,
+body.light-mode body{
+  background:var(--bg);
 }
 .theme-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:6px;font-family:var(--mono);font-size:11px;cursor:pointer;transition:all .2s;}
 .theme-btn:hover{border-color:var(--gold);}
@@ -2031,7 +2136,7 @@ async function loadCalendar(){
 // ═══════════════════════════════════════════════════
 // WIDGET MANAGEMENT ENGINE (move/sort/add/remove + save)
 // ═══════════════════════════════════════════════════
-const LAYOUT_KEY='fxdesk_layout_v2';
+const LAYOUT_KEY='fxdesk_layout_v3';
 let editMode=false;
 
 function getWrap(){ return document.getElementById('mainCol') || document.querySelector('.wrap'); }
@@ -2039,16 +2144,25 @@ const STUB_WIDGETS=['euhero','goldrow','crypto']; // live inside tabs, not main 
 function allWidgets(){ const c=document.getElementById('mainCol'); return Array.from((c||document).querySelectorAll('.widget')).filter(w=>!STUB_WIDGETS.includes(w.getAttribute('data-widget'))); }
 
 // Load saved layout (order + hidden) and apply
+// Widgets that must always stay at the bottom, after the tab widget
+const BOTTOM_WIDGETS = ['portfolio','journal'];
+
 function applyLayout(){
   // Clean up stale layout keys from old versions
-  try{ localStorage.removeItem('fxdesk_layout_v1'); }catch(e){}
+  try{ localStorage.removeItem('fxdesk_layout_v1'); localStorage.removeItem('fxdesk_layout_v2'); }catch(e){}
   let saved=null;
   try{ saved=JSON.parse(localStorage.getItem(LAYOUT_KEY)); }catch(e){}
   if(!saved||!saved.order) return;
   const wrap=getWrap();
-  // Reorder
+  // Reorder only non-bottom, non-stub widgets
   saved.order.forEach(id=>{
-    if(STUB_WIDGETS.includes(id)) return; // skip sidebar stubs
+    if(STUB_WIDGETS.includes(id)) return;
+    if(BOTTOM_WIDGETS.includes(id)) return; // keep portfolio/journal at bottom
+    const w=document.querySelector(`.widget[data-widget="${id}"]`);
+    if(w) wrap.appendChild(w);
+  });
+  // Always append portfolio then journal last
+  BOTTOM_WIDGETS.forEach(id=>{
     const w=document.querySelector(`.widget[data-widget="${id}"]`);
     if(w) wrap.appendChild(w);
   });
@@ -2744,10 +2858,21 @@ function switchTab(paneId, btn){
     tabWidget = tabWidget.parentElement;
   }
   if(!tabWidget) return;
-  tabWidget.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-  tabWidget.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+  // Hide all panes, deactivate all buttons
+  tabWidget.querySelectorAll('.tab-pane').forEach(p => {
+    p.classList.remove('active');
+    p.style.display = 'none';
+  });
+  tabWidget.querySelectorAll('.tab-btn').forEach(b => {
+    b.classList.remove('active');
+    b.setAttribute('aria-selected','false');
+  });
+  // Show selected pane
+  pane.style.display = 'block';
   pane.classList.add('active');
   if(btn){ btn.classList.add('active'); btn.setAttribute('aria-selected','true'); }
+  // Save selected tab
+  try{ localStorage.setItem('fxdesk_active_tab', paneId); }catch(e){}
 }
 
 // ═══════════════════════════════════════════════════
@@ -2797,6 +2922,14 @@ window.addEventListener('load', () => {
   restoreChart();
   loadPortfolio();
   loadJournal();
+  // Restore saved active tab
+  try{
+    const savedTab = localStorage.getItem('fxdesk_active_tab');
+    if(savedTab && document.getElementById(savedTab)){
+      const btn = document.querySelector(`[onclick*="${savedTab}"]`);
+      switchTab(savedTab, btn);
+    }
+  }catch(e){}
 });
 
 // Defer first refresh until after first paint so UI is visible fast
