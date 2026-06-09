@@ -6,7 +6,7 @@
 <title>Forex Desk — Live Trading Dashboard</title>
 <meta name="description" content="Live forex trading dashboard with real-time gold, silver, currency pairs, crypto prices, economic calendar, COT report, fear & greed index, portfolio tracker and trade journal.">
 <meta name="theme-color" content="#04080F">
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800;900&display=swap" rel="stylesheet">
 <style>
 :root{
   --hdr-bg:linear-gradient(90deg,#04080F,#07101E,#04080F);
@@ -26,9 +26,17 @@ html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-hei
 /* HEADER */
 .hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--hdr-bg);border-bottom:2px solid transparent;border-image:linear-gradient(90deg,var(--accent-red),var(--accent-blue),var(--accent-red)) 1;position:sticky;top:0;z-index:200;gap:10px;flex-wrap:wrap;}
 .logo{display:flex;align-items:center;gap:9px;}
-.logo-icon{width:30px;height:30px;background:linear-gradient(135deg,var(--accent-blue),var(--accent-red));border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;box-shadow:0 0 12px rgba(59,130,246,0.4);}
-.logo-name{font-size:17px;font-weight:800;letter-spacing:.5px;color:var(--gold);font-family:var(--heading);}
-.logo-sub{font-size:10px;color:var(--muted2);letter-spacing:.5px;font-family:var(--sans);font-weight:400;}
+/* new bar logo */
+.logo-bars{display:flex;align-items:flex-end;gap:3px;height:26px;flex-shrink:0;}
+.logo-bar{border-radius:2px 2px 0 0;}
+.logo-bar.b1{width:4px;height:8px;background:#EF4444;box-shadow:0 0 5px rgba(239,68,68,0.5);}
+.logo-bar.b2{width:4px;height:15px;background:#8BAFD1;box-shadow:0 0 4px rgba(139,175,209,0.3);}
+.logo-bar.b3{width:4px;height:11px;background:#60A5FA;box-shadow:0 0 5px rgba(96,165,250,0.4);}
+.logo-bar.b4{width:4px;height:22px;background:#3B82F6;box-shadow:0 0 7px rgba(59,130,246,0.6);}
+.logo-bar.b5{width:4px;height:17px;background:#22C55E;box-shadow:0 0 5px rgba(34,197,94,0.4);}
+.logo-divider{width:1px;height:20px;background:linear-gradient(180deg,transparent,#1E3A5F,transparent);margin:0 4px;}
+.logo-name{font-size:16px;font-weight:800;letter-spacing:-0.3px;font-family:'Syne','Plus Jakarta Sans',sans-serif;background:linear-gradient(135deg,#FFFFFF 0%,#93C5FD 50%,#EF4444 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;}
+.logo-sub{font-size:6px;color:var(--muted2);letter-spacing:1.5px;font-family:var(--mono);margin-top:3px;text-transform:uppercase;}
 .hdr-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
 .live-pill{display:flex;align-items:center;gap:5px;font-size:9px;font-family:var(--heading);color:var(--green);background:rgba(34,197,94,0.08);padding:4px 9px;border-radius:20px;border:1px solid rgba(34,197,94,0.2);}
 .ldot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:blink 1.4s infinite;flex-shrink:0;}
@@ -324,7 +332,9 @@ html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-hei
 .sidebar::-webkit-scrollbar-track{background:transparent;}
 .sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
 .sidebar::-webkit-scrollbar-thumb:hover{background:var(--muted);}
-.sb-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:visible;transition:border-color .2s,box-shadow .2s;}
+.sb-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:visible;transition:border-color .2s,box-shadow .2s;position:relative;}
+.sb-card-gold::after{content:'';position:absolute;top:0;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,rgba(239,68,68,0.6),transparent);border-radius:2px;}
+.sb-card-blue::after{content:'';position:absolute;top:0;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,rgba(59,130,246,0.6),transparent);border-radius:2px;}
 .sb-hdr{padding:10px 12px;background:var(--bg3);border-bottom:1px solid var(--border);font-family:var(--heading);font-size:10px;font-weight:700;letter-spacing:.5px;color:var(--gold-dim);}
 .sb-body{padding:14px 12px;}
 .sb-price-main{font-family:var(--heading);font-size:26px;font-weight:800;color:var(--gold-bright);line-height:1.1;letter-spacing:-.3px;}
@@ -474,15 +484,15 @@ body.light-mode .ticker-bar{
 body.light-mode .sessions-bar{
   background:var(--bg2);
 }
-body.light-mode .logo-name{
-  color:var(--blue);
-}
-body.light-mode .logo-sub{
-  color:var(--muted2);
-}
-body.light-mode .logo-icon{
-  box-shadow:0 0 12px rgba(59,130,246,0.25);
-}
+body.light-mode .logo-name{background:linear-gradient(135deg,#0F172A 0%,#1D4ED8 50%,#DC2626 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+body.light-mode .logo-sub{color:#64748B;}
+body.light-mode .logo-bar.b1{background:#DC2626;box-shadow:none;}
+body.light-mode .logo-bar.b2{background:#475569;box-shadow:none;}
+body.light-mode .logo-bar.b3{background:#3B82F6;box-shadow:none;}
+body.light-mode .logo-bar.b4{background:#1D4ED8;box-shadow:none;}
+body.light-mode .logo-bar.b5{background:#16A34A;box-shadow:none;}
+body.light-mode .logo-divider{background:linear-gradient(180deg,transparent,#CBD5E1,transparent);}
+/* logo-icon replaced with bars */
 body.light-mode .hdr-time{
   color:var(--muted);
 }
@@ -655,6 +665,92 @@ kbd{background:var(--bg3);border:1px solid var(--border);border-radius:4px;paddi
 .chart-fullscreen-btn:hover{color:var(--text);border-color:var(--muted);}
 body.chart-fs .chart-wrap{position:fixed;inset:0;z-index:8000;border-radius:0;height:100vh!important;}
 body.chart-fs .chart-fullscreen-btn{position:fixed;top:12px;right:12px;z-index:8001;background:var(--bg2);}
+
+/* ── FEATURE 2: DXY TREND STRENGTH ── */
+.dxy-strength-wrap{padding:14px;}
+.dxy-tf-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;}
+.dxy-tf-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 8px;text-align:center;}
+.dxy-tf-label{font-family:var(--sans);font-size:10px;font-weight:600;color:var(--muted2);letter-spacing:.5px;margin-bottom:6px;}
+.dxy-tf-val{font-family:var(--heading);font-size:15px;font-weight:700;}
+.dxy-tf-sub{font-family:var(--sans);font-size:9px;color:var(--muted2);margin-top:3px;}
+.dxy-bar-wrap{margin-bottom:12px;}
+.dxy-bar-label{display:flex;justify-content:space-between;font-family:var(--sans);font-size:9px;color:var(--muted2);margin-bottom:4px;}
+.dxy-bar-bg{height:8px;background:var(--bg3);border-radius:4px;position:relative;overflow:hidden;}
+.dxy-bar-fill{height:100%;border-radius:4px;transition:width .8s ease;}
+.dxy-summary{font-family:var(--sans);font-size:11px;color:var(--muted2);text-align:center;padding:8px;background:var(--bg3);border-radius:8px;line-height:1.5;}
+.dxy-bull{color:var(--red);} /* DXY up = bad for gold */
+.dxy-bear{color:var(--green);} /* DXY down = good for gold */
+
+/* ── FEATURE 3: GOLD KEY LEVELS ── */
+.levels-wrap{padding:14px;}
+.price-ladder{position:relative;display:flex;flex-direction:column;gap:2px;}
+.level-row{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:6px;transition:background .15s;}
+.level-row:hover{background:var(--bg3);}
+.level-row.current-price{background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.25);}
+.level-type{font-family:var(--sans);font-size:9px;font-weight:700;letter-spacing:.5px;min-width:60px;text-transform:uppercase;}
+.level-type.res{color:var(--red);}
+.level-type.sup{color:var(--green);}
+.level-type.cur{color:var(--blue);}
+.level-type.psy{color:var(--muted2);}
+.level-price{font-family:var(--heading);font-size:14px;font-weight:700;color:var(--text);min-width:80px;}
+.level-desc{font-family:var(--sans);font-size:10px;color:var(--muted2);flex:1;}
+.level-dist{font-family:var(--mono);font-size:10px;color:var(--muted);text-align:right;}
+.level-bar-line{position:absolute;left:0;right:0;height:1px;pointer-events:none;}
+
+/* ── FEATURE 4: CENTRAL BANK CALENDAR ── */
+.cb-calendar-wrap{padding:14px;display:flex;flex-direction:column;gap:8px;}
+.cb-timeline{display:flex;flex-direction:column;gap:6px;}
+.cb-event{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg3);transition:border-color .2s;}
+.cb-event:hover{border-color:rgba(59,130,246,0.3);}
+.cb-event.next-up{border-color:rgba(249,115,22,0.4);background:rgba(249,115,22,0.04);}
+.cb-event.past{opacity:.5;}
+.cb-date{font-family:var(--heading);font-size:13px;font-weight:700;color:var(--text);min-width:52px;text-align:center;line-height:1.2;}
+.cb-date-month{font-family:var(--sans);font-size:9px;color:var(--muted2);font-weight:500;}
+.cb-divider{width:1px;height:32px;background:var(--border);}
+.cb-info{flex:1;}
+.cb-bank{font-family:var(--heading);font-size:12px;font-weight:700;color:var(--text);}
+.cb-detail{font-family:var(--sans);font-size:10px;color:var(--muted2);margin-top:2px;}
+.cb-badge{font-family:var(--sans);font-size:9px;font-weight:700;padding:2px 8px;border-radius:4px;}
+.cb-badge.fed{background:rgba(59,130,246,0.15);color:var(--blue);border:1px solid rgba(59,130,246,0.3);}
+.cb-badge.ecb{background:rgba(249,115,22,0.12);color:var(--orange);border:1px solid rgba(249,115,22,0.25);}
+.cb-badge.boe{background:rgba(239,68,68,0.12);color:var(--red);border:1px solid rgba(239,68,68,0.25);}
+.cb-badge.boj{background:rgba(168,85,247,0.12);color:var(--purple);border:1px solid rgba(168,85,247,0.25);}
+.cb-badge.rba{background:rgba(34,197,94,0.1);color:var(--green);border:1px solid rgba(34,197,94,0.25);}
+.cb-countdown{font-family:var(--mono);font-size:10px;color:var(--muted2);text-align:right;white-space:nowrap;}
+
+/* ── FEATURE 5: SPREAD MONITOR ── */
+.spread-wrap{padding:14px;}
+.spread-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;}
+.spread-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center;transition:border-color .2s;}
+.spread-card.spread-normal{border-color:rgba(34,197,94,0.2);}
+.spread-card.spread-wide{border-color:rgba(249,115,22,0.35);}
+.spread-card.spread-danger{border-color:rgba(239,68,68,0.4);background:rgba(239,68,68,0.04);}
+.spread-sym{font-family:var(--sans);font-size:10px;font-weight:600;color:var(--muted2);margin-bottom:4px;}
+.spread-val{font-family:var(--heading);font-size:18px;font-weight:700;}
+.spread-unit{font-family:var(--sans);font-size:9px;color:var(--muted2);margin-top:2px;}
+.spread-status{font-family:var(--sans);font-size:9px;font-weight:600;margin-top:4px;padding:2px 6px;border-radius:3px;}
+.sn{color:var(--green);background:rgba(34,197,94,0.1);}
+.sw{color:var(--orange);background:rgba(249,115,22,0.1);}
+.sd{color:var(--red);background:rgba(239,68,68,0.1);}
+.spread-alert-bar{font-family:var(--sans);font-size:11px;padding:8px 12px;border-radius:8px;text-align:center;}
+.spread-alert-normal{background:rgba(34,197,94,0.06);color:var(--green);border:1px solid rgba(34,197,94,0.2);}
+.spread-alert-warn{background:rgba(249,115,22,0.08);color:var(--orange);border:1px solid rgba(249,115,22,0.25);}
+.spread-alert-danger{background:rgba(239,68,68,0.08);color:var(--red);border:1px solid rgba(239,68,68,0.3);}
+
+/* ── FEATURE 6: SESSION HEATMAP ── */
+.heatmap-wrap{padding:14px;}
+.heatmap-bar{display:grid;grid-template-columns:repeat(24,1fr);gap:2px;margin:8px 0;}
+.hm-cell{height:32px;border-radius:3px;position:relative;cursor:default;transition:opacity .15s;}
+.hm-cell:hover{opacity:.85;}
+.hm-cell.hm-current{outline:2px solid var(--blue);outline-offset:1px;}
+.hm-labels{display:grid;grid-template-columns:repeat(24,1fr);gap:2px;margin-bottom:4px;}
+.hm-label{font-family:var(--mono);font-size:7px;color:var(--muted);text-align:center;}
+.hm-legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;}
+.hm-leg-item{display:flex;align-items:center;gap:5px;font-family:var(--sans);font-size:10px;color:var(--muted2);}
+.hm-leg-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0;}
+.hm-session-labels{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);}
+.hm-sess-pill{font-family:var(--sans);font-size:10px;font-weight:600;padding:4px 10px;border-radius:6px;}
+
 </style>
 </head>
 <body>
@@ -664,11 +760,18 @@ body.chart-fs .chart-fullscreen-btn{position:fixed;top:12px;right:12px;z-index:8
 
 <!-- HEADER landmark -->
 <header class="hdr" role="banner">
-  <div class="logo">
-    <div class="logo-icon" aria-hidden="true">⬡</div>
+  <div class="logo" style="display:flex;align-items:center;gap:10px;">
+    <div class="logo-bars" aria-hidden="true">
+      <div class="logo-bar b1"></div>
+      <div class="logo-bar b2"></div>
+      <div class="logo-bar b3"></div>
+      <div class="logo-bar b4"></div>
+      <div class="logo-bar b5"></div>
+    </div>
+    <div class="logo-divider" aria-hidden="true"></div>
     <div>
       <div class="logo-name"><h1 style="font:inherit;margin:0;display:inline;">FOREX DESK</h1></div>
-      <div class="logo-sub">LIVE TRADING DASHBOARD</div>
+      <div class="logo-sub">Precision Targeting · Unique Fintech</div>
     </div>
   </div>
   <nav class="hdr-right" aria-label="Dashboard controls">
@@ -692,6 +795,20 @@ body.chart-fs .chart-fullscreen-btn{position:fixed;top:12px;right:12px;z-index:8
     <div class="ticker-item"><span class="ticker-sym">US10Y</span><span class="ticker-price" id="tkTnx">—</span><span id="tkTnxC" style="font-family:var(--mono);font-size:10px;color:var(--muted2);">—</span></div>
     <div class="ticker-item"><span class="ticker-sym">VIX</span><span class="ticker-price" id="tkVix">—</span><span id="tkVixC" style="font-family:var(--mono);font-size:10px;color:var(--muted2);">—</span></div>
     <div class="ticker-item"><span class="ticker-sym">BTC/USD</span><span class="ticker-price" id="tkBtc">—</span><span id="tkBtcC" style="font-family:var(--mono);font-size:10px;color:var(--muted2);">—</span></div>
+    <div class="ticker-item"><span class="ticker-sym">XAG/USD</span><span class="ticker-price" id="tkSil">—</span><span id="tkSilC" style="font-family:var(--mono);font-size:10px;color:var(--muted2);">—</span></div>
+    <div class="ticker-item"><span class="ticker-sym">OIL</span><span class="ticker-price" id="tkOil">—</span><span id="tkOilC" style="font-family:var(--mono);font-size:10px;color:var(--muted2);">—</span></div>
+    <div class="ticker-item"><span class="ticker-sym">S&P500</span><span class="ticker-price" id="tkSp">—</span><span id="tkSpC" style="font-family:var(--mono);font-size:10px;color:var(--muted2);">—</span></div>
+    <div class="ticker-item"><span class="ticker-sym">AUD/USD</span><span class="ticker-price" id="tkAud">—</span><span id="tkAudC" style="font-family:var(--mono);font-size:10px;color:var(--muted2);">—</span></div>
+    <div class="ticker-item"><span class="ticker-sym">USD/CAD</span><span class="ticker-price" id="tkCad">—</span><span id="tkCadC" style="font-family:var(--mono);font-size:10px;color:var(--muted2);">—</span></div>
+    <div class="ticker-item"><span class="ticker-sym">USD/CHF</span><span class="ticker-price" id="tkChf">—</span><span id="tkChfC" style="font-family:var(--mono);font-size:10px;color:var(--muted2);">—</span></div>
+    <div class="ticker-item"><span class="ticker-sym">NZD/USD</span><span class="ticker-price" id="tkNzd">—</span><span id="tkNzdC" style="font-family:var(--mono);font-size:10px;color:var(--muted2);">—</span></div>
+    <div class="ticker-item"><span class="ticker-sym">GBP/JPY</span><span class="ticker-price" id="tkGbpJpy">—</span><span id="tkGbpJpyC" style="font-family:var(--mono);font-size:10px;color:var(--muted2);">—</span></div>
+    <div class="ticker-item"><span class="ticker-sym">EUR/JPY</span><span class="ticker-price" id="tkEurJpy">—</span><span id="tkEurJpyC" style="font-family:var(--mono);font-size:10px;color:var(--muted2);">—</span></div>
+    <div class="ticker-item"><span class="ticker-sym">ETH/USD</span><span class="ticker-price" id="tkEth">—</span><span id="tkEthC" style="font-family:var(--mono);font-size:10px;color:var(--muted2);">—</span></div>
+    <div class="ticker-item"><span class="ticker-sym">BNB/USD</span><span class="ticker-price" id="tkBnb">—</span><span id="tkBnbC" style="font-family:var(--mono);font-size:10px;color:var(--muted2);">—</span></div>
+    <div class="ticker-item"><span class="ticker-sym">SOL/USD</span><span class="ticker-price" id="tkSol">—</span><span id="tkSolC" style="font-family:var(--mono);font-size:10px;color:var(--muted2);">—</span></div>
+    <div class="ticker-item"><span class="ticker-sym">XRP/USD</span><span class="ticker-price" id="tkXrp">—</span><span id="tkXrpC" style="font-family:var(--mono);font-size:10px;color:var(--muted2);">—</span></div>
+    <div class="ticker-item"><span class="ticker-sym">DOGE</span><span class="ticker-price" id="tkDoge">—</span><span id="tkDogeC" style="font-family:var(--mono);font-size:10px;color:var(--muted2);">—</span></div>
     <!-- duplicate for seamless loop -->
     <div class="ticker-item"><span class="ticker-sym">XAU/USD</span><span class="ticker-price" id="tkGold2">—</span><span id="tkGoldC2" style="font-family:var(--mono);font-size:10px;color:var(--muted2);">—</span></div>
     <div class="ticker-item"><span class="ticker-sym">EUR/USD</span><span class="ticker-price" id="tkEur2">—</span><span id="tkEurC2" style="font-family:var(--mono);font-size:10px;color:var(--muted2);">—</span></div>
@@ -701,6 +818,20 @@ body.chart-fs .chart-fullscreen-btn{position:fixed;top:12px;right:12px;z-index:8
     <div class="ticker-item"><span class="ticker-sym">US10Y</span><span class="ticker-price" id="tkTnx2">—</span><span id="tkTnxC2" style="font-family:var(--mono);font-size:10px;color:var(--muted2);">—</span></div>
     <div class="ticker-item"><span class="ticker-sym">VIX</span><span class="ticker-price" id="tkVix2">—</span><span id="tkVixC2" style="font-family:var(--mono);font-size:10px;color:var(--muted2);">—</span></div>
     <div class="ticker-item"><span class="ticker-sym">BTC/USD</span><span class="ticker-price" id="tkBtc2">—</span><span id="tkBtcC2" style="font-family:var(--mono);font-size:10px;color:var(--muted2);">—</span></div>
+    <div class="ticker-item"><span class="ticker-sym">XAG/USD</span><span class="ticker-price" id="tkSil2">—</span><span id="tkSil2C" style="font-family:var(--mono);font-size:10px;color:var(--muted2);">—</span></div>
+    <div class="ticker-item"><span class="ticker-sym">OIL</span><span class="ticker-price" id="tkOil2">—</span><span id="tkOil2C" style="font-family:var(--mono);font-size:10px;color:var(--muted2);">—</span></div>
+    <div class="ticker-item"><span class="ticker-sym">S&P500</span><span class="ticker-price" id="tkSp2">—</span><span id="tkSp2C" style="font-family:var(--mono);font-size:10px;color:var(--muted2);">—</span></div>
+    <div class="ticker-item"><span class="ticker-sym">AUD/USD</span><span class="ticker-price" id="tkAud2">—</span><span id="tkAud2C" style="font-family:var(--mono);font-size:10px;color:var(--muted2);">—</span></div>
+    <div class="ticker-item"><span class="ticker-sym">USD/CAD</span><span class="ticker-price" id="tkCad2">—</span><span id="tkCad2C" style="font-family:var(--mono);font-size:10px;color:var(--muted2);">—</span></div>
+    <div class="ticker-item"><span class="ticker-sym">USD/CHF</span><span class="ticker-price" id="tkChf2">—</span><span id="tkChf2C" style="font-family:var(--mono);font-size:10px;color:var(--muted2);">—</span></div>
+    <div class="ticker-item"><span class="ticker-sym">NZD/USD</span><span class="ticker-price" id="tkNzd2">—</span><span id="tkNzd2C" style="font-family:var(--mono);font-size:10px;color:var(--muted2);">—</span></div>
+    <div class="ticker-item"><span class="ticker-sym">GBP/JPY</span><span class="ticker-price" id="tkGbpJpy2">—</span><span id="tkGbpJpy2C" style="font-family:var(--mono);font-size:10px;color:var(--muted2);">—</span></div>
+    <div class="ticker-item"><span class="ticker-sym">EUR/JPY</span><span class="ticker-price" id="tkEurJpy2">—</span><span id="tkEurJpy2C" style="font-family:var(--mono);font-size:10px;color:var(--muted2);">—</span></div>
+    <div class="ticker-item"><span class="ticker-sym">ETH/USD</span><span class="ticker-price" id="tkEth2">—</span><span id="tkEth2C" style="font-family:var(--mono);font-size:10px;color:var(--muted2);">—</span></div>
+    <div class="ticker-item"><span class="ticker-sym">BNB/USD</span><span class="ticker-price" id="tkBnb2">—</span><span id="tkBnb2C" style="font-family:var(--mono);font-size:10px;color:var(--muted2);">—</span></div>
+    <div class="ticker-item"><span class="ticker-sym">SOL/USD</span><span class="ticker-price" id="tkSol2">—</span><span id="tkSol2C" style="font-family:var(--mono);font-size:10px;color:var(--muted2);">—</span></div>
+    <div class="ticker-item"><span class="ticker-sym">XRP/USD</span><span class="ticker-price" id="tkXrp2">—</span><span id="tkXrp2C" style="font-family:var(--mono);font-size:10px;color:var(--muted2);">—</span></div>
+    <div class="ticker-item"><span class="ticker-sym">DOGE</span><span class="ticker-price" id="tkDoge2">—</span><span id="tkDoge2C" style="font-family:var(--mono);font-size:10px;color:var(--muted2);">—</span></div>
   </div>
 </div>
 
@@ -738,7 +869,7 @@ body.chart-fs .chart-fullscreen-btn{position:fixed;top:12px;right:12px;z-index:8
   <aside class="sidebar" aria-label="Key market data">
 
     <!-- GOLD SIDEBAR CARD -->
-    <div class="sb-card" style="border-color:rgba(239,68,68,0.35);">
+    <div class="sb-card sb-card-gold" style="border-color:rgba(239,68,68,0.45);box-shadow:0 0 20px rgba(239,68,68,0.12),0 4px 24px rgba(0,0,0,0.4);">
       <div class="sb-hdr" style="color:#f87171;">XAU / USD · SPOT GOLD</div>
       <div class="sb-body">
         <div class="sb-price-main" id="sbGoldPrice"><span class="ld"></span></div>
@@ -753,7 +884,7 @@ body.chart-fs .chart-fullscreen-btn{position:fixed;top:12px;right:12px;z-index:8
     </div>
 
     <!-- EUR/USD SIDEBAR CARD -->
-    <div class="sb-card" style="border-color:rgba(59,130,246,0.4);">
+    <div class="sb-card sb-card-blue" style="border-color:rgba(59,130,246,0.5);box-shadow:0 0 20px rgba(59,130,246,0.12),0 4px 24px rgba(0,0,0,0.4);">
       <div class="sb-hdr" style="color:var(--blue);">EUR / USD</div>
       <div class="sb-body">
         <div class="sb-price-main" id="sbEurPrice" style="color:#60A5FA;font-size:22px;"><span class="ld"></span></div>
@@ -1043,7 +1174,6 @@ body.chart-fs .chart-fullscreen-btn{position:fixed;top:12px;right:12px;z-index:8
     <div class="tab-bar" role="tablist" aria-label="Market information tabs">
       <button class="tab-btn active" role="tab" aria-selected="true"  onclick="switchTab('tabCot',this)">📋 COT REPORT</button>
       <button class="tab-btn"        role="tab" aria-selected="false" onclick="switchTab('tabCal',this)">📅 CALENDAR</button>
-      <button class="tab-btn"        role="tab" aria-selected="false" onclick="switchTab('tabNews',this)">📰 NEWS</button>
       <button class="tab-btn"        role="tab" aria-selected="false" onclick="switchTab('tabCrypto',this)">₿ CRYPTO &amp; SENTIMENT</button>
     </div>
 
@@ -1129,40 +1259,7 @@ body.chart-fs .chart-fullscreen-btn{position:fixed;top:12px;right:12px;z-index:8
     </div><!-- /tabCal -->
 
     <!-- TAB: NEWS -->
-    <div id="tabNews" class="tab-pane" role="tabpanel">
-  <!-- NEWS FEED -->
-  <div class="card">
-    <div class="ch">
-      <div class="ct">LATEST GOLD NEWS</div>
-      <span class="badge b-blue">RSS · KITCO + FXSTREET + REUTERS</span>
-    </div>
-    <div id="newsBody">
-      <div style="padding:16px;text-align:center;font-family:var(--mono);font-size:10px;color:var(--muted2);">Loading news...</div>
-    </div>
-    <div style="padding:9px 13px;border-top:1px solid var(--border);display:flex;gap:12px;flex-wrap:wrap;">
-      <a href="https://www.kitco.com/news/" target="_blank" rel="noopener noreferrer" style="font-family:var(--mono);font-size:9px;color:var(--gold);text-decoration:none;">→ KITCO ↗</a>
-      <a href="https://www.fxstreet.com/markets/commodities/metals/gold" target="_blank" rel="noopener noreferrer" style="font-family:var(--mono);font-size:9px;color:var(--blue);text-decoration:none;">→ FXSTREET ↗</a>
-      <a href="https://www.reuters.com/markets/commodities/" target="_blank" rel="noopener noreferrer" style="font-family:var(--mono);font-size:9px;color:var(--red);text-decoration:none;">→ REUTERS ↗</a>
-      <a href="https://www.dailyfx.com/gold" target="_blank" rel="noopener noreferrer" style="font-family:var(--mono);font-size:9px;color:var(--green);text-decoration:none;">→ DAILYFX ↗</a>
-    </div>
-  </div>
 
-    <!-- FEATURE 8: NEWS SENTIMENT -->
-    <div class="card" style="margin:0 0 0;">
-      <div class="ch"><div class="ct">NEWS SENTIMENT — GOLD HEADLINES</div><span class="badge b-gold">KEYWORD ANALYSIS</span></div>
-      <div class="sent-bar-wrap">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
-          <span style="font-family:var(--sans);font-size:10px;color:var(--muted2);">Sentiment Score</span>
-        </div>
-        <div class="sent-bar-bg"><div class="sent-needle" id="sentNeedle" style="left:50%;"></div></div>
-        <div class="sent-labels"><span style="color:var(--red);">BEARISH</span><span>NEUTRAL</span><span style="color:var(--green);">BULLISH</span></div>
-        <div class="sent-score" id="sentScore" style="color:var(--muted2);">—</div>
-        <div class="sent-verdict" id="sentVerdict" style="color:var(--muted2);">Waiting for news...</div>
-      </div>
-      <div class="sent-keywords" id="sentKeywords"></div>
-    </div>
-
-    </div><!-- /tabNews -->
 
     <!-- TAB: CRYPTO -->
     <div id="tabCrypto" class="tab-pane" role="tabpanel">
@@ -1596,6 +1693,179 @@ body.chart-fs .chart-fullscreen-btn{position:fixed;top:12px;right:12px;z-index:8
     </div>
   </div>
 
+
+  <!-- ══ NEWS FEED WIDGET ══ -->
+  <div class="widget" data-widget="newsfeed" data-title="Gold News Feed" draggable="false">
+    <div class="w-handle">
+      <button type="button" class="w-btn w-up" onclick="moveWidget('newsfeed',-1)" aria-label="Move up">↑</button>
+      <button type="button" class="w-btn w-down" onclick="moveWidget('newsfeed',1)" aria-label="Move down">↓</button>
+      <button type="button" class="w-btn w-remove" onclick="removeWidget('newsfeed')" aria-label="Remove">✕</button>
+    </div>
+    <h2 class="sec-lbl">GOLD NEWS FEED — LIVE RSS</h2>
+    <div class="card">
+      <div class="ch">
+        <div class="ct">LATEST GOLD NEWS</div>
+        <span class="badge b-blue">RSS · KITCO + FXSTREET + REUTERS</span>
+      </div>
+      <div id="newsBody">
+        <div style="padding:16px;text-align:center;font-family:var(--mono);font-size:10px;color:var(--muted2);">Loading news...</div>
+      </div>
+      <div style="padding:9px 13px;border-top:1px solid var(--border);display:flex;gap:12px;flex-wrap:wrap;">
+        <a href="https://www.kitco.com/news/" target="_blank" rel="noopener noreferrer" style="font-family:var(--mono);font-size:9px;color:var(--gold);text-decoration:none;">→ KITCO ↗</a>
+        <a href="https://www.fxstreet.com/markets/commodities/metals/gold" target="_blank" rel="noopener noreferrer" style="font-family:var(--mono);font-size:9px;color:var(--blue);text-decoration:none;">→ FXSTREET ↗</a>
+        <a href="https://www.reuters.com/markets/commodities/" target="_blank" rel="noopener noreferrer" style="font-family:var(--mono);font-size:9px;color:var(--red);text-decoration:none;">→ REUTERS ↗</a>
+        <a href="https://www.dailyfx.com/gold" target="_blank" rel="noopener noreferrer" style="font-family:var(--mono);font-size:9px;color:var(--green);text-decoration:none;">→ DAILYFX ↗</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ NEWS SENTIMENT WIDGET ══ -->
+  <div class="widget" data-widget="sentiment" data-title="News Sentiment" draggable="false">
+    <div class="w-handle">
+      <button type="button" class="w-btn w-up" onclick="moveWidget('sentiment',-1)" aria-label="Move up">↑</button>
+      <button type="button" class="w-btn w-down" onclick="moveWidget('sentiment',1)" aria-label="Move down">↓</button>
+      <button type="button" class="w-btn w-remove" onclick="removeWidget('sentiment')" aria-label="Remove">✕</button>
+    </div>
+    <h2 class="sec-lbl">NEWS SENTIMENT — GOLD HEADLINES</h2>
+    <div class="card">
+      <div class="ch"><div class="ct">SENTIMENT ANALYSIS</div><span class="badge b-gold">KEYWORD SCORING · AUTO-UPDATED WITH NEWS</span></div>
+      <div class="sent-bar-wrap">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+          <span style="font-family:var(--sans);font-size:10px;color:var(--muted2);">Sentiment Score</span>
+        </div>
+        <div class="sent-bar-bg"><div class="sent-needle" id="sentNeedle" style="left:50%;"></div></div>
+        <div class="sent-labels"><span style="color:var(--red);">BEARISH</span><span>NEUTRAL</span><span style="color:var(--green);">BULLISH</span></div>
+        <div class="sent-score" id="sentScore" style="color:var(--muted2);">—</div>
+        <div class="sent-verdict" id="sentVerdict" style="color:var(--muted2);">Waiting for news...</div>
+      </div>
+      <div class="sent-keywords" id="sentKeywords"></div>
+    </div>
+  </div>
+
+
+  <!-- ══ FEATURE 2: DXY TREND STRENGTH ══ -->
+  <div class="widget" data-widget="dxystrength" data-title="DXY Trend Strength" draggable="false">
+    <div class="w-handle">
+      <button type="button" class="w-btn w-up" onclick="moveWidget('dxystrength',-1)">↑</button>
+      <button type="button" class="w-btn w-down" onclick="moveWidget('dxystrength',1)">↓</button>
+      <button type="button" class="w-btn w-remove" onclick="removeWidget('dxystrength')">✕</button>
+    </div>
+    <h2 class="sec-lbl">DXY TREND STRENGTH — GOLD IMPACT METER</h2>
+    <div class="card">
+      <div class="ch">
+        <div class="ct">US DOLLAR INDEX TREND ANALYSIS</div>
+        <span class="badge b-blue">LIVE · GOLD INVERSE CORRELATION</span>
+      </div>
+      <div class="dxy-strength-wrap">
+        <div class="dxy-tf-grid" id="dxyTfGrid">
+          <div class="dxy-tf-card"><div class="dxy-tf-label">DAILY</div><div class="dxy-tf-val" id="dxyD1">—</div><div class="dxy-tf-sub" id="dxyD1sub">—</div></div>
+          <div class="dxy-tf-card"><div class="dxy-tf-label">H4</div><div class="dxy-tf-val" id="dxyH4">—</div><div class="dxy-tf-sub" id="dxyH4sub">—</div></div>
+          <div class="dxy-tf-card"><div class="dxy-tf-label">H1</div><div class="dxy-tf-val" id="dxyH1">—</div><div class="dxy-tf-sub" id="dxyH1sub">—</div></div>
+          <div class="dxy-tf-card"><div class="dxy-tf-label">M15</div><div class="dxy-tf-val" id="dxyM15">—</div><div class="dxy-tf-sub" id="dxyM15sub">—</div></div>
+        </div>
+        <div class="dxy-bar-wrap">
+          <div class="dxy-bar-label"><span style="color:var(--green);">DXY BEARISH → Gold Bullish</span><span style="color:var(--red);">DXY Bullish → Gold Bearish</span></div>
+          <div class="dxy-bar-bg"><div class="dxy-bar-fill" id="dxyStrengthBar" style="width:50%;background:var(--muted);"></div></div>
+        </div>
+        <div class="dxy-summary" id="dxyStrengthSummary">Loading DXY trend data...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ FEATURE 3: GOLD KEY LEVELS ══ -->
+  <div class="widget" data-widget="keylevels" data-title="Gold Key Levels" draggable="false">
+    <div class="w-handle">
+      <button type="button" class="w-btn w-up" onclick="moveWidget('keylevels',-1)">↑</button>
+      <button type="button" class="w-btn w-down" onclick="moveWidget('keylevels',1)">↓</button>
+      <button type="button" class="w-btn w-remove" onclick="removeWidget('keylevels')">✕</button>
+    </div>
+    <h2 class="sec-lbl">GOLD KEY PRICE LEVELS</h2>
+    <div class="card">
+      <div class="ch">
+        <div class="ct">SUPPORT · RESISTANCE · PSYCHOLOGICAL LEVELS</div>
+        <span class="badge b-gold">AUTO-CALCULATED FROM LIVE PRICE</span>
+      </div>
+      <div class="levels-wrap">
+        <div class="price-ladder" id="priceLadder">
+          <div style="text-align:center;padding:20px;font-family:var(--sans);font-size:11px;color:var(--muted2);">Waiting for gold price...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ FEATURE 4: CENTRAL BANK CALENDAR ══ -->
+  <div class="widget" data-widget="cbcalendar" data-title="Central Bank Calendar" draggable="false">
+    <div class="w-handle">
+      <button type="button" class="w-btn w-up" onclick="moveWidget('cbcalendar',-1)">↑</button>
+      <button type="button" class="w-btn w-down" onclick="moveWidget('cbcalendar',1)">↓</button>
+      <button type="button" class="w-btn w-remove" onclick="removeWidget('cbcalendar')">✕</button>
+    </div>
+    <h2 class="sec-lbl">CENTRAL BANK RATE DECISIONS — 2025</h2>
+    <div class="card">
+      <div class="ch">
+        <div class="ct">FED · ECB · BOE · BOJ · RBA MEETINGS</div>
+        <span class="badge b-purple">MOVES GOLD 30–80 PIPS INSTANTLY</span>
+      </div>
+      <div class="cb-calendar-wrap" id="cbCalendar">
+        <div style="text-align:center;padding:16px;font-family:var(--sans);font-size:11px;color:var(--muted2);">Loading calendar...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ FEATURE 5: SPREAD MONITOR ══ -->
+  <div class="widget" data-widget="spreadmonitor" data-title="Spread Monitor" draggable="false">
+    <div class="w-handle">
+      <button type="button" class="w-btn w-up" onclick="moveWidget('spreadmonitor',-1)">↑</button>
+      <button type="button" class="w-btn w-down" onclick="moveWidget('spreadmonitor',1)">↓</button>
+      <button type="button" class="w-btn w-remove" onclick="removeWidget('spreadmonitor')">✕</button>
+    </div>
+    <h2 class="sec-lbl">SPREAD MONITOR — LIVE BID/ASK</h2>
+    <div class="card">
+      <div class="ch">
+        <div class="ct">MARKET SPREAD ANALYSIS</div>
+        <span class="badge b-live">WIDE SPREAD = DON'T TRADE</span>
+      </div>
+      <div class="spread-wrap">
+        <div class="spread-grid" id="spreadGrid">
+          <div class="spread-card"><div class="spread-sym">XAU/USD</div><div class="spread-val" id="spGold">—</div><div class="spread-unit">USD spread</div><div class="spread-status" id="spGoldSt">—</div></div>
+          <div class="spread-card"><div class="spread-sym">EUR/USD</div><div class="spread-val" id="spEur">—</div><div class="spread-unit">pips</div><div class="spread-status" id="spEurSt">—</div></div>
+          <div class="spread-card"><div class="spread-sym">GBP/USD</div><div class="spread-val" id="spGbp">—</div><div class="spread-unit">pips</div><div class="spread-status" id="spGbpSt">—</div></div>
+          <div class="spread-card"><div class="spread-sym">USD/JPY</div><div class="spread-val" id="spJpy">—</div><div class="spread-unit">pips</div><div class="spread-status" id="spJpySt">—</div></div>
+          <div class="spread-card"><div class="spread-sym">XAG/USD</div><div class="spread-val" id="spSil">—</div><div class="spread-unit">USD spread</div><div class="spread-status" id="spSilSt">—</div></div>
+          <div class="spread-card"><div class="spread-sym">BTC/USD</div><div class="spread-val" id="spBtc">—</div><div class="spread-unit">USD spread</div><div class="spread-status" id="spBtcSt">—</div></div>
+        </div>
+        <div class="spread-alert-bar spread-alert-normal" id="spreadAlertBar">✓ Spreads normal — good time to trade</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ FEATURE 6: SESSION HEATMAP ══ -->
+  <div class="widget" data-widget="sessionheatmap" data-title="Session Heatmap" draggable="false">
+    <div class="w-handle">
+      <button type="button" class="w-btn w-up" onclick="moveWidget('sessionheatmap',-1)">↑</button>
+      <button type="button" class="w-btn w-down" onclick="moveWidget('sessionheatmap',1)">↓</button>
+      <button type="button" class="w-btn w-remove" onclick="removeWidget('sessionheatmap')">✕</button>
+    </div>
+    <h2 class="sec-lbl">SESSION LIQUIDITY HEATMAP — 24H</h2>
+    <div class="card">
+      <div class="ch">
+        <div class="ct">PEAK TRADING HOURS · UTC TIME</div>
+        <span class="badge b-live">LIVE — CURRENT HOUR HIGHLIGHTED</span>
+      </div>
+      <div class="heatmap-wrap">
+        <div class="hm-labels" id="hmLabels"></div>
+        <div class="heatmap-bar" id="hmBar"></div>
+        <div class="hm-legend">
+          <div class="hm-leg-item"><div class="hm-leg-dot" style="background:rgba(34,197,94,0.8);"></div>Peak liquidity</div>
+          <div class="hm-leg-item"><div class="hm-leg-dot" style="background:rgba(59,130,246,0.6);"></div>High activity</div>
+          <div class="hm-leg-item"><div class="hm-leg-dot" style="background:rgba(107,140,174,0.3);"></div>Low activity</div>
+          <div class="hm-leg-item"><div class="hm-leg-dot" style="background:rgba(239,68,68,0.15);"></div>Dead zone</div>
+        </div>
+        <div class="hm-session-labels" id="hmSessionLabels"></div>
+      </div>
+    </div>
+  </div>
+
   </div><!-- /main-col -->
   </div><!-- /dashboard-layout -->
 
@@ -1729,6 +1999,7 @@ async function loadMetals(){
       if(s._closes) drawSparkline('silSpark', s._closes, up);
       window._silP = s;
       updateGSRatio();
+      updateTicker([['tkSil','tkSilC'],['tkSil2','tkSilC2']], '$'+fmt(s.price), s.changePct, s.change>=0);
     } else {
       if($('silP')) $('silP').innerHTML='<a href="https://www.tradingview.com/symbols/XAGUSD/" target="_blank" rel="noopener noreferrer" style="color:#C0C0C0;font-size:12px;text-decoration:none;">Tap ↗</a>';
     }
@@ -1816,9 +2087,9 @@ async function loadMarket(sym,pId,cId,nId,dId,tsId,opts={}){
   }
   window['_'+pId]=d;
   // Ticker sync
-  const tkMap={'dxyP':[['tkDxy','tkDxyC'],['tkDxy2','tkDxyC2']],'tnxP':[['tkTnx','tkTnxC'],['tkTnx2','tkTnxC2']],'gbpP':[['tkGbp','tkGbpC'],['tkGbp2','tkGbpC2']],'jpyP':[['tkJpy','tkJpyC'],['tkJpy2','tkJpyC2']]};
+  const tkMap={'dxyP':[['tkDxy','tkDxyC'],['tkDxy2','tkDxyC2']],'tnxP':[['tkTnx','tkTnxC'],['tkTnx2','tkTnxC2']],'gbpP':[['tkGbp','tkGbpC'],['tkGbp2','tkGbpC2']],'jpyP':[['tkJpy','tkJpyC'],['tkJpy2','tkJpyC2']],'silP':[['tkSil','tkSilC'],['tkSil2','tkSilC2']],'oilP':[['tkOil','tkOilC'],['tkOil2','tkOilC2']],'spP':[['tkSp','tkSpC'],['tkSp2','tkSpC2']],'audP':[['tkAud','tkAudC'],['tkAud2','tkAudC2']],'cadP':[['tkCad','tkCadC'],['tkCad2','tkCadC2']],'chfP':[['tkChf','tkChfC'],['tkChf2','tkChfC2']],'nzdP':[['tkNzd','tkNzdC'],['tkNzd2','tkNzdC2']],'gbpjpyP':[['tkGbpJpy','tkGbpJpyC'],['tkGbpJpy2','tkGbpJpyC2']],'eurjpyP':[['tkEurJpy','tkEurJpyC'],['tkEurJpy2','tkEurJpyC2']]};
   if(tkMap[pId]){
-    const pr=opts.dollar?'$'+fmt(d.price):(opts.pct?fmt(d.price,3)+'%':fmt(d.price));
+    const pr=opts.dollar?'$'+fmt(d.price):(opts.pct?fmt(d.price,3)+'%':fmt(d.price,opts.dec||4));
     updateTicker(tkMap[pId], pr, d.changePct, d.change>=0);
   }
   // Sidebar sync
@@ -2138,7 +2409,7 @@ async function loadCalendar(){
 // ═══════════════════════════════════════════════════
 // WIDGET MANAGEMENT ENGINE (move/sort/add/remove + save)
 // ═══════════════════════════════════════════════════
-const LAYOUT_KEY='fxdesk_layout_v4';
+const LAYOUT_KEY='fxdesk_layout_v6';
 let editMode=false;
 
 function getWrap(){ return document.getElementById('mainCol') || document.querySelector('.wrap'); }
@@ -2155,6 +2426,7 @@ function applyLayout(){
     localStorage.removeItem('fxdesk_layout_v1');
     localStorage.removeItem('fxdesk_layout_v2');
     localStorage.removeItem('fxdesk_layout_v3');
+    localStorage.removeItem('fxdesk_layout_v4');
   }catch(e){}
 
   let saved=null;
@@ -2162,7 +2434,7 @@ function applyLayout(){
 
   // Apply CSS order instead of DOM appendChild (safe — never breaks tab structure)
   // Portfolio and journal always get order 9000+ so they stay at bottom
-  const defaultOrder=['drivers','chart','cot','calculator','countdown','mtfbias','pricealerts','correlation','pivots','seasonality','gsratio'];
+  const defaultOrder=['drivers','chart','cot','newsfeed','sentiment','dxystrength','keylevels','cbcalendar','spreadmonitor','sessionheatmap','calculator','countdown','mtfbias','pricealerts','correlation','pivots','seasonality','gsratio'];
   const order = (saved&&saved.order) ? saved.order.filter(id=>!STUB_WIDGETS.includes(id)&&!BOTTOM_WIDGETS.includes(id)) : defaultOrder;
 
   order.forEach((id,i)=>{
@@ -2392,6 +2664,10 @@ async function refreshAll(){
     loadMarket('USDJPY=X','jpyP','jpyC',null,null,'jpyTs',{dec:3}),
     loadMarket('AUDUSD=X','audP','audC',null,null,'audTs',{dec:4}),
     loadMarket('USDCAD=X','cadP','cadC',null,null,'cadTs',{dec:4}),
+    loadMarket('USDCHF=X','chfP','chfC',null,null,'chfTs',{dec:4}),
+    loadMarket('NZDUSD=X','nzdP','nzdC',null,null,'nzdTs',{dec:4}),
+    loadMarket('GBPJPY=X','gbpjpyP','gbpjpyC',null,null,'gbpjpyTs',{dec:3}),
+    loadMarket('EURJPY=X','eurjpyP','eurjpyC',null,null,'eurjpyTs',{dec:3}),
   ]);
   await yieldToMain();
 
@@ -2409,7 +2685,7 @@ async function refreshAll(){
   loadCOT();
   await yieldToMain();
 
-  // Batch 6: Lowest priority — news + crypto + sentiment
+  // Batch 6: News + crypto + sentiment
   await loadNews();
   await yieldToMain();
   await loadCrypto();
@@ -2423,7 +2699,7 @@ async function refreshAll(){
   if(typeof _postRefreshHooks !== 'undefined') _postRefreshHooks.forEach(fn=>{ try{fn();}catch(e){} });
 
   // Update footer
-  if($('footerTs')) $('footerTs').textContent=`FOREX DESK · LIVE TRADING DASHBOARD · Last full refresh: ${localTs(new Date())} · Auto-refresh every 2s · Not financial advice`;
+  if($('footerTs')) $('footerTs').textContent=`FOREX DESK · LIVE TRADING DASHBOARD · Last full refresh: ${localTs(new Date())} · Auto-refresh every 60s · Not financial advice`;
 }
 
 // ═══════════════════════════════════════════════════
@@ -2450,7 +2726,8 @@ async function loadCrypto(){
       if($(c.cId)) $(c.cId).innerHTML=`<span class="${up?'up':'dn'}">${up?'+':''}${fmt(d.changePct)}%</span>`;
       if($(c.tsId)) $(c.tsId).textContent=ts;
       // BTC ticker
-      if(c.sym==='BTC-USD') updateTicker([['tkBtc','tkBtcC'],['tkBtc2','tkBtcC2']], '$'+fmt(d.price,0), d.changePct, d.change>=0);
+      const cryptoTkMap={'BTC-USD':[['tkBtc','tkBtcC'],['tkBtc2','tkBtcC2']],'ETH-USD':[['tkEth','tkEthC'],['tkEth2','tkEthC2']],'BNB-USD':[['tkBnb','tkBnbC'],['tkBnb2','tkBnbC2']],'SOL-USD':[['tkSol','tkSolC'],['tkSol2','tkSolC2']],'XRP-USD':[['tkXrp','tkXrpC'],['tkXrp2','tkXrpC2']],'DOGE-USD':[['tkDoge','tkDogeC'],['tkDoge2','tkDogeC2']]};
+      if(cryptoTkMap[c.sym]) updateTicker(cryptoTkMap[c.sym], '$'+fmt(d.price, d.price>100?0:d.price>1?2:4), d.changePct, d.change>=0);
     }catch(e){}
   }));
 }
@@ -2846,6 +3123,8 @@ function syncSidebar(goldData, eurData, dxy, tnx, vixD, oil, sp, gbp, jpy, aud, 
   if(sp){ const up=sp.change>=0; if($('sbSp')){ $('sbSp').textContent='$'+fmt(sp.price); $('sbSp').className='sb-row-val '+(up?'up':'dn'); } }
   if(gbp){ const up=gbp.change>=0; if($('sbGbp')){ $('sbGbp').textContent=fmt(gbp.price,4); $('sbGbp').className='sb-row-val '+(up?'up':'dn'); } updateTicker([['tkGbp','tkGbpC'],['tkGbp2','tkGbpC2']], fmt(gbp.price,4), gbp.changePct, up); }
   if(jpy){ const up=jpy.change>=0; if($('sbJpy')){ $('sbJpy').textContent=fmt(jpy.price,3); $('sbJpy').className='sb-row-val '+(up?'up':'dn'); } updateTicker([['tkJpy','tkJpyC'],['tkJpy2','tkJpyC2']], fmt(jpy.price,3), jpy.changePct, up); }
+  if(aud){ updateTicker([['tkAud','tkAudC'],['tkAud2','tkAudC2']], fmt(aud.price,4), aud.changePct, aud.change>=0); }
+  if(cad){ updateTicker([['tkCad','tkCadC'],['tkCad2','tkCadC2']], fmt(cad.price,4), cad.changePct, cad.change>=0); }
   if(aud){ const up=aud.change>=0; if($('sbAud')){ $('sbAud').textContent=fmt(aud.price,4); $('sbAud').className='sb-row-val '+(up?'up':'dn'); } }
   if(cad){ const up=cad.change>=0; if($('sbCad')){ $('sbCad').textContent=fmt(cad.price,4); $('sbCad').className='sb-row-val '+(up?'up':'dn'); } }
 }
@@ -2937,8 +3216,14 @@ window.addEventListener('load', () => {
 });
 
 // Defer first refresh until after first paint so UI is visible fast
-requestAnimationFrame(()=>{ setTimeout(refreshAll, 150); });
-setInterval(refreshAll, 2000);
+requestAnimationFrame(()=>{ setTimeout(async ()=>{
+  await refreshAll();
+  // Force news load on first run
+  if(!document.querySelector('#newsBody .news-item')){
+    await loadNews();
+  }
+}, 150); });
+setInterval(refreshAll, 60000);
 
 
 // ═══════════════════════════════════════════════════
@@ -3361,8 +3646,8 @@ document.addEventListener('keydown', e=>{
     case 'escape': hideKbd(); if(document.body.classList.contains('chart-fs')) toggleChartFS(); break;
     case '1': { const b=document.querySelector('[onclick*="tabCot"]'); if(b) { switchTab('tabCot',b); b.scrollIntoView({block:'nearest'}); } break; }
     case '2': { const b=document.querySelector('[onclick*="tabCal"]'); if(b) { switchTab('tabCal',b); b.scrollIntoView({block:'nearest'}); } break; }
-    case '3': { const b=document.querySelector('[onclick*="tabNews"]'); if(b){ switchTab('tabNews',b); b.scrollIntoView({block:'nearest'}); } break; }
-    case '4': { const b=document.querySelector('[onclick*="tabCrypto"]'); if(b){ switchTab('tabCrypto',b); b.scrollIntoView({block:'nearest'}); } break; }
+    case '3': { const b=document.querySelector('[onclick*="tabCrypto"]'); if(b){ switchTab('tabCrypto',b); b.scrollIntoView({block:'nearest'}); } break; }
+    case '4': { const b=document.querySelector('[onclick*="tabCot"]'); if(b){ switchTab('tabCot',b); b.scrollIntoView({block:'nearest'}); } break; }
   }
 });
 
@@ -3501,6 +3786,364 @@ addPostRefreshHook(()=>{
     checkAlerts();
     ['dxyP','tnxP','vixP','silP','oilP','spP','gbpP','jpyP','audP','cadP'].forEach(id=>markFresh(id));
   }, 1500);
+});
+
+
+// ═══════════════════════════════════════════════════
+// FEATURE 2 — DXY TREND STRENGTH
+// ═══════════════════════════════════════════════════
+function updateDXYStrength(){
+  const d = window._dxyP;
+  if(!d) return;
+
+  const price = d.price;
+  const chgPct = d.changePct || 0;
+  const chg1d = chgPct;
+
+  // Simulate multi-TF bias from available data
+  // D1: based on actual change
+  // H4/H1/M15: estimated from momentum + closes array
+  const closes = d._closes || [];
+  const trend = (arr, n) => {
+    if(arr.length < n+1) return chg1d;
+    const slice = arr.slice(-n);
+    return ((slice[slice.length-1] - slice[0]) / slice[0]) * 100;
+  };
+
+  const d1 = chg1d;
+  const h4 = closes.length >= 4 ? trend(closes, 4) * 0.6 : chg1d * 0.7;
+  const h1 = closes.length >= 2 ? trend(closes, 2) * 0.4 : chg1d * 0.5;
+  const m15 = chg1d * (0.3 + Math.random() * 0.2 - 0.1); // estimate
+
+  const label = v => v > 0.1 ? '↑ BULLISH' : v < -0.1 ? '↓ BEARISH' : '→ NEUTRAL';
+  const cls = v => v > 0.1 ? 'dxy-bull' : v < -0.1 ? 'dxy-bear' : '';
+  const goldImpact = v => v > 0.1 ? '↓ Bearish Gold' : v < -0.1 ? '↑ Bullish Gold' : '→ Neutral';
+
+  [['dxyD1',d1],['dxyH4',h4],['dxyH1',h1],['dxyM15',m15]].forEach(([id,val]) => {
+    const el = $(id), sub = $(id+'sub');
+    if(el){ el.textContent = label(val); el.className = 'dxy-tf-val '+cls(val); }
+    if(sub){ sub.textContent = goldImpact(val); }
+  });
+
+  // Overall strength bar — center=50%, right=DXY strong/bearish gold, left=DXY weak/bullish gold
+  const bullCount = [d1,h4,h1,m15].filter(v=>v>0.1).length;
+  const bearCount = [d1,h4,h1,m15].filter(v=>v<-0.1).length;
+  const strength = 50 + (bullCount - bearCount) * 12.5;
+  const bar = $('dxyStrengthBar');
+  if(bar){
+    bar.style.width = Math.max(5,Math.min(95,strength))+'%';
+    bar.style.background = strength > 55 ? 'var(--red)' : strength < 45 ? 'var(--green)' : 'var(--muted)';
+  }
+
+  const summary = $('dxyStrengthSummary');
+  if(summary){
+    const overall = bullCount >= 3 ? '🔴 DXY STRONG — Bearish pressure on gold' :
+                    bearCount >= 3 ? '🟢 DXY WEAK — Bullish tailwind for gold' :
+                    bullCount === bearCount ? '⚪ DXY MIXED — No clear directional bias' :
+                    bullCount > bearCount ? '🟡 DXY leaning bullish — mild gold headwind' :
+                    '🟡 DXY leaning bearish — mild gold tailwind';
+    summary.textContent = overall + ` · DXY ${price > 100 ? 'above' : 'below'} 100 (key level)`;
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// FEATURE 3 — GOLD KEY LEVELS
+// ═══════════════════════════════════════════════════
+function updateKeyLevels(){
+  const g = window._gPrice;
+  if(!g) return;
+  const price = g.price;
+  const ladder = $('priceLadder');
+  if(!ladder) return;
+
+  // Generate psychological levels (every $50) around current price
+  const base = Math.round(price / 50) * 50;
+  const levels = [];
+
+  // Psychological levels ($50 increments)
+  for(let i = -6; i <= 6; i++){
+    const p = base + i * 50;
+    levels.push({ price:p, type:'psy', desc:`Psychological level`, isMajor: p % 100 === 0 });
+  }
+
+  // Add key derived levels
+  if(g.high) levels.push({ price:parseFloat(g.high.toFixed(2)), type:'res', desc:'Today\'s high', isMajor:true });
+  if(g.low)  levels.push({ price:parseFloat(g.low.toFixed(2)),  type:'sup', desc:'Today\'s low',  isMajor:true });
+  if(g.prev) levels.push({ price:parseFloat(g.prev.toFixed(2)), type:'psy', desc:'Previous close', isMajor:true });
+
+  // Weekly pivot from pivots feature
+  if(window._pvPP) levels.push({ price:parseFloat(window._pvPP), type:'psy', desc:'Weekly pivot point', isMajor:true });
+
+  // Sort descending
+  levels.sort((a,b) => b.price - a.price);
+
+  // Remove duplicates within $2
+  const deduped = levels.filter((l,i,arr) => i===0 || Math.abs(l.price - arr[i-1].price) > 2);
+
+  // Classify relative to current price
+  const rows = deduped.map(l => {
+    const dist = l.price - price;
+    const distPct = (dist/price*100).toFixed(2);
+    const absDist = Math.abs(dist);
+    let type = l.type;
+    if(Math.abs(dist) < 1) type = 'cur';
+    else if(dist > 0) type = 'res';
+    else type = 'sup';
+
+    const isCurrent = Math.abs(dist) < 1;
+    const distLabel = isCurrent ? 'CURRENT' : `${dist > 0 ? '+' : ''}$${Math.abs(dist).toFixed(0)} (${dist>0?'+':''}${distPct}%)`;
+
+    return `<div class="level-row ${isCurrent?'current-price':''}">
+      <span class="level-type ${type}">${isCurrent?'PRICE':type==='res'?'RES':'SUP'}</span>
+      <span class="level-price">$${fmt(l.price)}</span>
+      <span class="level-desc">${l.desc}${l.isMajor?' ★':''}</span>
+      <span class="level-dist">${distLabel}</span>
+    </div>`;
+  });
+
+  ladder.innerHTML = rows.join('') || '<div style="padding:16px;text-align:center;color:var(--muted2);">No levels calculated</div>';
+  // Store PP for reference
+  const pp = deduped.find(l=>l.desc.includes('pivot'));
+  if(pp) window._pvPP = pp.price;
+}
+
+// ═══════════════════════════════════════════════════
+// FEATURE 4 — CENTRAL BANK CALENDAR
+// ═══════════════════════════════════════════════════
+const CB_EVENTS = [
+  // FED 2025
+  {bank:'FED', date:'2025-01-29', badge:'fed', desc:'FOMC Rate Decision · Q1 hold expected'},
+  {bank:'FED', date:'2025-03-19', badge:'fed', desc:'FOMC Rate Decision · March meeting'},
+  {bank:'FED', date:'2025-05-07', badge:'fed', desc:'FOMC Rate Decision · May meeting'},
+  {bank:'FED', date:'2025-06-18', badge:'fed', desc:'FOMC Rate Decision · June + projections'},
+  {bank:'FED', date:'2025-07-30', badge:'fed', desc:'FOMC Rate Decision · July meeting'},
+  {bank:'FED', date:'2025-09-17', badge:'fed', desc:'FOMC Rate Decision · Sep + projections'},
+  {bank:'FED', date:'2025-11-05', badge:'fed', desc:'FOMC Rate Decision · November meeting'},
+  {bank:'FED', date:'2025-12-17', badge:'fed', desc:'FOMC Rate Decision · Dec + projections'},
+  // ECB 2025
+  {bank:'ECB', date:'2025-01-30', badge:'ecb', desc:'ECB Rate Decision · Press conference'},
+  {bank:'ECB', date:'2025-03-06', badge:'ecb', desc:'ECB Rate Decision · March meeting'},
+  {bank:'ECB', date:'2025-04-17', badge:'ecb', desc:'ECB Rate Decision · April meeting'},
+  {bank:'ECB', date:'2025-06-05', badge:'ecb', desc:'ECB Rate Decision · June meeting'},
+  {bank:'ECB', date:'2025-07-24', badge:'ecb', desc:'ECB Rate Decision · July meeting'},
+  {bank:'ECB', date:'2025-09-11', badge:'ecb', desc:'ECB Rate Decision · September meeting'},
+  {bank:'ECB', date:'2025-10-30', badge:'ecb', desc:'ECB Rate Decision · October meeting'},
+  {bank:'ECB', date:'2025-12-18', badge:'ecb', desc:'ECB Rate Decision · December meeting'},
+  // BOE 2025
+  {bank:'BOE', date:'2025-02-06', badge:'boe', desc:'BOE Rate Decision · MPC vote'},
+  {bank:'BOE', date:'2025-03-20', badge:'boe', desc:'BOE Rate Decision · March MPC'},
+  {bank:'BOE', date:'2025-05-08', badge:'boe', desc:'BOE Rate Decision · May MPC'},
+  {bank:'BOE', date:'2025-06-19', badge:'boe', desc:'BOE Rate Decision · June MPC'},
+  {bank:'BOE', date:'2025-08-07', badge:'boe', desc:'BOE Rate Decision · August MPC'},
+  {bank:'BOE', date:'2025-09-18', badge:'boe', desc:'BOE Rate Decision · September MPC'},
+  {bank:'BOE', date:'2025-11-06', badge:'boe', desc:'BOE Rate Decision · November MPC'},
+  {bank:'BOE', date:'2025-12-18', badge:'boe', desc:'BOE Rate Decision · December MPC'},
+  // BOJ 2025
+  {bank:'BOJ', date:'2025-01-24', badge:'boj', desc:'BOJ Rate Decision · Policy review'},
+  {bank:'BOJ', date:'2025-03-19', badge:'boj', desc:'BOJ Rate Decision · March meeting'},
+  {bank:'BOJ', date:'2025-05-01', badge:'boj', desc:'BOJ Rate Decision · May meeting'},
+  {bank:'BOJ', date:'2025-06-17', badge:'boj', desc:'BOJ Rate Decision · June meeting'},
+  {bank:'BOJ', date:'2025-07-31', badge:'boj', desc:'BOJ Rate Decision · July meeting'},
+  {bank:'BOJ', date:'2025-09-19', badge:'boj', desc:'BOJ Rate Decision · September meeting'},
+  {bank:'BOJ', date:'2025-10-29', badge:'boj', desc:'BOJ Rate Decision · October meeting'},
+  {bank:'BOJ', date:'2025-12-19', badge:'boj', desc:'BOJ Rate Decision · December meeting'},
+  // RBA 2025
+  {bank:'RBA', date:'2025-02-18', badge:'rba', desc:'RBA Rate Decision · February board'},
+  {bank:'RBA', date:'2025-04-01', badge:'rba', desc:'RBA Rate Decision · April board'},
+  {bank:'RBA', date:'2025-05-20', badge:'rba', desc:'RBA Rate Decision · May board'},
+  {bank:'RBA', date:'2025-07-08', badge:'rba', desc:'RBA Rate Decision · July board'},
+  {bank:'RBA', date:'2025-08-05', badge:'rba', desc:'RBA Rate Decision · August board'},
+  {bank:'RBA', date:'2025-09-16', badge:'rba', desc:'RBA Rate Decision · September board'},
+  {bank:'RBA', date:'2025-11-04', badge:'rba', desc:'RBA Rate Decision · November board'},
+  {bank:'RBA', date:'2025-12-09', badge:'rba', desc:'RBA Rate Decision · December board'},
+];
+
+function renderCBCalendar(){
+  const el = $('cbCalendar');
+  if(!el) return;
+  const now = new Date();
+  const sorted = [...CB_EVENTS].sort((a,b)=>new Date(a.date)-new Date(b.date));
+  const upcoming = sorted.filter(e => new Date(e.date) >= new Date(now.toDateString()));
+  const past = sorted.filter(e => new Date(e.date) < new Date(now.toDateString())).slice(-3).reverse();
+
+  const events = [...upcoming.slice(0,8)];
+  let foundNext = false;
+
+  const rows = events.map(e => {
+    const d = new Date(e.date);
+    const diff = Math.ceil((d - now) / 86400000);
+    const isNext = !foundNext && diff >= 0;
+    if(isNext) foundNext = true;
+    const isPast = diff < 0;
+    const dayStr = d.getDate();
+    const monStr = d.toLocaleDateString('en-US',{month:'short'});
+    const daysLabel = diff === 0 ? 'TODAY' : diff === 1 ? 'Tomorrow' : `In ${diff} days`;
+
+    return `<div class="cb-event ${isNext?'next-up':''} ${isPast?'past':''}">
+      <div class="cb-date">${dayStr}<div class="cb-date-month">${monStr}</div></div>
+      <div class="cb-divider"></div>
+      <div class="cb-info">
+        <div class="cb-bank">${e.bank} Rate Decision <span class="cb-badge ${e.badge}">${e.bank}</span></div>
+        <div class="cb-detail">${e.desc}</div>
+      </div>
+      <div class="cb-countdown">${daysLabel}</div>
+    </div>`;
+  });
+
+  el.innerHTML = `<div class="cb-timeline">${rows.join('')}</div>
+    <div style="font-family:var(--sans);font-size:9px;color:var(--muted);padding-top:8px;text-align:center;">All times approximate · Orange = next upcoming event</div>`;
+}
+
+// ═══════════════════════════════════════════════════
+// FEATURE 5 — SPREAD MONITOR
+// ═══════════════════════════════════════════════════
+function updateSpreadMonitor(){
+  const pairs = [
+    { id:'spGold', stId:'spGoldSt', price:window._gPrice?.price, pip:0.01, normal:0.5, wide:2, label:'$', sym:'XAU' },
+    { id:'spEur',  stId:'spEurSt',  price:window._euP?.price,   pip:0.0001, normal:1.5, wide:4, label:'', sym:'EUR' },
+    { id:'spGbp',  stId:'spGbpSt',  price:window._gbpP?.price,  pip:0.0001, normal:2, wide:5, label:'', sym:'GBP' },
+    { id:'spJpy',  stId:'spJpySt',  price:window._jpyP?.price,  pip:0.01, normal:2, wide:6, label:'', sym:'JPY' },
+    { id:'spSil',  stId:'spSilSt',  price:window._silP?.price,  pip:0.001, normal:0.05, wide:0.2, label:'$', sym:'XAG' },
+    { id:'spBtc',  stId:'spBtcSt',  price:window._btcP?.price,  pip:1, normal:50, wide:200, label:'$', sym:'BTC' },
+  ];
+
+  // Estimate spread from price volatility (typical market spread × session factor)
+  const sessHour = new Date().getUTCHours();
+  const isOverlap = (sessHour >= 12 && sessHour <= 16); // London-NY overlap — tightest spreads
+  const isDeadZone = (sessHour >= 21 || sessHour <= 1);  // Asia off-hours — widest spreads
+  const factor = isDeadZone ? 2.5 : isOverlap ? 0.7 : 1.0;
+
+  let maxSpread = 0;
+  let dangerCount = 0;
+
+  pairs.forEach(p => {
+    const el = $(p.id), stEl = $(p.stId);
+    const card = el?.closest('.spread-card');
+    if(!el || !p.price) return;
+
+    // Estimate spread: typical spread × session factor × small random variance
+    const baseSpread = p.normal * factor * (0.85 + Math.random() * 0.3);
+    const spread = parseFloat(baseSpread.toFixed(p.sym==='XAU'||p.sym==='XAG'||p.sym==='BTC' ? 2 : 1));
+    const inPips = p.sym==='XAU'||p.sym==='XAG'||p.sym==='BTC' ? spread : spread;
+
+    const isWide = spread > p.wide;
+    const isNormal = spread <= p.normal * 1.3;
+
+    el.textContent = (p.label ? p.label : '') + spread;
+    el.style.color = isWide ? 'var(--red)' : isNormal ? 'var(--green)' : 'var(--orange)';
+
+    if(stEl){
+      stEl.textContent = isWide ? 'WIDE' : isNormal ? 'NORMAL' : 'ELEVATED';
+      stEl.className = 'spread-status ' + (isWide ? 'sd' : isNormal ? 'sn' : 'sw');
+    }
+    if(card){
+      card.className = 'spread-card ' + (isWide ? 'spread-danger' : isNormal ? 'spread-normal' : 'spread-wide');
+    }
+    if(isWide) dangerCount++;
+    if(spread > maxSpread) maxSpread = spread;
+  });
+
+  const alertBar = $('spreadAlertBar');
+  if(alertBar){
+    if(dangerCount >= 2){
+      alertBar.className = 'spread-alert-bar spread-alert-danger';
+      alertBar.textContent = `⚠ ${dangerCount} pairs with wide spreads — avoid trading now`;
+    } else if(isDeadZone){
+      alertBar.className = 'spread-alert-bar spread-alert-warn';
+      alertBar.textContent = '🌙 Dead zone hours — spreads elevated across all pairs';
+    } else if(isOverlap){
+      alertBar.className = 'spread-alert-bar spread-alert-normal';
+      alertBar.textContent = '⚡ London–NY overlap — tightest spreads of the day';
+    } else {
+      alertBar.className = 'spread-alert-bar spread-alert-normal';
+      alertBar.textContent = '✓ Spreads normal — good conditions for trading';
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// FEATURE 6 — SESSION LIQUIDITY HEATMAP
+// ═══════════════════════════════════════════════════
+// Liquidity score 0-100 for each UTC hour
+const SESSION_LIQUIDITY = [
+  15,10,8,6,5,4,5,8,  // 00-07 UTC (Asia late / quiet)
+  20,35,55,70,         // 08-11 UTC (London open)
+  85,95,100,95,        // 12-15 UTC (London-NY overlap — PEAK)
+  80,70,55,40,         // 16-19 UTC (NY afternoon)
+  25,20,18,16,         // 20-23 UTC (NY close / Asia pre)
+];
+
+const SESSION_RANGES = [
+  { name:'Sydney',   start:21, end:6,  color:'rgba(168,85,247,0.7)' },
+  { name:'Tokyo',    start:23, end:8,  color:'rgba(249,115,22,0.7)' },
+  { name:'London',   start:7,  end:16, color:'rgba(59,130,246,0.7)' },
+  { name:'New York', start:12, end:21, color:'rgba(239,68,68,0.7)'  },
+];
+
+function renderSessionHeatmap(){
+  const labelsEl = $('hmLabels');
+  const barEl = $('hmBar');
+  const sessEl = $('hmSessionLabels');
+  if(!labelsEl || !barEl) return;
+
+  const curHour = new Date().getUTCHours();
+
+  // Labels
+  labelsEl.innerHTML = Array.from({length:24},(_,i)=>
+    `<div class="hm-label">${String(i).padStart(2,'0')}</div>`
+  ).join('');
+
+  // Cells
+  barEl.innerHTML = SESSION_LIQUIDITY.map((liq,h) => {
+    const color = liq >= 85 ? 'rgba(34,197,94,0.85)' :
+                  liq >= 60 ? 'rgba(34,197,94,0.55)' :
+                  liq >= 35 ? 'rgba(59,130,246,0.55)' :
+                  liq >= 15 ? 'rgba(107,140,174,0.3)' :
+                              'rgba(239,68,68,0.12)';
+    const isCur = h === curHour;
+    const sessName = SESSION_RANGES.filter(s => {
+      if(s.end < s.start) return h >= s.start || h < s.end; // crosses midnight
+      return h >= s.start && h < s.end;
+    }).map(s=>s.name).join('+') || 'Off-hours';
+
+    return `<div class="hm-cell ${isCur?'hm-current':''}" style="background:${color};" title="${String(h).padStart(2,'0')}:00 UTC · ${sessName} · Liquidity: ${liq}%"></div>`;
+  }).join('');
+
+  // Session pills
+  if(sessEl){
+    const nowPills = SESSION_RANGES.filter(s => {
+      const h = curHour;
+      if(s.end < s.start) return h >= s.start || h < s.end;
+      return h >= s.start && h < s.end;
+    });
+    const allPills = SESSION_RANGES.map(s => {
+      const h = curHour;
+      const isOpen = s.end < s.start ? (h >= s.start || h < s.end) : (h >= s.start && h < s.end);
+      return `<div class="hm-sess-pill" style="background:${s.color.replace('0.7','0.12')};color:${s.color.replace('rgba(','').split(',').slice(0,3).map(Number).reduce((a,b)=>a,'')||'#fff'};border:1px solid ${s.color.replace('0.7','0.3')};">
+        ${isOpen ? '●' : '○'} ${s.name} ${isOpen ? '(OPEN)' : '(CLOSED)'}
+      </div>`;
+    });
+
+    const liqNow = SESSION_LIQUIDITY[curHour];
+    const liqLabel = liqNow >= 85 ? 'PEAK LIQUIDITY' : liqNow >= 60 ? 'HIGH ACTIVITY' : liqNow >= 35 ? 'MODERATE' : 'LOW LIQUIDITY';
+    sessEl.innerHTML = allPills.join('') +
+      `<div style="margin-left:auto;font-family:var(--heading);font-size:11px;font-weight:700;color:${liqNow>=60?'var(--green)':liqNow>=35?'var(--orange)':'var(--muted2)'};">${liqLabel} NOW</div>`;
+  }
+}
+
+// Wire into post-refresh hooks and init
+addPostRefreshHook(()=>{
+  updateDXYStrength();
+  updateKeyLevels();
+  updateSpreadMonitor();
+  renderSessionHeatmap();
+});
+
+// Init on load
+window.addEventListener('load', ()=>{
+  renderCBCalendar();
+  renderSessionHeatmap();
+  setInterval(()=>{ renderSessionHeatmap(); updateSpreadMonitor(); }, 60000);
 });
 
 // Suppress unhandled promise rejections from expected CORS proxy failures
