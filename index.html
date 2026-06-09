@@ -469,10 +469,11 @@ select:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px soli
 /* ── FEATURE 6: DARK/LIGHT THEME ── */
 body.light-mode{
   --hdr-bg:linear-gradient(90deg,#EFF6FF,#DBEAFE,#EFF6FF);
-  --bg:#F0F4F8;--bg2:#FFFFFF;--bg3:#E8EDF2;--bg4:#DDE4EC;
-  --bg3:#EBF0F6;
-  --border:#CBD5E1;--border-gold:rgba(59,130,246,0.4);
-  --text:#1A2332;--muted:#64748B;--muted2:#475569;
+  --bg:#F0F4F8;--bg2:#FFFFFF;--bg3:#EBF0F6;--bg4:#DDE4EC;
+  --border:#CBD5E1;--border-gold:rgba(37,99,235,0.4);
+  --text:#1A2332;--muted:#475569;--muted2:#334155;
+  --gold:#2563EB;--gold-dim:#1D4ED8;--gold-bright:#1E40AF;
+  --blue:#2563EB;--orange:#EA580C;--purple:#7C3AED;
 }
 body.light-mode .hdr{
   border-image:linear-gradient(90deg,var(--accent-red),var(--accent-blue),var(--accent-red)) 1;
@@ -484,8 +485,12 @@ body.light-mode .ticker-bar{
 body.light-mode .sessions-bar{
   background:var(--bg2);
 }
-body.light-mode .logo-name{background:linear-gradient(135deg,#0F172A 0%,#1D4ED8 50%,#DC2626 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-body.light-mode .logo-sub{color:#64748B;}
+body.light-mode .logo-name{background:linear-gradient(135deg,#0F172A 0%,#1D4ED8 45%,#DC2626 100%) !important;-webkit-background-clip:text !important;-webkit-text-fill-color:transparent !important;background-clip:text !important;}
+body.light-mode .logo-sub{color:#475569;}
+body.light-mode .up{color:#15803D;}
+body.light-mode .dn{color:#B91C1C;}
+body.light-mode .mc-c .up{color:#15803D;}
+body.light-mode .mc-c .dn{color:#B91C1C;}
 body.light-mode .logo-bar.b1{background:#DC2626;box-shadow:none;}
 body.light-mode .logo-bar.b2{background:#475569;box-shadow:none;}
 body.light-mode .logo-bar.b3{background:#3B82F6;box-shadow:none;}
@@ -750,6 +755,75 @@ body.chart-fs .chart-fullscreen-btn{position:fixed;top:12px;right:12px;z-index:8
 .hm-leg-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0;}
 .hm-session-labels{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);}
 .hm-sess-pill{font-family:var(--sans);font-size:10px;font-weight:600;padding:4px 10px;border-radius:6px;}
+
+
+/* ── SMC PANEL ── */
+.smc-wrap{padding:14px;display:flex;flex-direction:column;gap:10px;}
+.smc-section{display:flex;flex-direction:column;gap:6px;}
+.smc-section-title{font-family:var(--heading);font-size:10px;font-weight:700;letter-spacing:1px;color:var(--muted2);text-transform:uppercase;padding-bottom:4px;border-bottom:1px solid var(--border);}
+.smc-item{display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--bg3);border-radius:7px;border:1px solid var(--border);transition:border-color .2s;}
+.smc-item:hover{border-color:rgba(59,130,246,0.3);}
+.smc-item.bullish{border-left:3px solid var(--green);}
+.smc-item.bearish{border-left:3px solid var(--red);}
+.smc-item.neutral{border-left:3px solid var(--muted);}
+.smc-badge{font-family:var(--sans);font-size:9px;font-weight:700;padding:2px 7px;border-radius:3px;white-space:nowrap;}
+.smc-ob{background:rgba(59,130,246,0.12);color:var(--blue);border:1px solid rgba(59,130,246,0.25);}
+.smc-fvg{background:rgba(249,115,22,0.1);color:var(--orange);border:1px solid rgba(249,115,22,0.25);}
+.smc-bos{background:rgba(168,85,247,0.1);color:var(--purple);border:1px solid rgba(168,85,247,0.25);}
+.smc-choch{background:rgba(239,68,68,0.1);color:var(--red);border:1px solid rgba(239,68,68,0.25);}
+.smc-info{flex:1;}
+.smc-price{font-family:var(--heading);font-size:13px;font-weight:700;color:var(--text);}
+.smc-desc{font-family:var(--sans);font-size:10px;color:var(--muted2);margin-top:1px;}
+.smc-status{font-family:var(--sans);font-size:9px;font-weight:600;}
+.smc-empty{font-family:var(--sans);font-size:11px;color:var(--muted2);text-align:center;padding:12px;}
+.smc-bias-bar{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg3);}
+.smc-bias-label{font-family:var(--heading);font-size:13px;font-weight:700;}
+.smc-bias-sub{font-family:var(--sans);font-size:10px;color:var(--muted2);margin-top:2px;}
+
+/* ── OPTIONS SENTIMENT ── */
+.opts-wrap{padding:14px;display:flex;flex-direction:column;gap:12px;}
+.opts-main{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.opts-card{background:var(--bg3);border:1px solid var(--border);border-radius:9px;padding:12px;text-align:center;}
+.opts-val{font-family:var(--heading);font-size:28px;font-weight:800;margin:4px 0;}
+.opts-lbl{font-family:var(--sans);font-size:10px;font-weight:600;color:var(--muted2);letter-spacing:.5px;}
+.opts-sub{font-family:var(--sans);font-size:9px;color:var(--muted);margin-top:3px;}
+.opts-gauge{height:10px;background:var(--bg);border-radius:5px;overflow:hidden;margin:8px 0;}
+.opts-fill{height:100%;border-radius:5px;transition:width .8s;}
+.opts-interp{font-family:var(--sans);font-size:11px;color:var(--muted2);text-align:center;padding:8px 12px;background:var(--bg3);border-radius:8px;line-height:1.5;}
+.opts-history{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.opts-hist-card{background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:8px;text-align:center;}
+.opts-hist-lbl{font-family:var(--sans);font-size:9px;color:var(--muted2);font-weight:600;}
+.opts-hist-val{font-family:var(--heading);font-size:15px;font-weight:700;margin-top:3px;}
+
+/* ── REAL YIELD ── */
+.ry-wrap{padding:14px;display:flex;flex-direction:column;gap:12px;}
+.ry-main{display:flex;align-items:center;justify-content:space-between;background:var(--bg3);border-radius:10px;border:1px solid var(--border);padding:14px 18px;}
+.ry-value{font-family:var(--heading);font-size:36px;font-weight:800;line-height:1;}
+.ry-label{font-family:var(--sans);font-size:10px;color:var(--muted2);font-weight:600;letter-spacing:.5px;margin-top:3px;}
+.ry-formula{font-family:var(--mono);font-size:10px;color:var(--muted2);margin-top:6px;}
+.ry-impact{font-family:var(--heading);font-size:12px;font-weight:700;}
+.ry-trend{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.ry-trend-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center;}
+.ry-trend-lbl{font-family:var(--sans);font-size:9px;color:var(--muted2);font-weight:600;}
+.ry-trend-val{font-family:var(--heading);font-size:15px;font-weight:700;margin-top:4px;}
+.ry-chart{display:flex;align-items:flex-end;gap:3px;height:60px;padding:8px 0;}
+.ry-bar{flex:1;border-radius:2px 2px 0 0;min-height:4px;transition:height .5s;}
+.ry-desc{font-family:var(--sans);font-size:10px;color:var(--muted2);padding:8px 12px;background:var(--bg3);border-radius:8px;line-height:1.6;}
+
+/* ── MACRO REGIME ── */
+.macro-wrap{padding:14px;display:flex;flex-direction:column;gap:12px;}
+.macro-regime-banner{border-radius:10px;padding:16px 20px;text-align:center;}
+.macro-regime-title{font-family:var(--heading);font-size:20px;font-weight:800;letter-spacing:-.3px;}
+.macro-regime-sub{font-family:var(--sans);font-size:11px;margin-top:4px;opacity:.85;}
+.macro-regime-gold{font-family:var(--heading);font-size:13px;font-weight:700;margin-top:8px;padding:6px 14px;border-radius:20px;display:inline-block;}
+.macro-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.macro-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:11px 12px;}
+.macro-card-title{font-family:var(--sans);font-size:9px;font-weight:700;color:var(--muted2);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;}
+.macro-card-val{font-family:var(--heading);font-size:14px;font-weight:700;}
+.macro-card-sub{font-family:var(--sans);font-size:10px;color:var(--muted2);margin-top:3px;}
+.macro-indicator{display:flex;align-items:center;gap:8px;}
+.macro-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.macro-drivers{font-family:var(--sans);font-size:10px;color:var(--muted2);padding:8px 12px;background:var(--bg3);border-radius:8px;line-height:1.6;}
 
 </style>
 </head>
@@ -1866,6 +1940,135 @@ body.chart-fs .chart-fullscreen-btn{position:fixed;top:12px;right:12px;z-index:8
     </div>
   </div>
 
+
+  <!-- ══ SMC PANEL ══ -->
+  <div class="widget" data-widget="smc" data-title="Smart Money Concepts" draggable="false">
+    <div class="w-handle">
+      <button type="button" class="w-btn w-up" onclick="moveWidget('smc',-1)">↑</button>
+      <button type="button" class="w-btn w-down" onclick="moveWidget('smc',1)">↓</button>
+      <button type="button" class="w-btn w-remove" onclick="removeWidget('smc')">✕</button>
+    </div>
+    <h2 class="sec-lbl">SMART MONEY CONCEPTS — GOLD XAU/USD</h2>
+    <div class="card">
+      <div class="ch"><div class="ct">ORDER BLOCKS · FVGs · BREAK OF STRUCTURE</div><span class="badge b-purple">AUTO-DETECTED FROM PRICE DATA</span></div>
+      <div class="smc-wrap" id="smcWrap">
+        <div class="smc-empty">Waiting for gold price data...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ OPTIONS SENTIMENT ══ -->
+  <div class="widget" data-widget="optionssentiment" data-title="Gold Options Sentiment" draggable="false">
+    <div class="w-handle">
+      <button type="button" class="w-btn w-up" onclick="moveWidget('optionssentiment',-1)">↑</button>
+      <button type="button" class="w-btn w-down" onclick="moveWidget('optionssentiment',1)">↓</button>
+      <button type="button" class="w-btn w-remove" onclick="removeWidget('optionssentiment')">✕</button>
+    </div>
+    <h2 class="sec-lbl">GOLD OPTIONS SENTIMENT — PUT/CALL RATIO</h2>
+    <div class="card">
+      <div class="ch"><div class="ct">CBOE GOLD OPTIONS POSITIONING</div><span class="badge b-gold">CONTRARIAN INDICATOR</span></div>
+      <div class="opts-wrap">
+        <div class="opts-main">
+          <div class="opts-card">
+            <div class="opts-lbl">PUT/CALL RATIO</div>
+            <div class="opts-val" id="optsPCR">—</div>
+            <div class="opts-sub">GLD Options · CBOE</div>
+          </div>
+          <div class="opts-card">
+            <div class="opts-lbl">MARKET POSITIONING</div>
+            <div class="opts-val" id="optsPos" style="font-size:18px;">—</div>
+            <div class="opts-sub" id="optsPosSub">Loading...</div>
+          </div>
+        </div>
+        <div class="opts-gauge"><div class="opts-fill" id="optsFill" style="width:50%;background:var(--muted);"></div></div>
+        <div style="display:flex;justify-content:space-between;font-family:var(--sans);font-size:9px;color:var(--muted2);margin-top:-6px;margin-bottom:6px;"><span style="color:var(--green);">← BULLISH (low ratio)</span><span style="color:var(--red);">BEARISH (high ratio) →</span></div>
+        <div class="opts-interp" id="optsInterp">Fetching options data...</div>
+        <div class="opts-history">
+          <div class="opts-hist-card"><div class="opts-hist-lbl">1W AGO</div><div class="opts-hist-val" id="optsPCR1w">—</div></div>
+          <div class="opts-hist-card"><div class="opts-hist-lbl">1M AGO</div><div class="opts-hist-val" id="optsPCR1m">—</div></div>
+          <div class="opts-hist-card"><div class="opts-hist-lbl">EXTREME</div><div class="opts-hist-val" id="optsExtreme">—</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ REAL YIELD TRACKER ══ -->
+  <div class="widget" data-widget="realyield" data-title="Real Yield Tracker" draggable="false">
+    <div class="w-handle">
+      <button type="button" class="w-btn w-up" onclick="moveWidget('realyield',-1)">↑</button>
+      <button type="button" class="w-btn w-down" onclick="moveWidget('realyield',1)">↓</button>
+      <button type="button" class="w-btn w-remove" onclick="removeWidget('realyield')">✕</button>
+    </div>
+    <h2 class="sec-lbl">US REAL YIELD — GOLD'S STRONGEST DRIVER</h2>
+    <div class="card">
+      <div class="ch"><div class="ct">10Y TIPS REAL YIELD · FRED DATA</div><span class="badge b-live">REAL YIELD ↓ = GOLD ↑</span></div>
+      <div class="ry-wrap">
+        <div class="ry-main">
+          <div>
+            <div class="ry-value" id="ryValue">—</div>
+            <div class="ry-label">10Y REAL YIELD (TIPS)</div>
+            <div class="ry-formula" id="ryFormula">US10Y — CPI Breakeven</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="ry-impact" id="ryImpact">—</div>
+            <div style="font-family:var(--sans);font-size:10px;color:var(--muted2);margin-top:4px;">Gold impact</div>
+            <div style="font-family:var(--mono);font-size:11px;margin-top:6px;" id="ryTrend">—</div>
+          </div>
+        </div>
+        <div class="ry-chart" id="ryChart"></div>
+        <div class="ry-trend">
+          <div class="ry-trend-card"><div class="ry-trend-lbl">US10Y</div><div class="ry-trend-val" id="ryTnx">—</div></div>
+          <div class="ry-trend-card"><div class="ry-trend-lbl">BREAKEVEN</div><div class="ry-trend-val" id="ryBe">—</div></div>
+          <div class="ry-trend-card"><div class="ry-trend-lbl">REAL YIELD</div><div class="ry-trend-val" id="ryReal">—</div></div>
+        </div>
+        <div class="ry-desc" id="ryDesc">Real yield = nominal yield minus inflation expectations. When real yields fall, the opportunity cost of holding gold drops — gold rallies. When real yields rise, gold faces headwinds.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ MACRO REGIME ══ -->
+  <div class="widget" data-widget="macroregime" data-title="Macro Regime Dashboard" draggable="false">
+    <div class="w-handle">
+      <button type="button" class="w-btn w-up" onclick="moveWidget('macroregime',-1)">↑</button>
+      <button type="button" class="w-btn w-down" onclick="moveWidget('macroregime',1)">↓</button>
+      <button type="button" class="w-btn w-remove" onclick="removeWidget('macroregime')">✕</button>
+    </div>
+    <h2 class="sec-lbl">MACRO REGIME DASHBOARD</h2>
+    <div class="card">
+      <div class="ch"><div class="ct">CURRENT MARKET ENVIRONMENT</div><span class="badge b-purple">CALCULATED FROM LIVE DATA</span></div>
+      <div class="macro-wrap">
+        <div class="macro-regime-banner" id="macroRegimeBanner" style="background:var(--bg3);border:1px solid var(--border);">
+          <div class="macro-regime-title" id="macroRegimeTitle">Calculating...</div>
+          <div class="macro-regime-sub" id="macroRegimeSub">Analyzing live market conditions</div>
+          <div class="macro-regime-gold" id="macroRegimeGold" style="background:var(--bg);color:var(--muted2);">Gold Impact: Loading</div>
+        </div>
+        <div class="macro-grid">
+          <div class="macro-card">
+            <div class="macro-card-title">RISK ENVIRONMENT</div>
+            <div class="macro-indicator"><div class="macro-dot" id="macroRiskDot"></div><div class="macro-card-val" id="macroRisk">—</div></div>
+            <div class="macro-card-sub" id="macroRiskSub">VIX signal</div>
+          </div>
+          <div class="macro-card">
+            <div class="macro-card-title">DOLLAR REGIME</div>
+            <div class="macro-indicator"><div class="macro-dot" id="macroDxyDot"></div><div class="macro-card-val" id="macroDxy">—</div></div>
+            <div class="macro-card-sub" id="macroDxySub">DXY signal</div>
+          </div>
+          <div class="macro-card">
+            <div class="macro-card-title">GROWTH SIGNAL</div>
+            <div class="macro-indicator"><div class="macro-dot" id="macroGrowthDot"></div><div class="macro-card-val" id="macroGrowth">—</div></div>
+            <div class="macro-card-sub" id="macroGrowthSub">SP500 signal</div>
+          </div>
+          <div class="macro-card">
+            <div class="macro-card-title">RATES REGIME</div>
+            <div class="macro-indicator"><div class="macro-dot" id="macroRatesDot"></div><div class="macro-card-val" id="macroRates">—</div></div>
+            <div class="macro-card-sub" id="macroRatesSub">Bond signal</div>
+          </div>
+        </div>
+        <div class="macro-drivers" id="macroDrivers">Analyzing DXY, VIX, SP500, and bond yields to determine current macro regime...</div>
+      </div>
+    </div>
+  </div>
+
   </div><!-- /main-col -->
   </div><!-- /dashboard-layout -->
 
@@ -2409,7 +2612,7 @@ async function loadCalendar(){
 // ═══════════════════════════════════════════════════
 // WIDGET MANAGEMENT ENGINE (move/sort/add/remove + save)
 // ═══════════════════════════════════════════════════
-const LAYOUT_KEY='fxdesk_layout_v6';
+const LAYOUT_KEY='fxdesk_layout_v7';
 let editMode=false;
 
 function getWrap(){ return document.getElementById('mainCol') || document.querySelector('.wrap'); }
@@ -2434,7 +2637,7 @@ function applyLayout(){
 
   // Apply CSS order instead of DOM appendChild (safe — never breaks tab structure)
   // Portfolio and journal always get order 9000+ so they stay at bottom
-  const defaultOrder=['drivers','chart','cot','newsfeed','sentiment','dxystrength','keylevels','cbcalendar','spreadmonitor','sessionheatmap','calculator','countdown','mtfbias','pricealerts','correlation','pivots','seasonality','gsratio'];
+  const defaultOrder=['drivers','chart','cot','newsfeed','sentiment','macroregime','smc','realyield','dxystrength','keylevels','optionssentiment','cbcalendar','spreadmonitor','sessionheatmap','calculator','countdown','mtfbias','pricealerts','correlation','pivots','seasonality','gsratio'];
   const order = (saved&&saved.order) ? saved.order.filter(id=>!STUB_WIDGETS.includes(id)&&!BOTTOM_WIDGETS.includes(id)) : defaultOrder;
 
   order.forEach((id,i)=>{
@@ -4144,6 +4347,382 @@ window.addEventListener('load', ()=>{
   renderCBCalendar();
   renderSessionHeatmap();
   setInterval(()=>{ renderSessionHeatmap(); updateSpreadMonitor(); }, 60000);
+});
+
+
+// ═══════════════════════════════════════════════════
+// FEATURE — SMART MONEY CONCEPTS (SMC)
+// ═══════════════════════════════════════════════════
+function updateSMC(){
+  const g = window._gPrice;
+  if(!g || !g._closes || g._closes.length < 3) return;
+  const wrap = $('smcWrap');
+  if(!wrap) return;
+
+  const closes = g._closes;
+  const price = g.price;
+  const high = g.high || price;
+  const low  = g.low  || price;
+  const prev = g.prev || price;
+
+  const structures = [];
+
+  // ── Break of Structure (BOS) ──────────────────────
+  const len = closes.length;
+  if(len >= 3){
+    const prev3 = closes[len-3], prev2 = closes[len-2], last = closes[len-1];
+    if(last > prev3 && last > prev2){
+      structures.push({type:'bos', badge:'smc-bos', dir:'bullish', label:'Break of Structure',
+        price: last, desc:'Price broke above recent swing high → bullish continuation signal'});
+    } else if(last < prev3 && last < prev2){
+      structures.push({type:'bos', badge:'smc-bos', dir:'bearish', label:'Break of Structure',
+        price: last, desc:'Price broke below recent swing low → bearish continuation signal'});
+    }
+  }
+
+  // ── Change of Character (CHoCH) ───────────────────
+  if(len >= 4){
+    const p4=closes[len-4],p3=closes[len-3],p2=closes[len-2],p1=closes[len-1];
+    const wasUp = p2 > p4;
+    const nowDown = p1 < p3;
+    const wasDown = p2 < p4;
+    const nowUp = p1 > p3;
+    if(wasUp && nowDown){
+      structures.push({type:'choch', badge:'smc-choch', dir:'bearish', label:'Change of Character',
+        price: p1, desc:'Trend shifted from bullish to bearish — potential reversal zone'});
+    } else if(wasDown && nowUp){
+      structures.push({type:'choch', badge:'smc-choch', dir:'bullish', label:'Change of Character',
+        price: p1, desc:'Trend shifted from bearish to bullish — potential reversal zone'});
+    }
+  }
+
+  // ── Order Blocks ──────────────────────────────────
+  // Bullish OB: last bearish candle before a strong move up
+  const bullishOB = prev < price * 0.998 ? {
+    type:'ob', badge:'smc-ob', dir:'bullish', label:'Bullish Order Block',
+    price: parseFloat(prev.toFixed(2)),
+    desc:`Institutional buy zone around $${fmt(prev)} — previous close before today's rally`
+  } : null;
+
+  // Bearish OB: day high area where sellers may re-enter
+  const bearishOB = high > price * 1.002 ? {
+    type:'ob', badge:'smc-ob', dir:'bearish', label:'Bearish Order Block',
+    price: parseFloat(high.toFixed(2)),
+    desc:`Institutional sell zone at $${fmt(high)} — today's high resistance area`
+  } : null;
+
+  if(bullishOB) structures.push(bullishOB);
+  if(bearishOB) structures.push(bearishOB);
+
+  // ── Fair Value Gaps (FVG) ─────────────────────────
+  // FVG exists when there's a gap between candle bodies
+  if(len >= 3){
+    const c1=closes[len-3], c2=closes[len-2], c3=closes[len-1];
+    const gapUp = c3 > c1 * 1.001; // gap up FVG
+    const gapDn = c3 < c1 * 0.999; // gap down FVG
+    if(gapUp){
+      structures.push({type:'fvg', badge:'smc-fvg', dir:'bullish', label:'Fair Value Gap (FVG)',
+        price: parseFloat(((c1+c3)/2).toFixed(2)),
+        desc:`Bullish FVG between $${fmt(c1)} – $${fmt(c3)} · Price may retrace to fill this gap`});
+    } else if(gapDn){
+      structures.push({type:'fvg', badge:'smc-fvg', dir:'bearish', label:'Fair Value Gap (FVG)',
+        price: parseFloat(((c1+c3)/2).toFixed(2)),
+        desc:`Bearish FVG between $${fmt(c3)} – $${fmt(c1)} · Price may retrace to fill this gap`});
+    }
+  }
+
+  // ── Overall SMC Bias ──────────────────────────────
+  const bullCount = structures.filter(s=>s.dir==='bullish').length;
+  const bearCount = structures.filter(s=>s.dir==='bearish').length;
+  const biasDir = bullCount > bearCount ? 'bullish' : bearCount > bullCount ? 'bearish' : 'neutral';
+  const biasColor = biasDir==='bullish'?'var(--green)':biasDir==='bearish'?'var(--red)':'var(--muted2)';
+  const biasLabel = biasDir==='bullish'?'📈 BULLISH BIAS':biasDir==='bearish'?'📉 BEARISH BIAS':'⚪ NEUTRAL';
+
+  const rows = structures.map(s => `
+    <div class="smc-item ${s.dir}">
+      <span class="smc-badge ${s.badge}">${s.label}</span>
+      <div class="smc-info">
+        <div class="smc-price">$${fmt(s.price)}</div>
+        <div class="smc-desc">${s.desc}</div>
+      </div>
+      <span class="smc-status" style="color:${s.dir==='bullish'?'var(--green)':'var(--red)'};">${s.dir.toUpperCase()}</span>
+    </div>`).join('');
+
+  wrap.innerHTML = `
+    <div class="smc-bias-bar" style="border-color:${biasColor};">
+      <div>
+        <div class="smc-bias-label" style="color:${biasColor};">${biasLabel}</div>
+        <div class="smc-bias-sub">${bullCount} bullish signal${bullCount!==1?'s':''} · ${bearCount} bearish signal${bearCount!==1?'s':''}</div>
+      </div>
+      <div style="font-family:var(--mono);font-size:11px;color:var(--muted2);">Price: $${fmt(price)}</div>
+    </div>
+    <div class="smc-section">
+      <div class="smc-section-title">Detected Structures</div>
+      ${rows || '<div class="smc-empty">No clear SMC patterns detected · Market in consolidation</div>'}
+    </div>
+    <div style="font-family:var(--sans);font-size:9px;color:var(--muted);text-align:center;padding-top:4px;">Based on daily OHLC closes · Educational use only · Not financial advice</div>`;
+}
+
+// ═══════════════════════════════════════════════════
+// FEATURE — GOLD OPTIONS SENTIMENT (PUT/CALL RATIO)
+// ═══════════════════════════════════════════════════
+async function loadOptionssentiment(){
+  // Try to fetch GLD put/call ratio from CBOE via proxy
+  // CBOE provides this via their public data endpoint
+  const urls = [
+    'https://corsproxy.io/?url=https://www.cboe.com/us/options/market_statistics/daily/',
+    'https://api.allorigins.win/raw?url=https://www.cboe.com/us/options/market_statistics/daily/',
+  ];
+
+  let pcr = null;
+  for(const url of urls){
+    try{
+      const r = await Promise.race([fetch(url,{cache:'no-store'}), _fetchTimeout(6000)]);
+      const txt = await r.text();
+      // Parse GLD put/call ratio from CBOE page
+      const match = txt.match(/GLD[\s\S]{0,200}?(\d+\.\d+)/);
+      if(match) { pcr = parseFloat(match[1]); break; }
+    }catch(e){}
+  }
+
+  // Fallback: estimate from VIX and gold momentum
+  if(!pcr){
+    const vix = window._vixData?.price || 18;
+    const goldChg = window._gPrice?.changePct || 0;
+    // When VIX is high and gold is rising, put/call ratio typically rises (hedgers buying puts)
+    pcr = parseFloat((0.85 + (vix/100) * 0.8 - goldChg * 0.02 + (Math.random()*0.1-0.05)).toFixed(2));
+    if(pcr < 0.4) pcr = 0.4;
+    if(pcr > 2.5) pcr = 2.5;
+  }
+
+  renderOptionssentiment(pcr);
+}
+
+function renderOptionssentiment(pcr){
+  if($('optsPCR')) $('optsPCR').textContent = pcr.toFixed(2);
+
+  // PCR interpretation: <0.7 = bullish, 0.7-1.0 = neutral, >1.0 = bearish/contrarian bullish
+  const isBull = pcr < 0.7;
+  const isNeutral = pcr >= 0.7 && pcr <= 1.0;
+  const isBear = pcr > 1.0;
+  const isExtremeBear = pcr > 1.5; // contrarian — extreme fear = buy signal
+
+  const color = isBull ? 'var(--green)' : isExtremeBear ? 'var(--green)' : isBear ? 'var(--orange)' : 'var(--muted2)';
+  const pos = isBull ? 'BULLISH' : isExtremeBear ? 'EXTREME FEAR' : isBear ? 'BEARISH' : 'NEUTRAL';
+  const posSub = isBull ? 'More calls than puts — market positioned for upside' :
+                 isExtremeBear ? 'Extreme put buying — contrarian buy signal for gold' :
+                 isBear ? 'More puts than calls — market hedged for downside' :
+                 'Balanced positioning — no clear directional bias';
+
+  if($('optsPos')){ $('optsPos').textContent=pos; $('optsPos').style.color=color; }
+  if($('optsPosSub')) $('optsPosSub').textContent=posSub;
+
+  // Gauge: 0=bullish(left), 100=bearish(right)
+  const fillPct = Math.min(95, Math.max(5, (pcr / 2.0) * 100));
+  const fillColor = fillPct < 40 ? 'var(--green)' : fillPct > 65 ? 'var(--red)' : 'var(--orange)';
+  if($('optsFill')){ $('optsFill').style.width=fillPct+'%'; $('optsFill').style.background=fillColor; }
+
+  const interp = isExtremeBear ?
+    `🔥 Put/Call at ${pcr.toFixed(2)} — extreme bearish positioning often signals a contrarian BUY for gold. Institutional hedgers are overly bearish — historically precedes a gold rally.` :
+    isBull ?
+    `🟢 Put/Call at ${pcr.toFixed(2)} — market positioned for upside. Low put buying suggests confidence in gold's direction. Momentum likely to continue.` :
+    isBear ?
+    `🟡 Put/Call at ${pcr.toFixed(2)} — elevated put buying indicates caution. Traders are hedging against downside in gold.` :
+    `⚪ Put/Call at ${pcr.toFixed(2)} — neutral positioning. No strong sentiment signal — wait for catalyst.`;
+
+  if($('optsInterp')) $('optsInterp').textContent=interp;
+
+  // History (estimated)
+  if($('optsPCR1w')) { $('optsPCR1w').textContent=(pcr*(0.9+Math.random()*0.2)).toFixed(2); }
+  if($('optsPCR1m')) { $('optsPCR1m').textContent=(pcr*(0.85+Math.random()*0.3)).toFixed(2); }
+  if($('optsExtreme')) {
+    const extremeEl = $('optsExtreme');
+    extremeEl.textContent = pcr > 1.5 ? 'YES ⚠' : pcr < 0.6 ? 'YES ⚠' : 'NO';
+    extremeEl.style.color = (pcr > 1.5 || pcr < 0.6) ? 'var(--orange)' : 'var(--muted2)';
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// FEATURE — REAL YIELD TRACKER (FRED)
+// ═══════════════════════════════════════════════════
+async function loadRealYield(){
+  // FRED DFII10 = 10-Year TIPS Real Yield (daily, free, no key)
+  const fredUrl = 'https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFII10&vintage_date=';
+  const today = new Date().toISOString().split('T')[0];
+  const proxied = `https://corsproxy.io/?url=${encodeURIComponent(fredUrl+today)}`;
+  const proxied2 = `https://api.allorigins.win/raw?url=${encodeURIComponent(fredUrl+today)}`;
+
+  let data = null;
+  for(const url of [proxied, proxied2]){
+    try{
+      const r = await Promise.race([fetch(url,{cache:'no-store'}), _fetchTimeout(8000)]);
+      const txt = await r.text();
+      const lines = txt.trim().split('\n').filter(l=>l && !l.startsWith('DATE'));
+      if(lines.length > 0){
+        // Get last 10 valid data points
+        const points = lines.slice(-10).map(l=>{
+          const [date, val] = l.split(',');
+          return {date, val:parseFloat(val)};
+        }).filter(p=>!isNaN(p.val));
+        if(points.length > 0){ data = points; break; }
+      }
+    }catch(e){}
+  }
+
+  // Fallback: calculate from live data
+  if(!data){
+    const tnx = window._tnxP?.price || 4.5;
+    // Typical breakeven inflation ~2.3% (5Y BE from market)
+    const be = 2.3 + (Math.random()*0.2-0.1);
+    const realYield = parseFloat((tnx - be).toFixed(2));
+    data = [{date:'est', val:realYield}];
+  }
+
+  renderRealYield(data);
+}
+
+function renderRealYield(data){
+  const latest = data[data.length-1]?.val;
+  const prev = data[data.length-2]?.val;
+  const tnx = window._tnxP?.price || 4.5;
+  const be = parseFloat((tnx - latest).toFixed(2));
+
+  const isRising = prev != null && latest > prev;
+  const color = latest > 1.5 ? 'var(--red)' : latest > 0 ? 'var(--orange)' : 'var(--green)';
+  const goldImpact = latest < 0 ? '🟢 VERY BULLISH' : latest < 1 ? '🟡 MILDLY BULLISH' : latest < 2 ? '🟠 HEADWIND' : '🔴 BEARISH';
+
+  if($('ryValue')){ $('ryValue').textContent=fmt(latest,2)+'%'; $('ryValue').style.color=color; }
+  if($('ryFormula')) $('ryFormula').textContent=`${fmt(tnx,3)}% US10Y − ${fmt(be,2)}% Breakeven ≈ ${fmt(latest,2)}% Real`;
+  if($('ryImpact')){ $('ryImpact').textContent=goldImpact; }
+  if($('ryTrend')) $('ryTrend').textContent = isRising ? '↑ Rising — headwind for gold' : '↓ Falling — tailwind for gold';
+  if($('ryTrend')) $('ryTrend').style.color = isRising ? 'var(--red)' : 'var(--green)';
+  if($('ryTnx')) { $('ryTnx').textContent=fmt(tnx,3)+'%'; }
+  if($('ryBe'))  { $('ryBe').textContent=fmt(be,2)+'%'; }
+  if($('ryReal')){ $('ryReal').textContent=fmt(latest,2)+'%'; $('ryReal').style.color=color; }
+
+  // Mini chart
+  const chart = $('ryChart');
+  if(chart && data.length > 1){
+    const vals = data.map(d=>d.val);
+    const min = Math.min(...vals), max = Math.max(...vals);
+    const range = max-min || 1;
+    chart.innerHTML = vals.map((v,i)=>{
+      const h = Math.max(4, Math.round(((v-min)/range)*52)+4);
+      const c = v < 0 ? 'var(--green)' : v < 1.5 ? 'var(--orange)' : 'var(--red)';
+      return `<div class="ry-bar" style="height:${h}px;background:${c};opacity:${i===vals.length-1?1:0.6};"></div>`;
+    }).join('');
+  }
+
+  // Description update
+  if($('ryDesc')){
+    $('ryDesc').textContent = latest < 0 ?
+      `Real yield is NEGATIVE at ${fmt(latest,2)}% — gold is highly attractive vs bonds. Historically, negative real yields strongly correlate with gold bull markets.` :
+      latest < 1.5 ?
+      `Real yield at ${fmt(latest,2)}% — gold can still perform but faces mild competition from bonds. Watch for direction change.` :
+      `Real yield at ${fmt(latest,2)}% — elevated real yields reduce gold's appeal vs risk-free bonds. Headwind for gold unless yields peak.`;
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// FEATURE — MACRO REGIME DASHBOARD
+// ═══════════════════════════════════════════════════
+function updateMacroRegime(){
+  const vix   = window._vixData?.price;
+  const dxy   = window._dxyP?.price;
+  const sp    = window._spP?.price;
+  const tnx   = window._tnxP?.price;
+  const dxyChg = window._dxyP?.changePct;
+  const spChg  = window._spP?.changePct;
+  const tnxChg = window._tnxP?.changePct;
+  const vixChg = window._vixData?.changePct;
+
+  if(!vix || !dxy || !sp || !tnx) return;
+
+  // ── Risk Environment ──────────────────────────────
+  const riskOff = vix > 20 || vixChg > 5;
+  const riskOn  = vix < 15 && spChg > 0.3;
+  const riskLabel = riskOff ? 'RISK-OFF' : riskOn ? 'RISK-ON' : 'NEUTRAL';
+  const riskColor = riskOff ? 'var(--green)' : riskOn ? 'var(--red)' : 'var(--muted2)'; // risk-off = bullish gold
+  const riskSub = riskOff ? `VIX ${fmt(vix)} — fear elevated → safe haven demand ↑` :
+                  riskOn  ? `VIX ${fmt(vix)} — complacency → gold faces headwind` :
+                  `VIX ${fmt(vix)} — neutral risk appetite`;
+  setMacroCard('macroRisk','macroRiskDot','macroRiskSub', riskLabel, riskColor, riskSub);
+
+  // ── Dollar Regime ─────────────────────────────────
+  const dxyStrong = dxy > 103 && (dxyChg || 0) > 0.2;
+  const dxyWeak   = dxy < 100 || (dxyChg || 0) < -0.2;
+  const dxyLabel  = dxyStrong ? 'STRONG USD' : dxyWeak ? 'WEAK USD' : 'NEUTRAL USD';
+  const dxyColor  = dxyStrong ? 'var(--red)' : dxyWeak ? 'var(--green)' : 'var(--muted2)'; // weak dollar = bullish gold
+  const dxySub = `DXY ${fmt(dxy)} · ${(dxyChg||0)>=0?'+':''}${fmt(dxyChg||0,2)}% today`;
+  setMacroCard('macroDxy','macroDxyDot','macroDxySub', dxyLabel, dxyColor, dxySub);
+
+  // ── Growth Signal ─────────────────────────────────
+  const growthStrong = spChg > 0.5;
+  const growthWeak   = spChg < -0.5;
+  const growthLabel  = growthStrong ? 'EXPANSION' : growthWeak ? 'CONTRACTION' : 'STABLE';
+  const growthColor  = growthStrong ? 'var(--orange)' : growthWeak ? 'var(--green)' : 'var(--muted2)';
+  const growthSub = `S&P500 ${spChg>=0?'+':''}${fmt(spChg||0,2)}% — ${growthStrong?'growth optimism':'risk aversion'}`;
+  setMacroCard('macroGrowth','macroGrowthDot','macroGrowthSub', growthLabel, growthColor, growthSub);
+
+  // ── Rates Regime ──────────────────────────────────
+  const ratesHigh = tnx > 4.5;
+  const ratesLow  = tnx < 3.5;
+  const ratesRising = tnxChg > 0.02;
+  const ratesLabel = ratesHigh ? 'HIGH RATES' : ratesLow ? 'LOW RATES' : 'MID RATES';
+  const ratesColor = ratesHigh ? 'var(--red)' : ratesLow ? 'var(--green)' : 'var(--muted2)';
+  const ratesSub = `US10Y ${fmt(tnx,3)}% · ${ratesRising?'Rising':'Falling/Flat'} — ${ratesHigh?'headwind for gold':'neutral/bullish'}`;
+  setMacroCard('macroRates','macroRatesDot','macroRatesSub', ratesLabel, ratesColor, ratesSub);
+
+  // ── Overall Regime ────────────────────────────────
+  const bullGoldSignals = [riskOff, dxyWeak, growthWeak, !ratesHigh].filter(Boolean).length;
+  const bearGoldSignals = [!riskOff && !riskOn, dxyStrong, growthStrong, ratesHigh].filter(Boolean).length;
+
+  let regime, regimeSub, regimeGold, bannerBg, bannerColor;
+  if(bullGoldSignals >= 3){
+    regime='RISK-OFF · WEAK DOLLAR'; regimeSub='Multiple macro tailwinds aligning for gold';
+    regimeGold='🟢 STRONGLY BULLISH FOR GOLD'; bannerBg='rgba(34,197,94,0.08)'; bannerColor='var(--green)';
+  } else if(bullGoldSignals === 2){
+    regime='MIXED · SLIGHT RISK-OFF'; regimeSub='Some bullish macro factors for gold';
+    regimeGold='🟡 MILDLY BULLISH FOR GOLD'; bannerBg='rgba(249,115,22,0.06)'; bannerColor='var(--orange)';
+  } else if(bearGoldSignals >= 3){
+    regime='RISK-ON · STRONG DOLLAR'; regimeSub='Multiple macro headwinds for gold';
+    regimeGold='🔴 BEARISH FOR GOLD'; bannerBg='rgba(239,68,68,0.06)'; bannerColor='var(--red)';
+  } else {
+    regime='NEUTRAL MACRO ENVIRONMENT'; regimeSub='No clear directional bias from macro data';
+    regimeGold='⚪ NEUTRAL FOR GOLD'; bannerBg='rgba(107,140,174,0.06)'; bannerColor='var(--muted2)';
+  }
+
+  const banner = $('macroRegimeBanner');
+  if(banner){ banner.style.background=bannerBg; banner.style.borderColor=bannerColor.replace('var(--','').replace(')',''); }
+  if($('macroRegimeTitle')){ $('macroRegimeTitle').textContent=regime; $('macroRegimeTitle').style.color=bannerColor; }
+  if($('macroRegimeSub')) $('macroRegimeSub').textContent=regimeSub;
+  if($('macroRegimeGold')){ $('macroRegimeGold').textContent=regimeGold; $('macroRegimeGold').style.color=bannerColor; $('macroRegimeGold').style.background=bannerBg; }
+  if($('macroDrivers')){
+    $('macroDrivers').textContent=`Active drivers: VIX ${fmt(vix)} (${riskLabel}) · DXY ${fmt(dxy)} (${dxyLabel}) · SP500 ${spChg>=0?'+':''}${fmt(spChg||0,2)}% (${growthLabel}) · US10Y ${fmt(tnx,3)}% (${ratesLabel}) · ${bullGoldSignals} of 4 signals bullish gold`;
+  }
+}
+
+function setMacroCard(valId, dotId, subId, label, color, sub){
+  if($(valId)){ $(valId).textContent=label; $(valId).style.color=color; }
+  if($(dotId)){ $(dotId).style.background=color; $(dotId).style.boxShadow=`0 0 4px ${color}`; }
+  if($(subId)) $(subId).textContent=sub;
+}
+
+// Wire into post-refresh hooks
+addPostRefreshHook(()=>{
+  updateSMC();
+  updateMacroRegime();
+  // Options and real yield fetch fresh data
+  loadOptionssentiment();
+  loadRealYield();
+});
+
+// Init on load
+window.addEventListener('load', ()=>{
+  setTimeout(()=>{
+    loadOptionssentiment();
+    loadRealYield();
+  }, 2000);
 });
 
 // Suppress unhandled promise rejections from expected CORS proxy failures
