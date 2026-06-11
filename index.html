@@ -1753,6 +1753,21 @@ body.light-mode .page-nav-btn.active{color:var(--blue);}
     </div>
   </div>
 
+  <!-- ══ MTF CONFLUENCE SCANNER ══ -->
+  <div class="widget" data-widget="confluence" data-title="MTF Confluence Scanner" draggable="false">
+    <div class="w-handle">
+      <button type="button" class="w-btn w-up" onclick="moveWidget('confluence',-1)" aria-label="Move up">↑</button>
+      <button type="button" class="w-btn w-down" onclick="moveWidget('confluence',1)" aria-label="Move down">↓</button>
+      <button type="button" class="w-btn w-remove" onclick="removeWidget('confluence')" aria-label="Remove">✕</button>
+    </div>
+    <h2 class="sec-lbl">MTF CONFLUENCE SCANNER</h2>
+    <div class="card">
+      <div class="ch"><div class="ct">EMA9 / EMA21 TREND PER TIMEFRAME</div><span class="badge b-purple">AUTO · LIVE</span></div>
+      <div class="mtf-grid" id="confGrid" style="grid-template-columns:auto repeat(5,1fr);"></div>
+      <div class="mtf-note" id="confNote">Bias = EMA9 vs EMA21 on each timeframe (D1/H4/H1/M15). Score = how many timeframes agree.</div>
+    </div>
+  </div>
+
   <!-- ══ FEATURE 4: PRICE ALERTS ══ -->
   <div class="widget" data-widget="pricealerts" data-title="Price Alerts" draggable="false">
     <div class="w-handle">
@@ -1842,6 +1857,24 @@ body.light-mode .page-nav-btn.active{color:var(--blue);}
           <div class="pivot-row"><span class="pivot-row-lbl">S3</span><span class="pivot-val pivot-s" id="pvS3">—</span></div>
         </div>
         <div style="font-family:var(--sans);font-size:10px;color:var(--muted2);margin-top:10px;text-align:center;" id="pvtSource">Based on previous day OHLC from Yahoo Finance</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ VOLATILITY SESSION RANGE PROJECTOR ══ -->
+  <div class="widget" data-widget="volrange" data-title="Volatility Range Projector" draggable="false">
+    <div class="w-handle">
+      <button type="button" class="w-btn w-up" onclick="moveWidget('volrange',-1)" aria-label="Move up">↑</button>
+      <button type="button" class="w-btn w-down" onclick="moveWidget('volrange',1)" aria-label="Move down">↓</button>
+      <button type="button" class="w-btn w-remove" onclick="removeWidget('volrange')" aria-label="Remove">✕</button>
+    </div>
+    <h2 class="sec-lbl">VOLATILITY SESSION RANGE PROJECTOR</h2>
+    <div class="card">
+      <div class="ch"><div class="ct">XAU/USD — ATR(14) BASED PROJECTION</div><span class="badge b-purple">AUTO · LIVE</span></div>
+      <div class="pivot-wrap">
+        <div class="pivot-grid" id="volGrid"></div>
+        <div class="pivot-levels" id="volSessions"></div>
+        <div style="font-family:var(--sans);font-size:10px;color:var(--muted2);margin-top:10px;text-align:center;" id="volNote">Calculating ATR(14)…</div>
       </div>
     </div>
   </div>
@@ -2203,6 +2236,10 @@ body.light-mode .page-nav-btn.active{color:var(--blue);}
 // ═══════════════════════════════════════════════════
 const $=id=>document.getElementById(id);
 
+// Personal Cloudflare Worker proxy — fastest, always-on, tried first
+// before falling back to public CORS proxies.
+const FX_PROXY='https://forex-desk-proxy.zreik111.workers.dev/?url=';
+
 // Theme-aware status colors — full-saturation green/red/orange fail WCAG contrast
 // on light backgrounds. Use these for inline style.color assignments.
 function clrGood(){ return document.body.classList.contains('light-mode') ? '#15803D' : 'var(--green)'; }
@@ -2269,6 +2306,7 @@ async function yfFull(sym){
   // fall back to the last close in the price array if needed.
   const encoded=encodeURIComponent(`https://query1.finance.yahoo.com/v8/finance/chart/${sym}?interval=1d&range=5d&includePrePost=true`);
   const proxies=[
+    `${FX_PROXY}${encoded}`,
     `https://corsproxy.io/?url=${encoded}`,
     `https://corsproxy.io/?${encoded}`,
     `https://api.allorigins.win/raw?url=${encoded}`,
@@ -2383,6 +2421,7 @@ async function loadEUHero(){
 async function yf(sym){
   const encoded=encodeURIComponent(`https://query1.finance.yahoo.com/v8/finance/chart/${sym}?interval=1d&range=5d&includePrePost=true`);
   const proxies=[
+    `${FX_PROXY}${encoded}`,
     `https://corsproxy.io/?url=${encoded}`,
     `https://corsproxy.io/?${encoded}`,
     `https://api.allorigins.win/raw?url=${encoded}`,
@@ -2743,7 +2782,7 @@ async function loadCalendar(){
 // ═══════════════════════════════════════════════════
 // WIDGET MANAGEMENT ENGINE (move/sort/add/remove + save)
 // ═══════════════════════════════════════════════════
-const LAYOUT_KEY='fxdesk_layout_v7';
+const LAYOUT_KEY='fxdesk_layout_v9';
 let editMode=false;
 
 function getWrap(){ return document.getElementById('mainCol') || document.querySelector('.wrap'); }
@@ -2768,7 +2807,7 @@ function applyLayout(){
 
   // Apply CSS order instead of DOM appendChild (safe — never breaks tab structure)
   // Portfolio and journal always get order 9000+ so they stay at bottom
-  const defaultOrder=['drivers','chart','cot','newsfeed','sentiment','macroregime','smc','realyield','dxystrength','keylevels','optionssentiment','cbcalendar','spreadmonitor','sessionheatmap','calculator','countdown','mtfbias','pricealerts','correlation','pivots','seasonality','gsratio'];
+  const defaultOrder=['drivers','chart','cot','newsfeed','sentiment','macroregime','smc','realyield','dxystrength','keylevels','optionssentiment','cbcalendar','spreadmonitor','sessionheatmap','calculator','countdown','mtfbias','confluence','pricealerts','correlation','pivots','volrange','seasonality','gsratio'];
   const order = (saved&&saved.order) ? saved.order.filter(id=>!STUB_WIDGETS.includes(id)&&!BOTTOM_WIDGETS.includes(id)) : defaultOrder;
 
   order.forEach((id,i)=>{
@@ -3705,6 +3744,216 @@ function cycleMTF(key){
 }
 
 // ═══════════════════════════════════════════════════
+// MTF CONFLUENCE SCANNER (auto, EMA9/EMA21 per timeframe)
+// ═══════════════════════════════════════════════════
+const CONF_SYMS = {
+  'XAU/USD':'GC=F',
+  'EUR/USD':'EURUSD=X',
+  'GBP/USD':'GBPUSD=X',
+  'USD/JPY':'USDJPY=X',
+  'DXY':'DX-Y.NYB',
+};
+const CONF_TFS = ['D1','H4','H1','M15'];
+const CONF_CACHE_KEY='fxdesk_conf_cache_v1';
+const CONF_CACHE_TTL=30*60*1000; // 30 minutes — intraday data moves faster than daily
+
+function ema(values, period){
+  if(values.length<period) return null;
+  const k=2/(period+1);
+  let e=values.slice(0,period).reduce((a,b)=>a+b,0)/period;
+  for(let i=period;i<values.length;i++) e=values[i]*k+e*(1-k);
+  return e;
+}
+
+// Bias for one series: EMA9 vs EMA21, null if not enough data
+function emaTrend(closes){
+  const e9=ema(closes,9), e21=ema(closes,21);
+  if(e9==null||e21==null) return null;
+  return e9>e21?'BULL':'BEAR';
+}
+
+// Collapse 1h closes into 4h closes by taking the last close of every 4 bars
+function aggregate(closes, n){
+  const out=[];
+  for(let i=0;i<closes.length;i+=n){
+    const grp=closes.slice(i,i+n);
+    if(grp.length) out.push(grp[grp.length-1]);
+  }
+  return out;
+}
+
+async function loadConfluence(){
+  const grid=$('confGrid');
+  if(!grid) return;
+  try{
+    const cached=JSON.parse(localStorage.getItem(CONF_CACHE_KEY)||'null');
+    if(cached && (Date.now()-cached.ts)<CONF_CACHE_TTL){
+      renderConfluence(cached.rows);
+      return;
+    }
+  }catch(e){}
+  if(!grid.dataset.loaded){
+    grid.innerHTML='<div style="grid-column:1/-1;padding:10px;color:var(--muted2);font-family:var(--sans);font-size:11px;">Scanning timeframes…</div>';
+  }
+  const labels=Object.keys(CONF_SYMS);
+  const rows=await Promise.all(labels.map(async pair=>{
+    const sym=CONF_SYMS[pair];
+    const [d1,h1,m15]=await Promise.all([
+      fetchHistClosesEx(sym,'3mo','1d',25),
+      fetchHistClosesEx(sym,'1mo','60m',25),
+      fetchHistClosesEx(sym,'5d','15m',25),
+    ]);
+    const h4 = h1 ? aggregate(h1,4) : null;
+    const trends = {
+      D1: d1?emaTrend(d1):null,
+      H4: h4?emaTrend(h4):null,
+      H1: h1?emaTrend(h1):null,
+      M15: m15?emaTrend(m15):null,
+    };
+    return {pair, trends};
+  }));
+  if(rows.every(r=>Object.values(r.trends).every(v=>v==null))){
+    grid.innerHTML='<div style="grid-column:1/-1;padding:10px;color:var(--muted2);font-family:var(--sans);font-size:11px;">Scan unavailable — try refreshing.</div>';
+    return;
+  }
+  try{ localStorage.setItem(CONF_CACHE_KEY, JSON.stringify({ts:Date.now(),rows})); }catch(e){}
+  renderConfluence(rows);
+}
+
+function renderConfluence(rows){
+  const grid=$('confGrid');
+  if(!grid) return;
+  let html=`<div class="mtf-cell mtf-hdr">PAIR</div>${CONF_TFS.map(tf=>`<div class="mtf-cell mtf-hdr">${tf}</div>`).join('')}<div class="mtf-cell mtf-hdr">SCORE</div>`;
+  rows.forEach(({pair,trends})=>{
+    html+=`<div class="mtf-cell" style="font-family:var(--heading);font-size:11px;font-weight:700;color:var(--muted2);">${pair}</div>`;
+    let bulls=0, bears=0, total=0;
+    CONF_TFS.forEach(tf=>{
+      const v=trends[tf];
+      if(v==='BULL') bulls++; if(v==='BEAR') bears++; if(v) total++;
+      const cls = v==='BULL'?'mtf-bull':v==='BEAR'?'mtf-bear':'mtf-neu';
+      html+=`<div class="mtf-cell"><span class="mtf-bias ${cls}" style="display:inline-block;cursor:default;">${v||'—'}</span></div>`;
+    });
+    let scoreTxt='—', scoreCls='mtf-neu';
+    if(total>0){
+      if(bulls===total){ scoreTxt=`${bulls}/${total} ↑`; scoreCls='mtf-bull'; }
+      else if(bears===total){ scoreTxt=`${bears}/${total} ↓`; scoreCls='mtf-bear'; }
+      else { scoreTxt=`${bulls}↑ ${bears}↓`; scoreCls='mtf-neu'; }
+    }
+    html+=`<div class="mtf-cell"><span class="mtf-bias ${scoreCls}" style="display:inline-block;cursor:default;">${scoreTxt}</span></div>`;
+  });
+  grid.innerHTML=html;
+  grid.dataset.loaded='1';
+}
+
+// ═══════════════════════════════════════════════════
+// VOLATILITY SESSION RANGE PROJECTOR (ATR-based)
+// ═══════════════════════════════════════════════════
+const VOL_CACHE_KEY='fxdesk_vol_cache_v1';
+const VOL_CACHE_TTL=4*60*60*1000; // 4 hours — ATR(14) barely shifts intraday
+
+// Historical OHLC fetch (separate from closes-only helper above)
+async function fetchHistOHLC(sym, range, interval, minLen){
+  const encoded=encodeURIComponent(`https://query1.finance.yahoo.com/v8/finance/chart/${sym}?interval=${interval}&range=${range}`);
+  const proxies=[
+    `${FX_PROXY}${encoded}`,
+    `https://corsproxy.io/?url=${encoded}`,
+    `https://corsproxy.io/?${encoded}`,
+    `https://api.allorigins.win/raw?url=${encoded}`,
+    `https://api.codetabs.com/v1/proxy/?quest=${encoded}`,
+  ];
+  const tryProxy=async url=>{
+    const r=await Promise.race([fetch(url,{cache:'no-store'}),_fetchTimeout(8000)]);
+    if(!r.ok) throw new Error('not ok');
+    const d=JSON.parse(await r.text());
+    const res=d?.chart?.result?.[0];
+    const q=res?.indicators?.quote?.[0]||{};
+    const highs=q.high||[], lows=q.low||[], closes=q.close||[];
+    const n=Math.min(highs.length,lows.length,closes.length);
+    const out={highs:[],lows:[],closes:[]};
+    for(let i=0;i<n;i++){
+      if(highs[i]!=null&&lows[i]!=null&&closes[i]!=null){
+        out.highs.push(highs[i]); out.lows.push(lows[i]); out.closes.push(closes[i]);
+      }
+    }
+    if(out.closes.length<minLen) throw new Error('insufficient');
+    return out;
+  };
+  try{ return await Promise.any(proxies.map(tryProxy)); }catch(e){ return null; }
+}
+
+// Wilder-smoothed ATR(14) from daily OHLC
+function atr14(highs, lows, closes){
+  const trs=[];
+  for(let i=1;i<closes.length;i++){
+    const tr=Math.max(highs[i]-lows[i], Math.abs(highs[i]-closes[i-1]), Math.abs(lows[i]-closes[i-1]));
+    trs.push(tr);
+  }
+  if(trs.length<14) return null;
+  let a=trs.slice(0,14).reduce((s,v)=>s+v,0)/14;
+  for(let i=14;i<trs.length;i++) a=(a*13+trs[i])/14;
+  return a;
+}
+
+async function loadVolRange(){
+  const el=$('volGrid');
+  if(!el) return;
+  let atr=null;
+  try{
+    const cached=JSON.parse(localStorage.getItem(VOL_CACHE_KEY)||'null');
+    if(cached && (Date.now()-cached.ts)<VOL_CACHE_TTL) atr=cached.atr;
+  }catch(e){}
+  if(atr==null){
+    const ohlc=await fetchHistOHLC('GC=F','2mo','1d',20);
+    if(ohlc){
+      atr=atr14(ohlc.highs, ohlc.lows, ohlc.closes);
+      if(atr!=null){ try{ localStorage.setItem(VOL_CACHE_KEY, JSON.stringify({ts:Date.now(),atr})); }catch(e){} }
+    }
+  }
+  renderVolRange(atr);
+}
+
+function renderVolRange(atr){
+  const el=$('volGrid'), sess=$('volSessions'), note=$('volNote');
+  if(!el) return;
+  const g=window._gPrice;
+  if(atr==null||!g||g.price==null){
+    el.innerHTML=`<div style="grid-column:1/-1;padding:6px;color:var(--muted2);font-family:var(--sans);font-size:11px;text-align:center;">Waiting for price + history…</div>`;
+    if(sess) sess.innerHTML='';
+    if(note) note.textContent='';
+    return;
+  }
+  const open = g.open ?? g.prev ?? g.price;
+  const high = g.high ?? g.price;
+  const low  = g.low  ?? g.price;
+  const rangeToday = Math.max(0, high-low);
+  const usedPct = Math.min(100, (rangeToday/atr)*100);
+  const remaining = Math.max(0, atr-rangeToday);
+  const projHigh = open+atr;
+  const projLow  = open-atr;
+  const usedColor = usedPct>=80?'var(--red)':usedPct>=50?'var(--orange)':'var(--green)';
+
+  el.innerHTML = `
+    <div class="pivot-card"><div class="pivot-lbl">ATR(14)</div><div class="pivot-val">$${fmt(atr)}</div></div>
+    <div class="pivot-card"><div class="pivot-lbl">TODAY'S RANGE</div><div class="pivot-val">$${fmt(rangeToday)}</div></div>
+    <div class="pivot-card"><div class="pivot-lbl">RANGE USED</div><div class="pivot-val" style="color:${usedColor};">${fmt(usedPct,0)}%</div></div>
+    <div class="pivot-card"><div class="pivot-lbl">ROOM LEFT</div><div class="pivot-val">$${fmt(remaining)}</div></div>
+  `;
+  if(sess){
+    sess.innerHTML = `
+      <div class="pivot-row"><span class="pivot-row-lbl">Projected High (Open + ATR)</span><span class="pivot-row-val pivot-r">$${fmt(projHigh)}</span></div>
+      <div class="pivot-row"><span class="pivot-row-lbl">Projected Low (Open − ATR)</span><span class="pivot-row-val pivot-s">$${fmt(projLow)}</span></div>
+      <div class="pivot-row"><span class="pivot-row-lbl">Asian session (~25% of ATR)</span><span class="pivot-row-val">$${fmt(atr*0.25)}</span></div>
+      <div class="pivot-row"><span class="pivot-row-lbl">London session (~45% of ATR)</span><span class="pivot-row-val">$${fmt(atr*0.45)}</span></div>
+      <div class="pivot-row"><span class="pivot-row-lbl">New York session (~50% of ATR)</span><span class="pivot-row-val">$${fmt(atr*0.50)}</span></div>
+    `;
+  }
+  if(note){
+    const diff = g.price-open;
+    note.textContent = `Price is ${diff>=0?'$'+fmt(Math.abs(diff))+' above':'$'+fmt(Math.abs(diff))+' below'} today's open. Session % are typical contributions to the daily ATR, not live measurements.`;
+  }
+}
+
+// ═══════════════════════════════════════════════════
 // FEATURE 4 — PRICE ALERTS
 // ═══════════════════════════════════════════════════
 let alerts = [];
@@ -3801,54 +4050,117 @@ function checkAlerts(){
 }
 
 // ═══════════════════════════════════════════════════
-// FEATURE 5 — CORRELATION MATRIX
+// FEATURE 5 — CORRELATION MATRIX (real 20-day rolling Pearson)
 // ═══════════════════════════════════════════════════
-// Historical typical daily correlations with XAU/USD
+// Fallback "typical" correlations, used only if live calc fails
 const CORR_DATA = {
   labels: ['DXY','US10Y','VIX','Silver','Oil','EUR/USD'],
-  // Approximate typical correlations (updated when live data loads)
   base:   [-0.82, -0.61, 0.54, 0.87, 0.31, 0.74],
 };
+const CORR_SYMS = {
+  'DXY':'DX-Y.NYB',
+  'US10Y':'%5ETNX',
+  'VIX':'%5EVIX',
+  'Silver':'SI=F',
+  'Oil':'CL=F',
+  'EUR/USD':'EURUSD=X',
+};
+const CORR_CACHE_KEY='fxdesk_corr_cache_v1';
+const CORR_CACHE_TTL=4*60*60*1000; // 4 hours
 
-function renderCorrelation(){
+// Generic historical closes fetch, raced across the same proxy chain as yf/yfFull
+async function fetchHistClosesEx(sym, range, interval, minLen){
+  const encoded=encodeURIComponent(`https://query1.finance.yahoo.com/v8/finance/chart/${sym}?interval=${interval}&range=${range}`);
+  const proxies=[
+    `${FX_PROXY}${encoded}`,
+    `https://corsproxy.io/?url=${encoded}`,
+    `https://corsproxy.io/?${encoded}`,
+    `https://api.allorigins.win/raw?url=${encoded}`,
+    `https://api.codetabs.com/v1/proxy/?quest=${encoded}`,
+  ];
+  const tryProxy=async url=>{
+    const r=await Promise.race([fetch(url,{cache:'no-store'}),_fetchTimeout(8000)]);
+    if(!r.ok) throw new Error('not ok');
+    const d=JSON.parse(await r.text());
+    const res=d?.chart?.result?.[0];
+    const closes=(res?.indicators?.quote?.[0]?.close||[]).filter(v=>v!=null);
+    if(closes.length<minLen) throw new Error('insufficient');
+    return closes;
+  };
+  try{ return await Promise.any(proxies.map(tryProxy)); }catch(e){ return null; }
+}
+
+// 1-month daily closes — used by the correlation matrix
+async function fetchHistCloses(sym){
+  return fetchHistClosesEx(sym, '1mo', '1d', 10);
+}
+
+function pctReturns(closes){
+  const r=[];
+  for(let i=1;i<closes.length;i++) r.push((closes[i]-closes[i-1])/closes[i-1]);
+  return r;
+}
+
+function pearson(a,b){
+  const n=Math.min(a.length,b.length);
+  if(n<5) return null;
+  a=a.slice(-n); b=b.slice(-n);
+  const ma=a.reduce((s,v)=>s+v,0)/n, mb=b.reduce((s,v)=>s+v,0)/n;
+  let num=0,da=0,db=0;
+  for(let i=0;i<n;i++){
+    const xa=a[i]-ma, xb=b[i]-mb;
+    num+=xa*xb; da+=xa*xa; db+=xb*xb;
+  }
+  if(da===0||db===0) return null;
+  return num/Math.sqrt(da*db);
+}
+
+async function loadCorrelation(){
+  const el=$('corrMatrix');
+  if(!el) return;
+  // Serve from cache if fresh — avoids 7 extra fetches every refresh cycle
+  try{
+    const cached=JSON.parse(localStorage.getItem(CORR_CACHE_KEY)||'null');
+    if(cached && (Date.now()-cached.ts)<CORR_CACHE_TTL){
+      renderCorrelation(cached.vals);
+      return;
+    }
+  }catch(e){}
+  if(!el.dataset.loaded){
+    el.innerHTML='<div style="grid-column:1/-1;padding:10px;color:var(--muted2);font-family:var(--sans);font-size:11px;">Calculating 20-day correlations…</div>';
+  }
+  const goldCloses=await fetchHistCloses('GC=F');
+  if(!goldCloses){ renderCorrelation(null); return; }
+  const goldR=pctReturns(goldCloses);
+  const labels=Object.keys(CORR_SYMS);
+  const results=await Promise.all(labels.map(async l=>{
+    const closes=await fetchHistCloses(CORR_SYMS[l]);
+    if(!closes) return null;
+    return pearson(goldR, pctReturns(closes));
+  }));
+  if(results.some(v=>v==null)){ renderCorrelation(null); return; }
+  const vals=results.map(v=>parseFloat(v.toFixed(2)));
+  try{ localStorage.setItem(CORR_CACHE_KEY, JSON.stringify({ts:Date.now(),vals})); }catch(e){}
+  renderCorrelation(vals);
+}
+
+function renderCorrelation(vals){
   const el = $('corrMatrix');
   if(!el) return;
-  const cols = CORR_DATA.labels.length;
-  el.style.gridTemplateColumns = `auto repeat(${cols},1fr)`;
-  // Try to compute live correlations from window price changes
-  const liveCorr = computeLiveCorr();
-  const vals = liveCorr || CORR_DATA.base;
+  const labels=Object.keys(CORR_SYMS);
+  el.style.gridTemplateColumns = `auto repeat(${labels.length},1fr)`;
+  const useVals = vals || CORR_DATA.base;
   let html = `<div class="corr-label" style="font-weight:700;color:var(--gold-dim);">XAU/USD vs</div>`;
-  CORR_DATA.labels.forEach(l=>{ html+=`<div class="corr-label" style="text-align:center;">${l}</div>`; });
-  html += `<div class="corr-label" style="font-weight:700;">Correlation</div>`;
-  vals.forEach((v,i)=>{
+  labels.forEach(l=>{ html+=`<div class="corr-label" style="text-align:center;">${l}</div>`; });
+  html += `<div class="corr-label" style="font-weight:700;">${vals?'20D Corr':'Typical'}</div>`;
+  useVals.forEach(v=>{
     const cls = v>0.6?'corr-strong-pos':v>0.2?'corr-weak-pos':v<-0.6?'corr-strong-neg':v<-0.2?'corr-weak-neg':'corr-neutral';
     html += `<div class="corr-cell ${cls}">${v>=0?'+':''}${(v).toFixed(2)}</div>`;
   });
   el.innerHTML = html;
-}
-
-function computeLiveCorr(){
-  // Use change% as a proxy for same-day correlation direction
-  const goldChg = window._gPrice?.changePct;
-  if(goldChg==null) return null;
-  const assets = [
-    window._dxyP?.changePct,
-    window._tnxP?.changePct,
-    window._vixData?.changePct,
-    window._silP?.changePct,
-    window._oilP?.changePct,
-    window._euP?.changePct,
-  ];
-  if(assets.some(v=>v==null)) return null;
-  // Correlation sign: same direction = positive, inverse = negative
-  return assets.map((a,i)=>{
-    if(goldChg===0) return CORR_DATA.base[i];
-    const raw = (a/goldChg);
-    // Normalize to -1..1 range and blend with historical base
-    const live = Math.max(-1, Math.min(1, raw * 0.5));
-    return parseFloat((live * 0.4 + CORR_DATA.base[i] * 0.6).toFixed(2));
-  });
+  el.dataset.loaded='1';
+  const badge=el.closest('.card')?.querySelector('.badge');
+  if(badge) badge.textContent = vals ? '20-DAY ROLLING CORRELATION (LIVE)' : 'TYPICAL HISTORICAL ESTIMATE';
 }
 
 // ═══════════════════════════════════════════════════
@@ -4104,7 +4416,9 @@ window.addEventListener('load', ()=>{
   loadMTF();
   loadAlerts();
   renderSeasonality();
-  renderCorrelation();
+  loadCorrelation();
+  loadConfluence();
+  loadVolRange();
   runCalc();
 });
 
@@ -4116,7 +4430,9 @@ addPostRefreshHook(()=>{
   setTimeout(()=>{
     calcPivots();
     updateGSRatio();
-    renderCorrelation();
+    loadCorrelation();
+    loadConfluence();
+    loadVolRange();
     checkAlerts();
     ['dxyP','tnxP','vixP','silP','oilP','spP','gbpP','jpyP','audP','cadP'].forEach(id=>markFresh(id));
   }, 1500);
