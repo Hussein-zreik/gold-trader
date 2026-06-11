@@ -3095,17 +3095,6 @@ document.addEventListener('dragover',e=>{
 });
 
 // Apply saved layout + chart on load (moved to consolidated listener at bottom)
-function restoreChart(){
-  try{
-    const sym=localStorage.getItem('fxdesk_chart_sym');
-    const intv=localStorage.getItem('fxdesk_chart_intv');
-    const symSel=document.getElementById('chartSymbol');
-    const intvSel=document.getElementById('chartInterval');
-    if(sym&&symSel) symSel.value=sym;
-    if(intv&&intvSel) intvSel.value=intv;
-    // Do NOT load the iframe — user must click "Load Chart"
-  }catch(e){}
-}
 
 // ═══════════════════════════════════════════════════
 // CHART — LAZY LOAD + SYMBOL SWITCHER
@@ -3216,14 +3205,6 @@ async function refreshAll(){
     loadMarket('USDCAD=X','cadP','cadC',null,null,'cadTs',{dec:4}),
     loadMarket('USDCHF=X','chfP','chfC',null,null,'chfTs',{dec:4}),
     loadMarket('NZDUSD=X','nzdP','nzdC',null,null,'nzdTs',{dec:4}),
-    loadMarket('GBPJPY=X','gbpjpyP','gbpjpyC',null,null,'gbpjpyTs',{dec:3}),
-    loadMarket('EURJPY=X','eurjpyP','eurjpyC',null,null,'eurjpyTs',{dec:3}),
-  ]);
-  await yieldToMain();
-
-  await Promise.allSettled([
-    loadMarket('NZDUSD=X','nzdP','nzdC',null,null,'nzdTs',{dec:4}),
-    loadMarket('USDCHF=X','chfP','chfC',null,null,'chfTs',{dec:4}),
     loadMarket('GBPJPY=X','gbpjpyP','gbpjpyC',null,null,'gbpjpyTs',{dec:3}),
     loadMarket('EURJPY=X','eurjpyP','eurjpyC',null,null,'eurjpyTs',{dec:3}),
   ]);
