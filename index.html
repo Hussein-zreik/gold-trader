@@ -537,6 +537,8 @@ body.light-mode .sessions-bar{
 body.light-mode .logo-name{background:linear-gradient(135deg,#0F172A 0%,#1D4ED8 45%,#DC2626 100%) !important;-webkit-background-clip:text !important;-webkit-text-fill-color:transparent !important;background-clip:text !important;}
 body.light-mode .logo-sub{color:#475569;}
 body.light-mode .up{color:#15803D;}
+body.light-mode .dxy-bull{color:#B91C1C;}
+body.light-mode .dxy-bear{color:#15803D;}
 body.light-mode .dn{color:#B91C1C;}
 body.light-mode .mc-c .up{color:#15803D;}
 body.light-mode .mc-c .dn{color:#B91C1C;}
@@ -874,6 +876,56 @@ body.chart-fs .chart-fullscreen-btn{position:fixed;top:12px;right:12px;z-index:8
 .macro-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 .macro-drivers{font-family:var(--sans);font-size:10px;color:var(--muted2);padding:8px 12px;background:var(--bg3);border-radius:8px;line-height:1.6;}
 
+
+/* ── PAGE NAV BAR ── */
+.page-nav{
+  display:flex;align-items:center;gap:0;
+  background:var(--bg2);
+  border-bottom:1px solid var(--border);
+  position:sticky;top:53px;z-index:185;
+  overflow-x:auto;scrollbar-width:none;
+  padding:0 20px;
+}
+.page-nav::-webkit-scrollbar{display:none;}
+.page-nav-btn{
+  display:flex;align-items:center;gap:6px;
+  padding:11px 16px;
+  font-family:var(--heading);font-size:11px;font-weight:600;
+  color:var(--muted2);
+  border:none;background:transparent;
+  border-bottom:2px solid transparent;
+  cursor:pointer;white-space:nowrap;
+  transition:color .15s,border-color .15s;
+  letter-spacing:.3px;
+}
+.page-nav-btn:hover{color:var(--text);}
+.page-nav-btn.active{
+  color:var(--blue);
+  border-bottom-color:var(--blue);
+}
+.page-nav-btn .nav-icon{font-size:13px;}
+.page-nav-divider{width:1px;height:18px;background:var(--border);margin:0 4px;flex-shrink:0;}
+
+/* ── PAGE SECTIONS ── */
+.page-section{display:none;}
+.page-section.active{display:block;}
+
+/* ── JOURNAL PAGE ── */
+.journal-page-wrap{max-width:900px;margin:0 auto;padding:24px 20px;}
+.journal-page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.journal-page-title{font-family:var(--heading);font-size:22px;font-weight:800;color:var(--text);}
+.journal-page-sub{font-family:var(--sans);font-size:12px;color:var(--muted2);margin-top:3px;}
+
+/* ── PORTFOLIO PAGE ── */
+.portfolio-page-wrap{max-width:900px;margin:0 auto;padding:24px 20px;}
+
+/* ── CALENDAR PAGE ── */
+.calendar-page-wrap{max-width:900px;margin:0 auto;padding:24px 20px;}
+.cal-page-title{font-family:var(--heading);font-size:22px;font-weight:800;color:var(--text);margin-bottom:20px;}
+
+/* Light mode nav */
+body.light-mode .page-nav{background:var(--bg2);border-color:var(--border);}
+body.light-mode .page-nav-btn.active{color:var(--blue);}
 </style>
 </head>
 <body>
@@ -899,13 +951,8 @@ body.chart-fs .chart-fullscreen-btn{position:fixed;top:12px;right:12px;z-index:8
     </div>
   </div>
 
-  <!-- CENTER: Market status -->
-  <div style="display:flex;align-items:center;gap:8px;flex:1;justify-content:center;">
-    <div class="market-status market-closed" id="marketStatus">
-      <div class="ms-dot"></div>
-      <span id="marketStatusText">CHECKING...</span>
-    </div>
-  </div>
+  <!-- CENTER: spacer -->
+  <div style="flex:1;"></div>
 
   <!-- RIGHT: Controls -->
   <nav class="hdr-right" aria-label="Dashboard controls">
@@ -916,6 +963,24 @@ body.chart-fs .chart-fullscreen-btn{position:fixed;top:12px;right:12px;z-index:8
     <button type="button" class="ref-btn" aria-label="Refresh all data" onclick="refreshAllWithGlow()">↻ REFRESH</button>
   </nav>
 </header>
+
+
+<!-- PAGE NAVIGATION BAR -->
+<nav class="page-nav" role="navigation" aria-label="Page sections">
+  <button class="page-nav-btn active" onclick="switchPage('dashboard',this)" aria-label="Dashboard">
+    <span class="nav-icon">📊</span> Dashboard
+  </button>
+  <div class="page-nav-divider"></div>
+  <button class="page-nav-btn" onclick="switchPage('journal',this)" aria-label="Journal">
+    <span class="nav-icon">📓</span> Journal
+  </button>
+  <button class="page-nav-btn" onclick="switchPage('portfolio',this)" aria-label="Portfolio">
+    <span class="nav-icon">💼</span> Portfolio
+  </button>
+  <button class="page-nav-btn" onclick="switchPage('calendar',this)" aria-label="Calendar">
+    <span class="nav-icon">📅</span> Calendar
+  </button>
+</nav>
 
 <!-- TICKER BAR -->
 <div class="ticker-bar" aria-label="Live price ticker" role="marquee">
@@ -980,6 +1045,7 @@ body.chart-fs .chart-fullscreen-btn{position:fixed;top:12px;right:12px;z-index:8
 
 <!-- MAIN landmark -->
 <main id="main-content">
+<div class="page-section active" id="page-dashboard">
 <div class="wrap">
 
   <!-- EDIT MODE BAR -->
@@ -2136,6 +2202,12 @@ body.chart-fs .chart-fullscreen-btn{position:fixed;top:12px;right:12px;z-index:8
 // UTILITIES
 // ═══════════════════════════════════════════════════
 const $=id=>document.getElementById(id);
+
+// Theme-aware status colors — full-saturation green/red/orange fail WCAG contrast
+// on light backgrounds. Use these for inline style.color assignments.
+function clrGood(){ return document.body.classList.contains('light-mode') ? '#15803D' : 'var(--green)'; }
+function clrBad(){  return document.body.classList.contains('light-mode') ? '#B91C1C' : 'var(--red)'; }
+function clrWarn(){ return document.body.classList.contains('light-mode') ? '#C2410C' : 'var(--orange)'; }
 const fmt=(n,d=2)=>n==null||isNaN(n)?'—':Number(n).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
 
 function nowUTC(){
@@ -2628,7 +2700,7 @@ async function loadCalendar(){
     // Show static fallback
     if(calBody) calBody.style.display='none';
     if(calStatic) calStatic.style.display='block';
-    if(calSrc){ calSrc.textContent='STATIC FALLBACK'; calSrc.style.background='rgba(249,115,22,.1)'; calSrc.style.color='var(--orange)'; }
+    if(calSrc){ calSrc.textContent='STATIC FALLBACK'; calSrc.style.background='rgba(249,115,22,.1)'; calSrc.style.color=clrWarn(); }
     if(calFetch) calFetch.textContent='Live calendar unavailable — showing static reference · '+localTs(new Date());
     return;
   }
@@ -4007,11 +4079,11 @@ function updateGSRatio(){
   }
   if($('gsRatioInterp')){
     const el=$('gsRatioInterp');
-    if(ratio>90){ el.textContent='Silver very cheap'; el.style.color='var(--green)'; }
-    else if(ratio>80){ el.textContent='Silver undervalued'; el.style.color='var(--green)'; }
+    if(ratio>90){ el.textContent='Silver very cheap'; el.style.color=clrGood(); }
+    else if(ratio>80){ el.textContent='Silver undervalued'; el.style.color=clrGood(); }
     else if(ratio>70){ el.textContent='Near historical avg'; el.style.color='var(--muted2)'; }
-    else if(ratio>60){ el.textContent='Silver elevated'; el.style.color='var(--orange)'; }
-    else { el.textContent='Silver expensive'; el.style.color='var(--red)'; }
+    else if(ratio>60){ el.textContent='Silver elevated'; el.style.color=clrWarn(); }
+    else { el.textContent='Silver expensive'; el.style.color=clrBad(); }
   }
 }
 
@@ -4292,7 +4364,7 @@ function updateSpreadMonitor(){
     const isNormal = spread <= p.normal * 1.3;
 
     el.textContent = (p.label ? p.label : '') + spread;
-    el.style.color = isWide ? 'var(--red)' : isNormal ? 'var(--green)' : 'var(--orange)';
+    el.style.color = isWide ? clrBad() : isNormal ? clrGood() : clrWarn();
 
     if(stEl){
       stEl.textContent = isWide ? 'WIDE' : isNormal ? 'NORMAL' : 'ELEVATED';
@@ -4378,10 +4450,18 @@ function renderSessionHeatmap(){
       if(s.end < s.start) return h >= s.start || h < s.end;
       return h >= s.start && h < s.end;
     });
+    const isLight = document.body.classList.contains('light-mode');
+    const SESSION_TEXT_COLORS = {
+      'Sydney':   isLight ? '#7C3AED' : '#C4B5FD',
+      'Tokyo':    isLight ? '#EA580C' : '#FDBA74',
+      'London':   isLight ? '#2563EB' : '#93C5FD',
+      'New York': isLight ? '#DC2626' : '#FCA5A5',
+    };
     const allPills = SESSION_RANGES.map(s => {
       const h = curHour;
       const isOpen = s.end < s.start ? (h >= s.start || h < s.end) : (h >= s.start && h < s.end);
-      return `<div class="hm-sess-pill" style="background:${s.color.replace('0.7','0.12')};color:${s.color.replace('rgba(','').split(',').slice(0,3).map(Number).reduce((a,b)=>a,'')||'#fff'};border:1px solid ${s.color.replace('0.7','0.3')};">
+      const txtColor = SESSION_TEXT_COLORS[s.name] || 'var(--text)';
+      return `<div class="hm-sess-pill" style="background:${s.color.replace('0.7','0.12')};color:${txtColor};border:1px solid ${s.color.replace('0.7','0.3')};">
         ${isOpen ? '●' : '○'} ${s.name} ${isOpen ? '(OPEN)' : '(CLOSED)'}
       </div>`;
     });
@@ -4701,7 +4781,7 @@ function updateMacroRegime(){
   const riskOff = vix > 20 || vixChg > 5;
   const riskOn  = vix < 15 && spChg > 0.3;
   const riskLabel = riskOff ? 'RISK-OFF' : riskOn ? 'RISK-ON' : 'NEUTRAL';
-  const riskColor = riskOff ? 'var(--green)' : riskOn ? 'var(--red)' : 'var(--muted2)'; // risk-off = bullish gold
+  const riskColor = riskOff ? clrGood() : riskOn ? clrBad() : 'var(--muted2)'; // risk-off = bullish gold
   const riskSub = riskOff ? `VIX ${fmt(vix)} — fear elevated → safe haven demand ↑` :
                   riskOn  ? `VIX ${fmt(vix)} — complacency → gold faces headwind` :
                   `VIX ${fmt(vix)} — neutral risk appetite`;
@@ -4711,7 +4791,7 @@ function updateMacroRegime(){
   const dxyStrong = dxy > 103 && (dxyChg || 0) > 0.2;
   const dxyWeak   = dxy < 100 || (dxyChg || 0) < -0.2;
   const dxyLabel  = dxyStrong ? 'STRONG USD' : dxyWeak ? 'WEAK USD' : 'NEUTRAL USD';
-  const dxyColor  = dxyStrong ? 'var(--red)' : dxyWeak ? 'var(--green)' : 'var(--muted2)'; // weak dollar = bullish gold
+  const dxyColor  = dxyStrong ? clrBad() : dxyWeak ? clrGood() : 'var(--muted2)'; // weak dollar = bullish gold
   const dxySub = `DXY ${fmt(dxy)} · ${(dxyChg||0)>=0?'+':''}${fmt(dxyChg||0,2)}% today`;
   setMacroCard('macroDxy','macroDxyDot','macroDxySub', dxyLabel, dxyColor, dxySub);
 
@@ -4719,7 +4799,7 @@ function updateMacroRegime(){
   const growthStrong = spChg > 0.5;
   const growthWeak   = spChg < -0.5;
   const growthLabel  = growthStrong ? 'EXPANSION' : growthWeak ? 'CONTRACTION' : 'STABLE';
-  const growthColor  = growthStrong ? 'var(--orange)' : growthWeak ? 'var(--green)' : 'var(--muted2)';
+  const growthColor  = growthStrong ? clrWarn() : growthWeak ? clrGood() : 'var(--muted2)';
   const growthSub = `S&P500 ${spChg>=0?'+':''}${fmt(spChg||0,2)}% — ${growthStrong?'growth optimism':'risk aversion'}`;
   setMacroCard('macroGrowth','macroGrowthDot','macroGrowthSub', growthLabel, growthColor, growthSub);
 
@@ -4728,7 +4808,7 @@ function updateMacroRegime(){
   const ratesLow  = tnx < 3.5;
   const ratesRising = tnxChg > 0.02;
   const ratesLabel = ratesHigh ? 'HIGH RATES' : ratesLow ? 'LOW RATES' : 'MID RATES';
-  const ratesColor = ratesHigh ? 'var(--red)' : ratesLow ? 'var(--green)' : 'var(--muted2)';
+  const ratesColor = ratesHigh ? clrBad() : ratesLow ? clrGood() : 'var(--muted2)';
   const ratesSub = `US10Y ${fmt(tnx,3)}% · ${ratesRising?'Rising':'Falling/Flat'} — ${ratesHigh?'headwind for gold':'neutral/bullish'}`;
   setMacroCard('macroRates','macroRatesDot','macroRatesSub', ratesLabel, ratesColor, ratesSub);
 
@@ -4736,19 +4816,20 @@ function updateMacroRegime(){
   const bullGoldSignals = [riskOff, dxyWeak, growthWeak, !ratesHigh].filter(Boolean).length;
   const bearGoldSignals = [!riskOff && !riskOn, dxyStrong, growthStrong, ratesHigh].filter(Boolean).length;
 
+  const isLightMacro = document.body.classList.contains('light-mode');
   let regime, regimeSub, regimeGold, bannerBg, bannerColor;
   if(bullGoldSignals >= 3){
     regime='RISK-OFF · WEAK DOLLAR'; regimeSub='Multiple macro tailwinds aligning for gold';
-    regimeGold='🟢 STRONGLY BULLISH FOR GOLD'; bannerBg='rgba(34,197,94,0.08)'; bannerColor='var(--green)';
+    regimeGold='🟢 STRONGLY BULLISH FOR GOLD'; bannerBg='rgba(34,197,94,0.08)'; bannerColor=isLightMacro?'#15803D':'var(--green)';
   } else if(bullGoldSignals === 2){
     regime='MIXED · SLIGHT RISK-OFF'; regimeSub='Some bullish macro factors for gold';
-    regimeGold='🟡 MILDLY BULLISH FOR GOLD'; bannerBg='rgba(249,115,22,0.06)'; bannerColor='var(--orange)';
+    regimeGold='🟡 MILDLY BULLISH FOR GOLD'; bannerBg='rgba(249,115,22,0.06)'; bannerColor=isLightMacro?'#C2410C':'var(--orange)';
   } else if(bearGoldSignals >= 3){
     regime='RISK-ON · STRONG DOLLAR'; regimeSub='Multiple macro headwinds for gold';
-    regimeGold='🔴 BEARISH FOR GOLD'; bannerBg='rgba(239,68,68,0.06)'; bannerColor='var(--red)';
+    regimeGold='🔴 BEARISH FOR GOLD'; bannerBg='rgba(239,68,68,0.06)'; bannerColor=isLightMacro?'#B91C1C':'var(--red)';
   } else {
     regime='NEUTRAL MACRO ENVIRONMENT'; regimeSub='No clear directional bias from macro data';
-    regimeGold='⚪ NEUTRAL FOR GOLD'; bannerBg='rgba(107,140,174,0.06)'; bannerColor='var(--muted2)';
+    regimeGold='⚪ NEUTRAL FOR GOLD'; bannerBg='rgba(107,140,174,0.06)'; bannerColor=isLightMacro?'#475569':'var(--muted2)';
   }
 
   const banner = $('macroRegimeBanner');
@@ -4857,6 +4938,81 @@ addPostRefreshHook(()=>{
   // signal pill removed — market status updates via setInterval
 });
 
+
+// ═══════════════════════════════════════════════════
+// PAGE NAVIGATION
+// ═══════════════════════════════════════════════════
+function switchPage(pageId, btn){
+  // Hide all sections
+  document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.page-nav-btn').forEach(b => b.classList.remove('active'));
+
+  // Show selected
+  const section = document.getElementById('page-' + pageId);
+  if(section) section.classList.add('active');
+  if(btn) btn.classList.add('active');
+
+  // Save current page
+  try{ localStorage.setItem('fxdesk_page', pageId); }catch(e){}
+
+  // Populate page content if needed
+  if(pageId === 'journal') populateJournalPage();
+  if(pageId === 'portfolio') populatePortfolioPage();
+  if(pageId === 'calendar') populateCalendarPage();
+
+  // Scroll to top
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// Clone widget content into page views
+function populateJournalPage(){
+  const src = document.querySelector('.widget[data-widget="journal"]');
+  const dst = document.getElementById('journalPageContent');
+  if(!src || !dst) return;
+  // Clone inner card
+  const card = src.querySelector('.card');
+  if(card && dst.innerHTML === ''){
+    dst.appendChild(card.cloneNode(true));
+  }
+  // Re-render from storage
+  if(typeof loadJournal === 'function') loadJournal();
+}
+
+function populatePortfolioPage(){
+  const src = document.querySelector('.widget[data-widget="portfolio"]');
+  const dst = document.getElementById('portfolioPageContent');
+  if(!src || !dst) return;
+  const card = src.querySelector('.card');
+  if(card && dst.innerHTML === ''){
+    dst.appendChild(card.cloneNode(true));
+  }
+  if(typeof loadPortfolio === 'function') loadPortfolio();
+}
+
+function populateCalendarPage(){
+  // Central bank calendar
+  const cbSrc = document.getElementById('cbCalendar');
+  const cbDst = document.getElementById('calPageCB');
+  if(cbSrc && cbDst) cbDst.innerHTML = cbSrc.innerHTML;
+
+  // Economic calendar
+  const evSrc = document.getElementById('calBody');
+  const evDst = document.getElementById('calPageEvents');
+  if(evSrc && evDst) evDst.innerHTML = evSrc.innerHTML;
+  else if(evDst) evDst.innerHTML = '<div style="padding:12px 0;font-family:var(--sans);font-size:11px;color:var(--muted2);">Scroll to Dashboard → Calendar tab to view live events</div>';
+}
+
+// Restore last page on load
+window.addEventListener('load', ()=>{
+  try{
+    const saved = localStorage.getItem('fxdesk_page');
+    if(saved && saved !== 'dashboard'){
+      const btn = document.querySelector(".page-nav-btn[onclick*=\""+saved+"\"]");
+      switchPage(saved, btn);
+    }
+  }catch(e){}
+});
+
 // Suppress unhandled promise rejections from expected CORS proxy failures
 // These are handled internally via try/catch; we don't want them in console
 window.addEventListener('unhandledrejection', e => {
@@ -4882,6 +5038,50 @@ window.addEventListener('unhandledrejection', e => {
       <div class="kbd-row"><span class="kbd-desc">Fullscreen chart</span><kbd>F</kbd></div>
       <div class="kbd-row"><span class="kbd-desc">Show this help</span><kbd>?</kbd></div>
       <div class="kbd-row"><span class="kbd-desc">Close overlays</span><kbd>Esc</kbd></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /page-dashboard -->
+
+<!-- ══ JOURNAL PAGE ══ -->
+<div class="page-section" id="page-journal">
+  <div class="journal-page-wrap" id="journalPageWrap">
+    <div class="journal-page-header">
+      <div>
+        <div class="journal-page-title">📓 Trade Journal</div>
+        <div class="journal-page-sub">Log, review and analyse your trades</div>
+      </div>
+    </div>
+    <!-- Journal widget content injected here by JS -->
+    <div id="journalPageContent"></div>
+  </div>
+</div>
+
+<!-- ══ PORTFOLIO PAGE ══ -->
+<div class="page-section" id="page-portfolio">
+  <div class="portfolio-page-wrap" id="portfolioPageWrap">
+    <div class="journal-page-header">
+      <div>
+        <div class="journal-page-title">💼 Portfolio Tracker</div>
+        <div class="journal-page-sub">Track your open positions and P&amp;L</div>
+      </div>
+    </div>
+    <div id="portfolioPageContent"></div>
+  </div>
+</div>
+
+<!-- ══ CALENDAR PAGE ══ -->
+<div class="page-section" id="page-calendar">
+  <div class="calendar-page-wrap">
+    <div class="cal-page-title">📅 Economic Calendar</div>
+    <div class="card" style="margin-bottom:16px;">
+      <div class="ch"><div class="ct">CENTRAL BANK MEETINGS — 2025</div><span class="badge b-purple">FED · ECB · BOE · BOJ · RBA</span></div>
+      <div id="calPageCB" style="padding:14px;"></div>
+    </div>
+    <div class="card">
+      <div class="ch"><div class="ct">USD ECONOMIC EVENTS — LIVE</div><span class="badge b-live">AUTO-UPDATED</span></div>
+      <div id="calPageEvents" style="padding:14px;font-family:var(--sans);font-size:11px;color:var(--muted2);">Loading calendar data...</div>
     </div>
   </div>
 </div>
