@@ -338,6 +338,8 @@ html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-hei
 .journal-filter{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
 .jfilter-btn{background:var(--bg3);border:1px solid var(--border);color:var(--muted2);padding:5px 12px;border-radius:20px;font-family:var(--sans);font-size:11px;font-weight:500;cursor:pointer;}
 .jfilter-btn.active{background:var(--blue);color:#fff;border-color:var(--blue);}
+.mistake-chip{background:var(--bg3);border:1px solid var(--border);color:var(--muted2);padding:4px 10px;border-radius:14px;font-family:var(--sans);font-size:10px;font-weight:500;cursor:pointer;}
+.mistake-chip.active{background:rgba(239,68,68,.15);color:var(--red);border-color:rgba(239,68,68,.3);}
 
 @media(max-width:600px){
   .port-summary,.journal-stats{grid-template-columns:1fr 1fr;}
@@ -1683,6 +1685,7 @@ body.light-mode .page-nav-btn.active{color:var(--blue);}
       <div class="ct">TRADE JOURNAL</div>
       <div style="display:flex;gap:6px;">
         <span class="badge b-blue">SAVED LOCALLY</span>
+        <button type="button" class="badge" style="cursor:pointer;background:rgba(34,197,94,.1);color:var(--green);border:1px solid rgba(34,197,94,.2);" aria-label="Toggle analytics" onclick="toggleJournalAnalytics()">📊 ANALYTICS</button>
         <button type="button" class="badge" style="cursor:pointer;background:rgba(59,130,246,.1);color:var(--blue);border:1px solid rgba(59,130,246,.2);" aria-label="Add new journal entry" onclick="toggleJournalForm()">+ NEW ENTRY</button>
       </div>
     </div>
@@ -1708,10 +1711,34 @@ body.light-mode .page-nav-btn.active{color:var(--blue);}
         <input class="journal-input" id="jRR" aria-label="Risk to reward ratio" placeholder="R:R (e.g. 1:2)">
       </div>
       <textarea class="journal-textarea" id="jNote" aria-label="Trade notes" placeholder="Trade notes: setup, confluences, emotions, lessons learned..."></textarea>
+      <div style="font-family:var(--sans);font-size:10px;color:var(--muted2);margin:8px 0 6px;">Mistakes (optional, tap to tag):</div>
+      <div class="journal-filter" id="jMistakes" style="margin-bottom:8px;">
+        <button type="button" class="mistake-chip" data-tag="No SL" onclick="toggleMistakeChip(this)">No SL</button>
+        <button type="button" class="mistake-chip" data-tag="FOMO Entry" onclick="toggleMistakeChip(this)">FOMO Entry</button>
+        <button type="button" class="mistake-chip" data-tag="Revenge Trade" onclick="toggleMistakeChip(this)">Revenge Trade</button>
+        <button type="button" class="mistake-chip" data-tag="Moved SL" onclick="toggleMistakeChip(this)">Moved SL</button>
+        <button type="button" class="mistake-chip" data-tag="Oversized" onclick="toggleMistakeChip(this)">Oversized</button>
+        <button type="button" class="mistake-chip" data-tag="Early Exit" onclick="toggleMistakeChip(this)">Early Exit</button>
+        <button type="button" class="mistake-chip" data-tag="Ignored Plan" onclick="toggleMistakeChip(this)">Ignored Plan</button>
+        <button type="button" class="mistake-chip" data-tag="Overtrading" onclick="toggleMistakeChip(this)">Overtrading</button>
+      </div>
       <div style="display:flex;gap:8px;">
         <button type="button" class="journal-btn" onclick="saveJournalEntry()">💾 SAVE ENTRY</button>
         <button class="journal-btn sec" onclick="toggleJournalForm()">CANCEL</button>
       </div>
+    </div>
+    <div class="portfolio-wrap" id="journalAnalyticsWrap" style="display:none;border-bottom:1px solid var(--border);">
+      <div style="font-family:var(--mono);font-size:11px;color:var(--muted2);letter-spacing:1px;margin-bottom:10px;">PERFORMANCE ANALYTICS</div>
+      <div class="journal-stats" style="margin-bottom:14px;">
+        <div class="jstat"><div class="jstat-l">AVG WIN</div><div class="jstat-v" id="jAvgWin" style="color:var(--green)">—</div></div>
+        <div class="jstat"><div class="jstat-l">AVG LOSS</div><div class="jstat-v" id="jAvgLoss" style="color:var(--red)">—</div></div>
+        <div class="jstat"><div class="jstat-l">PROFIT FACTOR</div><div class="jstat-v" id="jProfitFactor">—</div></div>
+        <div class="jstat"><div class="jstat-l">BEST PAIR</div><div class="jstat-v" id="jBestPair" style="font-size:13px;">—</div></div>
+      </div>
+      <div style="font-family:var(--sans);font-size:10px;color:var(--muted2);margin-bottom:6px;">EQUITY CURVE — CUMULATIVE P&amp;L</div>
+      <div class="ry-chart" id="jEquityChart"></div>
+      <div style="font-family:var(--sans);font-size:10px;color:var(--muted2);margin:14px 0 6px;">MISTAKE BREAKDOWN</div>
+      <div class="pivot-levels" id="jMistakeBreakdown"></div>
     </div>
     <div class="portfolio-wrap">
       <!-- Stats -->
@@ -1915,15 +1942,28 @@ body.light-mode .page-nav-btn.active{color:var(--blue);}
       <button type="button" class="w-btn w-down" onclick="moveWidget('pivots',1)" aria-label="Move down">↓</button>
       <button type="button" class="w-btn w-remove" onclick="removeWidget('pivots')" aria-label="Remove">✕</button>
     </div>
-    <h2 class="sec-lbl">GOLD PIVOT POINTS</h2>
+    <h2 class="sec-lbl" id="pvtSecLbl">GOLD PIVOT POINTS</h2>
     <div class="card">
       <div class="ch">
-        <div class="ct">DAILY PIVOT POINTS — XAU/USD</div>
+        <div class="ct" id="pvtTitle">DAILY PIVOT POINTS — XAU/USD</div>
         <div style="display:flex;gap:5px;">
           <button class="pivot-type-btn active" id="pvtClassic" onclick="setPivotType('classic',this)">Classic</button>
           <button class="pivot-type-btn" id="pvtFib" onclick="setPivotType('fib',this)">Fibonacci</button>
           <button class="pivot-type-btn" id="pvtCam" onclick="setPivotType('cam',this)">Camarilla</button>
         </div>
+      </div>
+      <div style="padding:12px 14px 0;">
+        <select class="port-input" id="pvtPairSelect" style="width:100%;" onchange="setPivotPair(this.value)">
+          <option value="XAU/USD">XAU/USD (Gold)</option>
+          <option value="XAG/USD">XAG/USD (Silver)</option>
+          <option value="DXY">DXY (US Dollar Index)</option>
+          <option value="EUR/USD">EUR/USD</option>
+          <option value="GBP/USD">GBP/USD</option>
+          <option value="USD/JPY">USD/JPY</option>
+          <option value="AUD/USD">AUD/USD</option>
+          <option value="USD/CAD">USD/CAD</option>
+          <option value="WTI Oil">WTI Crude Oil</option>
+        </select>
       </div>
       <div class="pivot-wrap">
         <div class="pivot-grid">
@@ -2639,7 +2679,7 @@ async function loadMarket(sym,pId,cId,nId,dId,tsId,opts={}){
   // Ticker sync
   const tkMap={'dxyP':[['tkDxy','tkDxyC'],['tkDxy2','tkDxyC2']],'tnxP':[['tkTnx','tkTnxC'],['tkTnx2','tkTnxC2']],'gbpP':[['tkGbp','tkGbpC'],['tkGbp2','tkGbpC2']],'jpyP':[['tkJpy','tkJpyC'],['tkJpy2','tkJpyC2']],'silP':[['tkSil','tkSilC'],['tkSil2','tkSilC2']],'oilP':[['tkOil','tkOilC'],['tkOil2','tkOilC2']],'spP':[['tkSp','tkSpC'],['tkSp2','tkSpC2']],'audP':[['tkAud','tkAudC'],['tkAud2','tkAudC2']],'cadP':[['tkCad','tkCadC'],['tkCad2','tkCadC2']],'chfP':[['tkChf','tkChfC'],['tkChf2','tkChfC2']],'nzdP':[['tkNzd','tkNzdC'],['tkNzd2','tkNzdC2']],'gbpjpyP':[['tkGbpJpy','tkGbpJpyC'],['tkGbpJpy2','tkGbpJpyC2']],'eurjpyP':[['tkEurJpy','tkEurJpyC'],['tkEurJpy2','tkEurJpyC2']],'hgP':[['tkHg','tkHgC'],['tkHg2','tkHgC2']],'moveP':[['tkMove','tkMoveC'],['tkMove2','tkMoveC2']],'hsiP':[['tkHsi','tkHsiC'],['tkHsi2','tkHsiC2']],'cnhP':[['tkCnh','tkCnhC'],['tkCnh2','tkCnhC2']],'gvzP':[['tkGvz','tkGvzC'],['tkGvz2','tkGvzC2']],'plP':[['tkPl','tkPlC'],['tkPl2','tkPlC2']],'paP':[['tkPa','tkPaC'],['tkPa2','tkPaC2']],'fvxP':[['tkFvx','tkFvxC'],['tkFvx2','tkFvxC2']],'tyxP':[['tkTyx','tkTyxC'],['tkTyx2','tkTyxC2']],'axjoP':[['tkAxjo','tkAxjoC'],['tkAxjo2','tkAxjoC2']],'stoxxP':[['tkStoxx','tkStoxxC'],['tkStoxx2','tkStoxxC2']],'rutP':[['tkRut','tkRutC'],['tkRut2','tkRutC2']],'ngP':[['tkNg','tkNgC'],['tkNg2','tkNgC2']]};
   if(tkMap[pId]){
-    const pr=opts.dollar?'$'+fmt(d.price):(opts.pct?fmt(d.price,3)+'%':fmt(d.price,opts.dec||4));
+    const pr=opts.dollar?'$'+fmt(d.price):(opts.pct?fmt(d.price,3)+'%':fmt(d.price,opts.dec??4));
     updateTicker(tkMap[pId], pr, d.changePct, d.change>=0);
   }
   // Sidebar sync
@@ -2765,7 +2805,20 @@ function loadCOT(){
 // ═══════════════════════════════════════════════════
 // NEWS FEED
 // ═══════════════════════════════════════════════════
+const NEWS_CACHE_KEY='fxdesk_news_cache_v1';
+const NEWS_CACHE_TTL=10*60*1000; // 10 minutes — rss2json has tight rate limits
+
 async function loadNews(){
+  // Serve from cache if fresh — avoids hitting rss2json's rate limit every 60s
+  try{
+    const cached=JSON.parse(localStorage.getItem(NEWS_CACHE_KEY)||'null');
+    if(cached && (Date.now()-cached.ts)<NEWS_CACHE_TTL){
+      renderNewsList(cached.items.map(i=>({...i,date:new Date(i.date)})), false);
+      renderSentiment(cached.items.slice(0,20).map(i=>i.title));
+      return;
+    }
+  }catch(e){}
+
   const feeds=[
     {url:'https://www.kitco.com/rss/kitco-news.rss',  src:'Kitco',    color:'#C9A84C'},
     {url:'https://www.fxstreet.com/markets/commodities/metals/gold/rss', src:'FXStreet', color:'#3B82F6'},
@@ -2788,6 +2841,26 @@ async function loadNews(){
   let all=results.flatMap(r=>r.status==='fulfilled'?r.value:[]);
   all.sort((a,b)=>b.date-a.date);
 
+  if(!all.length){
+    // All feeds failed (likely rss2json rate limit) — fall back to last known-good set
+    let stale=null;
+    try{ stale=JSON.parse(localStorage.getItem(NEWS_CACHE_KEY)||'null'); }catch(e){}
+    if(stale && stale.items?.length){
+      renderNewsList(stale.items.map(i=>({...i,date:new Date(i.date)})), true);
+      renderSentiment(stale.items.slice(0,20).map(i=>i.title));
+      return;
+    }
+    renderNewsList([], false);
+    if(window._sentimentBiasScore==null) renderSentiment([]);
+    return;
+  }
+
+  try{ localStorage.setItem(NEWS_CACHE_KEY, JSON.stringify({ts:Date.now(), items:all.slice(0,20)})); }catch(e){}
+  renderNewsList(all, false);
+  renderSentiment(all.slice(0,20).map(i=>i.title));
+}
+
+function renderNewsList(all, stale){
   const nb=$('newsBody');
   if(!nb)return;
   if(!all.length){
@@ -2802,7 +2875,8 @@ async function loadNews(){
     return;
   }
 
-  nb.innerHTML=all.slice(0,12).map(i=>`
+  const staleNote = stale ? `<div style="padding:8px 14px 0;font-family:var(--sans);font-size:9px;color:var(--muted2);text-align:center;">Feeds temporarily unavailable — showing last cached headlines</div>` : '';
+  nb.innerHTML=staleNote+all.slice(0,12).map(i=>`
     <a class="news-item" href="${i.link}" target="_blank" rel="noopener noreferrer" style="text-decoration:none;display:flex;gap:9px;cursor:pointer;">
       <div class="ndot" style="background:${i.color};margin-top:4px;flex-shrink:0;"></div>
       <div style="flex:1;min-width:0;">
@@ -2814,8 +2888,6 @@ async function loadNews(){
         </div>
       </div>
     </a>`).join('');
-  // Run sentiment analysis on headlines
-  renderSentiment(all.slice(0,20).map(i=>i.title));
 }
 
 // ═══════════════════════════════════════════════════
@@ -3473,6 +3545,16 @@ function toggleJournalForm(){
   wrap.style.display=wrap.style.display==='none'?'block':'none';
 }
 
+function toggleMistakeChip(btn){ btn.classList.toggle('active'); }
+
+function toggleJournalAnalytics(){
+  const wrap=$('journalAnalyticsWrap');
+  if(!wrap) return;
+  const showing=wrap.style.display!=='none';
+  wrap.style.display=showing?'none':'block';
+  if(!showing) renderJournalAnalytics();
+}
+
 function saveJournalEntry(){
   const pair=($('jPair').value||'').toUpperCase().trim();
   const dir=$('jDir').value;
@@ -3482,13 +3564,15 @@ function saveJournalEntry(){
   const exit=parseFloat($('jExit').value)||null;
   const rr=$('jRR').value.trim()||null;
   const note=$('jNote').value.trim();
+  const mistakes=Array.from(document.querySelectorAll('#jMistakes .mistake-chip.active')).map(b=>b.dataset.tag);
   if(!pair){alert('Please enter a currency pair.');return;}
   journalEntries.unshift({
-    id:Date.now(),pair,dir,outcome,pnl,entry,exit,rr,note,
+    id:Date.now(),pair,dir,outcome,pnl,entry,exit,rr,note,mistakes,
     date:new Date().toISOString()
   });
   // Clear form
   $('jPair').value='';$('jPnl').value='';$('jEntry').value='';$('jExit').value='';$('jRR').value='';$('jNote').value='';
+  document.querySelectorAll('#jMistakes .mistake-chip').forEach(b=>b.classList.remove('active'));
   toggleJournalForm();
   saveJournalData();
   renderJournal();
@@ -3541,6 +3625,7 @@ function renderJournal(){
     const pnlStr=e.pnl!=null?(e.pnl>=0?`<span style="color:var(--green)">+$${fmt(Math.abs(e.pnl))}</span>`:`<span style="color:var(--red)">-$${fmt(Math.abs(e.pnl))}</span>`):'';
     const rrStr=e.rr?`<span style="font-family:var(--mono);font-size:11px;color:var(--muted2);">R:R ${e.rr}</span>`:'';
     const entryExit=e.entry&&e.exit?`<span style="font-family:var(--mono);font-size:10px;color:var(--muted2);">Entry: ${fmt(e.entry,4)} → Exit: ${fmt(e.exit,4)}</span>`:'';
+    const mistakeStr=(e.mistakes&&e.mistakes.length)?`<div style="margin-top:5px;">${e.mistakes.map(m=>`<span class="mistake-chip active" style="cursor:default;margin-right:4px;display:inline-block;margin-bottom:4px;">${m}</span>`).join('')}</div>`:'';
     return `<div class="journal-entry">
       <button type="button" aria-label="Delete entry" class="je-del" onclick="deleteJournalEntry(${e.id})">✕</button>
       <div class="je-meta">
@@ -3552,9 +3637,80 @@ function renderJournal(){
       </div>
       ${entryExit?`<div style="margin-bottom:5px;">${entryExit}</div>`:''}
       ${e.note?`<div class="je-note">${e.note}</div>`:''}
+      ${mistakeStr}
       ${pnlStr?`<div class="je-pnl">${pnlStr}</div>`:''}
     </div>`;
   }).join('');
+
+  if($('journalAnalyticsWrap') && $('journalAnalyticsWrap').style.display!=='none') renderJournalAnalytics();
+}
+
+function renderJournalAnalytics(){
+  const wins=journalEntries.filter(e=>e.outcome==='WIN' && e.pnl!=null);
+  const losses=journalEntries.filter(e=>e.outcome==='LOSS' && e.pnl!=null);
+  const avgWin=wins.length?wins.reduce((s,e)=>s+e.pnl,0)/wins.length:0;
+  const avgLoss=losses.length?losses.reduce((s,e)=>s+e.pnl,0)/losses.length:0;
+  const grossProfit=wins.reduce((s,e)=>s+e.pnl,0);
+  const grossLoss=Math.abs(losses.reduce((s,e)=>s+e.pnl,0));
+
+  if($('jAvgWin')) $('jAvgWin').textContent=wins.length?'+$'+fmt(avgWin):'—';
+  if($('jAvgLoss')) $('jAvgLoss').textContent=losses.length?'-$'+fmt(Math.abs(avgLoss)):'—';
+  if($('jProfitFactor')){
+    const pf=$('jProfitFactor');
+    if(grossLoss>0){ pf.textContent=fmt(grossProfit/grossLoss,2); pf.style.color=(grossProfit/grossLoss)>=1.5?'var(--green)':(grossProfit/grossLoss)<1?'var(--red)':'var(--orange)'; }
+    else if(grossProfit>0){ pf.textContent='∞'; pf.style.color='var(--green)'; }
+    else { pf.textContent='—'; pf.style.color='var(--text)'; }
+  }
+
+  // Best/worst pair by total P&L
+  const byPair={};
+  journalEntries.forEach(e=>{ if(e.pnl!=null) byPair[e.pair]=(byPair[e.pair]||0)+e.pnl; });
+  const pairEntries=Object.entries(byPair).sort((a,b)=>b[1]-a[1]);
+  if($('jBestPair')){
+    if(pairEntries.length){
+      const [bp,bv]=pairEntries[0];
+      $('jBestPair').textContent=`${bp} (${bv>=0?'+':''}$${fmt(Math.abs(bv))})`;
+      $('jBestPair').style.color=bv>=0?'var(--green)':'var(--red)';
+    } else { $('jBestPair').textContent='—'; $('jBestPair').style.color='var(--text)'; }
+  }
+
+  // Equity curve — cumulative P&L in chronological order
+  const chart=$('jEquityChart');
+  if(chart){
+    const withPnl=[...journalEntries].filter(e=>e.pnl!=null).sort((a,b)=>new Date(a.date)-new Date(b.date));
+    if(!withPnl.length){
+      chart.innerHTML='<div style="font-family:var(--sans);font-size:10px;color:var(--muted2);text-align:center;width:100%;">No closed trades with P&amp;L yet</div>';
+    }else{
+      let cum=0;
+      const points=withPnl.map(e=>{ cum+=e.pnl; return cum; });
+      const min=Math.min(0,...points), max=Math.max(0,...points);
+      const range=(max-min)||1;
+      chart.innerHTML=points.map(v=>{
+        const h=Math.max(4,Math.round(((v-min)/range)*56)+4);
+        const c=v>=0?'var(--green)':'var(--red)';
+        return `<div class="ry-bar" style="height:${h}px;background:${c};" title="$${fmt(v)}"></div>`;
+      }).join('');
+    }
+  }
+
+  // Mistake breakdown
+  const mb=$('jMistakeBreakdown');
+  if(mb){
+    const counts={};
+    journalEntries.forEach(e=>{
+      (e.mistakes||[]).forEach(m=>{
+        if(!counts[m]) counts[m]={count:0,cost:0};
+        counts[m].count++;
+        if(e.pnl!=null && e.pnl<0) counts[m].cost+=e.pnl;
+      });
+    });
+    const rows=Object.entries(counts).sort((a,b)=>b[1].count-a[1].count);
+    if(!rows.length){
+      mb.innerHTML='<div class="port-empty" style="padding:10px;">No mistakes tagged yet — tag trades when logging to spot patterns.</div>';
+    }else{
+      mb.innerHTML=rows.map(([tag,d])=>`<div class="pivot-row"><span class="pivot-row-lbl">${tag} (${d.count}x)</span><span class="pivot-row-val ${d.cost<0?'pivot-r':''}">${d.cost<0?'-$'+fmt(Math.abs(d.cost)):'—'}</span></div>`).join('');
+    }
+  }
 }
 
 // ═══════════════════════════════════════════════════
@@ -4002,6 +4158,7 @@ async function loadConfluence(){
   }));
   if(rows.every(r=>Object.values(r.trends).every(v=>v==null))){
     grid.innerHTML='<div style="grid-column:1/-1;padding:10px;color:var(--muted2);font-family:var(--sans);font-size:11px;">Scan unavailable — try refreshing.</div>';
+    if(window._confluenceBiasScore==null){ window._confluenceBiasScore=0; computeTodaysBias(); }
     return;
   }
   try{ localStorage.setItem(CONF_CACHE_KEY, JSON.stringify({ts:Date.now(),rows})); }catch(e){}
@@ -4027,8 +4184,8 @@ function renderConfluence(rows){
       else if(bears===total){ scoreTxt=`${bears}/${total} ↓`; scoreCls='mtf-bear'; }
       else { scoreTxt=`${bulls}↑ ${bears}↓`; scoreCls='mtf-neu'; }
     }
-    if(pair==='XAU/USD' && total>0){
-      window._confluenceBiasScore = (bulls-bears)/total; // bullish XAU trend = bullish gold directly
+    if(pair==='XAU/USD'){
+      window._confluenceBiasScore = total>0 ? (bulls-bears)/total : 0; // bullish XAU trend = bullish gold directly
     }
     html+=`<div class="mtf-cell"><span class="mtf-bias ${scoreCls}" style="display:inline-block;cursor:default;">${scoreTxt}</span></div>`;
   });
@@ -4156,6 +4313,7 @@ function renderCurrencyStrength(){
   if([eu,gb,jp,au,ca,ch,nz].some(v=>v==null)){
     el.innerHTML='<div style="text-align:center;color:var(--muted2);font-family:var(--sans);font-size:11px;padding:10px 0;">Waiting for FX data…</div>';
     if(note) note.textContent='';
+    if(window._usdBiasScore==null){ window._usdBiasScore=0; computeTodaysBias(); }
     return;
   }
   // Base currency of a pair gains +%chg, quote currency gains -%chg.
@@ -4745,6 +4903,44 @@ function loadTheme(){
 // ═══════════════════════════════════════════════════
 let pivotType = 'classic';
 
+const PIVOT_SYMS = {
+  'XAU/USD': {sym:'GC=F',     dec:2, prefix:'$'},
+  'XAG/USD': {sym:'SI=F',     dec:3, prefix:'$'},
+  'DXY':     {sym:'DX-Y.NYB', dec:3, prefix:''},
+  'EUR/USD': {sym:'EURUSD=X', dec:4, prefix:''},
+  'GBP/USD': {sym:'GBPUSD=X', dec:4, prefix:''},
+  'USD/JPY': {sym:'USDJPY=X', dec:3, prefix:''},
+  'AUD/USD': {sym:'AUDUSD=X', dec:4, prefix:''},
+  'USD/CAD': {sym:'USDCAD=X', dec:4, prefix:''},
+  'WTI Oil': {sym:'CL=F',     dec:2, prefix:'$'},
+};
+const PIVOT_PAIR_KEY='fxdesk_pivot_pair_v1';
+const PIVOT_OHLC_CACHE='fxdesk_pivot_ohlc_v1';
+const PIVOT_OHLC_TTL=60*60*1000; // 1 hour — previous-day OHLC barely changes
+
+let pivotPair = (typeof localStorage!=='undefined' && localStorage.getItem(PIVOT_PAIR_KEY)) || 'XAU/USD';
+let pivotOHLC = {}; // in-memory cache: {label: {H,L,C}}
+
+// Previous-day H/L/C for any symbol — robust fallback when live intraday data is missing
+async function loadPivotOHLC(label){
+  const cfg=PIVOT_SYMS[label];
+  if(!cfg) return null;
+  try{
+    const cached=JSON.parse(localStorage.getItem(PIVOT_OHLC_CACHE)||'{}');
+    if(cached[label] && (Date.now()-cached[label].ts)<PIVOT_OHLC_TTL) return cached[label].ohlc;
+  }catch(e){}
+  const data=await fetchHistOHLC(cfg.sym,'5d','1d',2);
+  if(!data) return null;
+  const n=data.closes.length;
+  const ohlc={H:data.highs[n-2], L:data.lows[n-2], C:data.closes[n-2]};
+  try{
+    const cached=JSON.parse(localStorage.getItem(PIVOT_OHLC_CACHE)||'{}');
+    cached[label]={ts:Date.now(),ohlc};
+    localStorage.setItem(PIVOT_OHLC_CACHE, JSON.stringify(cached));
+  }catch(e){}
+  return ohlc;
+}
+
 function setPivotType(type, btn){
   pivotType = type;
   document.querySelectorAll('.pivot-type-btn').forEach(b=>b.classList.remove('active'));
@@ -4752,10 +4948,33 @@ function setPivotType(type, btn){
   calcPivots();
 }
 
-function calcPivots(){
+async function setPivotPair(label){
+  if(!PIVOT_SYMS[label]) return;
+  pivotPair=label;
+  try{ localStorage.setItem(PIVOT_PAIR_KEY,label); }catch(e){}
+  if($('pvtTitle')) $('pvtTitle').textContent=`DAILY PIVOT POINTS — ${label}`;
+  if($('pvtSecLbl')) $('pvtSecLbl').textContent= label==='XAU/USD' ? 'GOLD PIVOT POINTS' : `${label} PIVOT POINTS`;
+  await calcPivots();
+}
+
+async function calcPivots(){
+  const cfg = PIVOT_SYMS[pivotPair];
+  if(!cfg) return;
+  let H,L,C;
   const g = window._gPrice;
-  if(!g || !g.high || !g.low || !g.prev) return;
-  const H = g.high, L = g.low, C = g.prev;
+  if(pivotPair==='XAU/USD' && g && g.high && g.low && g.prev){
+    // Live intraday H/L + prior close — same as before
+    H=g.high; L=g.low; C=g.prev;
+  } else {
+    let ohlc = pivotOHLC[pivotPair];
+    if(!ohlc){ ohlc = await loadPivotOHLC(pivotPair); if(ohlc) pivotOHLC[pivotPair]=ohlc; }
+    if(!ohlc || ohlc.H==null || ohlc.L==null || ohlc.C==null){
+      if($('pvtSource')) $('pvtSource').textContent='Loading previous-day data…';
+      return;
+    }
+    H=ohlc.H; L=ohlc.L; C=ohlc.C;
+  }
+
   let PP, R1, R2, R3, S1, S2, S3;
   if(pivotType==='classic'){
     PP=(H+L+C)/3; R1=2*PP-L; R2=PP+(H-L); R3=H+2*(PP-L); S1=2*PP-H; S2=PP-(H-L); S3=L-2*(H-PP);
@@ -4766,14 +4985,16 @@ function calcPivots(){
     const rng=H-L;
     R1=C+rng*1.1/12; R2=C+rng*1.1/6; R3=C+rng*1.1/4; S1=C-rng*1.1/12; S2=C-rng*1.1/6; S3=C-rng*1.1/4; PP=(H+L+C)/3;
   }
-  if($('pvPP')) $('pvPP').textContent='$'+fmt(PP);
-  if($('pvR1')) $('pvR1').textContent='$'+fmt(R1);
-  if($('pvR2')) $('pvR2').textContent='$'+fmt(R2);
-  if($('pvR3')) $('pvR3').textContent='$'+fmt(R3);
-  if($('pvS1')) $('pvS1').textContent='$'+fmt(S1);
-  if($('pvS2')) $('pvS2').textContent='$'+fmt(S2);
-  if($('pvS3')) $('pvS3').textContent='$'+fmt(S3);
-  if($('pvtSource')) $('pvtSource').textContent=`Based on prev OHLC — H:$${fmt(H)} L:$${fmt(L)} C:$${fmt(C)}`;
+  const dec=cfg.dec, pre=cfg.prefix;
+  const fv=v=>pre+fmt(v,dec);
+  if($('pvPP')) $('pvPP').textContent=fv(PP);
+  if($('pvR1')) $('pvR1').textContent=fv(R1);
+  if($('pvR2')) $('pvR2').textContent=fv(R2);
+  if($('pvR3')) $('pvR3').textContent=fv(R3);
+  if($('pvS1')) $('pvS1').textContent=fv(S1);
+  if($('pvS2')) $('pvS2').textContent=fv(S2);
+  if($('pvS3')) $('pvS3').textContent=fv(S3);
+  if($('pvtSource')) $('pvtSource').textContent=`Based on previous day OHLC — H:${fv(H)} L:${fv(L)} C:${fv(C)}`;
 }
 
 // ═══════════════════════════════════════════════════
@@ -4988,6 +5209,10 @@ window.addEventListener('load', ()=>{
   loadHiLo();
   loadSurprises();
   renderSurpriseIndex();
+  if($('pvtPairSelect')) $('pvtPairSelect').value = pivotPair;
+  if($('pvtTitle')) $('pvtTitle').textContent=`DAILY PIVOT POINTS — ${pivotPair}`;
+  if($('pvtSecLbl')) $('pvtSecLbl').textContent= pivotPair==='XAU/USD' ? 'GOLD PIVOT POINTS' : `${pivotPair} PIVOT POINTS`;
+  calcPivots();
   runCalc();
 });
 
@@ -5017,7 +5242,10 @@ addPostRefreshHook(()=>{
 // ═══════════════════════════════════════════════════
 function updateDXYStrength(){
   const d = window._dxyP;
-  if(!d) return;
+  if(!d){
+    if(window._dxyBiasScore==null){ window._dxyBiasScore=0; computeTodaysBias(); }
+    return;
+  }
 
   const price = d.price;
   const chgPct = d.changePct || 0;
@@ -5714,7 +5942,10 @@ function updateMacroRegime(){
   const tnxChg = window._tnxP?.changePct;
   const vixChg = window._vixData?.changePct;
 
-  if(!vix || !dxy || !sp || !tnx) return;
+  if(!vix || !dxy || !sp || !tnx){
+    if(window._macroBiasScore==null){ window._macroBiasScore=0; computeTodaysBias(); }
+    return;
+  }
 
   // ── Risk Environment ──────────────────────────────
   const riskOff = vix > 20 || vixChg > 5;
