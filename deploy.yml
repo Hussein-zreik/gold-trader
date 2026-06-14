@@ -1,0 +1,63 @@
+name: Build & Deploy Forex Desk
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install terser clean-css-cli html-minifier-terser --save-dev
+
+      - name: Minify CSS
+        run: |
+          npx cleancss -O2 -o shared.min.css shared.css
+          echo "shared.css: $(wc -c < shared.css) → $(wc -c < shared.min.css) bytes"
+
+      - name: Minify JS
+        run: |
+          npx terser shared.js -c -m -o shared.min.js
+          echo "shared.js: $(wc -c < shared.js) → $(wc -c < shared.min.js) bytes"
+
+      - name: Minify HTML files (update references to .min files)
+        run: |
+          for file in index.html landing.html dashboard.html journal.html portfolio.html news.html calendar.html 404.html; do
+            if [ -f "$file" ]; then
+              # Update references to minified assets
+              sed -i 's/href="shared.css"/href="shared.min.css"/g' "$file"
+              sed -i 's/src="shared.js"/src="shared.min.js"/g' "$file"
+              echo "Updated asset refs in $file"
+            fi
+          done
+
+      - name: Report file sizes
+        run: |
+          echo "=== Build Summary ==="
+          for file in *.html *.css *.js; do
+            if [ -f "$file" ]; then
+              raw=$(wc -c < "$file")
+              gz=$(gzip -c "$file" | wc -c)
+              echo "$file: ${raw}B raw / ${gz}B gzip"
+            fi
+          done
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
+          exclude_assets: '.github,node_modules,*.map,shared.css,shared.js'
+          commit_message: 'Deploy: ${{ github.event.head_commit.message }}'
