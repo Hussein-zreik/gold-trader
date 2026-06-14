@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 — Page Not Found · Forex Desk</title>
+<meta name="theme-color" content="#04080F">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800;900&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800;900&display=swap"></noscript>
+<link rel="stylesheet" href="shared.css">
+<style>
+.not-found {
+  min-height: calc(100vh - 64px - 80px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.not-found::before {
+  content: '404';
+  position: absolute;
+  font-family: var(--display);
+  font-size: clamp(160px, 30vw, 300px);
+  font-weight: 900;
+  color: rgba(59,130,246,.04);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  pointer-events: none;
+  letter-spacing: -10px;
+  white-space: nowrap;
+}
+
+.nf-code {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  color: var(--blue);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.nf-title {
+  font-family: var(--display);
+  font-size: clamp(28px, 5vw, 52px);
+  font-weight: 900;
+  letter-spacing: -1.5px;
+  color: var(--text);
+  margin-bottom: 16px;
+  line-height: 1.05;
+}
+
+.nf-desc {
+  font-family: var(--sans);
+  font-size: 15px;
+  color: var(--muted2);
+  max-width: 400px;
+  line-height: 1.7;
+  margin-bottom: 40px;
+}
+
+.nf-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.nf-links {
+  margin-top: 48px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.nf-link {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  color: var(--muted2);
+  text-decoration: none;
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  transition: color .2s, border-color .2s;
+}
+.nf-link:hover { color: var(--text); border-color: var(--muted); }
+</style>
+</head>
+<body>
+<main id="main-content">
+  <div class="not-found">
+    <div class="nf-code">Error 404</div>
+    <h1 class="nf-title">Page not found.</h1>
+    <p class="nf-desc">This page doesn't exist or may have moved. Head back to the dashboard — the market won't wait.</p>
+    <div class="nf-actions">
+      <a href="dashboard.html" class="nav-cta">Open Dashboard →</a>
+      <a href="index.html" class="btn-secondary" style="display:inline-block;">Back to Home</a>
+    </div>
+    <div class="nf-links">
+      <a href="journal.html"   class="nf-link">Journal</a>
+      <a href="portfolio.html" class="nf-link">Portfolio</a>
+      <a href="news.html"      class="nf-link">News</a>
+      <a href="calendar.html"  class="nf-link">Calendar</a>
+    </div>
+  </div>
+</main>
+<script src="shared.js"></script>
+</body>
+</html>

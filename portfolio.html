@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio — Forex Desk</title>
+<meta name="description" content="Track your open positions and portfolio P&L with Forex Desk's live portfolio tracker.">
+<meta name="theme-color" content="#04080F">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800;900&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800;900&display=swap"></noscript>
+<link rel="stylesheet" href="shared.css">
+<style>
+.sec-lbl{font-family:var(--heading);font-size:11px;font-weight:700;letter-spacing:.5px;color:var(--badge-blue);text-transform:uppercase;padding:0 2px 8px;display:block}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:11px;overflow:visible}
+.ch{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--border);background:var(--bg3);gap:10px;flex-wrap:wrap}
+.ct{font-size:12px;font-weight:700;letter-spacing:.3px;color:var(--blue);font-family:var(--heading)}
+.badge{font-family:var(--sans);font-size:10px;font-weight:600;padding:3px 8px;border-radius:4px;letter-spacing:.3px;white-space:nowrap}
+.b-blue{background:rgba(59,130,246,.1);color:var(--badge-blue);border:1px solid rgba(59,130,246,.2)}
+.portfolio-wrap{padding:14px}
+.port-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.port-stat{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:9px}
+.port-stat-l{font-family:var(--sans);font-size:10px;font-weight:500;color:var(--muted2);letter-spacing:.3px}
+.port-stat-v{font-family:var(--heading);font-size:17px;font-weight:700;margin-top:4px}
+.port-table{width:100%;border-collapse:collapse}
+.port-table th{font-family:var(--sans);font-size:10px;font-weight:600;color:var(--muted2);letter-spacing:.3px;padding:8px 10px;border-bottom:1px solid var(--border);text-align:left}
+.port-table td{font-family:var(--sans);font-size:11px;padding:9px 10px;border-bottom:1px solid rgba(255,255,255,.03)}
+.port-table tr:hover td{background:rgba(255,255,255,.012)}
+.port-add-row{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.port-input{background:var(--bg3);border:1px solid rgba(59,130,246,.35);color:var(--text);padding:7px 10px;border-radius:7px;font-family:var(--sans);font-size:11px;flex:1;min-width:80px}
+.port-input:focus{border-color:var(--blue);outline:0}
+.port-btn{background:var(--blue);color:#fff;border:none;padding:6px 14px;border-radius:7px;font-family:var(--mono);font-size:10px;cursor:pointer;white-space:nowrap}
+.port-btn.danger{background:0 0;color:var(--badge-red);border:1px solid rgba(239,68,68,.3)}
+.port-empty{text-align:center;padding:20px;font-family:var(--mono);font-size:10px;color:var(--muted2)}
+.up{color:var(--green)}.dn{color:var(--badge-red)}
+@media(max-width:600px){.port-summary{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<main id="main-content">
+  <div class="page-wrap">
+    <div class="page-title">💼 Portfolio</div>
+    <div class="page-sub">Track your open positions and live P&amp;L. All data saved locally in your browser.</div>
+    <h2 class="sec-lbl">PORTFOLIO TRACKER — LOCAL STORAGE</h2>
+  <div class="card">
+    <div class="ch">
+      <div class="ct">MY PORTFOLIO</div>
+      <span class="badge b-blue">SAVED LOCALLY</span>
+    </div>
+    <div class="portfolio-wrap">
+      <!-- Summary stats -->
+      <div class="port-summary">
+        <div class="port-stat"><div class="port-stat-l">TOTAL VALUE</div><div class="port-stat-v" id="portTotal" style="color:var(--blue)">$0.00</div></div>
+        <div class="port-stat"><div class="port-stat-l">TOTAL P&amp;L</div><div class="port-stat-v" id="portPnl">$0.00</div></div>
+        <div class="port-stat"><div class="port-stat-l">P&amp;L %</div><div class="port-stat-v" id="portPnlPct">0.00%</div></div>
+        <div class="port-stat"><div class="port-stat-l">POSITIONS</div><div class="port-stat-v" id="portCount" style="color:var(--text)">0</div></div>
+      </div>
+      <!-- Table -->
+      <div style="overflow-x:auto;">
+        <table class="port-table">
+          <thead>
+            <tr>
+              <th>SYMBOL</th><th>DIRECTION</th><th>ENTRY</th><th>LOTS</th><th>CURRENT</th><th>P&amp;L</th><th>P&amp;L%</th><th></th>
+            </tr>
+          </thead>
+          <tbody id="portBody">
+            <tr><td colspan="8" class="port-empty">No positions yet. Add one below.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- Add position form -->
+      <div class="port-add-row" style="margin-top:12px;">
+        <input class="port-input" id="portSym" aria-label="Symbol" placeholder="Symbol (e.g. XAUUSD)" style="max-width:130px;">
+        <select class="port-input" id="portDir" aria-label="Direction" style="max-width:90px;cursor:pointer;">
+          <option value="BUY">BUY</option>
+          <option value="SELL">SELL</option>
+        </select>
+        <input class="port-input" id="portEntry" aria-label="Entry price" type="number" placeholder="Entry price" style="max-width:120px;">
+        <input class="port-input" id="portLots" aria-label="Lot size" type="number" placeholder="Lots" step="0.01" style="max-width:80px;" value="0.1">
+        <input class="port-input" id="portCurrent" aria-label="Current price" type="number" placeholder="Current price" style="max-width:120px;">
+        <button type="button" class="port-btn" onclick="addPortPosition()">+ ADD</button>
+      </div>
+      <div style="margin-top:6px;font-family:var(--mono);font-size:10px;color:var(--muted2);">P&amp;L = (Current − Entry) × Lots × 100 &nbsp;|&nbsp; Data saved in browser storage</div>
+    </div>
+  </div>
+    </div>
+  </div>
+</main>
+<script src="shared.js"></script>
+<script>
+function _fetchTimeout(e){return new Promise((t,n)=>setTimeout(()=>n(new Error("timeout")),e))}
+const fmt=(e,t=2)=>null==e||isNaN(e)?"—":Number(e).toLocaleString("en-US",{minimumFractionDigits:t,maximumFractionDigits:t}
+function timeAgo(e){const t=Math.round((Date.now()-e)/6e4);if(t<1)return"just now";if(t<60)return t+"m ago";const n=Math.round(t/60);return n<24?n+"h ago":Math.round(n/24)+"d ago"}
+function localTs(e){return e?e.toLocaleString("en-US",{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit",timeZoneName:"short"}):"—"}
+const PORT_KEY="fxdesk_portfolio_v1";let portPositions=[];function loadPortfolio(){try{portPositions=JSON.parse(localStorage.getItem(PORT_KEY))||[]}catch(e){portPositions=[]}renderPortfolio()}function savePortfolio(){try{localStorage.setItem(PORT_KEY,JSON.stringify(portPositions))}catch(e){}}function addPortPosition(){const e=($("portSym").value||"").toUpperCase().trim(),t=$("portDir").value,n=parseFloat($("portEntry").value),a=parseFloat($("portLots").value)||.1,o=parseFloat($("portCurrent").value);!e||isNaN(n)||isNaN(o)?alert("Please fill in Symbol, Entry Price, and Current Price."):(portPositions.push({id:Date.now(),sym:e,dir:t,entry:n,lots:a,current:o}),$("portSym").value="",$("portEntry").value="",$("portCurrent").value="",savePortfolio(),renderPortfolio())}function removePortPosition(e){portPositions=portPositions.filter(t=>t.id!==e),savePortfolio(),renderPortfolio()}function refreshPortfolioPrices(){renderPortfolio()}function renderPortfolio(){const e=$("portBody");if(!e)return;if(!portPositions.length)return e.innerHTML='<tr><td colspan="8" class="port-empty">No positions yet. Add one below.</td></tr>',$("portTotal")&&($("portTotal").textContent="$0.00"),$("portPnl")&&($("portPnl").textContent="$0.00",$("portPnl").style.color="var(--text)"),$("portPnlPct")&&($("portPnlPct").textContent="0.00%"),void($("portCount")&&($("portCount").textContent="0"));let t=0,n=0,a=0;e.innerHTML=portPositions.map(e=>{const o="BUY"===e.dir?1:-1,r=(e.current-e.entry)*e.lots*100*o,s=e.entry?(e.current-e.entry)/e.entry*100*o:0,i=e.entry*e.lots*100;t+=e.current*e.lots*100,n+=r,a+=i;const l=r>=0;return`<tr>\n      <td style="font-family:var(--mono);font-weight:700;color:var(--blue);">${e.sym}</td>\n      <td><span style="font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:4px;background:${"BUY"===e.dir?"rgba(34,197,94,.15)":"rgba(239,68,68,.15)"};color:${"BUY"===e.dir?"var(--green)":"var(--red)"};">${e.dir}</span></td>\n      <td style="font-family:var(--mono);">${fmt(e.entry,4)}</td>\n      <td style="font-family:var(--mono);">${e.lots}</td>\n      <td style="font-family:var(--mono);">${fmt(e.current,4)}</td>\n      <td style="font-family:var(--mono);color:${l?"var(--green)":"var(--red)"};">${l?"+":""}$${fmt(r)}</td>\n      <td style="font-family:var(--mono);color:${l?"var(--green)":"var(--red)"};">${l?"+":""}${fmt(s)}%</td>\n      <td><button class="port-btn danger" onclick="removePortPosition(${e.id})" style="padding:3px 9px;font-size:9px;">✕</button></td>\n    </tr>`}).join("");const o=n>=0,r=a?n/a*100:0;$("portTotal")&&($("portTotal").textContent="$"+fmt(t),$("portTotal").style.color="var(--blue)"),$("portPnl")&&($("portPnl").textContent=(o?"+":"")+"$"+fmt(Math.abs(n)),$("portPnl").style.color=o?"var(--green)":"var(--red)"),$("portPnlPct")&&($("portPnlPct").textContent=(o?"+":"")+fmt(r)+"%",$("portPnlPct").style.color=o?"var(--green)":"var(--red)"),$("portCount")&&($("portCount").textContent=portPositions.length)}
+window.addEventListener('load', function(){
+  loadPortfolio();
+});
+</script>
+</body>
+</html>

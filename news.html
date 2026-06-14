@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Economy News — Forex Desk</title>
+<meta name="description" content="Live aggregated global economy and financial news from 40,000+ sources.">
+<meta name="theme-color" content="#04080F">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800;900&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800;900&display=swap"></noscript>
+<link rel="stylesheet" href="shared.css">
+<style>
+.enews-controls{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.enews-input{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:9px 12px;border-radius:7px;font-family:var(--sans);font-size:13px;flex:1;min-width:140px;transition:border-color .2s}
+.enews-input:focus{border-color:var(--blue);outline:0}
+.enews-status{font-family:var(--sans);font-size:12px;color:var(--muted2);padding:10px 14px;background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--blue);border-radius:8px;margin-bottom:14px}
+.enews-status.error{color:var(--badge-red);border-left-color:var(--red)}
+.enews-status.success{color:var(--green);border-left-color:var(--green)}
+.enews-grid{display:grid;gap:14px}
+@media(min-width:700px){.enews-grid{grid-template-columns:repeat(2,1fr)}}
+.enews-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:18px;cursor:pointer;transition:border-color .2s,box-shadow .2s;display:flex;flex-direction:column;gap:8px}
+.enews-card:hover{border-color:rgba(59,130,246,.4);box-shadow:0 4px 20px rgba(0,0,0,.3);transform:translateY(-2px)}
+.enews-card-hdr{display:flex;justify-content:space-between;align-items:start;gap:10px}
+.enews-source{font-family:var(--mono);font-size:9px;font-weight:700;padding:3px 8px;border-radius:4px;background:rgba(59,130,246,.1);color:var(--badge-blue);text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.enews-img{width:100%;height:180px;object-fit:cover;border-radius:8px}
+.enews-title{font-family:var(--heading);font-size:14px;font-weight:700;color:var(--text);line-height:1.4}
+.enews-summary{font-family:var(--sans);font-size:12px;color:var(--muted2);line-height:1.6;flex:1}
+.enews-footer{display:flex;justify-content:space-between;align-items:center;font-family:var(--sans);font-size:10px;color:var(--muted);padding-top:8px;border-top:1px solid var(--border)}
+.enews-footer .rd{color:var(--blue)}
+.enews-empty{text-align:center;padding:60px 20px;font-family:var(--sans);font-size:13px;color:var(--muted2);background:var(--bg2);border:1px solid var(--border);border-radius:12px}
+.enews-empty .ico{font-size:40px;margin-bottom:12px}
+.port-btn{background:var(--btn-blue-bg);color:#fff;border:none;padding:9px 20px;border-radius:7px;font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;cursor:pointer;transition:background .2s;white-space:nowrap}
+.port-btn:hover{background:#1d4ed8}
+</style>
+</head>
+<body>
+<main id="main-content">
+  <div class="page-wrap">
+    <div class="page-title">📰 Economy News</div>
+    <div class="page-sub">Aggregated financial &amp; economic news from 40,000+ sources. Powered by your Render backend.</div>
+    <div class="enews-controls">
+      <input type="text" id="enewsSearch" class="enews-input" aria-label="Search news articles" placeholder="Search articles...">
+      <select id="enewsCategory" class="enews-input" aria-label="News category" style="flex:0;min-width:160px;">
+        <option value="economy">Economy</option>
+        <option value="finance">Finance</option>
+        <option value="business">Business</option>
+        <option value="markets">Markets</option>
+        <option value="inflation">Inflation</option>
+        <option value="interest rates">Interest Rates</option>
+        <option value="cryptocurrency">Cryptocurrency</option>
+        <option value="stocks">Stocks</option>
+      </select>
+      <button type="button" class="port-btn" onclick="fetchEconomyNews()">🔄 Refresh</button>
+    </div>
+    <div class="enews-status" id="enewsStatus">Loading news…</div>
+    <div class="enews-grid" id="enewsFeed"></div>
+  </div>
+</main>
+<script src="shared.js"></script>
+<script>
+function _fetchTimeout(e){return new Promise((t,n)=>setTimeout(()=>n(new Error("timeout")),e))}
+const fmt=(e,t=2)=>null==e||isNaN(e)?"—":Number(e).toLocaleString("en-US",{minimumFractionDigits:t,maximumFractionDigits:t}
+function timeAgo(e){const t=Math.round((Date.now()-e)/6e4);if(t<1)return"just now";if(t<60)return t+"m ago";const n=Math.round(t/60);return n<24?n+"h ago":Math.round(n/24)+"d ago"}
+function localTs(e){return e?e.toLocaleString("en-US",{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit",timeZoneName:"short"}):"—"}
+const ENEWS_BACKEND_URL='https://economy-news-hub.onrender.com';
+const ENEWS_CACHE_KEY='fxdesk_enews_cache_v1';
+const ENEWS_CACHE_TTL=10*60*1000;
+let enewsArticles=[];
+let enewsLoaded=false;
+
+function populateNewsPage(){
+  if(!enewsLoaded){ enewsLoaded=true; fetchEconomyNews(); }
+}
+
+async function fetchEconomyNews(){
+  const status=$('enewsStatus'), feed=$('enewsFeed'), cat=$('enewsCategory');
+  if(!status||!feed) return;
+  const category=cat?cat.value:'economy';
+
+  status.textContent='⏳ Loading news…';
+  status.className='enews-status';
+
+  try{
+    const cached=JSON.parse(localStorage.getItem(ENEWS_CACHE_KEY)||'null');
+    if(cached && cached.category===category && (Date.now()-cached.ts)<ENEWS_CACHE_TTL && cached.articles?.length){
+      enewsArticles=cached.articles;
+      status.textContent=`✓ Loaded ${enewsArticles.length} articles (cached) · ${localTs(new Date(cached.ts))}`;
+      status.className='enews-status success';
+      renderEconomyNews();
+      return;
+    }
+  }catch(e){}
+
+  try{
+    const url=`${ENEWS_BACKEND_URL}/api/news?q=${encodeURIComponent(category)}&pageSize=50`;
+    const r=await Promise.race([fetch(url,{cache:'no-store'}),_fetchTimeout(45000)]);
+    const data=await r.json();
+    if(data.status==='ok' && Array.isArray(data.articles)){
+      enewsArticles=data.articles;
+      status.textContent=`✓ Loaded ${enewsArticles.length} articles · ${localTs(new Date())}`;
+      status.className='enews-status success';
+      try{ localStorage.setItem(ENEWS_CACHE_KEY, JSON.stringify({ts:Date.now(),category,articles:enewsArticles})); }catch(e){}
+      renderEconomyNews();
+    } else {
+      throw new Error(data.message||'Unexpected response');
+    }
+  }catch(e){
+    status.textContent='❌ Could not reach the news server. It may be waking up from sleep (free hosting) — try Refresh again in ~30s.';
+    status.className='enews-status error';
+    feed.innerHTML=`<div class="enews-empty"><div class="ico">⚠️</div><div>Failed to load news</div><div style="margin-top:6px;font-size:10px;">Backend: ${ENEWS_BACKEND_URL}</div></div>`;
+  }
+}
+
+function renderEconomyNews(){
+  const feed=$('enewsFeed'), search=$('enewsSearch');
+  if(!feed) return;
+  const term=(search?.value||'').toLowerCase();
+  const filtered=enewsArticles.filter(n=>n.title?.toLowerCase().includes(term) || n.description?.toLowerCase().includes(term));
+  if(!filtered.length){
+    feed.innerHTML='<div class="enews-empty"><div class="ico">🔍</div><div>No articles found</div><div style="margin-top:6px;font-size:10px;">Try a different search term or category</div></div>';
+    return;
+  }
+  feed.innerHTML=filtered.map(n=>{
+    const dt=new Date(n.publishedAt);
+    const img=n.urlToImage?`<img src="${n.urlToImage}" alt="" class="enews-img" onerror="this.style.display='none'">`:'';
+    const src=(n.source?.name||'Unknown').substring(0,30);
+    return `<div class="enews-card" onclick="window.open('${n.url}','_blank','noopener')">
+      ${img}
+      <div class="enews-card-hdr"><span class="enews-source">${src}</span></div>
+      <div class="enews-title">${n.title||''}</div>
+      <div class="enews-summary">${n.description||'No description available'}</div>
+      <div class="enews-footer"><span>📅 ${isNaN(dt)?'—':timeAgo(dt)}</span><span class="rd">Read full story →</span></div>
+    </div>`;
+  }).join('');
+}
+
+if($('enewsSearch')) $('enewsSearch').addEventListener('input', renderEconomyNews);
+if($('enewsCategory')) $('enewsCategory').addEventListener('change', fetchEconomyNews);
+addPostRefreshHook(()=>{updateSMC(),updateMacroRegime(),loadOptionssentiment()}),window.addEventListener("load",()=>{setTimeout(()=>{loadOptionssentiment(),loadRealYield()},2e3)}),updateMarketStatus(),setInterval(updateMarketStatus,6e4),addPostRefreshHook(()=>{}),window.addEventListener("load",()=>{const _hash=window.location.hash.replace('#','');const _savedPage=_hash&&['dashboard','journal','portfolio','news','calendar'].includes(_hash)?_hash:null;try{const e=_savedPage||localStorage.getItem("fxdesk_page");if(e&&"dashboard"!==e)switchPage(e,null)}catch(e){}}),window.addEventListener("unhandledrejection",e=>{const t=e?.reason?.message||"";(t.includes("Failed to fetch")||t.includes("NetworkError")||t.includes("Load failed"))&&e.preventDefault()});
+document.getElementById('enewsSearch').addEventListener('input', renderEconomyNews);
+document.getElementById('enewsCategory').addEventListener('change', fetchEconomyNews);
+window.addEventListener('load', function(){
+  fetchEconomyNews();
+});
+</script>
+</body>
+</html>

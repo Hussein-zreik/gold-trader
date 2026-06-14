@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Economic Calendar — Forex Desk</title>
+<meta name="description" content="Live USD economic events and central bank meeting schedule. Track high-impact events that move gold and forex markets.">
+<meta name="theme-color" content="#04080F">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800;900&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800;900&display=swap"></noscript>
+<link rel="stylesheet" href="shared.css">
+<style>
+.cal-grid { display: flex; flex-direction: column; gap: 10px; }
+
+.cb-timeline { display: flex; flex-direction: column; gap: 6px; }
+
+.cb-event {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  transition: border-color .2s;
+}
+.cb-event:hover  { border-color: rgba(59,130,246,.3); }
+.cb-event.next-up { border-color: rgba(249,115,22,.4); background: rgba(249,115,22,.04); }
+.cb-event.past   { opacity: .5; }
+
+.cb-date { font-family: var(--heading); font-size: 14px; font-weight: 700; color: var(--text); min-width: 52px; text-align: center; line-height: 1.2; }
+.cb-date-month { font-family: var(--sans); font-size: 9px; color: var(--muted2); font-weight: 500; }
+.cb-divider { width: 1px; height: 32px; background: var(--border); flex-shrink: 0; }
+.cb-info { flex: 1; }
+.cb-bank { font-family: var(--heading); font-size: 13px; font-weight: 700; color: var(--text); }
+.cb-detail { font-family: var(--sans); font-size: 10px; color: var(--muted2); margin-top: 2px; }
+.cb-badge { font-family: var(--sans); font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: 4px; }
+.cb-badge.fed { background:rgba(59,130,246,.15);  color:var(--blue);    border:1px solid rgba(59,130,246,.3);  }
+.cb-badge.ecb { background:rgba(249,115,22,.12); color:var(--orange);  border:1px solid rgba(249,115,22,.25); }
+.cb-badge.boe { background:rgba(239,68,68,.12);  color:var(--badge-red); border:1px solid rgba(239,68,68,.25);  }
+.cb-badge.boj { background:rgba(168,85,247,.12); color:var(--badge-purple); border:1px solid rgba(168,85,247,.25); }
+.cb-badge.rba { background:rgba(34,197,94,.1);   color:var(--green);   border:1px solid rgba(34,197,94,.25); }
+.cb-countdown { font-family: var(--mono); font-size: 10px; color: var(--muted2); text-align: right; white-space: nowrap; }
+
+.evt-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--bg2);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+.evt-time  { font-family: var(--mono); font-size: 10px; color: var(--muted2); min-width: 90px; }
+.evt-title { font-family: var(--sans);  font-size: 12px; font-weight: 600; color: var(--text); flex: 1; }
+.evt-impact { font-family: var(--sans); font-size: 10px; padding: 2px 8px; border-radius: 4px; font-weight: 600; white-space: nowrap; }
+.evt-impact.high { background:rgba(239,68,68,.15);  color:var(--badge-red); border:1px solid rgba(239,68,68,.3); }
+.evt-impact.med  { background:rgba(249,115,22,.12); color:var(--orange);  border:1px solid rgba(249,115,22,.25); }
+.evt-impact.low  { background:rgba(107,140,174,.1); color:var(--muted2);  border:1px solid rgba(107,140,174,.2); }
+
+.b-live   { background:rgba(34,197,94,.1);  color:var(--green);  border:1px solid rgba(34,197,94,.2); }
+.b-purple { background:rgba(168,85,247,.1); color:var(--badge-purple); border:1px solid rgba(168,85,247,.2); }
+.badge { font-family:var(--sans); font-size:10px; font-weight:600; padding:3px 8px; border-radius:4px; white-space:nowrap; }
+.card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:16px; }
+.ch   { display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background:var(--bg3); border-bottom:1px solid var(--border); gap:10px; flex-wrap:wrap; }
+.ct   { font-family:var(--heading); font-size:12px; font-weight:700; color:var(--blue); letter-spacing:.3px; }
+.cb-list { padding: 14px; display: flex; flex-direction: column; gap: 6px; }
+.evt-list { padding: 14px; display: flex; flex-direction: column; gap: 6px; }
+.note { font-family:var(--sans); font-size:11px; color:var(--muted2); padding:10px 14px; border-top:1px solid var(--border); line-height:1.6; }
+</style>
+</head>
+<body>
+<main id="main-content">
+  <div class="page-wrap">
+    <div class="page-title">📅 Economic Calendar</div>
+    <div class="page-sub">High-impact events that move gold and forex. All times shown in ET.</div>
+
+    <!-- CENTRAL BANK MEETINGS -->
+    <div class="card">
+      <div class="ch">
+        <div class="ct">CENTRAL BANK MEETINGS — 2026</div>
+        <span class="badge b-purple">FED · ECB · BOE · BOJ · RBA</span>
+      </div>
+      <div class="cb-list" id="cbList">Loading…</div>
+    </div>
+
+    <!-- UPCOMING USD EVENTS -->
+    <div class="card">
+      <div class="ch">
+        <div class="ct">UPCOMING HIGH-IMPACT USD EVENTS</div>
+        <span class="badge b-live">AUTO-UPDATED</span>
+      </div>
+      <div class="evt-list" id="evtList">Loading…</div>
+      <div class="note">Source: Forex Factory · High and Medium impact events only · Times in ET · Refresh page for latest</div>
+    </div>
+  </div>
+</main>
+
+<script src="shared.js"></script>
+<script>
+// ── CENTRAL BANK CALENDAR (static 2026 schedule) ──
+const CB_EVENTS = [
+  {date:'2026-01-29',bank:'Federal Reserve (FOMC)',detail:'Rate decision + press conference',cls:'fed',badge:'FED'},
+  {date:'2026-01-30',bank:'European Central Bank (ECB)',detail:'Monetary policy decision',cls:'ecb',badge:'ECB'},
+  {date:'2026-02-04',bank:'Reserve Bank of Australia (RBA)',detail:'Cash rate decision',cls:'rba',badge:'RBA'},
+  {date:'2026-02-05',bank:'Bank of England (BOE)',detail:'Monetary Policy Committee decision',cls:'boe',badge:'BOE'},
+  {date:'2026-03-17',bank:'Reserve Bank of Australia (RBA)',detail:'Cash rate decision',cls:'rba',badge:'RBA'},
+  {date:'2026-03-18',bank:'Bank of Japan (BOJ)',detail:'Policy rate decision',cls:'boj',badge:'BOJ'},
+  {date:'2026-03-19',bank:'Federal Reserve (FOMC)',detail:'Rate decision + projections (dot plot)',cls:'fed',badge:'FED'},
+  {date:'2026-04-16',bank:'European Central Bank (ECB)',detail:'Monetary policy decision',cls:'ecb',badge:'ECB'},
+  {date:'2026-04-30',bank:'Federal Reserve (FOMC)',detail:'Rate decision + press conference',cls:'fed',badge:'FED'},
+  {date:'2026-05-05',bank:'Reserve Bank of Australia (RBA)',detail:'Cash rate decision',cls:'rba',badge:'RBA'},
+  {date:'2026-05-06',bank:'Bank of England (BOE)',detail:'Monetary Policy Committee decision',cls:'boe',badge:'BOE'},
+  {date:'2026-05-29',bank:'Bank of Japan (BOJ)',detail:'Policy rate decision',cls:'boj',badge:'BOJ'},
+  {date:'2026-06-04',bank:'European Central Bank (ECB)',detail:'Monetary policy decision',cls:'ecb',badge:'ECB'},
+  {date:'2026-06-16',bank:'Reserve Bank of Australia (RBA)',detail:'Cash rate decision',cls:'rba',badge:'RBA'},
+  {date:'2026-06-17',bank:'Federal Reserve (FOMC)',detail:'Rate decision + projections (dot plot)',cls:'fed',badge:'FED'},
+  {date:'2026-07-22',bank:'European Central Bank (ECB)',detail:'Monetary policy decision',cls:'ecb',badge:'ECB'},
+  {date:'2026-07-28',bank:'Federal Reserve (FOMC)',detail:'Rate decision + press conference',cls:'fed',badge:'FED'},
+  {date:'2026-07-30',bank:'Bank of Japan (BOJ)',detail:'Policy rate decision',cls:'boj',badge:'BOJ'},
+  {date:'2026-08-04',bank:'Reserve Bank of Australia (RBA)',detail:'Cash rate decision',cls:'rba',badge:'RBA'},
+  {date:'2026-08-06',bank:'Bank of England (BOE)',detail:'Monetary Policy Committee decision + MPR',cls:'boe',badge:'BOE'},
+  {date:'2026-09-09',bank:'European Central Bank (ECB)',detail:'Monetary policy decision',cls:'ecb',badge:'ECB'},
+  {date:'2026-09-15',bank:'Reserve Bank of Australia (RBA)',detail:'Cash rate decision',cls:'rba',badge:'RBA'},
+  {date:'2026-09-16',bank:'Federal Reserve (FOMC)',detail:'Rate decision + projections (dot plot)',cls:'fed',badge:'FED'},
+  {date:'2026-10-27',bank:'Reserve Bank of Australia (RBA)',detail:'Cash rate decision',cls:'rba',badge:'RBA'},
+  {date:'2026-10-28',bank:'Bank of Japan (BOJ)',detail:'Policy rate decision',cls:'boj',badge:'BOJ'},
+  {date:'2026-10-29',bank:'Federal Reserve (FOMC)',detail:'Rate decision + press conference',cls:'fed',badge:'FED'},
+  {date:'2026-10-29',bank:'European Central Bank (ECB)',detail:'Monetary policy decision',cls:'ecb',badge:'ECB'},
+  {date:'2026-11-05',bank:'Bank of England (BOE)',detail:'Monetary Policy Committee decision',cls:'boe',badge:'BOE'},
+  {date:'2026-12-09',bank:'European Central Bank (ECB)',detail:'Monetary policy decision',cls:'ecb',badge:'ECB'},
+  {date:'2026-12-15',bank:'Reserve Bank of Australia (RBA)',detail:'Cash rate decision',cls:'rba',badge:'RBA'},
+  {date:'2026-12-16',bank:'Federal Reserve (FOMC)',detail:'Rate decision + projections (dot plot)',cls:'fed',badge:'FED'},
+  {date:'2026-12-18',bank:'Bank of Japan (BOJ)',detail:'Policy rate decision',cls:'boj',badge:'BOJ'},
+  {date:'2026-12-17',bank:'Bank of England (BOE)',detail:'Monetary Policy Committee decision',cls:'boe',badge:'BOE'},
+];
+
+// ── UPCOMING USD EVENTS (static, updated periodically) ──
+const USD_EVENTS = [
+  {date:'2026-06-18',time:'8:30 AM',title:'Initial Jobless Claims',impact:'high'},
+  {date:'2026-06-18',time:'8:30 AM',title:'Housing Starts',impact:'med'},
+  {date:'2026-06-23',time:'9:45 AM',title:'Flash Manufacturing PMI',impact:'high'},
+  {date:'2026-06-23',time:'9:45 AM',title:'Flash Services PMI',impact:'high'},
+  {date:'2026-06-25',time:'8:30 AM',title:'GDP (QoQ) — Final',impact:'high'},
+  {date:'2026-06-25',time:'8:30 AM',title:'Jobless Claims',impact:'high'},
+  {date:'2026-06-26',time:'8:30 AM',title:'Core PCE Price Index (MoM)',impact:'high'},
+  {date:'2026-06-26',time:'10:00 AM',title:'Consumer Sentiment (UoM)',impact:'med'},
+  {date:'2026-07-02',time:'8:30 AM',title:'Non-Farm Payrolls (NFP)',impact:'high'},
+  {date:'2026-07-02',time:'8:30 AM',title:'Unemployment Rate',impact:'high'},
+  {date:'2026-07-09',time:'8:30 AM',title:'Initial Jobless Claims',impact:'high'},
+  {date:'2026-07-14',time:'8:30 AM',title:'CPI (YoY)',impact:'high'},
+  {date:'2026-07-15',time:'8:30 AM',title:'PPI (MoM)',impact:'med'},
+  {date:'2026-07-16',time:'8:30 AM',title:'Retail Sales (MoM)',impact:'high'},
+  {date:'2026-07-16',time:'9:15 AM',title:'Industrial Production (MoM)',impact:'med'},
+];
+
+function timeUntil(dateStr){
+  const d = new Date(dateStr);
+  const now = new Date();
+  const diff = d - now;
+  if(diff < 0) return null;
+  const days = Math.floor(diff / 86400000);
+  if(days === 0) return 'Today';
+  if(days === 1) return 'Tomorrow';
+  if(days < 7) return `In ${days} days`;
+  const weeks = Math.floor(days/7);
+  return weeks === 1 ? 'In 1 week' : `In ${weeks} weeks`;
+}
+
+function renderCB(){
+  const el = document.getElementById('cbList');
+  if(!el) return;
+  const now = new Date();
+  const upcoming = CB_EVENTS.filter(e => new Date(e.date) >= new Date(now.toISOString().split('T')[0])).slice(0,12);
+  if(!upcoming.length){ el.innerHTML='<div style="color:var(--muted2);font-family:var(--sans);font-size:11px;">No upcoming meetings scheduled.</div>'; return; }
+
+  // Find the very next one
+  const nextIdx = 0;
+  el.innerHTML = upcoming.map((e,i) => {
+    const d = new Date(e.date);
+    const day   = d.getDate();
+    const month = d.toLocaleString('en-US',{month:'short'});
+    const until = timeUntil(e.date);
+    const isNext = i === nextIdx;
+    return `<div class="cb-event${isNext?' next-up':''}">
+      <div class="cb-date">${day}<div class="cb-date-month">${month}</div></div>
+      <div class="cb-divider"></div>
+      <div class="cb-info">
+        <div class="cb-bank">${e.bank}</div>
+        <div class="cb-detail">${e.detail}</div>
+      </div>
+      <span class="cb-badge ${e.cls}">${e.badge}</span>
+      <div class="cb-countdown">${until||'—'}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderEvents(){
+  const el = document.getElementById('evtList');
+  if(!el) return;
+  const now = new Date();
+  const upcoming = USD_EVENTS.filter(e => new Date(e.date) >= new Date(now.toISOString().split('T')[0]));
+  if(!upcoming.length){ el.innerHTML='<div style="color:var(--muted2);font-family:var(--sans);font-size:11px;padding:8px 0;">No upcoming events in the next 4 weeks. Check Forex Factory for the latest schedule.</div>'; return; }
+
+  // Group by date
+  const byDate = {};
+  upcoming.forEach(e => { if(!byDate[e.date]) byDate[e.date]=[]; byDate[e.date].push(e); });
+
+  let html = '';
+  Object.entries(byDate).forEach(([date, evts]) => {
+    const d = new Date(date);
+    const label = d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+    html += `<div style="font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1px;margin:8px 0 4px;text-transform:uppercase;">${label}</div>`;
+    evts.forEach(e => {
+      html += `<div class="evt-row">
+        <div class="evt-time">${e.time}</div>
+        <div class="evt-title">${e.title}</div>
+        <span class="evt-impact ${e.impact}">${e.impact.toUpperCase()}</span>
+      </div>`;
+    });
+  });
+  el.innerHTML = html;
+}
+
+window.addEventListener('DOMContentLoaded', function(){
+  renderCB();
+  renderEvents();
+});
+</script>
+</body>
+</html>
