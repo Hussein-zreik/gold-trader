@@ -35,7 +35,8 @@
 .port-btn.danger{background:0 0;color:var(--badge-red);border:1px solid rgba(239,68,68,.3)}
 .port-empty{text-align:center;padding:20px;font-family:var(--mono);font-size:10px;color:var(--muted2)}
 .up{color:var(--green)}.dn{color:var(--badge-red)}
-@media(max-width:600px){.port-summary{grid-template-columns:1fr 1fr}}
+@media(max-width:768px){.port-summary{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.port-summary{grid-template-columns:1fr 1fr}.port-add-row{flex-direction:column}.port-input{max-width:100%;width:100%}}
 </style>
 </head>
 <body>
@@ -47,7 +48,10 @@
   <div class="card">
     <div class="ch">
       <div class="ct">MY PORTFOLIO</div>
-      <span class="badge b-blue">SAVED LOCALLY</span>
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+        <span class="badge b-blue">SAVED LOCALLY</span>
+        <button type="button" class="badge" style="cursor:pointer;background:rgba(249,115,22,.1);color:var(--orange);border:1px solid rgba(249,115,22,.2);" aria-label="Export portfolio as JSON" onclick="exportPortfolio()">⬇ EXPORT</button>
+      </div>
     </div>
     <div class="portfolio-wrap">
       <!-- Summary stats -->
@@ -95,6 +99,15 @@ const fmt=(e,t=2)=>null==e||isNaN(e)?"—":Number(e).toLocaleString("en-US",{min
 function timeAgo(e){const t=Math.round((Date.now()-e)/6e4);if(t<1)return"just now";if(t<60)return t+"m ago";const n=Math.round(t/60);return n<24?n+"h ago":Math.round(n/24)+"d ago"}
 function localTs(e){return e?e.toLocaleString("en-US",{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit",timeZoneName:"short"}):"—"}
 const PORT_KEY="fxdesk_portfolio_v1";let portPositions=[];function loadPortfolio(){try{portPositions=JSON.parse(localStorage.getItem(PORT_KEY))||[]}catch(e){portPositions=[]}renderPortfolio()}function savePortfolio(){try{localStorage.setItem(PORT_KEY,JSON.stringify(portPositions))}catch(e){}}function addPortPosition(){const e=($("portSym").value||"").toUpperCase().trim(),t=$("portDir").value,n=parseFloat($("portEntry").value),a=parseFloat($("portLots").value)||.1,o=parseFloat($("portCurrent").value);!e||isNaN(n)||isNaN(o)?alert("Please fill in Symbol, Entry Price, and Current Price."):(portPositions.push({id:Date.now(),sym:e,dir:t,entry:n,lots:a,current:o}),$("portSym").value="",$("portEntry").value="",$("portCurrent").value="",savePortfolio(),renderPortfolio())}function removePortPosition(e){portPositions=portPositions.filter(t=>t.id!==e),savePortfolio(),renderPortfolio()}function refreshPortfolioPrices(){renderPortfolio()}function renderPortfolio(){const e=$("portBody");if(!e)return;if(!portPositions.length)return e.innerHTML='<tr><td colspan="8" class="port-empty">No positions yet. Add one below.</td></tr>',$("portTotal")&&($("portTotal").textContent="$0.00"),$("portPnl")&&($("portPnl").textContent="$0.00",$("portPnl").style.color="var(--text)"),$("portPnlPct")&&($("portPnlPct").textContent="0.00%"),void($("portCount")&&($("portCount").textContent="0"));let t=0,n=0,a=0;e.innerHTML=portPositions.map(e=>{const o="BUY"===e.dir?1:-1,r=(e.current-e.entry)*e.lots*100*o,s=e.entry?(e.current-e.entry)/e.entry*100*o:0,i=e.entry*e.lots*100;t+=e.current*e.lots*100,n+=r,a+=i;const l=r>=0;return`<tr>\n      <td style="font-family:var(--mono);font-weight:700;color:var(--blue);">${e.sym}</td>\n      <td><span style="font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:4px;background:${"BUY"===e.dir?"rgba(34,197,94,.15)":"rgba(239,68,68,.15)"};color:${"BUY"===e.dir?"var(--green)":"var(--red)"};">${e.dir}</span></td>\n      <td style="font-family:var(--mono);">${fmt(e.entry,4)}</td>\n      <td style="font-family:var(--mono);">${e.lots}</td>\n      <td style="font-family:var(--mono);">${fmt(e.current,4)}</td>\n      <td style="font-family:var(--mono);color:${l?"var(--green)":"var(--red)"};">${l?"+":""}$${fmt(r)}</td>\n      <td style="font-family:var(--mono);color:${l?"var(--green)":"var(--red)"};">${l?"+":""}${fmt(s)}%</td>\n      <td><button class="port-btn danger" onclick="removePortPosition(${e.id})" style="padding:3px 9px;font-size:9px;">✕</button></td>\n    </tr>`}).join("");const o=n>=0,r=a?n/a*100:0;$("portTotal")&&($("portTotal").textContent="$"+fmt(t),$("portTotal").style.color="var(--blue)"),$("portPnl")&&($("portPnl").textContent=(o?"+":"")+"$"+fmt(Math.abs(n)),$("portPnl").style.color=o?"var(--green)":"var(--red)"),$("portPnlPct")&&($("portPnlPct").textContent=(o?"+":"")+fmt(r)+"%",$("portPnlPct").style.color=o?"var(--green)":"var(--red)"),$("portCount")&&($("portCount").textContent=portPositions.length)}
+function exportPortfolio(){
+  if(!portPositions.length){alert('No positions to export.');return;}
+  const blob=new Blob([JSON.stringify(portPositions,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='forex-desk-portfolio.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
 window.addEventListener('load', function(){
   loadPortfolio();
 });
