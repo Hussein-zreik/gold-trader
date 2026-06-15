@@ -26,10 +26,10 @@
   --badge-purple: #C084FC;
   --badge-red:    #F87171;
   --btn-blue-bg:  #2563EB;
-  --sans:    'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
-  --mono:    'Inter', monospace;
-  --display: Syne, 'Plus Jakarta Sans', sans-serif;
-  --heading: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+  --sans:    'Inter', system-ui, sans-serif;
+  --mono:    'IBM Plex Mono', 'Inter', monospace;
+  --display: 'Manrope', 'Inter', system-ui, sans-serif;
+  --heading: 'Manrope', 'Inter', system-ui, sans-serif;
 }
 
 /* Light mode overrides */
