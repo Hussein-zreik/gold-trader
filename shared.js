@@ -64,6 +64,7 @@
              <input type="search" class="hdr-search-input" id="hdrSearchInput" placeholder="Search…" autocomplete="off" spellcheck="false" aria-label="Search pages and features" aria-expanded="false" aria-controls="hdrSearchResults" aria-haspopup="listbox">
              <div class="hdr-search-results" id="hdrSearchResults" role="listbox" hidden></div>
            </div>
+           <button type="button" class="hdr-icon-btn mobile-search-btn" id="mobileSearchBtn" onclick="FXShared.toggleMobileSearch()" aria-label="Search" aria-expanded="false">🔍</button>
            <span id="hdrTime" style="font-family:var(--mono);font-size:10px;color:var(--muted2);white-space:nowrap;">--:--:-- UTC</span>
            <button type="button" class="hdr-icon-btn" id="themeBtn" onclick="FXShared.toggleTheme()" aria-label="Toggle theme">🌙</button>
            <button class="mobile-menu-btn" onclick="FXShared.toggleMobile()" aria-label="Toggle menu" aria-expanded="false" id="mobileMenuBtn">☰</button>
@@ -90,13 +91,13 @@
   ${rightSide}
 </header>
 <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
-  ${!isLanding ? `<div class="mobile-search-wrap">
-    <input type="search" class="hdr-search-input mobile-search-input" id="mobileSearchInput" placeholder="Search pages and features…" autocomplete="off" spellcheck="false" aria-label="Search" aria-expanded="false" aria-controls="mobileSearchResults" aria-haspopup="listbox">
-    <div class="hdr-search-results" id="mobileSearchResults" role="listbox" hidden></div>
-  </div>` : ''}
   ${mobileNavLinks}
   <a href="dashboard.html" class="nav-cta">Open Dashboard →</a>
-</nav>`;
+</nav>
+${!isLanding ? `<div class="mobile-search-overlay" id="mobileSearchOverlay" hidden>
+  <input type="search" class="mobile-search-overlay-input" id="mobileSearchOverlayInput" placeholder="Search pages and features…" autocomplete="off" spellcheck="false" aria-label="Search pages and features">
+  <div class="mobile-search-overlay-results" id="mobileSearchOverlayResults"></div>
+</div>` : ''}`;
   }
 
   /* ── FOOTER HTML ── */
@@ -246,15 +247,78 @@
     }, true);
   }
 
+  function toggleMobileSearch(){
+    var overlay = document.getElementById('mobileSearchOverlay');
+    var btn     = document.getElementById('mobileSearchBtn');
+    if(!overlay) return;
+    var opening = overlay.hidden;
+    overlay.hidden = !opening;
+    if(btn) btn.setAttribute('aria-expanded', opening ? 'true' : 'false');
+    if(opening){
+      var inp = document.getElementById('mobileSearchOverlayInput');
+      if(inp){ inp.value = ''; inp.focus(); }
+      var res = document.getElementById('mobileSearchOverlayResults');
+      if(res) res.innerHTML = '';
+      // close hamburger nav if open
+      var nav = document.getElementById('mobileNav');
+      var hbtn = document.getElementById('mobileMenuBtn');
+      if(nav && nav.classList.contains('open')){
+        nav.classList.remove('open');
+        if(hbtn){ hbtn.setAttribute('aria-expanded','false'); hbtn.textContent='☰'; }
+      }
+    }
+  }
+
   function initSearch(){
     setupSearch(
       document.getElementById('hdrSearchInput'),
       document.getElementById('hdrSearchResults')
     );
-    setupSearch(
-      document.getElementById('mobileSearchInput'),
-      document.getElementById('mobileSearchResults')
-    );
+    // Mobile overlay search (inline results, not absolute dropdown)
+    var overlayInp = document.getElementById('mobileSearchOverlayInput');
+    var overlayRes = document.getElementById('mobileSearchOverlayResults');
+    if(overlayInp && overlayRes){
+      overlayInp.addEventListener('input', function(){
+        var matches = searchItems(overlayInp.value);
+        if(!overlayInp.value.trim()){ overlayRes.innerHTML = ''; return; }
+        overlayRes.innerHTML = '';
+        if(!matches.length){
+          overlayRes.innerHTML = '<div class="search-no-results">No results for that query</div>';
+        } else {
+          matches.forEach(function(item){
+            var a = document.createElement('a');
+            a.href = item.href;
+            a.className = 'search-result-item';
+            a.innerHTML =
+              '<span class="search-result-icon" aria-hidden="true">'+item.icon+'</span>'+
+              '<div class="search-result-text">'+
+                '<div class="search-result-title">'+item.title+'</div>'+
+                '<div class="search-result-desc">'+item.desc+'</div>'+
+              '</div>';
+            overlayRes.appendChild(a);
+          });
+        }
+      });
+      overlayInp.addEventListener('keydown', function(e){
+        if(e.key === 'Escape'){
+          var overlay = document.getElementById('mobileSearchOverlay');
+          var btn = document.getElementById('mobileSearchBtn');
+          if(overlay) overlay.hidden = true;
+          if(btn){ btn.setAttribute('aria-expanded','false'); }
+          overlayInp.blur();
+        }
+      });
+    }
+    // Close overlay on outside click
+    document.addEventListener('click', function(e){
+      var overlay = document.getElementById('mobileSearchOverlay');
+      var btn = document.getElementById('mobileSearchBtn');
+      if(overlay && !overlay.hidden && btn &&
+         !overlay.contains(e.target) && !btn.contains(e.target)){
+        overlay.hidden = true;
+        btn.setAttribute('aria-expanded','false');
+      }
+    }, true);
   }
 
   /* ── CLOSE MOBILE ON OUTSIDE CLICK ── */
@@ -272,6 +336,7 @@
   window.FXShared = {
     toggleTheme: function(){ applyTheme(document.body.classList.contains('light-mode')); },
     toggleMobile: toggleMobile,
+    toggleMobileSearch: toggleMobileSearch,
   };
 
   /* ── INIT ── */
