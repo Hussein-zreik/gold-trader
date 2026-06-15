@@ -14,740 +14,683 @@
 <link rel="stylesheet" href="shared.css">
 <style>
 
-/* ── DATE NAV STRIP ── */
-.cal-nav {
+/* ── FULL WIDTH LAYOUT ── */
+.cal-page { max-width: 1100px; margin: 0 auto; padding: 32px 24px 60px; }
+.cal-title { font-family: var(--display); font-size: 32px; font-weight: 900; color: var(--text); margin-bottom: 6px; }
+.cal-subtitle { font-family: var(--sans); font-size: 13px; color: var(--muted2); margin-bottom: 28px; line-height: 1.6; max-width: 600px; }
+
+/* ── MAIN CARD ── */
+.cal-card {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--bg2);
+}
+
+/* ── TOOLBAR ── */
+.cal-toolbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 0;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg2);
+  flex-wrap: wrap;
   gap: 12px;
-  margin-bottom: 16px;
-  flex-wrap: wrap;
 }
 
-.cal-period-btns {
+.cal-nav-links {
   display: flex;
-  gap: 6px;
+  align-items: center;
+  gap: 0;
+}
+
+.cal-nav-link {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted2);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 5px;
+  transition: color .15s, background .15s;
+  white-space: nowrap;
+}
+.cal-nav-link:hover { color: var(--text); background: rgba(255,255,255,.04); }
+.cal-nav-link.active { color: var(--blue); font-weight: 700; }
+
+.cal-sep { color: var(--border); margin: 0 2px; font-size: 14px; }
+
+.cal-toolbar-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   flex-wrap: wrap;
 }
 
-.cal-period-btn {
+.cal-tz {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted2);
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 10px;
+  white-space: nowrap;
+}
+
+.cal-view-btns { display: flex; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+.cal-view-btn {
   font-family: var(--mono);
   font-size: 10px;
   font-weight: 600;
-  letter-spacing: .5px;
-  text-transform: uppercase;
-  padding: 6px 14px;
-  border-radius: 6px;
-  border: 1px solid var(--border);
-  background: var(--bg2);
-  color: var(--muted2);
-  cursor: pointer;
-  transition: all .2s;
-}
-.cal-period-btn:hover  { color: var(--text); border-color: var(--muted); }
-.cal-period-btn.active { background: var(--btn-blue-bg); color: #fff; border-color: var(--btn-blue-bg); }
-
-.cal-filter-btns {
-  display: flex;
-  gap: 6px;
-}
-
-.cal-filter-btn {
-  font-family: var(--mono);
-  font-size: 10px;
-  font-weight: 700;
-  padding: 6px 12px;
-  border-radius: 6px;
-  border: 1px solid var(--border);
-  background: var(--bg2);
+  padding: 5px 14px;
+  background: none;
+  border: none;
   color: var(--muted2);
   cursor: pointer;
   transition: all .15s;
+  letter-spacing: .5px;
 }
-.cal-filter-btn:hover { opacity: .85; }
-.cal-filter-btn.low    { border-color: rgba(107,140,174,.4); }
-.cal-filter-btn.med    { border-color: rgba(249,115,22,.4); }
-.cal-filter-btn.high   { border-color: rgba(239,68,68,.4); }
-.cal-filter-btn.low.active  { background:rgba(107,140,174,.15); color:var(--muted2); }
-.cal-filter-btn.med.active  { background:rgba(249,115,22,.15); color:var(--orange); border-color:rgba(249,115,22,.5); }
-.cal-filter-btn.high.active { background:rgba(239,68,68,.15); color:var(--badge-red); border-color:rgba(239,68,68,.5); }
+.cal-view-btn + .cal-view-btn { border-left: 1px solid var(--border); }
+.cal-view-btn.active { background: var(--btn-blue-bg); color: #fff; }
+
+.cal-filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  padding: 5px 12px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--muted2);
+  cursor: pointer;
+  transition: all .15s;
+  letter-spacing: .5px;
+}
+.cal-filter-btn:hover { border-color: var(--muted); color: var(--text); }
 
 /* ── DATE STRIP ── */
-.date-strip-wrap {
-  position: relative;
-  margin-bottom: 16px;
+.date-strip-bar {
+  background: #101824;
+  border-bottom: 1px solid var(--border);
+  padding: 0 8px;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  min-height: 88px;
 }
+
+.strip-arrow {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.08);
+  border: none;
+  color: var(--text);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background .15s;
+}
+.strip-arrow:hover { background: rgba(255,255,255,.15); }
 
 .date-strip {
   display: flex;
-  gap: 6px;
-  overflow-x: auto;
-  scrollbar-width: none;
-  padding: 4px 2px;
-}
-.date-strip::-webkit-scrollbar { display: none; }
-
-.date-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-width: 60px;
-  padding: 10px 8px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  background: var(--bg2);
-  color: var(--muted2);
-  cursor: pointer;
-  transition: all .2s;
-  flex-shrink: 0;
-  font-family: var(--sans);
-}
-.date-btn:hover { border-color: rgba(59,130,246,.3); color: var(--text); }
-.date-btn.active { background: var(--btn-blue-bg); border-color: var(--btn-blue-bg); color: #fff; }
-.date-btn.today { border-color: rgba(59,130,246,.5); }
-.date-btn.today .date-day-label { color: var(--blue); }
-.date-btn.active .date-day-label { color: rgba(255,255,255,.7); }
-.date-btn.weekend { opacity: .45; }
-
-.date-day-num  { font-size: 18px; font-weight: 800; font-family: var(--display); line-height: 1; }
-.date-month    { font-size: 9px; font-weight: 500; margin-top: 1px; letter-spacing: .5px; text-transform: uppercase; }
-.date-day-label { font-size: 8px; letter-spacing: .8px; text-transform: uppercase; margin-top: 3px; font-family: var(--mono); }
-.date-dot-row  { display: flex; gap: 3px; margin-top: 5px; min-height: 6px; }
-.date-dot      { width: 5px; height: 5px; border-radius: 50%; }
-.date-dot.high { background: var(--red); }
-.date-dot.med  { background: var(--orange); }
-.date-dot.low  { background: var(--muted); }
-
-/* ── STATUS BAR ── */
-.cal-status {
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--muted2);
-  padding: 8px 12px;
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-left: 3px solid var(--blue);
-  border-radius: 8px;
-  margin-bottom: 14px;
-}
-.cal-status.error { border-left-color: var(--red); color: var(--badge-red); }
-
-/* ── DAY GROUP ── */
-.day-group { margin-bottom: 8px; }
-
-.day-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 10px 10px 0 0;
-}
-
-.day-header-date {
-  font-family: var(--display);
-  font-size: 22px;
-  font-weight: 900;
-  color: var(--text);
-  line-height: 1;
-  min-width: 36px;
-  text-align: center;
-}
-
-.day-header-month {
-  font-family: var(--sans);
-  font-size: 9px;
-  color: var(--muted2);
-  font-weight: 500;
-  text-align: center;
-}
-
-.day-header-vline {
-  width: 1px;
-  height: 28px;
-  background: var(--border);
-}
-
-.day-header-name {
-  font-family: var(--display);
-  font-size: 18px;
-  font-weight: 800;
-  color: var(--text);
-}
-
-.day-header-counts {
-  margin-left: auto;
-  display: flex;
-  gap: 6px;
-}
-
-/* ── EVENTS TABLE ── */
-.events-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-top: none;
-  border-radius: 0 0 10px 10px;
+  flex: 1;
   overflow: hidden;
 }
 
-.events-table th {
+.date-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 14px 6px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background .15s;
+  min-width: 0;
+  position: relative;
+}
+.date-col:hover { background: rgba(255,255,255,.05); }
+.date-col.active { background: rgba(59,130,246,.15); }
+.date-col.weekend { opacity: .4; }
+
+.date-col-month { font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+.date-col-num   { font-family: var(--display); font-size: 26px; font-weight: 900; color: var(--text); line-height: 1; }
+.date-col-day   { font-family: var(--mono); font-size: 8px; color: var(--muted2); letter-spacing: 1px; text-transform: uppercase; margin-top: 4px; }
+.date-col.active .date-col-num { color: #60a5fa; }
+.date-col.today-col .date-col-day { color: var(--blue); }
+
+.date-col-today-pill {
+  background: var(--blue);
+  color: #fff;
+  font-family: var(--mono);
+  font-size: 8px;
+  font-weight: 700;
+  padding: 1px 7px;
+  border-radius: 8px;
+  margin-top: 3px;
+  letter-spacing: .5px;
+}
+
+.date-dots { display: flex; gap: 2px; margin-top: 5px; min-height: 7px; justify-content: center; }
+.date-dot  { width: 5px; height: 5px; border-radius: 50%; }
+.date-dot.high { background: #ef4444; }
+.date-dot.med  { background: #f97316; }
+.date-dot.low  { background: #4b5e72; }
+
+/* ── DAY HEADER (like BabyPips) ── */
+.day-section { border-bottom: 1px solid var(--border); }
+.day-section:last-child { border-bottom: none; }
+
+.day-header-row {
+  display: grid;
+  grid-template-columns: 90px 1fr 100px 110px 110px 110px;
+  background: var(--bg3);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 20px;
+  align-items: center;
+  gap: 0;
+}
+
+.day-header-date-block {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+.day-header-month-lbl { font-family: var(--mono); font-size: 11px; color: var(--muted2); letter-spacing: 1px; text-transform: uppercase; }
+.day-header-day-num   { font-family: var(--display); font-size: 36px; font-weight: 900; color: var(--text); line-height: 1; margin-top: 1px; }
+
+.day-header-name { font-family: var(--display); font-size: 20px; font-weight: 900; color: var(--text); padding-left: 16px; border-left: 2px solid var(--border); margin-left: 4px; }
+
+.day-col-hdr {
   font-family: var(--mono);
   font-size: 9px;
   font-weight: 600;
   letter-spacing: 1px;
-  text-transform: uppercase;
   color: var(--muted);
-  padding: 8px 12px;
-  text-align: left;
-  border-bottom: 1px solid var(--border);
-  background: var(--bg3);
+  text-transform: uppercase;
+  text-align: right;
 }
 
-.events-table th.num { text-align: right; }
-
+/* ── EVENT ROW ── */
 .evt-row {
+  display: grid;
+  grid-template-columns: 90px 70px 1fr 100px 110px 110px 110px;
+  padding: 0 20px;
+  align-items: center;
+  min-height: 52px;
   border-bottom: 1px solid rgba(255,255,255,.04);
-  transition: background .15s;
+  transition: background .12s;
+  gap: 0;
 }
 .evt-row:last-child { border-bottom: none; }
-.evt-row:hover { background: rgba(59,130,246,.03); }
-.evt-row.high-impact { border-left: 3px solid var(--red); }
-.evt-row.med-impact  { border-left: 3px solid var(--orange); }
-.evt-row.low-impact  { border-left: 3px solid transparent; }
+.evt-row:hover { background: rgba(59,130,246,.04); }
+.evt-row.high-row { border-left: 3px solid #ef4444; padding-left: 17px; }
+.evt-row.med-row  { border-left: 3px solid #f97316; padding-left: 17px; }
+.evt-row.cb-row   { border-left: 3px solid #a855f7; padding-left: 17px; background: rgba(168,85,247,.03); }
 
-.evt-row td {
-  padding: 10px 12px;
-  font-family: var(--sans);
-  font-size: 12px;
-  color: var(--text);
-  vertical-align: middle;
+.evt-time { font-family: var(--mono); font-size: 11px; color: var(--muted2); }
+.evt-flag-cur { display: flex; align-items: center; gap: 5px; }
+.evt-flag { font-size: 15px; }
+.evt-cur  { font-family: var(--mono); font-size: 10px; font-weight: 700; color: var(--muted2); }
+.evt-name { font-family: var(--sans); font-size: 12px; font-weight: 600; color: var(--text); padding: 0 12px; }
+.evt-name.cb-name { color: var(--badge-purple); }
+
+.imp-dot {
+  width: 10px; height: 10px; border-radius: 50%; display: inline-block;
+  margin-right: 6px; flex-shrink: 0;
 }
+.imp-dot.high { background: #ef4444; box-shadow: 0 0 5px rgba(239,68,68,.5); }
+.imp-dot.med  { background: #f97316; box-shadow: 0 0 4px rgba(249,115,22,.4); }
+.imp-dot.low  { background: #4b5e72; }
+.imp-dot.cb   { background: #a855f7; box-shadow: 0 0 5px rgba(168,85,247,.4); }
 
-.evt-time {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--muted2);
-  white-space: nowrap;
-  min-width: 65px;
-}
-
-.evt-currency {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  min-width: 56px;
-}
-
-.evt-flag {
-  font-size: 14px;
-  line-height: 1;
-}
-
-.evt-cur-code {
-  font-family: var(--mono);
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--muted2);
-}
-
-.evt-title-cell { flex: 1; }
-
-.evt-title-text {
-  font-weight: 600;
-  color: var(--text);
-  font-size: 12px;
-}
-
-.impact-badge {
-  display: inline-block;
-  font-family: var(--sans);
-  font-size: 9px;
-  font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 4px;
-  text-transform: uppercase;
-  letter-spacing: .3px;
-  white-space: nowrap;
-}
-.impact-badge.high { background:rgba(239,68,68,.15);  color:var(--badge-red); border:1px solid rgba(239,68,68,.3); }
-.impact-badge.med  { background:rgba(249,115,22,.12); color:var(--orange);    border:1px solid rgba(249,115,22,.25); }
-.impact-badge.low  { background:rgba(107,140,174,.1); color:var(--muted2);    border:1px solid rgba(107,140,174,.2); }
+.evt-impact-cell { display: flex; align-items: center; }
 
 .evt-num {
   font-family: var(--mono);
   font-size: 11px;
   text-align: right;
-  white-space: nowrap;
-  min-width: 70px;
+  padding-right: 4px;
+  color: var(--muted2);
 }
-.evt-num.actual  { color: var(--text); font-weight: 600; }
-.evt-num.better  { color: var(--green); }
-.evt-num.worse   { color: var(--badge-red); }
-.evt-num.forecast { color: var(--muted2); }
-.evt-num.previous { color: var(--muted); }
-.evt-num.empty    { color: var(--muted); opacity: .4; }
+.evt-num.actual   { color: var(--text); font-weight: 600; }
+.evt-num.better   { color: #22c55e; font-weight: 600; }
+.evt-num.worse    { color: #f87171; font-weight: 600; }
+.evt-num.empty    { color: rgba(255,255,255,.15); }
 
-/* ── EMPTY / LOADING ── */
-.cal-loading {
-  text-align: center;
+/* ── STATUS / EMPTY ── */
+.cal-status-bar {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted2);
+  padding: 8px 20px;
+  background: var(--bg3);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.cal-status-bar.error { color: #f87171; }
+.cal-status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: 2s ease-in-out infinite pulse; flex-shrink: 0; }
+@keyframes pulse { 0%,100%{opacity:1}50%{opacity:.3} }
+
+.cal-empty {
   padding: 60px 20px;
+  text-align: center;
   font-family: var(--sans);
   font-size: 13px;
   color: var(--muted2);
 }
-.cal-loading .spin {
+.cal-loading-spin {
   display: inline-block;
-  font-size: 28px;
-  animation: 1.2s linear infinite spin;
-  margin-bottom: 12px;
+  font-size: 24px;
+  animation: 1s linear infinite spin;
+  margin-bottom: 10px;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* ── CB MEETINGS ── */
-.cb-event {
-  display: flex; align-items: center; gap: 12px;
-  padding: 11px 14px; border-radius: 9px;
-  border: 1px solid var(--border); background: var(--bg2);
-  transition: border-color .2s; margin-bottom: 6px;
-}
-.cb-event:hover { border-color: rgba(59,130,246,.3); }
-.cb-event.next-up { border-color: rgba(249,115,22,.4); background: rgba(249,115,22,.04); }
-.cb-date { font-family: var(--heading); font-size: 16px; font-weight: 800; color: var(--text); min-width: 42px; text-align: center; line-height: 1.1; }
-.cb-date-month { font-family: var(--sans); font-size: 9px; color: var(--muted2); font-weight: 500; }
-.cb-div  { width:1px; height:32px; background:var(--border); flex-shrink:0; }
-.cb-info { flex:1; }
-.cb-bank { font-family: var(--heading); font-size: 13px; font-weight: 700; color: var(--text); }
-.cb-detail { font-family: var(--sans); font-size: 10px; color: var(--muted2); margin-top: 2px; }
-.cb-badge { font-family:var(--sans); font-size:9px; font-weight:700; padding:2px 8px; border-radius:4px; white-space:nowrap; }
-.cb-badge.fed { background:rgba(59,130,246,.15); color:var(--blue); border:1px solid rgba(59,130,246,.3); }
-.cb-badge.ecb { background:rgba(249,115,22,.12); color:var(--orange); border:1px solid rgba(249,115,22,.25); }
-.cb-badge.boe { background:rgba(239,68,68,.12); color:var(--badge-red); border:1px solid rgba(239,68,68,.25); }
-.cb-badge.boj { background:rgba(168,85,247,.12); color:var(--badge-purple); border:1px solid rgba(168,85,247,.25); }
-.cb-badge.rba { background:rgba(34,197,94,.1); color:var(--green); border:1px solid rgba(34,197,94,.25); }
-.cb-countdown { font-family:var(--mono); font-size:10px; color:var(--muted2); text-align:right; white-space:nowrap; }
-
-.badge { font-family:var(--sans); font-size:10px; font-weight:600; padding:3px 8px; border-radius:4px; white-space:nowrap; }
-.b-live   { background:rgba(34,197,94,.1); color:var(--green); border:1px solid rgba(34,197,94,.2); }
-.b-purple { background:rgba(168,85,247,.1); color:var(--badge-purple); border:1px solid rgba(168,85,247,.2); }
-.card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:20px; }
-.ch   { display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background:var(--bg3); border-bottom:1px solid var(--border); gap:10px; flex-wrap:wrap; }
-.ct   { font-family:var(--heading); font-size:12px; font-weight:700; color:var(--blue); letter-spacing:.3px; }
-.cb-list { padding:14px; display:flex; flex-direction:column; gap:6px; }
-
-@media (max-width: 640px) {
-  .events-table th.hide-mobile,
-  .evt-row td.hide-mobile { display: none; }
-  .evt-row td { padding: 8px; font-size: 11px; }
-  .date-btn { min-width: 52px; padding: 8px 6px; }
-  .date-day-num { font-size: 16px; }
+/* ── MOBILE ── */
+@media (max-width: 700px) {
+  .cal-page { padding: 20px 12px 40px; }
+  .cal-title { font-size: 24px; }
+  .day-header-row { grid-template-columns: 70px 1fr; gap: 0; padding: 12px 14px; }
+  .day-col-hdr { display: none; }
+  .evt-row { grid-template-columns: 64px 52px 1fr 80px; padding: 0 14px; }
+  .evt-row.high-row, .evt-row.med-row, .evt-row.cb-row { padding-left: 11px; }
+  .evt-num.hide-m { display: none; }
+  .cal-toolbar { padding: 10px 14px; gap: 8px; }
+  .date-col-num { font-size: 20px; }
+  .day-header-day-num { font-size: 28px; }
+  .evt-name { padding: 0 8px; font-size: 11px; }
 }
 </style>
 </head>
 <body>
 <main id="main-content">
-<div class="page-wrap">
-  <div class="page-title">📅 Economic Calendar</div>
-  <div class="page-sub">Live economic events with impact ratings, forecasts and actuals. High-impact events move gold and forex instantly.</div>
+<div class="cal-page">
+  <div class="cal-title">📅 Economic Calendar</div>
+  <div class="cal-subtitle">Your trading companion for economic event risk. High-impact events move gold and forex markets instantly — don't get caught off-guard.</div>
 
-  <!-- ── LIVE CALENDAR ── -->
-  <div class="card" style="overflow:visible;">
-    <div class="ch">
-      <div class="ct">LIVE ECONOMIC CALENDAR</div>
-      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-        <div class="cal-filter-btns">
-          <button class="cal-filter-btn high active" data-impact="high" onclick="toggleFilter('high',this)">● HIGH</button>
-          <button class="cal-filter-btn med active"  data-impact="med"  onclick="toggleFilter('med',this)">● MED</button>
-          <button class="cal-filter-btn low"         data-impact="low"  onclick="toggleFilter('low',this)">● LOW</button>
+  <div class="cal-card">
+
+    <!-- ── TOOLBAR ── -->
+    <div class="cal-toolbar">
+      <div class="cal-nav-links">
+        <button class="cal-nav-link" onclick="quickNav('yesterday',this)">Yesterday</button>
+        <span class="cal-sep">|</span>
+        <button class="cal-nav-link active" onclick="quickNav('today',this)">Today</button>
+        <span class="cal-sep">|</span>
+        <button class="cal-nav-link" onclick="quickNav('tomorrow',this)">Tomorrow</button>
+        <span style="margin:0 10px;color:var(--border);">·</span>
+        <button class="cal-nav-link" onclick="loadPeriod('last',this)">Last Week</button>
+        <span class="cal-sep">|</span>
+        <button class="cal-nav-link" onclick="loadPeriod('this',this)">This Week</button>
+        <span class="cal-sep">|</span>
+        <button class="cal-nav-link" onclick="loadPeriod('next',this)">Next Week</button>
+      </div>
+      <div class="cal-toolbar-right">
+        <div class="cal-tz">🕐 <span id="calTzLabel">GMT+0</span> · <span id="calClock">--:--</span></div>
+        <div class="cal-view-btns">
+          <button class="cal-view-btn" onclick="setView('week',this)">Week</button>
+          <button class="cal-view-btn active" onclick="setView('day',this)">Day</button>
         </div>
-        <span class="badge b-live">FF · LIVE</span>
+        <button class="cal-filter-btn" onclick="toggleFilterPanel()">▼ Filters</button>
       </div>
     </div>
 
-    <div style="padding:16px;">
-      <!-- Period nav -->
-      <div class="cal-nav">
-        <div class="cal-period-btns">
-          <button class="cal-period-btn" onclick="loadPeriod('last',this)">Last Week</button>
-          <button class="cal-period-btn active" onclick="loadPeriod('this',this)">This Week</button>
-          <button class="cal-period-btn" onclick="loadPeriod('next',this)">Next Week</button>
-        </div>
-        <div style="font-family:var(--mono);font-size:10px;color:var(--muted2);" id="calTimeZone">GMT+0 · All currencies</div>
+    <!-- ── FILTER PANEL (hidden by default) ── -->
+    <div id="filterPanel" style="display:none;padding:12px 20px;border-bottom:1px solid var(--border);background:var(--bg3);display:none;">
+      <div style="font-family:var(--mono);font-size:10px;color:var(--muted2);margin-bottom:8px;letter-spacing:1px;">SHOW IMPACT LEVELS:</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="cal-nav-link active" style="border:1px solid rgba(239,68,68,.4);color:#f87171;" onclick="toggleImpact('high',this)" data-impact="high">● HIGH</button>
+        <button class="cal-nav-link active" style="border:1px solid rgba(249,115,22,.4);color:#f97316;" onclick="toggleImpact('med',this)" data-impact="med">● MEDIUM</button>
+        <button class="cal-nav-link" style="border:1px solid var(--border);" onclick="toggleImpact('low',this)" data-impact="low">● LOW</button>
+        <button class="cal-nav-link active" style="border:1px solid rgba(168,85,247,.4);color:#c084fc;" onclick="toggleImpact('cb',this)" data-impact="cb">● CB MEETINGS</button>
       </div>
+    </div>
 
-      <!-- Date strip -->
+    <!-- ── STATUS ── -->
+    <div class="cal-status-bar" id="calStatusBar">
+      <div class="cal-status-dot"></div>
+      <span id="calStatusText">Loading calendar…</span>
+    </div>
+
+    <!-- ── DATE STRIP ── -->
+    <div class="date-strip-bar">
+      <button class="strip-arrow" onclick="shiftWeek(-1)">&#8249;</button>
       <div class="date-strip" id="dateStrip"></div>
-
-      <!-- Status -->
-      <div class="cal-status" id="calStatus">Loading calendar data…</div>
-
-      <!-- Events -->
-      <div id="calEvents"><div class="cal-loading"><div class="spin">⟳</div><br>Fetching live events…</div></div>
+      <button class="strip-arrow" onclick="shiftWeek(1)">&#8250;</button>
     </div>
-  </div>
 
-  <!-- ── CENTRAL BANK MEETINGS ── -->
-  <div class="card">
-    <div class="ch">
-      <div class="ct">CENTRAL BANK MEETINGS — 2026</div>
-      <span class="badge b-purple">FED · ECB · BOE · BOJ · RBA</span>
+    <!-- ── EVENTS ── -->
+    <div id="calEvents">
+      <div class="cal-empty"><div class="cal-loading-spin">⟳</div><br>Fetching live events…</div>
     </div>
-    <div class="cb-list" id="cbList">Loading…</div>
-  </div>
 
+  </div>
 </div>
 </main>
 
 <script src="shared.js"></script>
 <script>
-// ── CONFIG ──
+// ── STATE ──
 const FX_PROXY = 'https://forex-desk-proxy.zreik111.workers.dev/?url=';
 const FF_BASE  = 'https://nfs.faireconomy.media/ff_calendar_';
-const CAL_CACHE_TTL = 15 * 60 * 1000; // 15 min
+const CAL_TTL  = 15*60*1000;
+const DAYS     = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const MONTHS   = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const MONTHSL  = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const FLAGS    = {USD:'🇺🇸',EUR:'🇪🇺',GBP:'🇬🇧',JPY:'🇯🇵',AUD:'🇦🇺',CAD:'🇨🇦',CHF:'🇨🇭',NZD:'🇳🇿',CNY:'🇨🇳',KRW:'🇰🇷',SGD:'🇸🇬',HKD:'🇭🇰'};
 
-function ffUrl(period){
-  const slug = period==='next' ? 'nextweek' : period==='last' ? 'lastweek' : 'thisweek';
-  return `${FF_BASE}${slug}.json`;
-}
-
-const CURRENCY_FLAGS = {
-  USD:'🇺🇸', EUR:'🇪🇺', GBP:'🇬🇧', JPY:'🇯🇵', AUD:'🇦🇺',
-  CAD:'🇨🇦', CHF:'🇨🇭', NZD:'🇳🇿', CNY:'🇨🇳', ALL:'🌐'
-};
-
-let allEvents = [];
-let activeFilters = new Set(['high','med']);
+let allEvents    = [];
+let activeImpact = new Set(['high','med','cb']);
 let selectedDate = null;
-let currentPeriod = 'this';
+let currentView  = 'day';
+let weekOffset   = 0;  // 0=this, -1=last, +1=next
 
-// ── FILTER TOGGLE ──
-function toggleFilter(impact, btn){
-  if(activeFilters.has(impact)){
-    if(activeFilters.size === 1) return; // keep at least one
-    activeFilters.delete(impact);
-    btn.classList.remove('active');
-  } else {
-    activeFilters.add(impact);
-    btn.classList.add('active');
-  }
-  renderCalendar();
+// ── CB MEETINGS as events ──
+const CB_EVENTS = [
+  {date:'2026-06-17T00:00:00',currency:'USD',title:'Federal Reserve (FOMC) — Rate Decision + Dot Plot',impact:'cb'},
+  {date:'2026-06-17T00:00:00',currency:'JPY',title:'Bank of Japan (BOJ) — Policy Rate Decision',impact:'cb'},
+  {date:'2026-07-22T00:00:00',currency:'EUR',title:'European Central Bank (ECB) — Rate Decision',impact:'cb'},
+  {date:'2026-07-28T00:00:00',currency:'USD',title:'Federal Reserve (FOMC) — Rate Decision',impact:'cb'},
+  {date:'2026-07-30T00:00:00',currency:'JPY',title:'Bank of Japan (BOJ) — Policy Rate Decision',impact:'cb'},
+  {date:'2026-08-04T00:00:00',currency:'AUD',title:'Reserve Bank of Australia (RBA) — Cash Rate Decision',impact:'cb'},
+  {date:'2026-08-06T00:00:00',currency:'GBP',title:'Bank of England (BOE) — MPC Decision + MPR',impact:'cb'},
+  {date:'2026-09-09T00:00:00',currency:'EUR',title:'European Central Bank (ECB) — Rate Decision',impact:'cb'},
+  {date:'2026-09-15T00:00:00',currency:'AUD',title:'Reserve Bank of Australia (RBA) — Cash Rate Decision',impact:'cb'},
+  {date:'2026-09-16T00:00:00',currency:'USD',title:'Federal Reserve (FOMC) — Rate Decision + Dot Plot',impact:'cb'},
+  {date:'2026-10-29T00:00:00',currency:'USD',title:'Federal Reserve (FOMC) — Rate Decision',impact:'cb'},
+  {date:'2026-10-29T00:00:00',currency:'EUR',title:'European Central Bank (ECB) — Rate Decision',impact:'cb'},
+  {date:'2026-11-05T00:00:00',currency:'GBP',title:'Bank of England (BOE) — MPC Decision',impact:'cb'},
+  {date:'2026-12-16T00:00:00',currency:'USD',title:'Federal Reserve (FOMC) — Rate Decision + Dot Plot',impact:'cb'},
+  {date:'2026-12-17T00:00:00',currency:'GBP',title:'Bank of England (BOE) — MPC Decision',impact:'cb'},
+  {date:'2026-12-18T00:00:00',currency:'JPY',title:'Bank of Japan (BOJ) — Policy Rate Decision',impact:'cb'},
+];
+
+// ── CLOCK ──
+function startClock(){
+  const tzEl=document.getElementById('calTzLabel');
+  const clEl=document.getElementById('calClock');
+  const offset=-new Date().getTimezoneOffset()/60;
+  if(tzEl) tzEl.textContent=`GMT${offset>=0?'+':''}${offset}`;
+  function tick(){ if(clEl) clEl.textContent=new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:false}); }
+  tick(); setInterval(tick,1000);
 }
 
-// ── PERIOD SWITCH ──
-function loadPeriod(period, btn){
-  currentPeriod = period;
-  document.querySelectorAll('.cal-period-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  selectedDate = null;
-  fetchCalendar(period);
+// ── WEEK RANGE ──
+function weekStart(offset=0){
+  const today=new Date();
+  const dow=today.getDay();
+  const diffToMon=dow===0?-6:1-dow;
+  const mon=new Date(today);
+  mon.setDate(today.getDate()+diffToMon+(offset*7));
+  mon.setHours(0,0,0,0);
+  return mon;
+}
+
+function weekDays(offset=0){
+  const mon=weekStart(offset);
+  return Array.from({length:7},(_,i)=>{ const d=new Date(mon); d.setDate(mon.getDate()+i); return d; });
 }
 
 // ── FETCH ──
-async function fetchCalendar(period='this'){
-  const status = document.getElementById('calStatus');
-  const el = document.getElementById('calEvents');
-  status.textContent = 'Loading calendar data…';
-  status.className = 'cal-status';
-  el.innerHTML = '<div class="cal-loading"><div class="spin">⟳</div><br>Fetching live events…</div>';
+async function fetchCalendar(){
+  const slug = weekOffset===1?'nextweek':weekOffset===-1?'lastweek':'thisweek';
+  const cacheKey=`fxdesk_cal_${slug}`;
+  setStatus('Loading…',false);
 
-  const cacheKey = `fxdesk_cal_${period}`;
   try{
-    const cached = JSON.parse(localStorage.getItem(cacheKey)||'null');
-    if(cached && (Date.now()-cached.ts)<CAL_CACHE_TTL){
-      allEvents = cached.data;
-      status.textContent = `✓ ${allEvents.length} events loaded (cached) · ${new Date(cached.ts).toLocaleTimeString()}`;
-      buildDateStrip();
-      renderCalendar();
-      return;
-    }
+    const cached=JSON.parse(localStorage.getItem(cacheKey)||'null');
+    if(cached&&(Date.now()-cached.ts)<CAL_TTL){ allEvents=cached.data; afterFetch(); return; }
   }catch(e){}
 
-  const directUrl = ffUrl(period);
-  const proxyUrl  = `${FX_PROXY}${encodeURIComponent(directUrl)}`;
-
-  let data = null;
-  for(const url of [proxyUrl, directUrl]){
+  const url=`${FF_BASE}${slug}.json`;
+  let data=null;
+  for(const src of [`${FX_PROXY}${encodeURIComponent(url)}`, url]){
     try{
-      const r = await Promise.race([
-        fetch(url, {cache:'no-store'}),
-        new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),12000))
-      ]);
-      if(!r.ok) throw new Error('HTTP '+r.status);
-      data = await r.json();
-      if(Array.isArray(data) && data.length) break;
+      const r=await Promise.race([fetch(src,{cache:'no-store'}),new Promise((_,rej)=>setTimeout(()=>rej('timeout'),12000))]);
+      if(!r.ok) continue;
+      data=await r.json();
+      if(Array.isArray(data)&&data.length) break;
     }catch(e){ data=null; }
   }
-  if(data && data.length){
-    allEvents = data;
-    try{ localStorage.setItem(cacheKey, JSON.stringify({ts:Date.now(), data})); }catch(e){}
-    status.textContent = `✓ ${allEvents.length} events loaded · Updated ${new Date().toLocaleTimeString()}`;
-    buildDateStrip();
-    renderCalendar();
+
+  if(data&&data.length){
+    allEvents=data;
+    try{ localStorage.setItem(cacheKey,JSON.stringify({ts:Date.now(),data})); }catch(e){}
+    setStatus(`✓ ${data.length} events loaded · ${new Date().toLocaleTimeString()}`,false);
   } else {
-    status.textContent = '⚠ Could not load live calendar — showing static schedule below.';
-    status.className = 'cal-status error';
-    el.innerHTML = `<div class="cal-loading" style="padding:30px;">
-      <div style="font-size:28px;margin-bottom:10px;">📅</div>
-      <div>Live feed unavailable. <a href="https://www.forexfactory.com/calendar" target="_blank" rel="noopener" style="color:var(--blue);">Open Forex Factory ↗</a></div>
-      <div style="font-size:11px;color:var(--muted);margin-top:6px;">Try refreshing in a moment.</div>
-    </div>`;
-    allEvents = [];
-    buildDateStrip();
+    setStatus('⚠ Live feed unavailable — CB meetings shown below',true);
+    allEvents=[];
   }
+  afterFetch();
+}
+
+function afterFetch(){
+  // merge CB events
+  const merged=[...allEvents,...CB_EVENTS];
+  allEvents=merged;
+  buildStrip();
+  render();
+}
+
+function setStatus(msg,err){
+  const el=document.getElementById('calStatusText');
+  const bar=document.getElementById('calStatusBar');
+  if(el) el.textContent=msg;
+  if(bar) bar.className='cal-status-bar'+(err?' error':'');
 }
 
 // ── DATE STRIP ──
-function buildDateStrip(){
-  const strip = document.getElementById('dateStrip');
+function buildStrip(){
+  const strip=document.getElementById('dateStrip');
   if(!strip) return;
+  const days=weekDays(weekOffset);
+  const today=new Date(); today.setHours(0,0,0,0);
 
-  // Determine week range
-  const now = new Date();
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-
-  // Get Mon of the selected week
-  const offset = currentPeriod==='next' ? 7 : currentPeriod==='last' ? -7 : 0;
-  const weekStart = new Date(today);
-  const dayOfWeek = today.getDay();
-  const diffToMon = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
-  weekStart.setDate(today.getDate() + diffToMon + offset);
-
-  const days = [];
-  for(let i=0;i<7;i++){
-    const d = new Date(weekStart);
-    d.setDate(weekStart.getDate()+i);
-    days.push(d);
-  }
-
-  // Count events per day
-  const countsByDate = {};
-  allEvents.forEach(e => {
-    const d = new Date(e.date).toDateString();
-    if(!countsByDate[d]) countsByDate[d]={high:0,med:0,low:0};
-    const imp = (e.impact||'').toLowerCase();
-    if(imp==='high') countsByDate[d].high++;
-    else if(imp==='medium'||imp==='med') countsByDate[d].med++;
-    else countsByDate[d].low++;
+  // Count per day
+  const counts={};
+  allEvents.forEach(e=>{
+    const d=new Date(e.date); d.setHours(0,0,0,0);
+    const k=d.toDateString();
+    if(!counts[k]) counts[k]={high:0,med:0,low:0,cb:0};
+    const imp=(e.impact||'').toLowerCase();
+    if(imp==='cb') counts[k].cb++;
+    else if(imp==='high') counts[k].high++;
+    else if(imp==='medium'||imp==='med') counts[k].med++;
+    else counts[k].low++;
   });
 
-  // Auto-select today or first weekday with events
   if(!selectedDate){
-    const todayStr = today.toDateString();
-    const hasToday = days.some(d=>d.toDateString()===todayStr);
-    if(hasToday) selectedDate = todayStr;
-    else {
-      const first = days.find(d=>countsByDate[d.toDateString()]?.high>0 || countsByDate[d.toDateString()]?.med>0);
-      selectedDate = first ? first.toDateString() : days[1].toDateString();
-    }
+    const td=today.toDateString();
+    selectedDate=days.some(d=>d.toDateString()===td)?td:days[1].toDateString();
   }
 
-  const DOW = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
-  const MON = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
-
-  strip.innerHTML = days.map(d => {
-    const ds = d.toDateString();
-    const isToday = ds === today.toDateString();
-    const isWeekend = d.getDay()===0 || d.getDay()===6;
-    const isActive = ds === selectedDate;
-    const counts = countsByDate[ds] || {high:0,med:0,low:0};
-    const dots = [
-      ...Array(Math.min(counts.high,3)).fill('<div class="date-dot high"></div>'),
-      ...Array(Math.min(counts.med,2)).fill('<div class="date-dot med"></div>'),
-      ...Array(Math.min(counts.low && !counts.high && !counts.med ? 1 : 0, 1)).fill('<div class="date-dot low"></div>'),
+  strip.innerHTML=days.map(d=>{
+    const ds=d.toDateString();
+    const isToday=ds===today.toDateString();
+    const isWeekend=d.getDay()===0||d.getDay()===6;
+    const isActive=ds===selectedDate;
+    const c=counts[ds]||{high:0,med:0,low:0,cb:0};
+    const dots=[
+      ...Array(Math.min(c.high,3)).fill('<div class="date-dot high"></div>'),
+      ...Array(Math.min(c.cb,2)).fill('<div class="date-dot" style="background:#a855f7;"></div>'),
+      ...Array(Math.min(c.med,2)).fill('<div class="date-dot med"></div>'),
     ].join('');
-
-    return `<button class="date-btn${isActive?' active':''}${isToday?' today':''}${isWeekend?' weekend':''}"
-      onclick="selectDate('${ds}',this)">
-      <div class="date-day-num">${d.getDate()}</div>
-      <div class="date-month">${MON[d.getMonth()]}</div>
-      <div class="date-day-label">${isToday?'TODAY':DOW[d.getDay()]}</div>
-      <div class="date-dot-row">${dots}</div>
-    </button>`;
+    const DOWS=['SUN','MON','TUE','WED','THU','FRI','SAT'];
+    return `<div class="date-col${isActive?' active':''}${isWeekend?' weekend':''}${isToday?' today-col':''}"
+      onclick="selectDate('${ds}')">
+      <div class="date-col-month">${MONTHS[d.getMonth()]}</div>
+      <div class="date-col-num">${d.getDate()}</div>
+      ${isToday?'<div class="date-col-today-pill">TODAY</div>':`<div class="date-col-day">${DOWS[d.getDay()]}</div>`}
+      <div class="date-dots">${dots}</div>
+    </div>`;
   }).join('');
 }
 
-function selectDate(dateStr, btn){
-  selectedDate = dateStr;
-  document.querySelectorAll('.date-btn').forEach(b=>b.classList.remove('active'));
+function selectDate(ds){
+  selectedDate=ds;
+  document.querySelectorAll('.date-col').forEach(b=>b.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  render();
+}
+
+// ── VIEW / PERIOD ──
+function setView(v,btn){
+  currentView=v;
+  document.querySelectorAll('.cal-view-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  renderCalendar();
+  render();
 }
 
-// ── RENDER EVENTS ──
-function renderCalendar(){
-  const el = document.getElementById('calEvents');
-  if(!el) return;
-  if(!allEvents.length) return;
+function quickNav(when,btn){
+  document.querySelectorAll('.cal-nav-link').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const today=new Date(); today.setHours(0,0,0,0);
+  if(when==='yesterday'){ const d=new Date(today); d.setDate(today.getDate()-1); selectedDate=d.toDateString(); }
+  else if(when==='tomorrow'){ const d=new Date(today); d.setDate(today.getDate()+1); selectedDate=d.toDateString(); }
+  else { selectedDate=today.toDateString(); }
+  currentView='day';
+  document.querySelectorAll('.cal-view-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.cal-view-btn')[1].classList.add('active');
+  buildStrip(); render();
+}
 
-  const impactMap = {high:'high', medium:'med', med:'med', low:'low', '':'low'};
-  const filtered = allEvents.filter(e => {
-    const imp = impactMap[(e.impact||'').toLowerCase()] || 'low';
-    return activeFilters.has(imp);
+function loadPeriod(p,btn){
+  weekOffset=p==='next'?1:p==='last'?-1:0;
+  selectedDate=null;
+  document.querySelectorAll('.cal-nav-link').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  fetchCalendar();
+}
+
+function shiftWeek(dir){
+  weekOffset+=dir;
+  selectedDate=null;
+  fetchCalendar();
+}
+
+function toggleFilterPanel(){
+  const p=document.getElementById('filterPanel');
+  p.style.display=p.style.display==='none'?'block':'none';
+}
+
+function toggleImpact(imp,btn){
+  if(activeImpact.has(imp)){
+    if(activeImpact.size===1) return;
+    activeImpact.delete(imp);
+    btn.classList.remove('active');
+  } else {
+    activeImpact.add(imp);
+    btn.classList.add('active');
+  }
+  render();
+}
+
+// ── RENDER ──
+function render(){
+  const el=document.getElementById('calEvents');
+  if(!el) return;
+  const impMap={high:'high',medium:'med',med:'med',low:'low',cb:'cb',''  :'low'};
+
+  // Filter
+  const visible=allEvents.filter(e=>{
+    const imp=impMap[(e.impact||'').toLowerCase()]||'low';
+    return activeImpact.has(imp);
   });
 
-  // Group by date
-  const byDate = {};
-  filtered.forEach(e => {
-    const d = new Date(e.date);
-    const key = d.toDateString();
-    if(!byDate[key]) byDate[key] = {date:d, events:[]};
-    byDate[key].events.push(e);
+  // Get days to show
+  const days=weekDays(weekOffset);
+  let toShow=days;
+  if(currentView==='day'){
+    toShow=days.filter(d=>d.toDateString()===selectedDate);
+    if(!toShow.length) toShow=[days.find(d=>d.toDateString()===selectedDate)||days[1]];
+  }
+
+  // Group by day
+  const byDay={};
+  visible.forEach(e=>{
+    const d=new Date(e.date); d.setHours(0,0,0,0);
+    const k=d.toDateString();
+    if(!byDay[k]) byDay[k]=[];
+    byDay[k].push(e);
   });
 
-  const sortedDates = Object.entries(byDate).sort((a,b)=>a[1].date-b[1].date);
-  if(!sortedDates.length){
-    el.innerHTML='<div class="cal-loading" style="padding:30px;"><div style="font-size:28px;margin-bottom:8px;">🔍</div>No events match the current filters.</div>';
-    return;
-  }
+  let html='';
+  toShow.forEach(day=>{
+    const ds=day.toDateString();
+    const evts=(byDay[ds]||[]).sort((a,b)=>new Date(a.date)-new Date(b.date));
+    const highCnt=evts.filter(e=>e.impact==='high').length;
+    const cbCnt=evts.filter(e=>e.impact==='cb').length;
 
-  // If a date is selected, show only that day — else show all
-  const toShow = selectedDate
-    ? sortedDates.filter(([k])=>k===selectedDate)
-    : sortedDates;
-
-  if(!toShow.length){
-    el.innerHTML='<div class="cal-loading" style="padding:30px;"><div style="font-size:28px;margin-bottom:8px;">✅</div>No events on this day. Select another date above.</div>';
-    return;
-  }
-
-  const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  const MON  = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-
-  el.innerHTML = toShow.map(([key,{date,events}]) => {
-    const high = events.filter(e=>(e.impact||'').toLowerCase()==='high').length;
-    const med  = events.filter(e=>['medium','med'].includes((e.impact||'').toLowerCase())).length;
-
-    const rows = events.map(e => {
-      const imp = impactMap[(e.impact||'').toLowerCase()] || 'low';
-      const flag = CURRENCY_FLAGS[e.currency] || '🌐';
-      const time = e.date ? new Date(e.date).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true}) : 'All Day';
-
-      // Color actual vs forecast
-      let actualClass = 'actual';
-      if(e.actual && e.forecast){
-        const a=parseFloat(e.actual), f=parseFloat(e.forecast);
-        if(!isNaN(a)&&!isNaN(f)){
-          // For most indicators, better than forecast = green (higher is better, except unemployment etc.)
-          actualClass = a>=f ? 'actual better' : 'actual worse';
-        }
-      }
-
-      return `<tr class="evt-row ${imp}-impact">
-        <td class="evt-time">${time}</td>
-        <td>
-          <div class="evt-currency">
-            <span class="evt-flag">${flag}</span>
-            <span class="evt-cur-code">${e.currency||'—'}</span>
-          </div>
-        </td>
-        <td><div class="evt-title-text">${e.title||'—'}</div></td>
-        <td><span class="impact-badge ${imp}">${imp.toUpperCase()}</span></td>
-        <td class="evt-num ${e.actual?actualClass:'empty'} hide-mobile">${e.actual||'—'}</td>
-        <td class="evt-num forecast hide-mobile">${e.forecast||'—'}</td>
-        <td class="evt-num previous hide-mobile">${e.previous||'—'}</td>
-      </tr>`;
-    }).join('');
-
-    return `<div class="day-group">
-      <div class="day-header">
-        <div>
-          <div class="day-header-date">${date.getDate()}</div>
-          <div class="day-header-month">${MON[date.getMonth()]}</div>
+    html+=`<div class="day-section">
+      <div class="day-header-row">
+        <div class="day-header-date-block">
+          <div class="day-header-month-lbl">${MONTHS[day.getMonth()]}</div>
+          <div class="day-header-day-num">${day.getDate()}</div>
         </div>
-        <div class="day-header-vline"></div>
-        <div class="day-header-name">${DAYS[date.getDay()]}</div>
-        <div class="day-header-counts">
-          ${high?`<span class="impact-badge high">${high} HIGH</span>`:''}
-          ${med?`<span class="impact-badge med">${med} MED</span>`:''}
-        </div>
-      </div>
-      <table class="events-table">
-        <thead>
-          <tr>
-            <th>TIME</th>
-            <th>CCY</th>
-            <th>EVENT</th>
-            <th>IMPACT</th>
-            <th class="num hide-mobile">ACTUAL</th>
-            <th class="num hide-mobile">FORECAST</th>
-            <th class="num hide-mobile">PREVIOUS</th>
-          </tr>
-        </thead>
-        <tbody>${rows}</tbody>
-      </table>
-    </div>`;
-  }).join('');
-}
+        <div class="day-header-name">${DAYS[day.getDay()]}${highCnt?` <span style="font-size:11px;font-family:var(--mono);color:#f87171;margin-left:10px;">${highCnt} HIGH</span>`:''}${cbCnt?` <span style="font-size:11px;font-family:var(--mono);color:#c084fc;margin-left:6px;">${cbCnt} CB</span>`:''}</div>
+        <div class="day-col-hdr">IMPACT</div>
+        <div class="day-col-hdr">ACTUAL</div>
+        <div class="day-col-hdr">FORECAST</div>
+        <div class="day-col-hdr">PREVIOUS</div>
+      </div>`;
 
-// ── CENTRAL BANK MEETINGS ──
-const CB_EVENTS = [
-  {date:'2026-06-17',bank:'Federal Reserve (FOMC)',detail:'Rate decision + projections (dot plot)',cls:'fed',badge:'FED'},
-  {date:'2026-06-17',bank:'Bank of Japan (BOJ)',detail:'Policy rate decision',cls:'boj',badge:'BOJ'},
-  {date:'2026-07-22',bank:'European Central Bank (ECB)',detail:'Monetary policy decision',cls:'ecb',badge:'ECB'},
-  {date:'2026-07-28',bank:'Federal Reserve (FOMC)',detail:'Rate decision + press conference',cls:'fed',badge:'FED'},
-  {date:'2026-07-30',bank:'Bank of Japan (BOJ)',detail:'Policy rate decision',cls:'boj',badge:'BOJ'},
-  {date:'2026-08-04',bank:'Reserve Bank of Australia (RBA)',detail:'Cash rate decision',cls:'rba',badge:'RBA'},
-  {date:'2026-08-06',bank:'Bank of England (BOE)',detail:'Monetary Policy Committee + MPR',cls:'boe',badge:'BOE'},
-  {date:'2026-09-09',bank:'European Central Bank (ECB)',detail:'Monetary policy decision',cls:'ecb',badge:'ECB'},
-  {date:'2026-09-15',bank:'Reserve Bank of Australia (RBA)',detail:'Cash rate decision',cls:'rba',badge:'RBA'},
-  {date:'2026-09-16',bank:'Federal Reserve (FOMC)',detail:'Rate decision + projections (dot plot)',cls:'fed',badge:'FED'},
-  {date:'2026-10-27',bank:'Reserve Bank of Australia (RBA)',detail:'Cash rate decision',cls:'rba',badge:'RBA'},
-  {date:'2026-10-28',bank:'Bank of Japan (BOJ)',detail:'Policy rate decision',cls:'boj',badge:'BOJ'},
-  {date:'2026-10-29',bank:'Federal Reserve (FOMC)',detail:'Rate decision + press conference',cls:'fed',badge:'FED'},
-  {date:'2026-10-29',bank:'European Central Bank (ECB)',detail:'Monetary policy decision',cls:'ecb',badge:'ECB'},
-  {date:'2026-11-05',bank:'Bank of England (BOE)',detail:'Monetary Policy Committee decision',cls:'boe',badge:'BOE'},
-  {date:'2026-12-09',bank:'European Central Bank (ECB)',detail:'Monetary policy decision',cls:'ecb',badge:'ECB'},
-  {date:'2026-12-16',bank:'Federal Reserve (FOMC)',detail:'Rate decision + projections (dot plot)',cls:'fed',badge:'FED'},
-  {date:'2026-12-17',bank:'Bank of England (BOE)',detail:'Monetary Policy Committee decision',cls:'boe',badge:'BOE'},
-  {date:'2026-12-18',bank:'Bank of Japan (BOJ)',detail:'Policy rate decision',cls:'boj',badge:'BOJ'},
-];
+    if(!evts.length){
+      html+=`<div style="padding:24px 20px;font-family:var(--sans);font-size:12px;color:var(--muted2);">No events match current filters for this day.</div>`;
+    } else {
+      evts.forEach(e=>{
+        const imp=impMap[(e.impact||'').toLowerCase()]||'low';
+        const flag=FLAGS[e.currency]||'🌐';
+        const time=e.date?new Date(e.date).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true}):'All Day';
+        let actClass='evt-num';
+        if(e.actual&&e.forecast){
+          const a=parseFloat(e.actual),f=parseFloat(e.forecast);
+          if(!isNaN(a)&&!isNaN(f)) actClass='evt-num '+(a>=f?'better':'worse');
+          else actClass='evt-num actual';
+        } else if(e.actual) actClass='evt-num actual';
+        const rowCls=imp==='high'?'high-row':imp==='cb'?'cb-row':imp==='med'?'med-row':'';
+        const nameCls=imp==='cb'?'evt-name cb-name':'evt-name';
+        const dotCls=imp;
+        html+=`<div class="evt-row ${rowCls}">
+          <div class="evt-time">${time}</div>
+          <div class="evt-flag-cur"><span class="evt-flag">${flag}</span><span class="evt-cur">${e.currency||'—'}</span></div>
+          <div class="${nameCls}">${e.title||'—'}</div>
+          <div class="evt-impact-cell"><span class="imp-dot ${dotCls}"></span></div>
+          <div class="${actClass} hide-m">${e.actual||'<span style="opacity:.3">—</span>'}</div>
+          <div class="evt-num hide-m" style="color:var(--muted2);">${e.forecast||'<span style="opacity:.3">—</span>'}</div>
+          <div class="evt-num hide-m" style="color:var(--muted);">${e.previous||'<span style="opacity:.3">—</span>'}</div>
+        </div>`;
+      });
+    }
+    html+='</div>';
+  });
 
-function timeUntil(dateStr){
-  const diff = new Date(dateStr) - new Date();
-  if(diff < 0) return null;
-  const days = Math.floor(diff/86400000);
-  if(days===0) return 'Today';
-  if(days===1) return 'Tomorrow';
-  if(days<7)   return `In ${days} days`;
-  const weeks = Math.floor(days/7);
-  return weeks===1 ? 'In 1 week' : `In ${weeks} weeks`;
-}
-
-function renderCB(){
-  const el = document.getElementById('cbList');
-  if(!el) return;
-  const now = new Date();
-  const todayStr = new Date(now.getFullYear(),now.getMonth(),now.getDate()).toISOString().split('T')[0];
-  const upcoming = CB_EVENTS.filter(e=>e.date>=todayStr).slice(0,10);
-  if(!upcoming.length){ el.innerHTML='<div style="color:var(--muted2);font-family:var(--sans);font-size:11px;padding:6px 0;">No upcoming meetings scheduled.</div>'; return; }
-  el.innerHTML = upcoming.map((e,i) => {
-    const d = new Date(e.date);
-    const until = timeUntil(e.date);
-    return `<div class="cb-event${i===0?' next-up':''}">
-      <div class="cb-date">${d.getDate()}<div class="cb-date-month">${d.toLocaleString('en-US',{month:'short'})}</div></div>
-      <div class="cb-div"></div>
-      <div class="cb-info">
-        <div class="cb-bank">${e.bank}</div>
-        <div class="cb-detail">${e.detail}</div>
-      </div>
-      <span class="cb-badge ${e.cls}">${e.badge}</span>
-      <div class="cb-countdown">${until||'—'}</div>
-    </div>`;
-  }).join('');
+  if(!html) html='<div class="cal-empty">No events for this period.</div>';
+  el.innerHTML=html;
 }
 
 // ── INIT ──
-document.addEventListener('DOMContentLoaded', function(){
-  // Show local timezone
-  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  const offset = -new Date().getTimezoneOffset()/60;
-  const tzEl = document.getElementById('calTimeZone');
-  if(tzEl) tzEl.textContent = `GMT${offset>=0?'+':''}${offset} · All currencies`;
-
-  fetchCalendar('this');
-  renderCB();
+document.addEventListener('DOMContentLoaded',function(){
+  startClock();
+  fetchCalendar();
 });
 </script>
 </body>
