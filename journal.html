@@ -58,6 +58,12 @@
 .port-empty{text-align:center;padding:20px;font-family:var(--mono);font-size:10px;color:var(--muted2)}
 .ry-chart{display:flex;align-items:flex-end;gap:3px;height:60px;padding:8px 0}
 .ry-bar{flex:1;border-radius:2px 2px 0 0;min-height:4px}
+.monthly-bar-wrap{display:flex;flex-direction:column;align-items:center;gap:2px;flex:1;min-width:22px;max-width:40px}
+.monthly-bar-pos{border-radius:2px 2px 0 0;min-height:4px;width:100%;background:var(--green)}
+.monthly-bar-neg{border-radius:0 0 2px 2px;min-height:4px;width:100%;background:var(--red)}
+.monthly-bar-lbl{font-family:var(--mono);font-size:8px;color:var(--muted2);letter-spacing:.5px;white-space:nowrap}
+.monthly-chart-container{display:flex;align-items:flex-end;gap:3px;height:80px;padding:4px 0 0;overflow-x:auto;scrollbar-width:none}
+.monthly-chart-container::-webkit-scrollbar{display:none}
 .pivot-levels{display:flex;flex-direction:column;gap:4px}
 .pivot-row{display:flex;justify-content:space-between;align-items:center;padding:5px 8px;background:var(--bg3);border-radius:6px}
 .pivot-row-lbl{font-family:var(--sans);font-size:10px;font-weight:600;color:var(--muted2)}
@@ -99,6 +105,8 @@
         <span class="badge b-blue">SAVED LOCALLY</span>
         <button type="button" class="badge" style="cursor:pointer;background:rgba(34,197,94,.1);color:var(--green);border:1px solid rgba(34,197,94,.2);" aria-label="Toggle analytics" onclick="toggleJournalAnalytics()">📊 ANALYTICS</button>
         <button type="button" class="badge" style="cursor:pointer;background:rgba(249,115,22,.1);color:var(--orange);border:1px solid rgba(249,115,22,.2);" aria-label="Export journal as JSON" onclick="exportJournal()">⬇ EXPORT</button>
+        <button type="button" class="badge" style="cursor:pointer;background:rgba(168,85,247,.1);color:#C084FC;border:1px solid rgba(168,85,247,.2);" aria-label="Import trades from MT4/MT5 CSV" onclick="triggerCsvImport()">⬆ IMPORT CSV</button>
+        <input type="file" id="csvImportInput" accept=".csv,.txt" style="display:none;" onchange="handleCsvFile(this)">
         <button type="button" class="badge" style="cursor:pointer;background:rgba(59,130,246,.1);color:var(--blue);border:1px solid rgba(59,130,246,.2);" aria-label="Add new journal entry" onclick="toggleJournalForm()">+ NEW ENTRY</button>
       </div>
     </div>
@@ -152,6 +160,8 @@
       <div class="ry-chart" id="jEquityChart"></div>
       <div style="font-family:var(--sans);font-size:10px;color:var(--muted2);margin:14px 0 6px;">MISTAKE BREAKDOWN</div>
       <div class="pivot-levels" id="jMistakeBreakdown"></div>
+      <div style="font-family:var(--sans);font-size:10px;color:var(--muted2);margin:14px 0 6px;">MONTHLY RETURNS</div>
+      <div class="monthly-chart-container" id="jMonthlyChart"></div>
     </div>
     <div class="portfolio-wrap">
       <!-- Stats -->
@@ -162,13 +172,16 @@
         <div class="jstat"><div class="jstat-l">AVG R:R</div><div class="jstat-v" id="jAvgRR" style="color:var(--text)">—</div></div>
       </div>
       <!-- Filters -->
-      <div class="journal-filter">
+      <div class="journal-filter" style="align-items:center;">
         <button type="button" class="jfilter-btn active" onclick="filterJournal('ALL',this)">ALL</button>
         <button type="button" class="jfilter-btn" onclick="filterJournal('WIN',this)">✅ WINS</button>
         <button type="button" class="jfilter-btn" onclick="filterJournal('LOSS',this)">❌ LOSSES</button>
         <button type="button" class="jfilter-btn" onclick="filterJournal('OPEN',this)">🔵 OPEN</button>
         <button type="button" class="jfilter-btn" onclick="filterJournal('BUY',this)">↑ BUYS</button>
         <button type="button" class="jfilter-btn" onclick="filterJournal('SELL',this)">↓ SELLS</button>
+        <select id="jMonthFilter" class="journal-input" aria-label="Filter by month" style="flex:0;min-width:130px;padding:5px 8px;cursor:pointer;font-size:10px;" onchange="renderJournal()">
+          <option value="">ALL MONTHS</option>
+        </select>
       </div>
       <!-- Entry list -->
       <div class="journal-list" id="journalList">
@@ -181,11 +194,123 @@
 </main>
 <script src="shared.js"></script>
 <script>
+const $=e=>document.getElementById(e);
 function _fetchTimeout(e){return new Promise((t,n)=>setTimeout(()=>n(new Error("timeout")),e))}
-const fmt=(e,t=2)=>null==e||isNaN(e)?"—":Number(e).toLocaleString("en-US",{minimumFractionDigits:t,maximumFractionDigits:t}
+const fmt=(e,t=2)=>null==e||isNaN(e)?"—":Number(e).toLocaleString("en-US",{minimumFractionDigits:t,maximumFractionDigits:t})
 function timeAgo(e){const t=Math.round((Date.now()-e)/6e4);if(t<1)return"just now";if(t<60)return t+"m ago";const n=Math.round(t/60);return n<24?n+"h ago":Math.round(n/24)+"d ago"}
 function localTs(e){return e?e.toLocaleString("en-US",{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit",timeZoneName:"short"}):"—"}
-const JOURNAL_KEY="fxdesk_journal_v1";let journalEntries=[],journalFilter="ALL";function loadJournal(){try{journalEntries=JSON.parse(localStorage.getItem(JOURNAL_KEY))||[]}catch(e){journalEntries=[]}renderJournal()}function saveJournalData(){try{localStorage.setItem(JOURNAL_KEY,JSON.stringify(journalEntries))}catch(e){}}function toggleJournalForm(){const e=$("journalFormWrap");e&&(e.style.display="none"===e.style.display?"block":"none")}function toggleMistakeChip(e){e.classList.toggle("active")}function toggleJournalAnalytics(){const e=$("journalAnalyticsWrap");if(!e)return;const t="none"!==e.style.display;e.style.display=t?"none":"block",t||renderJournalAnalytics()}function saveJournalEntry(){const e=($("jPair").value||"").toUpperCase().trim(),t=$("jDir").value,n=$("jOutcome").value,a=parseFloat($("jPnl").value)||null,o=parseFloat($("jEntry").value)||null,r=parseFloat($("jExit").value)||null,s=$("jRR").value.trim()||null,i=$("jNote").value.trim(),l=Array.from(document.querySelectorAll("#jMistakes .mistake-chip.active")).map(e=>e.dataset.tag);e?(journalEntries.unshift({id:Date.now(),pair:e,dir:t,outcome:n,pnl:a,entry:o,exit:r,rr:s,note:i,mistakes:l,date:(new Date).toISOString()}),$("jPair").value="",$("jPnl").value="",$("jEntry").value="",$("jExit").value="",$("jRR").value="",$("jNote").value="",document.querySelectorAll("#jMistakes .mistake-chip").forEach(e=>e.classList.remove("active")),toggleJournalForm(),saveJournalData(),renderJournal()):alert("Please enter a currency pair.")}function deleteJournalEntry(e){confirm("Delete this journal entry?")&&(journalEntries=journalEntries.filter(t=>t.id!==e),saveJournalData(),renderJournal())}function filterJournal(e,t){journalFilter=e,document.querySelectorAll(".jfilter-btn").forEach(e=>e.classList.remove("active")),t&&t.classList.add("active"),renderJournal()}function renderJournal(){const e=journalEntries.filter(e=>"WIN"===e.outcome||"LOSS"===e.outcome||"BE"===e.outcome),t=journalEntries.filter(e=>"WIN"===e.outcome).length,n=journalEntries.reduce((e,t)=>e+(t.pnl||0),0),a=e.length?Math.round(t/e.length*100):0;$("jTotalTrades")&&($("jTotalTrades").textContent=journalEntries.length),$("jWinRate")&&($("jWinRate").textContent=a+"%",$("jWinRate").style.color=a>=50?"var(--green)":"var(--red)"),$("jTotalPnl")&&($("jTotalPnl").textContent=(n>=0?"+":"")+"$"+fmt(Math.abs(n)),$("jTotalPnl").style.color=n>=0?"var(--green)":"var(--red)");const o=journalEntries.filter(e=>e.rr);$("jAvgRR")&&($("jAvgRR").textContent=o.length?o[0].rr:"—");let r=journalEntries;"ALL"!==journalFilter&&(r=journalEntries.filter(e=>e.outcome===journalFilter||e.dir===journalFilter));const s=$("journalList");s&&(r.length?(s.innerHTML=r.map(e=>{const t=new Date(e.date),n=null!=e.pnl?e.pnl>=0?`<span style="color:var(--green)">+$${fmt(Math.abs(e.pnl))}</span>`:`<span style="color:var(--red)">-$${fmt(Math.abs(e.pnl))}</span>`:"",a=e.rr?`<span style="font-family:var(--mono);font-size:11px;color:var(--muted2);">R:R ${e.rr}</span>`:"",o=e.entry&&e.exit?`<span style="font-family:var(--mono);font-size:10px;color:var(--muted2);">Entry: ${fmt(e.entry,4)} → Exit: ${fmt(e.exit,4)}</span>`:"",r=e.mistakes&&e.mistakes.length?`<div style="margin-top:5px;">${e.mistakes.map(e=>`<span class="mistake-chip active" style="cursor:default;margin-right:4px;display:inline-block;margin-bottom:4px;">${e}</span>`).join("")}</div>`:"";return`<div class="journal-entry">\n      <button type="button" aria-label="Delete entry" class="je-del" onclick="deleteJournalEntry(${e.id})">✕</button>\n      <div class="je-meta">\n        <span class="je-pair">${e.pair}</span>\n        <span class="je-dir ${e.dir.toLowerCase()}">${e.dir}</span>\n        <span class="je-outcome ${e.outcome.toLowerCase()}">${"WIN"===e.outcome?"✅ WIN":"LOSS"===e.outcome?"❌ LOSS":"BE"===e.outcome?"⚖️ B/E":"🔵 OPEN"}</span>\n        ${a}\n        <span class="je-date">${t.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"})}</span>\n      </div>\n      ${o?`<div style="margin-bottom:5px;">${o}</div>`:""}\n      ${e.note?`<div class="je-note">${e.note}</div>`:""}\n      ${r}\n      ${n?`<div class="je-pnl">${n}</div>`:""}\n    </div>`}).join(""),$("journalAnalyticsWrap")&&"none"!==$("journalAnalyticsWrap").style.display&&renderJournalAnalytics()):s.innerHTML='<div class="port-empty">No entries match this filter.</div>')}function renderJournalAnalytics(){const e=journalEntries.filter(e=>"WIN"===e.outcome&&null!=e.pnl),t=journalEntries.filter(e=>"LOSS"===e.outcome&&null!=e.pnl),n=e.length?e.reduce((e,t)=>e+t.pnl,0)/e.length:0,a=t.length?t.reduce((e,t)=>e+t.pnl,0)/t.length:0,o=e.reduce((e,t)=>e+t.pnl,0),r=Math.abs(t.reduce((e,t)=>e+t.pnl,0));if($("jAvgWin")&&($("jAvgWin").textContent=e.length?"+$"+fmt(n):"—"),$("jAvgLoss")&&($("jAvgLoss").textContent=t.length?"-$"+fmt(Math.abs(a)):"—"),$("jProfitFactor")){const e=$("jProfitFactor");r>0?(e.textContent=fmt(o/r,2),e.style.color=o/r>=1.5?"var(--green)":o/r<1?"var(--red)":"var(--orange)"):o>0?(e.textContent="∞",e.style.color="var(--green)"):(e.textContent="—",e.style.color="var(--text)")}const s={};journalEntries.forEach(e=>{null!=e.pnl&&(s[e.pair]=(s[e.pair]||0)+e.pnl)});const i=Object.entries(s).sort((e,t)=>t[1]-e[1]);if($("jBestPair"))if(i.length){const[e,t]=i[0];$("jBestPair").textContent=`${e} (${t>=0?"+":""}$${fmt(Math.abs(t))})`,$("jBestPair").style.color=t>=0?"var(--green)":"var(--red)"}else $("jBestPair").textContent="—",$("jBestPair").style.color="var(--text)";const l=$("jEquityChart");if(l){const e=[...journalEntries].filter(e=>null!=e.pnl).sort((e,t)=>new Date(e.date)-new Date(t.date));if(e.length){let t=0;const n=e.map(e=>(t+=e.pnl,t)),a=Math.min(0,...n),o=Math.max(0,...n)-a||1;l.innerHTML=n.map(e=>`<div class="ry-bar" style="height:${Math.max(4,Math.round((e-a)/o*56)+4)}px;background:${e>=0?"var(--green)":"var(--red)"};" title="$${fmt(e)}"></div>`).join("")}else l.innerHTML='<div style="font-family:var(--sans);font-size:10px;color:var(--muted2);text-align:center;width:100%;">No closed trades with P&amp;L yet</div>'}const c=$("jMistakeBreakdown");if(c){const e={};journalEntries.forEach(t=>{(t.mistakes||[]).forEach(n=>{e[n]||(e[n]={count:0,cost:0}),e[n].count++,null!=t.pnl&&t.pnl<0&&(e[n].cost+=t.pnl)})});const t=Object.entries(e).sort((e,t)=>t[1].count-e[1].count);t.length?c.innerHTML=t.map(([e,t])=>`<div class="pivot-row"><span class="pivot-row-lbl">${e} (${t.count}x)</span><span class="pivot-row-val ${t.cost<0?"pivot-r":""}">${t.cost<0?"-$"+fmt(Math.abs(t.cost)):"—"}</span></div>`).join(""):c.innerHTML='<div class="port-empty" style="padding:10px;">No mistakes tagged yet — tag trades when logging to spot patterns.</div>'}}
+const JOURNAL_KEY="fxdesk_journal_v1";let journalEntries=[],journalFilter="ALL",journalMonthFilter="";function loadJournal(){try{journalEntries=JSON.parse(localStorage.getItem(JOURNAL_KEY))||[]}catch(e){journalEntries=[]}renderJournal()}function saveJournalData(){try{localStorage.setItem(JOURNAL_KEY,JSON.stringify(journalEntries))}catch(e){}}function toggleJournalForm(){const e=$("journalFormWrap");e&&(e.style.display="none"===e.style.display?"block":"none")}function toggleMistakeChip(e){e.classList.toggle("active")}function toggleJournalAnalytics(){const e=$("journalAnalyticsWrap");if(!e)return;const t="none"!==e.style.display;e.style.display=t?"none":"block",t||renderJournalAnalytics()}function saveJournalEntry(){const e=($("jPair").value||"").toUpperCase().trim(),t=$("jDir").value,n=$("jOutcome").value,a=parseFloat($("jPnl").value)||null,o=parseFloat($("jEntry").value)||null,r=parseFloat($("jExit").value)||null,s=$("jRR").value.trim()||null,i=$("jNote").value.trim(),l=Array.from(document.querySelectorAll("#jMistakes .mistake-chip.active")).map(e=>e.dataset.tag);e?(journalEntries.unshift({id:Date.now(),pair:e,dir:t,outcome:n,pnl:a,entry:o,exit:r,rr:s,note:i,mistakes:l,date:(new Date).toISOString()}),$("jPair").value="",$("jPnl").value="",$("jEntry").value="",$("jExit").value="",$("jRR").value="",$("jNote").value="",document.querySelectorAll("#jMistakes .mistake-chip").forEach(e=>e.classList.remove("active")),toggleJournalForm(),saveJournalData(),renderJournal()):alert("Please enter a currency pair.")}function deleteJournalEntry(e){confirm("Delete this journal entry?")&&(journalEntries=journalEntries.filter(t=>t.id!==e),saveJournalData(),renderJournal())}function filterJournal(e,t){journalFilter=e,document.querySelectorAll(".jfilter-btn").forEach(e=>e.classList.remove("active")),t&&t.classList.add("active"),renderJournal()}function renderJournal(){const e=journalEntries.filter(e=>"WIN"===e.outcome||"LOSS"===e.outcome||"BE"===e.outcome),t=journalEntries.filter(e=>"WIN"===e.outcome).length,n=journalEntries.reduce((e,t)=>e+(t.pnl||0),0),a=e.length?Math.round(t/e.length*100):0;$("jTotalTrades")&&($("jTotalTrades").textContent=journalEntries.length),$("jWinRate")&&($("jWinRate").textContent=a+"%",$("jWinRate").style.color=a>=50?"var(--green)":"var(--red)"),$("jTotalPnl")&&($("jTotalPnl").textContent=(n>=0?"+":"")+"$"+fmt(Math.abs(n)),$("jTotalPnl").style.color=n>=0?"var(--green)":"var(--red)");const o=journalEntries.filter(e=>e.rr);$("jAvgRR")&&($("jAvgRR").textContent=o.length?o[0].rr:"—");journalMonthFilter=($("jMonthFilter")||{value:""}).value;const months=[...new Set(journalEntries.map(e=>e.date?e.date.substring(0,7):"").filter(Boolean))].sort().reverse();const mSel=$("jMonthFilter");if(mSel){const cur=mSel.value;mSel.innerHTML='<option value="">ALL MONTHS</option>'+months.map(m=>`<option value="${m}"${m===cur?" selected":""}>${m}</option>`).join("");mSel.value=months.includes(cur)?cur:"";}journalMonthFilter=($("jMonthFilter")||{value:""}).value;let r=journalEntries;if("ALL"!==journalFilter)r=r.filter(e=>e.outcome===journalFilter||e.dir===journalFilter);if(journalMonthFilter)r=r.filter(e=>e.date&&e.date.startsWith(journalMonthFilter));const s=$("journalList");s&&(r.length?(s.innerHTML=r.map(e=>{const t=new Date(e.date),n=null!=e.pnl?e.pnl>=0?`<span style="color:var(--green)">+$${fmt(Math.abs(e.pnl))}</span>`:`<span style="color:var(--red)">-$${fmt(Math.abs(e.pnl))}</span>`:"",a=e.rr?`<span style="font-family:var(--mono);font-size:11px;color:var(--muted2);">R:R ${e.rr}</span>`:"",o=e.entry&&e.exit?`<span style="font-family:var(--mono);font-size:10px;color:var(--muted2);">Entry: ${fmt(e.entry,4)} → Exit: ${fmt(e.exit,4)}</span>`:"",r=e.mistakes&&e.mistakes.length?`<div style="margin-top:5px;">${e.mistakes.map(e=>`<span class="mistake-chip active" style="cursor:default;margin-right:4px;display:inline-block;margin-bottom:4px;">${e}</span>`).join("")}</div>`:"";return`<div class="journal-entry">\n      <button type="button" aria-label="Delete entry" class="je-del" onclick="deleteJournalEntry(${e.id})">✕</button>\n      <div class="je-meta">\n        <span class="je-pair">${e.pair}</span>\n        <span class="je-dir ${e.dir.toLowerCase()}">${e.dir}</span>\n        <span class="je-outcome ${e.outcome.toLowerCase()}">${"WIN"===e.outcome?"✅ WIN":"LOSS"===e.outcome?"❌ LOSS":"BE"===e.outcome?"⚖️ B/E":"🔵 OPEN"}</span>\n        ${a}\n        <span class="je-date">${t.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"})}</span>\n      </div>\n      ${o?`<div style="margin-bottom:5px;">${o}</div>`:""}\n      ${e.note?`<div class="je-note">${e.note}</div>`:""}\n      ${r}\n      ${n?`<div class="je-pnl">${n}</div>`:""}\n    </div>`}).join(""),$("journalAnalyticsWrap")&&"none"!==$("journalAnalyticsWrap").style.display&&renderJournalAnalytics()):s.innerHTML='<div class="port-empty">No entries match this filter.</div>')}function renderJournalAnalytics(){const e=journalEntries.filter(e=>"WIN"===e.outcome&&null!=e.pnl),t=journalEntries.filter(e=>"LOSS"===e.outcome&&null!=e.pnl),n=e.length?e.reduce((e,t)=>e+t.pnl,0)/e.length:0,a=t.length?t.reduce((e,t)=>e+t.pnl,0)/t.length:0,o=e.reduce((e,t)=>e+t.pnl,0),r=Math.abs(t.reduce((e,t)=>e+t.pnl,0));if($("jAvgWin")&&($("jAvgWin").textContent=e.length?"+$"+fmt(n):"—"),$("jAvgLoss")&&($("jAvgLoss").textContent=t.length?"-$"+fmt(Math.abs(a)):"—"),$("jProfitFactor")){const e=$("jProfitFactor");r>0?(e.textContent=fmt(o/r,2),e.style.color=o/r>=1.5?"var(--green)":o/r<1?"var(--red)":"var(--orange)"):o>0?(e.textContent="∞",e.style.color="var(--green)"):(e.textContent="—",e.style.color="var(--text)")}const s={};journalEntries.forEach(e=>{null!=e.pnl&&(s[e.pair]=(s[e.pair]||0)+e.pnl)});const i=Object.entries(s).sort((e,t)=>t[1]-e[1]);if($("jBestPair"))if(i.length){const[e,t]=i[0];$("jBestPair").textContent=`${e} (${t>=0?"+":""}$${fmt(Math.abs(t))})`,$("jBestPair").style.color=t>=0?"var(--green)":"var(--red)"}else $("jBestPair").textContent="—",$("jBestPair").style.color="var(--text)";const l=$("jEquityChart");if(l){const e=[...journalEntries].filter(e=>null!=e.pnl).sort((e,t)=>new Date(e.date)-new Date(t.date));if(e.length){let t=0;const n=e.map(e=>(t+=e.pnl,t)),a=Math.min(0,...n),o=Math.max(0,...n)-a||1;l.innerHTML=n.map(e=>`<div class="ry-bar" style="height:${Math.max(4,Math.round((e-a)/o*56)+4)}px;background:${e>=0?"var(--green)":"var(--red)"};" title="$${fmt(e)}"></div>`).join("")}else l.innerHTML='<div style="font-family:var(--sans);font-size:10px;color:var(--muted2);text-align:center;width:100%;">No closed trades with P&amp;L yet</div>'}const c=$("jMistakeBreakdown");if(c){const e={};journalEntries.forEach(t=>{(t.mistakes||[]).forEach(n=>{e[n]||(e[n]={count:0,cost:0}),e[n].count++,null!=t.pnl&&t.pnl<0&&(e[n].cost+=t.pnl)})});const t=Object.entries(e).sort((e,t)=>t[1].count-e[1].count);t.length?c.innerHTML=t.map(([e,t])=>`<div class="pivot-row"><span class="pivot-row-lbl">${e} (${t.count}x)</span><span class="pivot-row-val ${t.cost<0?"pivot-r":""}">${t.cost<0?"-$"+fmt(Math.abs(t.cost)):"—"}</span></div>`).join(""):c.innerHTML='<div class="port-empty" style="padding:10px;">No mistakes tagged yet — tag trades when logging to spot patterns.</div>';renderMonthlyChart(journalEntries)}
+
+function renderMonthlyChart(entries){
+  const el=$("jMonthlyChart");if(!el)return;
+  const map={};
+  entries.filter(e=>e.pnl!=null&&e.date).forEach(e=>{
+    const k=e.date.substring(0,7);
+    map[k]=(map[k]||0)+e.pnl;
+  });
+  const keys=Object.keys(map).sort();
+  if(!keys.length){el.innerHTML='<div style="font-family:var(--sans);font-size:10px;color:var(--muted2);text-align:center;width:100%;">No closed trades with P&L yet</div>';return;}
+  const maxAbs=Math.max(...Object.values(map).map(Math.abs))||1;
+  const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  el.innerHTML=keys.map(k=>{
+    const v=map[k],pos=v>=0,pct=Math.max(4,Math.round(Math.abs(v)/maxAbs*70));
+    const [yr,mo]=k.split('-');const label=MONTHS[parseInt(mo)-1]+"'"+yr.slice(2);
+    return`<div class="monthly-bar-wrap" title="${k}: ${v>=0?'+':''}$${fmt(Math.abs(v))}">
+      <div style="display:flex;flex-direction:column;justify-content:flex-end;height:70px;">
+        ${pos?`<div class="monthly-bar-pos" style="height:${pct}px;"></div>`
+             :`<div class="monthly-bar-neg" style="height:${pct}px;"></div>`}
+      </div>
+      <div class="monthly-bar-lbl">${label}</div>
+    </div>`;
+  }).join('');
+}
+
+function triggerCsvImport(){$('csvImportInput').click();}
+
+function handleCsvFile(input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(e){
+    const text=e.target.result;
+    input.value='';
+    try{
+      const result=parseMT4CSV(text);
+      if(!result.entries.length){alert('No valid trades found in CSV.
+
+Make sure this is an MT4/MT5 trade history export (CSV format).');return;}
+      const msg=`Found ${result.total} trades (${result.skipped} already imported or skipped).
+
+Import ${result.entries.length} new trade${result.entries.length!==1?'s':''}?`;
+      if(!confirm(msg))return;
+      journalEntries=result.entries.concat(journalEntries).sort((a,b)=>new Date(b.date)-new Date(a.date));
+      saveJournalData();renderJournal();
+      alert('✅ Imported '+result.entries.length+' trade'+(result.entries.length!==1?'s':'')+' successfully!');
+    }catch(err){alert('Error parsing CSV: '+err.message+'
+
+Make sure this is an MT4/MT5 history export.');}
+  };
+  reader.readAsText(file);
+}
+
+function parseMT4CSV(text){
+  const lines=text.split(/?
+/).map(l=>l.trim()).filter(Boolean);
+  if(lines.length<2)throw new Error('File appears empty');
+  
+  // Detect delimiter
+  const delim=lines[0].includes('	')?'	':',';
+  const headers=lines[0].split(delim).map(h=>h.replace(/^"+|"+$/g,'').trim().toLowerCase());
+  
+  // Map header names to indices
+  function hi(names){for(const n of names){const i=headers.indexOf(n);if(i>=0)return i;}return-1;}
+  const iSym=hi(['symbol','pair','instrument']);
+  const iType=hi(['type','action','direction','order type']);
+  const iLots=hi(['lots','volume','size','quantity']);
+  const iOpen=hi(['open price','open_price','entry price','price','open']);
+  const iClose=hi(['close price','close_price','exit price','close']);
+  const iSL=hi(['s/l','sl','stop loss','stoploss']);
+  const iTP=hi(['t/p','tp','take profit','takeprofit']);
+  const iOpenTime=hi(['open time','open_time','open date','entry time','date']);
+  const iCloseTime=hi(['close time','close_time','close date','exit time']);
+  const iProfit=hi(['profit','p&l','pnl','net profit','gain/loss']);
+  const iComment=hi(['comment','notes','remark']);
+  
+  if(iSym<0||iType<0||iProfit<0)throw new Error('Required columns not found. Expected: Symbol, Type/Action, Profit');
+  
+  // Build set of existing trade fingerprints to detect duplicates
+  const existing=new Set(journalEntries.map(e=>(e.pair||'')+'|'+(e.entry||'')+'|'+(e.note||'').substring(0,20)));
+  
+  const entries=[];let skipped=0;let total=0;
+  for(let i=1;i<lines.length;i++){
+    const cols=lines[i].split(delim).map(c=>c.replace(/^"+|"+$/g,'').trim());
+    if(cols.length<3)continue;
+    const type=(cols[iType]||'').toLowerCase();
+    // Skip balance/credit/deposit rows
+    if(['balance','credit','deposit','withdrawal','correction'].some(t=>type.includes(t)))continue;
+    total++;
+    const sym=(cols[iSym]||'').toUpperCase().replace(/\//g,'').trim();
+    if(!sym)continue;
+    const pnl=parseFloat(cols[iProfit]);
+    if(isNaN(pnl)){skipped++;continue;}
+    const dir=type.includes('sell')||type.includes('short')?'SELL':'BUY';
+    const outcome=pnl>0?'WIN':pnl<0?'LOSS':'BE';
+    const entry=iOpen>=0?parseFloat(cols[iOpen])||null:null;
+    const exit=iClose>=0?parseFloat(cols[iClose])||null:null;
+    const lots=iLots>=0?parseFloat(cols[iLots])||null:null;
+    const sl=iSL>=0?parseFloat(cols[iSL])||null:null;
+    const tp=iTP>=0?parseFloat(cols[iTP])||null:null;
+    let rr=null;
+    if(entry&&sl&&tp){const risk=Math.abs(entry-sl),reward=Math.abs(entry-tp);if(risk>0)rr='1:'+(reward/risk).toFixed(1);}
+    const rawDate=iCloseTime>=0?cols[iCloseTime]:(iOpenTime>=0?cols[iOpenTime]:'');
+    let date=new Date().toISOString();
+    if(rawDate){const d=new Date(rawDate.replace(/\./g,'-').replace(' ','T'));if(!isNaN(d))date=d.toISOString();}
+    const comment=iComment>=0?cols[iComment]:'';
+    const fp=sym+'|'+(entry||'')+'|'+comment.substring(0,20);
+    if(existing.has(fp)){skipped++;continue;}
+    entries.push({id:Date.now()+i,pair:sym,dir,outcome,pnl,entry,exit,lots,rr,note:comment||'Imported from MT4/MT5',mistakes:[],date});
+  }
+  return{entries,skipped,total};
+}
 function exportJournal(){
   if(!journalEntries.length){alert('No entries to export.');return;}
   const blob=new Blob([JSON.stringify(journalEntries,null,2)],{type:'application/json'});

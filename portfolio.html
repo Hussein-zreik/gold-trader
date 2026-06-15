@@ -50,6 +50,7 @@
       <div class="ct">MY PORTFOLIO</div>
       <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
         <span class="badge b-blue">SAVED LOCALLY</span>
+        <button type="button" class="badge" id="portRefreshBtn" style="cursor:pointer;background:rgba(59,130,246,.1);color:var(--badge-blue);border:1px solid rgba(59,130,246,.2);" aria-label="Refresh live prices" onclick="refreshPortPrices()">↻ REFRESH PRICES</button>
         <button type="button" class="badge" style="cursor:pointer;background:rgba(249,115,22,.1);color:var(--orange);border:1px solid rgba(249,115,22,.2);" aria-label="Export portfolio as JSON" onclick="exportPortfolio()">⬇ EXPORT</button>
       </div>
     </div>
@@ -83,10 +84,11 @@
         </select>
         <input class="port-input" id="portEntry" aria-label="Entry price" type="number" placeholder="Entry price" style="max-width:120px;">
         <input class="port-input" id="portLots" aria-label="Lot size" type="number" placeholder="Lots" step="0.01" style="max-width:80px;" value="0.1">
-        <input class="port-input" id="portCurrent" aria-label="Current price" type="number" placeholder="Current price" style="max-width:120px;">
+        <input class="port-input" id="portCurrent" aria-label="Current price" type="number" placeholder="Current (auto-fetched)" style="max-width:140px;">
         <button type="button" class="port-btn" onclick="addPortPosition()">+ ADD</button>
       </div>
       <div style="margin-top:6px;font-family:var(--mono);font-size:10px;color:var(--muted2);">P&amp;L = (Current − Entry) × Lots × 100 &nbsp;|&nbsp; Data saved in browser storage</div>
+      <div id="portRefreshTs" style="margin-top:4px;font-family:var(--mono);font-size:10px;color:var(--muted2);">Prices: not yet fetched — click ↻ or wait for auto-refresh</div>
     </div>
   </div>
     </div>
@@ -94,11 +96,44 @@
 </main>
 <script src="shared.js"></script>
 <script>
+const $=e=>document.getElementById(e);
 function _fetchTimeout(e){return new Promise((t,n)=>setTimeout(()=>n(new Error("timeout")),e))}
-const fmt=(e,t=2)=>null==e||isNaN(e)?"—":Number(e).toLocaleString("en-US",{minimumFractionDigits:t,maximumFractionDigits:t}
+const fmt=(e,t=2)=>null==e||isNaN(e)?"—":Number(e).toLocaleString("en-US",{minimumFractionDigits:t,maximumFractionDigits:t})
 function timeAgo(e){const t=Math.round((Date.now()-e)/6e4);if(t<1)return"just now";if(t<60)return t+"m ago";const n=Math.round(t/60);return n<24?n+"h ago":Math.round(n/24)+"d ago"}
 function localTs(e){return e?e.toLocaleString("en-US",{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit",timeZoneName:"short"}):"—"}
-const PORT_KEY="fxdesk_portfolio_v1";let portPositions=[];function loadPortfolio(){try{portPositions=JSON.parse(localStorage.getItem(PORT_KEY))||[]}catch(e){portPositions=[]}renderPortfolio()}function savePortfolio(){try{localStorage.setItem(PORT_KEY,JSON.stringify(portPositions))}catch(e){}}function addPortPosition(){const e=($("portSym").value||"").toUpperCase().trim(),t=$("portDir").value,n=parseFloat($("portEntry").value),a=parseFloat($("portLots").value)||.1,o=parseFloat($("portCurrent").value);!e||isNaN(n)||isNaN(o)?alert("Please fill in Symbol, Entry Price, and Current Price."):(portPositions.push({id:Date.now(),sym:e,dir:t,entry:n,lots:a,current:o}),$("portSym").value="",$("portEntry").value="",$("portCurrent").value="",savePortfolio(),renderPortfolio())}function removePortPosition(e){portPositions=portPositions.filter(t=>t.id!==e),savePortfolio(),renderPortfolio()}function refreshPortfolioPrices(){renderPortfolio()}function renderPortfolio(){const e=$("portBody");if(!e)return;if(!portPositions.length)return e.innerHTML='<tr><td colspan="8" class="port-empty">No positions yet. Add one below.</td></tr>',$("portTotal")&&($("portTotal").textContent="$0.00"),$("portPnl")&&($("portPnl").textContent="$0.00",$("portPnl").style.color="var(--text)"),$("portPnlPct")&&($("portPnlPct").textContent="0.00%"),void($("portCount")&&($("portCount").textContent="0"));let t=0,n=0,a=0;e.innerHTML=portPositions.map(e=>{const o="BUY"===e.dir?1:-1,r=(e.current-e.entry)*e.lots*100*o,s=e.entry?(e.current-e.entry)/e.entry*100*o:0,i=e.entry*e.lots*100;t+=e.current*e.lots*100,n+=r,a+=i;const l=r>=0;return`<tr>\n      <td style="font-family:var(--mono);font-weight:700;color:var(--blue);">${e.sym}</td>\n      <td><span style="font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:4px;background:${"BUY"===e.dir?"rgba(34,197,94,.15)":"rgba(239,68,68,.15)"};color:${"BUY"===e.dir?"var(--green)":"var(--red)"};">${e.dir}</span></td>\n      <td style="font-family:var(--mono);">${fmt(e.entry,4)}</td>\n      <td style="font-family:var(--mono);">${e.lots}</td>\n      <td style="font-family:var(--mono);">${fmt(e.current,4)}</td>\n      <td style="font-family:var(--mono);color:${l?"var(--green)":"var(--red)"};">${l?"+":""}$${fmt(r)}</td>\n      <td style="font-family:var(--mono);color:${l?"var(--green)":"var(--red)"};">${l?"+":""}${fmt(s)}%</td>\n      <td><button class="port-btn danger" onclick="removePortPosition(${e.id})" style="padding:3px 9px;font-size:9px;">✕</button></td>\n    </tr>`}).join("");const o=n>=0,r=a?n/a*100:0;$("portTotal")&&($("portTotal").textContent="$"+fmt(t),$("portTotal").style.color="var(--blue)"),$("portPnl")&&($("portPnl").textContent=(o?"+":"")+"$"+fmt(Math.abs(n)),$("portPnl").style.color=o?"var(--green)":"var(--red)"),$("portPnlPct")&&($("portPnlPct").textContent=(o?"+":"")+fmt(r)+"%",$("portPnlPct").style.color=o?"var(--green)":"var(--red)"),$("portCount")&&($("portCount").textContent=portPositions.length)}
+const PORT_KEY="fxdesk_portfolio_v1";let portPositions=[];function loadPortfolio(){try{portPositions=JSON.parse(localStorage.getItem(PORT_KEY))||[]}catch(e){portPositions=[]}renderPortfolio()}function savePortfolio(){try{localStorage.setItem(PORT_KEY,JSON.stringify(portPositions))}catch(e){}}function addPortPosition(){const e=($("portSym").value||"").toUpperCase().trim(),t=$("portDir").value,n=parseFloat($("portEntry").value),a=parseFloat($("portLots").value)||.1,o=parseFloat($("portCurrent").value)||n;if(!e||isNaN(n)){alert("Please fill in Symbol and Entry Price.");return;}portPositions.push({id:Date.now(),sym:e,dir:t,entry:n,lots:a,current:o});$("portSym").value="";$("portEntry").value="";$("portCurrent").value="";savePortfolio();renderPortfolio();refreshPortPrices();}function removePortPosition(e){portPositions=portPositions.filter(t=>t.id!==e),savePortfolio(),renderPortfolio()}function refreshPortfolioPrices(){renderPortfolio()}function renderPortfolio(){const e=$("portBody");if(!e)return;if(!portPositions.length)return e.innerHTML='<tr><td colspan="8" class="port-empty">No positions yet. Add one below.</td></tr>',$("portTotal")&&($("portTotal").textContent="$0.00"),$("portPnl")&&($("portPnl").textContent="$0.00",$("portPnl").style.color="var(--text)"),$("portPnlPct")&&($("portPnlPct").textContent="0.00%"),void($("portCount")&&($("portCount").textContent="0"));let t=0,n=0,a=0;e.innerHTML=portPositions.map(e=>{const o="BUY"===e.dir?1:-1,r=(e.current-e.entry)*e.lots*100*o,s=e.entry?(e.current-e.entry)/e.entry*100*o:0,i=e.entry*e.lots*100;t+=e.current*e.lots*100,n+=r,a+=i;const l=r>=0;return`<tr>\n      <td style="font-family:var(--mono);font-weight:700;color:var(--blue);">${e.sym}</td>\n      <td><span style="font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:4px;background:${"BUY"===e.dir?"rgba(34,197,94,.15)":"rgba(239,68,68,.15)"};color:${"BUY"===e.dir?"var(--green)":"var(--red)"};">${e.dir}</span></td>\n      <td style="font-family:var(--mono);">${fmt(e.entry,4)}</td>\n      <td style="font-family:var(--mono);">${e.lots}</td>\n      <td style="font-family:var(--mono);">${fmt(e.current,4)}</td>\n      <td style="font-family:var(--mono);color:${l?"var(--green)":"var(--red)"};">${l?"+":""}$${fmt(r)}</td>\n      <td style="font-family:var(--mono);color:${l?"var(--green)":"var(--red)"};">${l?"+":""}${fmt(s)}%</td>\n      <td><button class="port-btn danger" onclick="removePortPosition(${e.id})" style="padding:3px 9px;font-size:9px;">✕</button></td>\n    </tr>`}).join("");const o=n>=0,r=a?n/a*100:0;$("portTotal")&&($("portTotal").textContent="$"+fmt(t),$("portTotal").style.color="var(--blue)"),$("portPnl")&&($("portPnl").textContent=(o?"+":"")+"$"+fmt(Math.abs(n)),$("portPnl").style.color=o?"var(--green)":"var(--red)"),$("portPnlPct")&&($("portPnlPct").textContent=(o?"+":"")+fmt(r)+"%",$("portPnlPct").style.color=o?"var(--green)":"var(--red)"),$("portCount")&&($("portCount").textContent=portPositions.length)}
+
+const PORT_PROXY='https://forex-desk-proxy.zreik111.workers.dev/?url=';
+const SYM_MAP={XAUUSD:'GC=F',XAGUSD:'SI=F',BTCUSD:'BTC-USD',ETHUSD:'ETH-USD',SOLUSD:'SOL-USD',BNBUSD:'BNB-USD',XRPUSD:'XRP-USD',ADAUSD:'ADA-USD',EURUSD:'EURUSD=X',GBPUSD:'GBPUSD=X',USDJPY:'USDJPY=X',AUDUSD:'AUDUSD=X',USDCAD:'USDCAD=X',USDCHF:'USDCHF=X',NZDUSD:'NZDUSD=X',GBPJPY:'GBPJPY=X',EURJPY:'EURJPY=X',USOIL:'CL=F',SP500:'ES=F',NAS100:'NQ=F',DXY:'DX-Y.NYB',GOLD:'GC=F',SILVER:'SI=F',OIL:'CL=F'};
+async function fetchPortPrice(sym){
+  const ticker=SYM_MAP[sym.toUpperCase()]||(sym.toUpperCase()+'=X');
+  const url=encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/'+ticker+'?interval=1m&range=1d');
+  try{
+    const r=await Promise.race([fetch(PORT_PROXY+url),_fetchTimeout(12000)]);
+    const j=await r.json();
+    const price=j?.chart?.result?.[0]?.meta?.regularMarketPrice;
+    return(typeof price==='number'&&price>0)?price:null;
+  }catch(e){return null;}
+}
+async function refreshPortPrices(){
+  if(!portPositions.length)return;
+  const btn=$('portRefreshBtn');
+  if(btn){btn.textContent='↻ LOADING…';btn.style.opacity='.6';}
+  const syms=[...new Set(portPositions.map(p=>p.sym))];
+  const prices=await Promise.all(syms.map(fetchPortPrice));
+  let updated=0;
+  syms.forEach((s,i)=>{
+    if(prices[i]!=null){
+      portPositions.filter(p=>p.sym===s).forEach(p=>{p.current=prices[i];});
+      updated++;
+    }
+  });
+  if(updated>0)savePortfolio();
+  renderPortfolio();
+  const ts=$('portRefreshTs');
+  if(ts){const now=new Date();ts.textContent='Prices updated: '+now.toLocaleTimeString()+(updated<syms.length?' ('+( syms.length-updated)+' symbol(s) not found)':'');}
+  if(btn){btn.textContent='↻ REFRESH PRICES';btn.style.opacity='';}
+}
 function exportPortfolio(){
   if(!portPositions.length){alert('No positions to export.');return;}
   const blob=new Blob([JSON.stringify(portPositions,null,2)],{type:'application/json'});
@@ -110,6 +145,8 @@ function exportPortfolio(){
 }
 window.addEventListener('load', function(){
   loadPortfolio();
+  refreshPortPrices();
+  setInterval(refreshPortPrices, 60000);
 });
 </script>
 </body>

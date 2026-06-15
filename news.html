@@ -34,6 +34,7 @@
 .enews-empty .ico{font-size:40px;margin-bottom:12px}
 .port-btn{background:var(--btn-blue-bg);color:#fff;border:none;padding:9px 20px;border-radius:7px;font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;cursor:pointer;transition:background .2s;white-space:nowrap}
 .port-btn:hover{background:#1d4ed8}
+body.light-mode .enews-card:hover{box-shadow:0 4px 20px rgba(0,0,0,.12)}
 </style>
 </head>
 <body>
@@ -61,8 +62,9 @@
 </main>
 <script src="shared.js"></script>
 <script>
+const $=e=>document.getElementById(e);
 function _fetchTimeout(e){return new Promise((t,n)=>setTimeout(()=>n(new Error("timeout")),e))}
-const fmt=(e,t=2)=>null==e||isNaN(e)?"—":Number(e).toLocaleString("en-US",{minimumFractionDigits:t,maximumFractionDigits:t}
+const fmt=(e,t=2)=>null==e||isNaN(e)?"—":Number(e).toLocaleString("en-US",{minimumFractionDigits:t,maximumFractionDigits:t})
 function timeAgo(e){const t=Math.round((Date.now()-e)/6e4);if(t<1)return"just now";if(t<60)return t+"m ago";const n=Math.round(t/60);return n<24?n+"h ago":Math.round(n/24)+"d ago"}
 function localTs(e){return e?e.toLocaleString("en-US",{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit",timeZoneName:"short"}):"—"}
 const ENEWS_BACKEND_URL='https://economy-news-hub.onrender.com';
@@ -73,6 +75,19 @@ let enewsLoaded=false;
 
 function populateNewsPage(){
   if(!enewsLoaded){ enewsLoaded=true; fetchEconomyNews(); }
+}
+
+
+const GOLD_BULL=['rate cut','stimulus','inflation','war','geopolitical','recession','dollar weakness','safe haven','uncertainty','crisis','dovish','easing','conflict','gold rallies','gold rises','gold surges','fed pivot','rate pause','slowdown','tariff','sanctions','debt ceiling','stagflation'];
+const GOLD_BEAR=['rate hike','hawkish','strong economy','nfp beat','dollar strength','tightening','risk-on','stocks rally','gold falls','gold drops','gold declines','strong dollar','economic growth','jobs growth','resilient economy'];
+function goldSentiment(title,desc){
+  const t=((title||'')+(desc||'')).toLowerCase();
+  let s=0;
+  GOLD_BULL.forEach(w=>{if(t.includes(w))s++;});
+  GOLD_BEAR.forEach(w=>{if(t.includes(w))s--;});
+  if(s>0)return{label:'BULLISH',color:'var(--green)',bg:'rgba(34,197,94,.15)'};
+  if(s<0)return{label:'BEARISH',color:'#F87171',bg:'rgba(239,68,68,.12)'};
+  return{label:'NEUTRAL',color:'var(--muted2)',bg:'rgba(139,175,209,.08)'};
 }
 
 async function fetchEconomyNews(){
@@ -127,9 +142,10 @@ function renderEconomyNews(){
     const dt=new Date(n.publishedAt);
     const img=n.urlToImage?`<img src="${n.urlToImage}" alt="" class="enews-img" onerror="this.style.display='none'">`:'';
     const src=(n.source?.name||'Unknown').substring(0,30);
+    const sent=goldSentiment(n.title,n.description);
     return `<div class="enews-card" onclick="window.open('${n.url}','_blank','noopener')">
       ${img}
-      <div class="enews-card-hdr"><span class="enews-source">${src}</span></div>
+      <div class="enews-card-hdr"><span class="enews-source">${src}</span><span style="font-family:var(--mono);font-size:9px;font-weight:700;padding:2px 8px;border-radius:4px;background:${sent.bg};color:${sent.color};letter-spacing:.5px;">⬤ ${sent.label}</span></div>
       <div class="enews-title">${n.title||''}</div>
       <div class="enews-summary">${n.description||'No description available'}</div>
       <div class="enews-footer"><span>📅 ${isNaN(dt)?'—':timeAgo(dt)}</span><span class="rd">Read full story →</span></div>
