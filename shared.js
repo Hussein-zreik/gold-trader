@@ -63,6 +63,7 @@
              <span class="hdr-search-icon" aria-hidden="true">&#9906;</span>
              <input type="search" class="hdr-search-input" id="hdrSearchInput" placeholder="Search…" autocomplete="off" spellcheck="false" aria-label="Search pages and features" aria-expanded="false" aria-controls="hdrSearchResults" aria-haspopup="listbox">
              <div class="hdr-search-results" id="hdrSearchResults" role="listbox" hidden></div>
+             <span class="hdr-search-kbd" id="hdrSearchKbd" aria-hidden="true">/</span>
            </div>
            <button type="button" class="hdr-icon-btn mobile-search-btn" id="mobileSearchBtn" onclick="FXShared.toggleMobileSearch()" aria-label="Search" aria-expanded="false">🔍</button>
            <span id="hdrTime" style="font-family:var(--mono);font-size:10px;color:var(--muted2);white-space:nowrap;">--:--:-- UTC</span>
@@ -83,7 +84,7 @@
     <div class="logo-divider" aria-hidden="true"></div>
     <div>
       <div class="logo-name">FOREX DESK</div>
-      <div class="logo-sub">Precision Targeting · Unique Fintech</div>
+      <div class="logo-sub">GOLD · FOREX · MARKETS</div>
     </div>
   </a>
   <nav class="site-nav" aria-label="Main navigation">${navLinks}</nav>
@@ -226,7 +227,17 @@ ${!isLanding ? `<div class="mobile-search-overlay" id="mobileSearchOverlay" hidd
     }
 
     inp.addEventListener('input', refresh);
-    inp.addEventListener('focus', function(){ if(inp.value.trim()) refresh(); });
+    inp.addEventListener('focus', function(){
+      var kbd = document.getElementById('hdrSearchKbd');
+      if(kbd) kbd.style.opacity = '0';
+      if(inp.value.trim()) refresh();
+    });
+    inp.addEventListener('blur', function(){
+      setTimeout(function(){
+        var kbd = document.getElementById('hdrSearchKbd');
+        if(kbd) kbd.style.opacity = '';
+      }, 200);
+    });
 
     inp.addEventListener('keydown', function(e){
       var items = res.querySelectorAll('.search-result-item');
@@ -277,6 +288,17 @@ ${!isLanding ? `<div class="mobile-search-overlay" id="mobileSearchOverlay" hidd
       document.getElementById('hdrSearchInput'),
       document.getElementById('hdrSearchResults')
     );
+    // "/" key focuses search
+    document.addEventListener('keydown', function(e){
+      if(e.key === '/' && !e.ctrlKey && !e.metaKey && !e.altKey){
+        var tag = (document.activeElement || {}).tagName || '';
+        var inp = document.getElementById('hdrSearchInput');
+        if(inp && tag !== 'INPUT' && tag !== 'TEXTAREA' && tag !== 'SELECT'){
+          e.preventDefault();
+          inp.focus();
+        }
+      }
+    });
     // Mobile overlay search (inline results, not absolute dropdown)
     var overlayInp = document.getElementById('mobileSearchOverlayInput');
     var overlayRes = document.getElementById('mobileSearchOverlayResults');
