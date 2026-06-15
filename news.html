@@ -137,11 +137,9 @@ function renderEconomyNews(){
   }).join('');
 }
 
-if($('enewsSearch')) $('enewsSearch').addEventListener('input', renderEconomyNews);
+if($('enewsSearch')){let _st;$('enewsSearch').addEventListener('input',function(){clearTimeout(_st);_st=setTimeout(renderEconomyNews,200);});}
 if($('enewsCategory')) $('enewsCategory').addEventListener('change', fetchEconomyNews);
 addPostRefreshHook(()=>{updateSMC(),updateMacroRegime(),loadOptionssentiment()}),window.addEventListener("load",()=>{setTimeout(()=>{loadOptionssentiment(),loadRealYield()},2e3)}),updateMarketStatus(),setInterval(updateMarketStatus,6e4),addPostRefreshHook(()=>{}),window.addEventListener("load",()=>{const _hash=window.location.hash.replace('#','');const _savedPage=_hash&&['dashboard','journal','portfolio','news','calendar'].includes(_hash)?_hash:null;try{const e=_savedPage||localStorage.getItem("fxdesk_page");if(e&&"dashboard"!==e)switchPage(e,null)}catch(e){}}),window.addEventListener("unhandledrejection",e=>{const t=e?.reason?.message||"";(t.includes("Failed to fetch")||t.includes("NetworkError")||t.includes("Load failed"))&&e.preventDefault()});
-document.getElementById('enewsSearch').addEventListener('input', renderEconomyNews);
-document.getElementById('enewsCategory').addEventListener('change', fetchEconomyNews);
 window.addEventListener('load', function(){
   fetchEconomyNews();
 });

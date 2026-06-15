@@ -95,7 +95,10 @@
   <a href="dashboard.html" class="nav-cta">Open Dashboard →</a>
 </nav>
 ${!isLanding ? `<div class="mobile-search-overlay" id="mobileSearchOverlay" hidden>
-  <input type="search" class="mobile-search-overlay-input" id="mobileSearchOverlayInput" placeholder="Search pages and features…" autocomplete="off" spellcheck="false" aria-label="Search pages and features">
+  <div class="mobile-search-overlay-row">
+    <input type="search" class="mobile-search-overlay-input" id="mobileSearchOverlayInput" placeholder="Search pages and features…" autocomplete="off" spellcheck="false" aria-label="Search pages and features">
+    <button type="button" class="mobile-search-close-btn" onclick="FXShared.toggleMobileSearch()" aria-label="Close search">✕</button>
+  </div>
   <div class="mobile-search-overlay-results" id="mobileSearchOverlayResults"></div>
 </div>` : ''}`;
   }
