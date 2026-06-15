@@ -593,16 +593,17 @@ body.light-mode .search-result-item.focused {
 
 /* ── RESPONSIVE ── */
 @media (max-width: 900px) {
-  .site-nav       { display: none; }
-  .nav-cta        { display: none; }
-  .hdr-search     { display: none; }
+  .site-nav        { display: none; }
+  .nav-cta         { display: none; }
+  .hdr-search      { display: none; }
+  #hdrTime         { display: none; }
   .mobile-menu-btn { display: block; }
-  .site-header    { padding: 0 16px; gap: 8px; }
-  .page-wrap      { padding: 24px 16px; }
-  .page-title     { font-size: 22px; }
-  .stats-inner    { grid-template-columns: 1fr 1fr; }
-  .site-footer    { flex-direction: column; align-items: flex-start; gap: 14px; padding: 24px 16px; }
-  .footer-links   { flex-wrap: wrap; gap: 14px; }
+  .site-header     { padding: 0 16px; gap: 8px; }
+  .page-wrap       { padding: 24px 16px; }
+  .page-title      { font-size: 22px; }
+  .stats-inner     { grid-template-columns: 1fr 1fr; }
+  .site-footer     { flex-direction: column; align-items: flex-start; gap: 14px; padding: 24px 16px; }
+  .footer-links    { flex-wrap: wrap; gap: 14px; }
 }
 
 @media (max-width: 480px) {
