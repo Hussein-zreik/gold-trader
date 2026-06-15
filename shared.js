@@ -18,6 +18,14 @@
     { label:'Calendar',  href:'calendar.html',   id:'calendar'  },
   ];
 
+  const SEARCH_INDEX = [
+    { title:'Dashboard', desc:'Live market prices — gold, silver, forex & crypto',   href:'dashboard.html', icon:'📊', tags:'market data prices live gold silver forex crypto charts widgets' },
+    { title:'Journal',   desc:'Log trades and track performance over time',           href:'journal.html',   icon:'📓', tags:'trade log journal entries p&l profit loss win rate history analytics' },
+    { title:'Portfolio', desc:'Open positions, live P&L and exposure overview',       href:'portfolio.html', icon:'💼', tags:'portfolio positions holdings equity balance exposure live tracker' },
+    { title:'News',      desc:'Aggregated financial & economic news from 40 k+ sources', href:'news.html',   icon:'📰', tags:'news headlines financial economic market sentiment articles sources feed' },
+    { title:'Calendar',  desc:'Economic events with impact ratings and forecasts',   href:'calendar.html',  icon:'📅', tags:'calendar events economic schedule releases forecast impact nfp cpi fed' },
+  ];
+
   // Detect current page from URL
   function currentPage(){
     const path = window.location.pathname;
@@ -40,14 +48,25 @@
       return `<a href="${item.href}" class="nav-link ${active}">${item.label}</a>`;
     }).join('');
 
+    // Mobile-only page title (replaces the hidden nav on small screens)
+    const currentItem = NAV_ITEMS.find(i => i.id === page);
+    const mobilePageTitle = currentItem
+      ? `<span class="hdr-page-title" aria-hidden="true">${currentItem.label}</span>`
+      : '';
+
     // Right side: landing gets "Open Dashboard →", other pages get utility buttons
     const rightSide = isLanding
       ? `<a href="dashboard.html" class="nav-cta">Open Dashboard →</a>
          <button class="mobile-menu-btn" onclick="FXShared.toggleMobile()" aria-label="Toggle menu" aria-expanded="false" id="mobileMenuBtn">☰</button>`
-      : `<div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+      : `<div class="hdr-right">
+           <div class="hdr-search" id="hdrSearch">
+             <span class="hdr-search-icon" aria-hidden="true">&#9906;</span>
+             <input type="search" class="hdr-search-input" id="hdrSearchInput" placeholder="Search…" autocomplete="off" spellcheck="false" aria-label="Search pages and features" aria-expanded="false" aria-controls="hdrSearchResults" aria-haspopup="listbox">
+             <div class="hdr-search-results" id="hdrSearchResults" role="listbox" hidden></div>
+           </div>
            <span id="hdrTime" style="font-family:var(--mono);font-size:10px;color:var(--muted2);white-space:nowrap;">--:--:-- UTC</span>
            <button type="button" class="hdr-icon-btn" id="themeBtn" onclick="FXShared.toggleTheme()" aria-label="Toggle theme">🌙</button>
-           <button class="mobile-menu-btn" onclick="FXShared.toggleMobile()" aria-label="Toggle menu" aria-expanded="false" id="mobileMenuBtn" style="display:block;margin-left:0;">☰</button>
+           <button class="mobile-menu-btn" onclick="FXShared.toggleMobile()" aria-label="Toggle menu" aria-expanded="false" id="mobileMenuBtn">☰</button>
          </div>`;
 
     return `
@@ -67,9 +86,14 @@
     </div>
   </a>
   <nav class="site-nav" aria-label="Main navigation">${navLinks}</nav>
+  ${mobilePageTitle}
   ${rightSide}
 </header>
 <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
+  ${!isLanding ? `<div class="mobile-search-wrap">
+    <input type="search" class="hdr-search-input mobile-search-input" id="mobileSearchInput" placeholder="Search pages and features…" autocomplete="off" spellcheck="false" aria-label="Search" aria-expanded="false" aria-controls="mobileSearchResults" aria-haspopup="listbox">
+    <div class="hdr-search-results" id="mobileSearchResults" role="listbox" hidden></div>
+  </div>` : ''}
   ${mobileNavLinks}
   <a href="dashboard.html" class="nav-cta">Open Dashboard →</a>
 </nav>`;
@@ -140,6 +164,99 @@
     el.textContent = `${hh}:${mm}:${ss} UTC`;
   }
 
+  /* ── SEARCH ── */
+  function searchItems(query){
+    const q = query.trim().toLowerCase();
+    if(!q) return [];
+    return SEARCH_INDEX.filter(item =>
+      item.title.toLowerCase().includes(q) ||
+      item.desc.toLowerCase().includes(q) ||
+      item.tags.toLowerCase().includes(q)
+    );
+  }
+
+  function renderSearchResults(results, container){
+    container.innerHTML = '';
+    if(!results.length){
+      container.innerHTML = '<div class="search-no-results">No results for that query</div>';
+    } else {
+      results.forEach(function(item){
+        const a = document.createElement('a');
+        a.href = item.href;
+        a.className = 'search-result-item';
+        a.setAttribute('role','option');
+        a.innerHTML =
+          '<span class="search-result-icon" aria-hidden="true">'+item.icon+'</span>'+
+          '<div class="search-result-text">'+
+            '<div class="search-result-title">'+item.title+'</div>'+
+            '<div class="search-result-desc">'+item.desc+'</div>'+
+          '</div>';
+        container.appendChild(a);
+      });
+    }
+    container.hidden = false;
+  }
+
+  function setupSearch(inp, res){
+    if(!inp || !res) return;
+    var focusIdx = -1;
+
+    function refresh(){
+      var matches = searchItems(inp.value);
+      if(!inp.value.trim()){ close(); return; }
+      renderSearchResults(matches, res);
+      inp.setAttribute('aria-expanded','true');
+      focusIdx = -1;
+      syncFocus();
+    }
+
+    function syncFocus(){
+      var items = res.querySelectorAll('.search-result-item');
+      items.forEach(function(el,i){ el.classList.toggle('focused', i === focusIdx); });
+    }
+
+    function close(){
+      res.hidden = true;
+      inp.setAttribute('aria-expanded','false');
+      focusIdx = -1;
+    }
+
+    inp.addEventListener('input', refresh);
+    inp.addEventListener('focus', function(){ if(inp.value.trim()) refresh(); });
+
+    inp.addEventListener('keydown', function(e){
+      var items = res.querySelectorAll('.search-result-item');
+      if(e.key === 'ArrowDown'){
+        e.preventDefault();
+        focusIdx = Math.min(focusIdx+1, items.length-1);
+        syncFocus();
+      } else if(e.key === 'ArrowUp'){
+        e.preventDefault();
+        focusIdx = Math.max(focusIdx-1, -1);
+        syncFocus();
+      } else if(e.key === 'Enter'){
+        if(focusIdx >= 0 && items[focusIdx]) window.location.href = items[focusIdx].href;
+      } else if(e.key === 'Escape'){
+        close(); inp.blur();
+      }
+    });
+
+    document.addEventListener('click', function(e){
+      if(!inp.contains(e.target) && !res.contains(e.target)) close();
+    }, true);
+  }
+
+  function initSearch(){
+    setupSearch(
+      document.getElementById('hdrSearchInput'),
+      document.getElementById('hdrSearchResults')
+    );
+    setupSearch(
+      document.getElementById('mobileSearchInput'),
+      document.getElementById('mobileSearchResults')
+    );
+  }
+
   /* ── CLOSE MOBILE ON OUTSIDE CLICK ── */
   document.addEventListener('click', function(e){
     const nav = document.getElementById('mobileNav');
@@ -161,6 +278,7 @@
   document.addEventListener('DOMContentLoaded', function(){
     inject();
     initTheme();
+    initSearch();
     // Start clock if on dashboard
     if(document.getElementById('hdrTime')){
       tickClock();

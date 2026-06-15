@@ -73,6 +73,16 @@
 .port-input{background:var(--bg3);border:1px solid rgba(59,130,246,.35);color:var(--text);padding:7px 10px;border-radius:7px;font-family:var(--sans);font-size:11px;flex:1;min-width:80px}
 .port-input:focus{border-color:var(--blue);outline:0}
 .port-add-row{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.j-form-r4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:8px}
+.j-form-r3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px}
+@media(max-width:600px){
+  .journal-stats{grid-template-columns:1fr 1fr}
+  .j-form-r4{grid-template-columns:1fr 1fr}
+  .j-form-r3{grid-template-columns:1fr 1fr}
+}
+@media(max-width:380px){
+  .j-form-r4,.j-form-r3{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
@@ -93,7 +103,7 @@
     </div>
     <div class="portfolio-wrap" id="journalFormWrap" style="display:none;border-bottom:1px solid var(--border);">
       <div style="font-family:var(--mono);font-size:11px;color:var(--muted2);letter-spacing:1px;margin-bottom:10px;">NEW TRADE ENTRY</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+      <div class="j-form-r4">
         <input class="journal-input" id="jPair" aria-label="Currency pair" placeholder="Pair (XAUUSD)">
         <select class="journal-input" id="jDir" aria-label="Trade direction" style="cursor:pointer;">
           <option value="BUY">BUY</option>
@@ -107,7 +117,7 @@
         </select>
         <input class="journal-input" id="jPnl" aria-label="Profit and loss" type="number" placeholder="P&amp;L ($)">
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px;">
+      <div class="j-form-r3">
         <input class="journal-input" id="jEntry" aria-label="Entry price" type="number" placeholder="Entry price">
         <input class="journal-input" id="jExit" aria-label="Exit price" type="number" placeholder="Exit price">
         <input class="journal-input" id="jRR" aria-label="Risk to reward ratio" placeholder="R:R (e.g. 1:2)">
