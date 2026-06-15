@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Economic Calendar — Forex Desk</title>
-<meta name="description" content="Live USD economic events and central bank meeting schedule. Track high-impact events that move gold and forex markets.">
+<meta name="description" content="Live interactive economic calendar with impact ratings, actual vs forecast data. Track high-impact events that move gold and forex markets.">
 <meta name="theme-color" content="#04080F">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,116 +13,672 @@
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800;900&display=swap"></noscript>
 <link rel="stylesheet" href="shared.css">
 <style>
-.cal-grid { display: flex; flex-direction: column; gap: 10px; }
 
-.cb-timeline { display: flex; flex-direction: column; gap: 6px; }
-
-.cb-event {
+/* ── DATE NAV STRIP ── */
+.cal-nav {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 12px;
-  padding: 12px 14px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.cal-period-btns {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.cal-period-btn {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--muted2);
+  cursor: pointer;
+  transition: all .2s;
+}
+.cal-period-btn:hover  { color: var(--text); border-color: var(--muted); }
+.cal-period-btn.active { background: var(--btn-blue-bg); color: #fff; border-color: var(--btn-blue-bg); }
+
+.cal-filter-btns {
+  display: flex;
+  gap: 6px;
+}
+
+.cal-filter-btn {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--muted2);
+  cursor: pointer;
+  transition: all .15s;
+}
+.cal-filter-btn:hover { opacity: .85; }
+.cal-filter-btn.low    { border-color: rgba(107,140,174,.4); }
+.cal-filter-btn.med    { border-color: rgba(249,115,22,.4); }
+.cal-filter-btn.high   { border-color: rgba(239,68,68,.4); }
+.cal-filter-btn.low.active  { background:rgba(107,140,174,.15); color:var(--muted2); }
+.cal-filter-btn.med.active  { background:rgba(249,115,22,.15); color:var(--orange); border-color:rgba(249,115,22,.5); }
+.cal-filter-btn.high.active { background:rgba(239,68,68,.15); color:var(--badge-red); border-color:rgba(239,68,68,.5); }
+
+/* ── DATE STRIP ── */
+.date-strip-wrap {
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.date-strip {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 4px 2px;
+}
+.date-strip::-webkit-scrollbar { display: none; }
+
+.date-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 60px;
+  padding: 10px 8px;
   border-radius: 10px;
   border: 1px solid var(--border);
   background: var(--bg2);
-  transition: border-color .2s;
+  color: var(--muted2);
+  cursor: pointer;
+  transition: all .2s;
+  flex-shrink: 0;
+  font-family: var(--sans);
 }
-.cb-event:hover  { border-color: rgba(59,130,246,.3); }
-.cb-event.next-up { border-color: rgba(249,115,22,.4); background: rgba(249,115,22,.04); }
-.cb-event.past   { opacity: .5; }
+.date-btn:hover { border-color: rgba(59,130,246,.3); color: var(--text); }
+.date-btn.active { background: var(--btn-blue-bg); border-color: var(--btn-blue-bg); color: #fff; }
+.date-btn.today { border-color: rgba(59,130,246,.5); }
+.date-btn.today .date-day-label { color: var(--blue); }
+.date-btn.active .date-day-label { color: rgba(255,255,255,.7); }
+.date-btn.weekend { opacity: .45; }
 
-.cb-date { font-family: var(--heading); font-size: 14px; font-weight: 700; color: var(--text); min-width: 52px; text-align: center; line-height: 1.2; }
-.cb-date-month { font-family: var(--sans); font-size: 9px; color: var(--muted2); font-weight: 500; }
-.cb-divider { width: 1px; height: 32px; background: var(--border); flex-shrink: 0; }
-.cb-info { flex: 1; }
-.cb-bank { font-family: var(--heading); font-size: 13px; font-weight: 700; color: var(--text); }
-.cb-detail { font-family: var(--sans); font-size: 10px; color: var(--muted2); margin-top: 2px; }
-.cb-badge { font-family: var(--sans); font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: 4px; }
-.cb-badge.fed { background:rgba(59,130,246,.15);  color:var(--blue);    border:1px solid rgba(59,130,246,.3);  }
-.cb-badge.ecb { background:rgba(249,115,22,.12); color:var(--orange);  border:1px solid rgba(249,115,22,.25); }
-.cb-badge.boe { background:rgba(239,68,68,.12);  color:var(--badge-red); border:1px solid rgba(239,68,68,.25);  }
-.cb-badge.boj { background:rgba(168,85,247,.12); color:var(--badge-purple); border:1px solid rgba(168,85,247,.25); }
-.cb-badge.rba { background:rgba(34,197,94,.1);   color:var(--green);   border:1px solid rgba(34,197,94,.25); }
-.cb-countdown { font-family: var(--mono); font-size: 10px; color: var(--muted2); text-align: right; white-space: nowrap; }
+.date-day-num  { font-size: 18px; font-weight: 800; font-family: var(--display); line-height: 1; }
+.date-month    { font-size: 9px; font-weight: 500; margin-top: 1px; letter-spacing: .5px; text-transform: uppercase; }
+.date-day-label { font-size: 8px; letter-spacing: .8px; text-transform: uppercase; margin-top: 3px; font-family: var(--mono); }
+.date-dot-row  { display: flex; gap: 3px; margin-top: 5px; min-height: 6px; }
+.date-dot      { width: 5px; height: 5px; border-radius: 50%; }
+.date-dot.high { background: var(--red); }
+.date-dot.med  { background: var(--orange); }
+.date-dot.low  { background: var(--muted); }
 
-.evt-row {
+/* ── STATUS BAR ── */
+.cal-status {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted2);
+  padding: 8px 12px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--blue);
+  border-radius: 8px;
+  margin-bottom: 14px;
+}
+.cal-status.error { border-left-color: var(--red); color: var(--badge-red); }
+
+/* ── DAY GROUP ── */
+.day-group { margin-bottom: 8px; }
+
+.day-header {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
-  background: var(--bg2);
-  border-radius: 8px;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--bg3);
   border: 1px solid var(--border);
+  border-radius: 10px 10px 0 0;
 }
-.evt-time  { font-family: var(--mono); font-size: 10px; color: var(--muted2); min-width: 90px; }
-.evt-title { font-family: var(--sans);  font-size: 12px; font-weight: 600; color: var(--text); flex: 1; }
-.evt-impact { font-family: var(--sans); font-size: 10px; padding: 2px 8px; border-radius: 4px; font-weight: 600; white-space: nowrap; }
-.evt-impact.high { background:rgba(239,68,68,.15);  color:var(--badge-red); border:1px solid rgba(239,68,68,.3); }
-.evt-impact.med  { background:rgba(249,115,22,.12); color:var(--orange);  border:1px solid rgba(249,115,22,.25); }
-.evt-impact.low  { background:rgba(107,140,174,.1); color:var(--muted2);  border:1px solid rgba(107,140,174,.2); }
 
-.b-live   { background:rgba(34,197,94,.1);  color:var(--green);  border:1px solid rgba(34,197,94,.2); }
-.b-purple { background:rgba(168,85,247,.1); color:var(--badge-purple); border:1px solid rgba(168,85,247,.2); }
+.day-header-date {
+  font-family: var(--display);
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--text);
+  line-height: 1;
+  min-width: 36px;
+  text-align: center;
+}
+
+.day-header-month {
+  font-family: var(--sans);
+  font-size: 9px;
+  color: var(--muted2);
+  font-weight: 500;
+  text-align: center;
+}
+
+.day-header-vline {
+  width: 1px;
+  height: 28px;
+  background: var(--border);
+}
+
+.day-header-name {
+  font-family: var(--display);
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.day-header-counts {
+  margin-left: auto;
+  display: flex;
+  gap: 6px;
+}
+
+/* ── EVENTS TABLE ── */
+.events-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+  overflow: hidden;
+}
+
+.events-table th {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg3);
+}
+
+.events-table th.num { text-align: right; }
+
+.evt-row {
+  border-bottom: 1px solid rgba(255,255,255,.04);
+  transition: background .15s;
+}
+.evt-row:last-child { border-bottom: none; }
+.evt-row:hover { background: rgba(59,130,246,.03); }
+.evt-row.high-impact { border-left: 3px solid var(--red); }
+.evt-row.med-impact  { border-left: 3px solid var(--orange); }
+.evt-row.low-impact  { border-left: 3px solid transparent; }
+
+.evt-row td {
+  padding: 10px 12px;
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--text);
+  vertical-align: middle;
+}
+
+.evt-time {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted2);
+  white-space: nowrap;
+  min-width: 65px;
+}
+
+.evt-currency {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 56px;
+}
+
+.evt-flag {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.evt-cur-code {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--muted2);
+}
+
+.evt-title-cell { flex: 1; }
+
+.evt-title-text {
+  font-weight: 600;
+  color: var(--text);
+  font-size: 12px;
+}
+
+.impact-badge {
+  display: inline-block;
+  font-family: var(--sans);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: .3px;
+  white-space: nowrap;
+}
+.impact-badge.high { background:rgba(239,68,68,.15);  color:var(--badge-red); border:1px solid rgba(239,68,68,.3); }
+.impact-badge.med  { background:rgba(249,115,22,.12); color:var(--orange);    border:1px solid rgba(249,115,22,.25); }
+.impact-badge.low  { background:rgba(107,140,174,.1); color:var(--muted2);    border:1px solid rgba(107,140,174,.2); }
+
+.evt-num {
+  font-family: var(--mono);
+  font-size: 11px;
+  text-align: right;
+  white-space: nowrap;
+  min-width: 70px;
+}
+.evt-num.actual  { color: var(--text); font-weight: 600; }
+.evt-num.better  { color: var(--green); }
+.evt-num.worse   { color: var(--badge-red); }
+.evt-num.forecast { color: var(--muted2); }
+.evt-num.previous { color: var(--muted); }
+.evt-num.empty    { color: var(--muted); opacity: .4; }
+
+/* ── EMPTY / LOADING ── */
+.cal-loading {
+  text-align: center;
+  padding: 60px 20px;
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--muted2);
+}
+.cal-loading .spin {
+  display: inline-block;
+  font-size: 28px;
+  animation: 1.2s linear infinite spin;
+  margin-bottom: 12px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── CB MEETINGS ── */
+.cb-event {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 14px; border-radius: 9px;
+  border: 1px solid var(--border); background: var(--bg2);
+  transition: border-color .2s; margin-bottom: 6px;
+}
+.cb-event:hover { border-color: rgba(59,130,246,.3); }
+.cb-event.next-up { border-color: rgba(249,115,22,.4); background: rgba(249,115,22,.04); }
+.cb-date { font-family: var(--heading); font-size: 16px; font-weight: 800; color: var(--text); min-width: 42px; text-align: center; line-height: 1.1; }
+.cb-date-month { font-family: var(--sans); font-size: 9px; color: var(--muted2); font-weight: 500; }
+.cb-div  { width:1px; height:32px; background:var(--border); flex-shrink:0; }
+.cb-info { flex:1; }
+.cb-bank { font-family: var(--heading); font-size: 13px; font-weight: 700; color: var(--text); }
+.cb-detail { font-family: var(--sans); font-size: 10px; color: var(--muted2); margin-top: 2px; }
+.cb-badge { font-family:var(--sans); font-size:9px; font-weight:700; padding:2px 8px; border-radius:4px; white-space:nowrap; }
+.cb-badge.fed { background:rgba(59,130,246,.15); color:var(--blue); border:1px solid rgba(59,130,246,.3); }
+.cb-badge.ecb { background:rgba(249,115,22,.12); color:var(--orange); border:1px solid rgba(249,115,22,.25); }
+.cb-badge.boe { background:rgba(239,68,68,.12); color:var(--badge-red); border:1px solid rgba(239,68,68,.25); }
+.cb-badge.boj { background:rgba(168,85,247,.12); color:var(--badge-purple); border:1px solid rgba(168,85,247,.25); }
+.cb-badge.rba { background:rgba(34,197,94,.1); color:var(--green); border:1px solid rgba(34,197,94,.25); }
+.cb-countdown { font-family:var(--mono); font-size:10px; color:var(--muted2); text-align:right; white-space:nowrap; }
+
 .badge { font-family:var(--sans); font-size:10px; font-weight:600; padding:3px 8px; border-radius:4px; white-space:nowrap; }
-.card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:16px; }
+.b-live   { background:rgba(34,197,94,.1); color:var(--green); border:1px solid rgba(34,197,94,.2); }
+.b-purple { background:rgba(168,85,247,.1); color:var(--badge-purple); border:1px solid rgba(168,85,247,.2); }
+.card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:20px; }
 .ch   { display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background:var(--bg3); border-bottom:1px solid var(--border); gap:10px; flex-wrap:wrap; }
 .ct   { font-family:var(--heading); font-size:12px; font-weight:700; color:var(--blue); letter-spacing:.3px; }
-.cb-list { padding: 14px; display: flex; flex-direction: column; gap: 6px; }
-.evt-list { padding: 14px; display: flex; flex-direction: column; gap: 6px; }
-.note { font-family:var(--sans); font-size:11px; color:var(--muted2); padding:10px 14px; border-top:1px solid var(--border); line-height:1.6; }
+.cb-list { padding:14px; display:flex; flex-direction:column; gap:6px; }
+
+@media (max-width: 640px) {
+  .events-table th.hide-mobile,
+  .evt-row td.hide-mobile { display: none; }
+  .evt-row td { padding: 8px; font-size: 11px; }
+  .date-btn { min-width: 52px; padding: 8px 6px; }
+  .date-day-num { font-size: 16px; }
+}
 </style>
 </head>
 <body>
 <main id="main-content">
-  <div class="page-wrap">
-    <div class="page-title">📅 Economic Calendar</div>
-    <div class="page-sub">High-impact events that move gold and forex. All times shown in ET.</div>
+<div class="page-wrap">
+  <div class="page-title">📅 Economic Calendar</div>
+  <div class="page-sub">Live economic events with impact ratings, forecasts and actuals. High-impact events move gold and forex instantly.</div>
 
-    <!-- CENTRAL BANK MEETINGS -->
-    <div class="card">
-      <div class="ch">
-        <div class="ct">CENTRAL BANK MEETINGS — 2026</div>
-        <span class="badge b-purple">FED · ECB · BOE · BOJ · RBA</span>
+  <!-- ── LIVE CALENDAR ── -->
+  <div class="card" style="overflow:visible;">
+    <div class="ch">
+      <div class="ct">LIVE ECONOMIC CALENDAR</div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+        <div class="cal-filter-btns">
+          <button class="cal-filter-btn high active" data-impact="high" onclick="toggleFilter('high',this)">● HIGH</button>
+          <button class="cal-filter-btn med active"  data-impact="med"  onclick="toggleFilter('med',this)">● MED</button>
+          <button class="cal-filter-btn low"         data-impact="low"  onclick="toggleFilter('low',this)">● LOW</button>
+        </div>
+        <span class="badge b-live">FF · LIVE</span>
       </div>
-      <div class="cb-list" id="cbList">Loading…</div>
     </div>
 
-    <!-- UPCOMING USD EVENTS -->
-    <div class="card">
-      <div class="ch">
-        <div class="ct">UPCOMING HIGH-IMPACT USD EVENTS</div>
-        <span class="badge b-live">AUTO-UPDATED</span>
+    <div style="padding:16px;">
+      <!-- Period nav -->
+      <div class="cal-nav">
+        <div class="cal-period-btns">
+          <button class="cal-period-btn" onclick="loadPeriod('last',this)">Last Week</button>
+          <button class="cal-period-btn active" onclick="loadPeriod('this',this)">This Week</button>
+          <button class="cal-period-btn" onclick="loadPeriod('next',this)">Next Week</button>
+        </div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--muted2);" id="calTimeZone">GMT+0 · All currencies</div>
       </div>
-      <div class="evt-list" id="evtList">Loading…</div>
-      <div class="note">Source: Forex Factory · High and Medium impact events only · Times in ET · Refresh page for latest</div>
+
+      <!-- Date strip -->
+      <div class="date-strip" id="dateStrip"></div>
+
+      <!-- Status -->
+      <div class="cal-status" id="calStatus">Loading calendar data…</div>
+
+      <!-- Events -->
+      <div id="calEvents"><div class="cal-loading"><div class="spin">⟳</div><br>Fetching live events…</div></div>
     </div>
   </div>
+
+  <!-- ── CENTRAL BANK MEETINGS ── -->
+  <div class="card">
+    <div class="ch">
+      <div class="ct">CENTRAL BANK MEETINGS — 2026</div>
+      <span class="badge b-purple">FED · ECB · BOE · BOJ · RBA</span>
+    </div>
+    <div class="cb-list" id="cbList">Loading…</div>
+  </div>
+
+</div>
 </main>
 
 <script src="shared.js"></script>
 <script>
-// ── CENTRAL BANK CALENDAR (static 2026 schedule) ──
+// ── CONFIG ──
+const FF_API   = 'https://nfs.faireconomy.media/ff_calendar_thisweek.json';
+const FF_NEXT  = 'https://nfs.faireconomy.media/ff_calendar_nextweek.json';
+const FF_LAST  = 'https://nfs.faireconomy.media/ff_calendar_lastweek.json';
+const CAL_CACHE_TTL = 15 * 60 * 1000; // 15 min
+
+const CURRENCY_FLAGS = {
+  USD:'🇺🇸', EUR:'🇪🇺', GBP:'🇬🇧', JPY:'🇯🇵', AUD:'🇦🇺',
+  CAD:'🇨🇦', CHF:'🇨🇭', NZD:'🇳🇿', CNY:'🇨🇳', ALL:'🌐'
+};
+
+let allEvents = [];
+let activeFilters = new Set(['high','med']);
+let selectedDate = null;
+let currentPeriod = 'this';
+
+// ── FILTER TOGGLE ──
+function toggleFilter(impact, btn){
+  if(activeFilters.has(impact)){
+    if(activeFilters.size === 1) return; // keep at least one
+    activeFilters.delete(impact);
+    btn.classList.remove('active');
+  } else {
+    activeFilters.add(impact);
+    btn.classList.add('active');
+  }
+  renderCalendar();
+}
+
+// ── PERIOD SWITCH ──
+function loadPeriod(period, btn){
+  currentPeriod = period;
+  document.querySelectorAll('.cal-period-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  selectedDate = null;
+  fetchCalendar(period);
+}
+
+// ── FETCH ──
+async function fetchCalendar(period='this'){
+  const status = document.getElementById('calStatus');
+  const el = document.getElementById('calEvents');
+  status.textContent = 'Loading calendar data…';
+  status.className = 'cal-status';
+  el.innerHTML = '<div class="cal-loading"><div class="spin">⟳</div><br>Fetching live events…</div>';
+
+  const cacheKey = `fxdesk_cal_${period}`;
+  try{
+    const cached = JSON.parse(localStorage.getItem(cacheKey)||'null');
+    if(cached && (Date.now()-cached.ts)<CAL_CACHE_TTL){
+      allEvents = cached.data;
+      status.textContent = `✓ ${allEvents.length} events loaded (cached) · ${new Date(cached.ts).toLocaleTimeString()}`;
+      buildDateStrip();
+      renderCalendar();
+      return;
+    }
+  }catch(e){}
+
+  const url = period==='next' ? FF_NEXT : period==='last' ? FF_LAST : FF_API;
+
+  try{
+    const r = await Promise.race([
+      fetch(url, {cache:'no-store'}),
+      new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),10000))
+    ]);
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const data = await r.json();
+    allEvents = data;
+    try{ localStorage.setItem(cacheKey, JSON.stringify({ts:Date.now(), data})); }catch(e){}
+    status.textContent = `✓ ${allEvents.length} events loaded · Updated ${new Date().toLocaleTimeString()}`;
+    buildDateStrip();
+    renderCalendar();
+  }catch(e){
+    status.textContent = '⚠ Could not load live calendar — showing static schedule below.';
+    status.className = 'cal-status error';
+    el.innerHTML = `<div class="cal-loading" style="padding:30px;">
+      <div style="font-size:28px;margin-bottom:10px;">📅</div>
+      <div>Live feed unavailable. <a href="https://www.forexfactory.com/calendar" target="_blank" rel="noopener" style="color:var(--blue);">Open Forex Factory ↗</a></div>
+      <div style="font-size:11px;color:var(--muted);margin-top:6px;">The Forex Factory API sometimes blocks certain browsers. Try refreshing.</div>
+    </div>`;
+    allEvents = [];
+    buildDateStrip();
+  }
+}
+
+// ── DATE STRIP ──
+function buildDateStrip(){
+  const strip = document.getElementById('dateStrip');
+  if(!strip) return;
+
+  // Determine week range
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+  // Get Mon of the selected week
+  const offset = currentPeriod==='next' ? 7 : currentPeriod==='last' ? -7 : 0;
+  const weekStart = new Date(today);
+  const dayOfWeek = today.getDay();
+  const diffToMon = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+  weekStart.setDate(today.getDate() + diffToMon + offset);
+
+  const days = [];
+  for(let i=0;i<7;i++){
+    const d = new Date(weekStart);
+    d.setDate(weekStart.getDate()+i);
+    days.push(d);
+  }
+
+  // Count events per day
+  const countsByDate = {};
+  allEvents.forEach(e => {
+    const d = new Date(e.date).toDateString();
+    if(!countsByDate[d]) countsByDate[d]={high:0,med:0,low:0};
+    const imp = (e.impact||'').toLowerCase();
+    if(imp==='high') countsByDate[d].high++;
+    else if(imp==='medium'||imp==='med') countsByDate[d].med++;
+    else countsByDate[d].low++;
+  });
+
+  // Auto-select today or first weekday with events
+  if(!selectedDate){
+    const todayStr = today.toDateString();
+    const hasToday = days.some(d=>d.toDateString()===todayStr);
+    if(hasToday) selectedDate = todayStr;
+    else {
+      const first = days.find(d=>countsByDate[d.toDateString()]?.high>0 || countsByDate[d.toDateString()]?.med>0);
+      selectedDate = first ? first.toDateString() : days[1].toDateString();
+    }
+  }
+
+  const DOW = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+  const MON = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+
+  strip.innerHTML = days.map(d => {
+    const ds = d.toDateString();
+    const isToday = ds === today.toDateString();
+    const isWeekend = d.getDay()===0 || d.getDay()===6;
+    const isActive = ds === selectedDate;
+    const counts = countsByDate[ds] || {high:0,med:0,low:0};
+    const dots = [
+      ...Array(Math.min(counts.high,3)).fill('<div class="date-dot high"></div>'),
+      ...Array(Math.min(counts.med,2)).fill('<div class="date-dot med"></div>'),
+      ...Array(Math.min(counts.low && !counts.high && !counts.med ? 1 : 0, 1)).fill('<div class="date-dot low"></div>'),
+    ].join('');
+
+    return `<button class="date-btn${isActive?' active':''}${isToday?' today':''}${isWeekend?' weekend':''}"
+      onclick="selectDate('${ds}',this)">
+      <div class="date-day-num">${d.getDate()}</div>
+      <div class="date-month">${MON[d.getMonth()]}</div>
+      <div class="date-day-label">${isToday?'TODAY':DOW[d.getDay()]}</div>
+      <div class="date-dot-row">${dots}</div>
+    </button>`;
+  }).join('');
+}
+
+function selectDate(dateStr, btn){
+  selectedDate = dateStr;
+  document.querySelectorAll('.date-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderCalendar();
+}
+
+// ── RENDER EVENTS ──
+function renderCalendar(){
+  const el = document.getElementById('calEvents');
+  if(!el) return;
+  if(!allEvents.length) return;
+
+  const impactMap = {high:'high', medium:'med', med:'med', low:'low', '':'low'};
+  const filtered = allEvents.filter(e => {
+    const imp = impactMap[(e.impact||'').toLowerCase()] || 'low';
+    return activeFilters.has(imp);
+  });
+
+  // Group by date
+  const byDate = {};
+  filtered.forEach(e => {
+    const d = new Date(e.date);
+    const key = d.toDateString();
+    if(!byDate[key]) byDate[key] = {date:d, events:[]};
+    byDate[key].events.push(e);
+  });
+
+  const sortedDates = Object.entries(byDate).sort((a,b)=>a[1].date-b[1].date);
+  if(!sortedDates.length){
+    el.innerHTML='<div class="cal-loading" style="padding:30px;"><div style="font-size:28px;margin-bottom:8px;">🔍</div>No events match the current filters.</div>';
+    return;
+  }
+
+  // If a date is selected, show only that day — else show all
+  const toShow = selectedDate
+    ? sortedDates.filter(([k])=>k===selectedDate)
+    : sortedDates;
+
+  if(!toShow.length){
+    el.innerHTML='<div class="cal-loading" style="padding:30px;"><div style="font-size:28px;margin-bottom:8px;">✅</div>No events on this day. Select another date above.</div>';
+    return;
+  }
+
+  const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const MON  = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  el.innerHTML = toShow.map(([key,{date,events}]) => {
+    const high = events.filter(e=>(e.impact||'').toLowerCase()==='high').length;
+    const med  = events.filter(e=>['medium','med'].includes((e.impact||'').toLowerCase())).length;
+
+    const rows = events.map(e => {
+      const imp = impactMap[(e.impact||'').toLowerCase()] || 'low';
+      const flag = CURRENCY_FLAGS[e.currency] || '🌐';
+      const time = e.date ? new Date(e.date).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true}) : 'All Day';
+
+      // Color actual vs forecast
+      let actualClass = 'actual';
+      if(e.actual && e.forecast){
+        const a=parseFloat(e.actual), f=parseFloat(e.forecast);
+        if(!isNaN(a)&&!isNaN(f)){
+          // For most indicators, better than forecast = green (higher is better, except unemployment etc.)
+          actualClass = a>=f ? 'actual better' : 'actual worse';
+        }
+      }
+
+      return `<tr class="evt-row ${imp}-impact">
+        <td class="evt-time">${time}</td>
+        <td>
+          <div class="evt-currency">
+            <span class="evt-flag">${flag}</span>
+            <span class="evt-cur-code">${e.currency||'—'}</span>
+          </div>
+        </td>
+        <td><div class="evt-title-text">${e.title||'—'}</div></td>
+        <td><span class="impact-badge ${imp}">${imp.toUpperCase()}</span></td>
+        <td class="evt-num ${e.actual?actualClass:'empty'} hide-mobile">${e.actual||'—'}</td>
+        <td class="evt-num forecast hide-mobile">${e.forecast||'—'}</td>
+        <td class="evt-num previous hide-mobile">${e.previous||'—'}</td>
+      </tr>`;
+    }).join('');
+
+    return `<div class="day-group">
+      <div class="day-header">
+        <div>
+          <div class="day-header-date">${date.getDate()}</div>
+          <div class="day-header-month">${MON[date.getMonth()]}</div>
+        </div>
+        <div class="day-header-vline"></div>
+        <div class="day-header-name">${DAYS[date.getDay()]}</div>
+        <div class="day-header-counts">
+          ${high?`<span class="impact-badge high">${high} HIGH</span>`:''}
+          ${med?`<span class="impact-badge med">${med} MED</span>`:''}
+        </div>
+      </div>
+      <table class="events-table">
+        <thead>
+          <tr>
+            <th>TIME</th>
+            <th>CCY</th>
+            <th>EVENT</th>
+            <th>IMPACT</th>
+            <th class="num hide-mobile">ACTUAL</th>
+            <th class="num hide-mobile">FORECAST</th>
+            <th class="num hide-mobile">PREVIOUS</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+  }).join('');
+}
+
+// ── CENTRAL BANK MEETINGS ──
 const CB_EVENTS = [
-  {date:'2026-01-29',bank:'Federal Reserve (FOMC)',detail:'Rate decision + press conference',cls:'fed',badge:'FED'},
-  {date:'2026-01-30',bank:'European Central Bank (ECB)',detail:'Monetary policy decision',cls:'ecb',badge:'ECB'},
-  {date:'2026-02-04',bank:'Reserve Bank of Australia (RBA)',detail:'Cash rate decision',cls:'rba',badge:'RBA'},
-  {date:'2026-02-05',bank:'Bank of England (BOE)',detail:'Monetary Policy Committee decision',cls:'boe',badge:'BOE'},
-  {date:'2026-03-17',bank:'Reserve Bank of Australia (RBA)',detail:'Cash rate decision',cls:'rba',badge:'RBA'},
-  {date:'2026-03-18',bank:'Bank of Japan (BOJ)',detail:'Policy rate decision',cls:'boj',badge:'BOJ'},
-  {date:'2026-03-19',bank:'Federal Reserve (FOMC)',detail:'Rate decision + projections (dot plot)',cls:'fed',badge:'FED'},
-  {date:'2026-04-16',bank:'European Central Bank (ECB)',detail:'Monetary policy decision',cls:'ecb',badge:'ECB'},
-  {date:'2026-04-30',bank:'Federal Reserve (FOMC)',detail:'Rate decision + press conference',cls:'fed',badge:'FED'},
-  {date:'2026-05-05',bank:'Reserve Bank of Australia (RBA)',detail:'Cash rate decision',cls:'rba',badge:'RBA'},
-  {date:'2026-05-06',bank:'Bank of England (BOE)',detail:'Monetary Policy Committee decision',cls:'boe',badge:'BOE'},
-  {date:'2026-05-29',bank:'Bank of Japan (BOJ)',detail:'Policy rate decision',cls:'boj',badge:'BOJ'},
-  {date:'2026-06-04',bank:'European Central Bank (ECB)',detail:'Monetary policy decision',cls:'ecb',badge:'ECB'},
-  {date:'2026-06-16',bank:'Reserve Bank of Australia (RBA)',detail:'Cash rate decision',cls:'rba',badge:'RBA'},
   {date:'2026-06-17',bank:'Federal Reserve (FOMC)',detail:'Rate decision + projections (dot plot)',cls:'fed',badge:'FED'},
+  {date:'2026-06-17',bank:'Bank of Japan (BOJ)',detail:'Policy rate decision',cls:'boj',badge:'BOJ'},
   {date:'2026-07-22',bank:'European Central Bank (ECB)',detail:'Monetary policy decision',cls:'ecb',badge:'ECB'},
   {date:'2026-07-28',bank:'Federal Reserve (FOMC)',detail:'Rate decision + press conference',cls:'fed',badge:'FED'},
   {date:'2026-07-30',bank:'Bank of Japan (BOJ)',detail:'Policy rate decision',cls:'boj',badge:'BOJ'},
   {date:'2026-08-04',bank:'Reserve Bank of Australia (RBA)',detail:'Cash rate decision',cls:'rba',badge:'RBA'},
-  {date:'2026-08-06',bank:'Bank of England (BOE)',detail:'Monetary Policy Committee decision + MPR',cls:'boe',badge:'BOE'},
+  {date:'2026-08-06',bank:'Bank of England (BOE)',detail:'Monetary Policy Committee + MPR',cls:'boe',badge:'BOE'},
   {date:'2026-09-09',bank:'European Central Bank (ECB)',detail:'Monetary policy decision',cls:'ecb',badge:'ECB'},
   {date:'2026-09-15',bank:'Reserve Bank of Australia (RBA)',detail:'Cash rate decision',cls:'rba',badge:'RBA'},
   {date:'2026-09-16',bank:'Federal Reserve (FOMC)',detail:'Rate decision + projections (dot plot)',cls:'fed',badge:'FED'},
@@ -132,62 +688,35 @@ const CB_EVENTS = [
   {date:'2026-10-29',bank:'European Central Bank (ECB)',detail:'Monetary policy decision',cls:'ecb',badge:'ECB'},
   {date:'2026-11-05',bank:'Bank of England (BOE)',detail:'Monetary Policy Committee decision',cls:'boe',badge:'BOE'},
   {date:'2026-12-09',bank:'European Central Bank (ECB)',detail:'Monetary policy decision',cls:'ecb',badge:'ECB'},
-  {date:'2026-12-15',bank:'Reserve Bank of Australia (RBA)',detail:'Cash rate decision',cls:'rba',badge:'RBA'},
   {date:'2026-12-16',bank:'Federal Reserve (FOMC)',detail:'Rate decision + projections (dot plot)',cls:'fed',badge:'FED'},
-  {date:'2026-12-18',bank:'Bank of Japan (BOJ)',detail:'Policy rate decision',cls:'boj',badge:'BOJ'},
   {date:'2026-12-17',bank:'Bank of England (BOE)',detail:'Monetary Policy Committee decision',cls:'boe',badge:'BOE'},
-];
-
-// ── UPCOMING USD EVENTS (static, updated periodically) ──
-const USD_EVENTS = [
-  {date:'2026-06-18',time:'8:30 AM',title:'Initial Jobless Claims',impact:'high'},
-  {date:'2026-06-18',time:'8:30 AM',title:'Housing Starts',impact:'med'},
-  {date:'2026-06-23',time:'9:45 AM',title:'Flash Manufacturing PMI',impact:'high'},
-  {date:'2026-06-23',time:'9:45 AM',title:'Flash Services PMI',impact:'high'},
-  {date:'2026-06-25',time:'8:30 AM',title:'GDP (QoQ) — Final',impact:'high'},
-  {date:'2026-06-25',time:'8:30 AM',title:'Jobless Claims',impact:'high'},
-  {date:'2026-06-26',time:'8:30 AM',title:'Core PCE Price Index (MoM)',impact:'high'},
-  {date:'2026-06-26',time:'10:00 AM',title:'Consumer Sentiment (UoM)',impact:'med'},
-  {date:'2026-07-02',time:'8:30 AM',title:'Non-Farm Payrolls (NFP)',impact:'high'},
-  {date:'2026-07-02',time:'8:30 AM',title:'Unemployment Rate',impact:'high'},
-  {date:'2026-07-09',time:'8:30 AM',title:'Initial Jobless Claims',impact:'high'},
-  {date:'2026-07-14',time:'8:30 AM',title:'CPI (YoY)',impact:'high'},
-  {date:'2026-07-15',time:'8:30 AM',title:'PPI (MoM)',impact:'med'},
-  {date:'2026-07-16',time:'8:30 AM',title:'Retail Sales (MoM)',impact:'high'},
-  {date:'2026-07-16',time:'9:15 AM',title:'Industrial Production (MoM)',impact:'med'},
+  {date:'2026-12-18',bank:'Bank of Japan (BOJ)',detail:'Policy rate decision',cls:'boj',badge:'BOJ'},
 ];
 
 function timeUntil(dateStr){
-  const d = new Date(dateStr);
-  const now = new Date();
-  const diff = d - now;
+  const diff = new Date(dateStr) - new Date();
   if(diff < 0) return null;
-  const days = Math.floor(diff / 86400000);
-  if(days === 0) return 'Today';
-  if(days === 1) return 'Tomorrow';
-  if(days < 7) return `In ${days} days`;
+  const days = Math.floor(diff/86400000);
+  if(days===0) return 'Today';
+  if(days===1) return 'Tomorrow';
+  if(days<7)   return `In ${days} days`;
   const weeks = Math.floor(days/7);
-  return weeks === 1 ? 'In 1 week' : `In ${weeks} weeks`;
+  return weeks===1 ? 'In 1 week' : `In ${weeks} weeks`;
 }
 
 function renderCB(){
   const el = document.getElementById('cbList');
   if(!el) return;
   const now = new Date();
-  const upcoming = CB_EVENTS.filter(e => new Date(e.date) >= new Date(now.toISOString().split('T')[0])).slice(0,12);
-  if(!upcoming.length){ el.innerHTML='<div style="color:var(--muted2);font-family:var(--sans);font-size:11px;">No upcoming meetings scheduled.</div>'; return; }
-
-  // Find the very next one
-  const nextIdx = 0;
+  const todayStr = new Date(now.getFullYear(),now.getMonth(),now.getDate()).toISOString().split('T')[0];
+  const upcoming = CB_EVENTS.filter(e=>e.date>=todayStr).slice(0,10);
+  if(!upcoming.length){ el.innerHTML='<div style="color:var(--muted2);font-family:var(--sans);font-size:11px;padding:6px 0;">No upcoming meetings scheduled.</div>'; return; }
   el.innerHTML = upcoming.map((e,i) => {
     const d = new Date(e.date);
-    const day   = d.getDate();
-    const month = d.toLocaleString('en-US',{month:'short'});
     const until = timeUntil(e.date);
-    const isNext = i === nextIdx;
-    return `<div class="cb-event${isNext?' next-up':''}">
-      <div class="cb-date">${day}<div class="cb-date-month">${month}</div></div>
-      <div class="cb-divider"></div>
+    return `<div class="cb-event${i===0?' next-up':''}">
+      <div class="cb-date">${d.getDate()}<div class="cb-date-month">${d.toLocaleString('en-US',{month:'short'})}</div></div>
+      <div class="cb-div"></div>
       <div class="cb-info">
         <div class="cb-bank">${e.bank}</div>
         <div class="cb-detail">${e.detail}</div>
@@ -198,36 +727,16 @@ function renderCB(){
   }).join('');
 }
 
-function renderEvents(){
-  const el = document.getElementById('evtList');
-  if(!el) return;
-  const now = new Date();
-  const upcoming = USD_EVENTS.filter(e => new Date(e.date) >= new Date(now.toISOString().split('T')[0]));
-  if(!upcoming.length){ el.innerHTML='<div style="color:var(--muted2);font-family:var(--sans);font-size:11px;padding:8px 0;">No upcoming events in the next 4 weeks. Check Forex Factory for the latest schedule.</div>'; return; }
+// ── INIT ──
+document.addEventListener('DOMContentLoaded', function(){
+  // Show local timezone
+  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const offset = -new Date().getTimezoneOffset()/60;
+  const tzEl = document.getElementById('calTimeZone');
+  if(tzEl) tzEl.textContent = `GMT${offset>=0?'+':''}${offset} · All currencies`;
 
-  // Group by date
-  const byDate = {};
-  upcoming.forEach(e => { if(!byDate[e.date]) byDate[e.date]=[]; byDate[e.date].push(e); });
-
-  let html = '';
-  Object.entries(byDate).forEach(([date, evts]) => {
-    const d = new Date(date);
-    const label = d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
-    html += `<div style="font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1px;margin:8px 0 4px;text-transform:uppercase;">${label}</div>`;
-    evts.forEach(e => {
-      html += `<div class="evt-row">
-        <div class="evt-time">${e.time}</div>
-        <div class="evt-title">${e.title}</div>
-        <span class="evt-impact ${e.impact}">${e.impact.toUpperCase()}</span>
-      </div>`;
-    });
-  });
-  el.innerHTML = html;
-}
-
-window.addEventListener('DOMContentLoaded', function(){
+  fetchCalendar('this');
   renderCB();
-  renderEvents();
 });
 </script>
 </body>
