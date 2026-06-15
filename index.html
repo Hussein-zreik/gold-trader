@@ -8,34 +8,30 @@
 <meta name="theme-color" content="#04080F">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800;900&display=swap">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800;900&display=swap" media="print" onload="this.media='all'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800;900&display=swap"></noscript>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"></noscript>
 <style>
 :root {
   --bg:    #04080F;
-  --bg2:   #070D18;
-  --bg3:   #0B1422;
-  --card:  #0D1825;
-  --border:#162235;
-  --border2:#1E2F47;
-  --text:  #E8F0FB;
-  --muted: #5A7A9E;
-  --muted2:#7FA3C8;
+  --bg2:   #080F1A;
+  --bg3:   #0D1520;
+  --card:  #0F1A28;
+  --border:#1A2A3D;
+  --text:  #E2EAF4;
+  --muted: #6B8CAE;
+  --muted2:#8BAFD1;
   --blue:  #3B82F6;
   --blue2: #2563EB;
-  --blue3: #1D4ED8;
   --red:   #EF4444;
   --green: #22C55E;
   --gold:  #F59E0B;
-  --sans:  'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
-  --mono:  'Inter', monospace;
-  --display: Syne, 'Plus Jakarta Sans', sans-serif;
+  --sans:  'Inter', system-ui, sans-serif;
+  --mono:  'IBM Plex Mono', 'Inter', monospace;
+  --display: 'Manrope', 'Inter', system-ui, sans-serif;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
-
-html { scroll-behavior: smooth; }
 
 body {
   font-family: var(--sans);
@@ -50,11 +46,11 @@ body {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(4,8,15,0.88);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: rgba(4,8,15,0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border);
-  padding: 0 32px;
+  padding: 0 24px;
   height: 64px;
   display: flex;
   align-items: center;
@@ -123,16 +119,16 @@ body {
 .site-nav {
   display: flex;
   align-items: center;
-  gap: 2px;
+  gap: 4px;
   flex: 1;
 }
 
 .nav-link {
-  padding: 7px 13px;
+  padding: 8px 12px;
   font-family: var(--mono);
   font-size: 11px;
   font-weight: 600;
-  letter-spacing: .6px;
+  letter-spacing: .8px;
   text-transform: uppercase;
   color: var(--muted2);
   text-decoration: none;
@@ -144,49 +140,27 @@ body {
   white-space: nowrap;
 }
 
-.nav-link:hover { color: var(--text); background: rgba(59,130,246,.07); }
+.nav-link:hover { color: var(--text); background: rgba(59,130,246,.08); }
 .nav-link.active { color: var(--blue); }
 
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-shrink: 0;
-  margin-left: auto;
-}
-
-.nav-login {
-  padding: 7px 16px;
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: .6px;
-  text-transform: uppercase;
-  color: var(--muted2);
-  text-decoration: none;
-  border-radius: 6px;
-  border: 1px solid var(--border2);
-  transition: color .2s, border-color .2s;
-}
-.nav-login:hover { color: var(--text); border-color: var(--muted); }
-
 .nav-cta {
-  padding: 8px 20px;
+  margin-left: auto;
+  padding: 9px 22px;
   background: var(--blue2);
   color: #fff;
   font-family: var(--mono);
   font-size: 11px;
-  font-weight: 700;
-  letter-spacing: .6px;
+  font-weight: 600;
+  letter-spacing: .8px;
   text-transform: uppercase;
   text-decoration: none;
   border-radius: 7px;
   border: none;
   cursor: pointer;
-  transition: background .2s, box-shadow .2s;
-  box-shadow: 0 0 0 0 rgba(37,99,235,0);
+  transition: background .2s, transform .1s;
+  flex-shrink: 0;
 }
-.nav-cta:hover { background: var(--blue3); box-shadow: 0 4px 16px rgba(37,99,235,.35); }
+.nav-cta:hover { background: #1d4ed8; transform: translateY(-1px); }
 
 .mobile-menu-btn {
   display: none;
@@ -209,34 +183,37 @@ body {
   padding: 80px 32px;
 }
 
+/* animated grid background */
 .hero::before {
   content: '';
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(59,130,246,.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(59,130,246,.035) 1px, transparent 1px);
-  background-size: 52px 52px;
-  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+    linear-gradient(rgba(59,130,246,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59,130,246,.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%);
 }
 
-.hero-glow-blue {
+/* glow orbs */
+.hero::after {
+  content: '';
   position: absolute;
-  top: 15%;
-  right: 8%;
-  width: 560px;
-  height: 560px;
-  background: radial-gradient(circle, rgba(59,130,246,.1) 0%, transparent 65%);
+  top: 20%;
+  right: 10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(59,130,246,.12) 0%, transparent 70%);
   pointer-events: none;
 }
 
-.hero-glow-red {
+.orb-red {
   position: absolute;
-  bottom: 15%;
-  left: 3%;
-  width: 320px;
-  height: 320px;
-  background: radial-gradient(circle, rgba(239,68,68,.07) 0%, transparent 70%);
+  bottom: 20%;
+  left: 5%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(239,68,68,.08) 0%, transparent 70%);
   pointer-events: none;
 }
 
@@ -248,49 +225,49 @@ body {
   width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 72px;
+  gap: 80px;
   align-items: center;
 }
 
-.hero-badge {
+.hero-eyebrow {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   font-family: var(--mono);
   font-size: 10px;
   font-weight: 600;
-  letter-spacing: 1.8px;
+  letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--blue);
-  background: rgba(59,130,246,.07);
-  border: 1px solid rgba(59,130,246,.18);
+  background: rgba(59,130,246,.08);
+  border: 1px solid rgba(59,130,246,.2);
   padding: 6px 14px;
   border-radius: 20px;
-  margin-bottom: 28px;
+  margin-bottom: 24px;
 }
 
-.hero-badge-dot { width:6px; height:6px; background:var(--green); border-radius:50%; animation:1.6s ease-in-out infinite livepulse; }
-@keyframes livepulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.75)} }
+.hero-eyebrow span { width:6px; height:6px; background:var(--green); border-radius:50%; animation:1.5s ease-in-out infinite pulse; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.8)} }
 
 .hero-title {
   font-family: var(--display);
-  font-size: clamp(38px, 5.2vw, 64px);
+  font-size: clamp(36px, 5vw, 60px);
   font-weight: 900;
-  line-height: 1.03;
-  letter-spacing: -2px;
+  line-height: 1.05;
+  letter-spacing: -1.5px;
   margin-bottom: 24px;
   color: var(--text);
 }
 
-.hl-blue {
-  background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+.hero-title .hl-blue {
+  background: linear-gradient(135deg, #60a5fa, #3b82f6);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-.hl-red {
-  background: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
+.hero-title .hl-red {
+  background: linear-gradient(135deg, #f87171, #ef4444);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -299,104 +276,77 @@ body {
 .hero-desc {
   font-size: 16px;
   color: var(--muted2);
-  line-height: 1.75;
-  margin-bottom: 36px;
-  max-width: 460px;
+  line-height: 1.7;
+  margin-bottom: 40px;
+  max-width: 480px;
 }
 
 .hero-actions {
   display: flex;
-  gap: 12px;
+  gap: 14px;
   flex-wrap: wrap;
-  margin-bottom: 40px;
 }
 
 .btn-primary {
-  padding: 13px 30px;
+  padding: 14px 32px;
   background: var(--blue2);
   color: #fff;
   font-family: var(--mono);
   font-size: 12px;
   font-weight: 700;
-  letter-spacing: .8px;
+  letter-spacing: 1px;
   text-transform: uppercase;
   text-decoration: none;
   border-radius: 8px;
   border: none;
   cursor: pointer;
   transition: background .2s, transform .15s, box-shadow .2s;
-  box-shadow: 0 4px 20px rgba(37,99,235,.3);
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
+  box-shadow: 0 4px 20px rgba(37,99,235,.35);
 }
-.btn-primary:hover { background: var(--blue3); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(37,99,235,.45); }
+.btn-primary:hover { background: #1d4ed8; transform: translateY(-2px); box-shadow: 0 8px 30px rgba(37,99,235,.5); }
 
 .btn-secondary {
-  padding: 13px 30px;
+  padding: 14px 32px;
   background: transparent;
   color: var(--muted2);
   font-family: var(--mono);
   font-size: 12px;
   font-weight: 600;
-  letter-spacing: .8px;
+  letter-spacing: 1px;
   text-transform: uppercase;
   text-decoration: none;
   border-radius: 8px;
-  border: 1px solid var(--border2);
+  border: 1px solid var(--border);
   cursor: pointer;
   transition: color .2s, border-color .2s, transform .15s;
 }
 .btn-secondary:hover { color: var(--text); border-color: var(--muted); transform: translateY(-2px); }
 
-.hero-trust {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.hero-trust-item {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--muted);
-  letter-spacing: .5px;
-}
-
-.hero-trust-item svg { color: var(--green); flex-shrink: 0; }
-
-.trust-divider { width: 1px; height: 14px; background: var(--border2); }
-
 /* hero dashboard preview */
-.hero-visual { position: relative; }
+.hero-visual {
+  position: relative;
+}
 
 .dashboard-preview {
   background: var(--bg2);
-  border: 1px solid var(--border2);
+  border: 1px solid var(--border);
   border-radius: 14px;
   overflow: hidden;
-  box-shadow:
-    0 40px 80px rgba(0,0,0,.7),
-    0 0 0 1px rgba(59,130,246,.08),
-    inset 0 1px 0 rgba(255,255,255,.04);
+  box-shadow: 0 40px 80px rgba(0,0,0,.6), 0 0 0 1px rgba(59,130,246,.1);
   transform: perspective(1000px) rotateY(-6deg) rotateX(2deg);
   transition: transform .4s ease;
 }
 .dashboard-preview:hover { transform: perspective(1000px) rotateY(-2deg) rotateX(1deg); }
 
 .dp-header {
-  background: rgba(4,8,15,.8);
-  padding: 11px 16px;
+  background: linear-gradient(90deg, #04080F, #07101E, #04080F);
+  padding: 12px 16px;
   display: flex;
   align-items: center;
   gap: 8px;
   border-bottom: 1px solid var(--border);
 }
 
-.dp-dots { display: flex; gap: 6px; }
 .dp-dot { width:10px; height:10px; border-radius:50%; }
 .dp-dot.r { background:#ef4444; }
 .dp-dot.y { background:#f59e0b; }
@@ -407,14 +357,13 @@ body {
   font-family: var(--mono);
   font-size: 10px;
   color: var(--muted);
-  background: rgba(255,255,255,.04);
+  background: rgba(255,255,255,.05);
   padding: 4px 12px;
   border-radius: 4px;
-  border: 1px solid var(--border);
 }
 
 .dp-body {
-  padding: 14px;
+  padding: 16px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
@@ -424,14 +373,14 @@ body {
   background: var(--bg3);
   border: 1px solid var(--border);
   border-radius: 8px;
-  padding: 12px 14px;
+  padding: 12px;
 }
 
 .dp-widget-label {
   font-family: var(--mono);
   font-size: 8px;
   color: var(--muted);
-  letter-spacing: 1.2px;
+  letter-spacing: 1px;
   text-transform: uppercase;
   margin-bottom: 6px;
 }
@@ -447,7 +396,7 @@ body {
 .dp-change {
   font-family: var(--mono);
   font-size: 10px;
-  margin-top: 3px;
+  margin-top: 2px;
 }
 .dp-change.up { color: var(--green); }
 .dp-change.dn { color: var(--red); }
@@ -457,64 +406,52 @@ body {
   background: var(--bg3);
   border: 1px solid var(--border);
   border-radius: 8px;
-  padding: 12px 14px;
+  padding: 12px;
 }
 
 .dp-bias-label {
   font-family: var(--mono);
   font-size: 8px;
   color: var(--muted);
-  letter-spacing: 1.2px;
+  letter-spacing: 1px;
   text-transform: uppercase;
   margin-bottom: 8px;
 }
 
 .dp-bias-bar {
-  height: 5px;
-  background: linear-gradient(90deg, rgba(239,68,68,.6), rgba(107,140,174,.2) 50%, rgba(34,197,94,.6));
+  height: 6px;
+  background: linear-gradient(90deg, var(--red), rgba(107,140,174,.3), var(--green));
   border-radius: 3px;
   position: relative;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .dp-bias-needle {
   position: absolute;
-  top: -4px;
-  width: 13px;
-  height: 13px;
+  top: -3px;
+  width: 12px;
+  height: 12px;
   background: #fff;
   border-radius: 50%;
   border: 2px solid var(--blue);
   transform: translateX(-50%);
   left: 68%;
-  box-shadow: 0 0 8px rgba(59,130,246,.7);
-}
-
-.dp-bias-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  box-shadow: 0 0 6px rgba(59,130,246,.6);
 }
 
 .dp-bias-verdict {
   font-family: var(--mono);
   font-size: 10px;
-  font-weight: 700;
   color: var(--green);
-}
-
-.dp-bias-score {
-  font-family: var(--mono);
-  font-size: 9px;
-  color: var(--muted);
+  text-align: center;
 }
 
 .dp-mini-bars {
   display: flex;
   align-items: flex-end;
   gap: 3px;
-  height: 36px;
-  margin-top: 8px;
+  height: 40px;
+  margin-top: 6px;
 }
 
 .dp-mini-bar {
@@ -522,57 +459,6 @@ body {
   border-radius: 2px 2px 0 0;
   min-height: 4px;
 }
-
-/* confluence row */
-.dp-conf {
-  grid-column: 1/-1;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 10px 14px;
-}
-
-.dp-conf-label {
-  font-family: var(--mono);
-  font-size: 8px;
-  color: var(--muted);
-  letter-spacing: 1.2px;
-  text-transform: uppercase;
-  margin-bottom: 8px;
-}
-
-.dp-conf-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 6px;
-}
-
-.dp-conf-cell {
-  border-radius: 4px;
-  padding: 5px 6px;
-  text-align: center;
-}
-
-.dp-conf-tf {
-  font-family: var(--mono);
-  font-size: 7px;
-  color: var(--muted);
-  letter-spacing: .5px;
-  margin-bottom: 3px;
-}
-
-.dp-conf-dir {
-  font-family: var(--mono);
-  font-size: 8px;
-  font-weight: 700;
-}
-
-.dp-conf-cell.bull { background: rgba(34,197,94,.1); border: 1px solid rgba(34,197,94,.2); }
-.dp-conf-cell.bull .dp-conf-dir { color: var(--green); }
-.dp-conf-cell.bear { background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.2); }
-.dp-conf-cell.bear .dp-conf-dir { color: var(--red); }
-.dp-conf-cell.neut { background: rgba(107,140,174,.08); border: 1px solid rgba(107,140,174,.15); }
-.dp-conf-cell.neut .dp-conf-dir { color: var(--muted); }
 
 /* ── TICKER STRIP ── */
 .ticker-strip {
@@ -587,7 +473,7 @@ body {
 .ticker-inner {
   display: inline-flex;
   gap: 48px;
-  animation: 32s linear infinite ticker-scroll;
+  animation: 30s linear infinite ticker-scroll;
 }
 
 .ticker-inner:hover { animation-play-state: paused; }
@@ -602,46 +488,13 @@ body {
   align-items: center;
   gap: 8px;
   font-family: var(--mono);
-  font-size: 11.5px;
+  font-size: 12px;
 }
 
-.tick-sep { color: var(--border2); }
-.tick-sym { color: var(--muted2); font-weight: 600; letter-spacing: .3px; }
+.tick-sym { color: var(--muted2); font-weight: 600; }
 .tick-price { color: var(--text); }
 .tick-chg.up { color: var(--green); }
 .tick-chg.dn { color: var(--red); }
-
-/* ── SECTION SHARED ── */
-.section-label {
-  font-family: var(--mono);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--blue);
-  margin-bottom: 14px;
-  text-align: center;
-}
-
-.section-title {
-  font-family: var(--display);
-  font-size: clamp(28px, 4vw, 44px);
-  font-weight: 900;
-  letter-spacing: -1.2px;
-  text-align: center;
-  color: var(--text);
-  margin-bottom: 14px;
-  line-height: 1.08;
-}
-
-.section-desc {
-  font-size: 15px;
-  color: var(--muted2);
-  text-align: center;
-  max-width: 520px;
-  margin: 0 auto 64px;
-  line-height: 1.75;
-}
 
 /* ── FEATURES ── */
 .features {
@@ -650,75 +503,105 @@ body {
   position: relative;
 }
 
+.section-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.section-title {
+  font-family: var(--display);
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 900;
+  letter-spacing: -1px;
+  text-align: center;
+  color: var(--text);
+  margin-bottom: 16px;
+  line-height: 1.1;
+}
+
+.section-desc {
+  font-size: 15px;
+  color: var(--muted2);
+  text-align: center;
+  max-width: 520px;
+  margin: 0 auto 64px;
+  line-height: 1.7;
+}
+
 .features-grid {
   max-width: 1100px;
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 22px;
+  gap: 24px;
 }
 
 .feature-card {
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: 14px;
   padding: 32px 28px;
   transition: border-color .25s, transform .25s, box-shadow .25s;
   position: relative;
   overflow: hidden;
 }
 
-.feature-card::after {
+.feature-card::before {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0;
-  height: 1px;
+  height: 2px;
   opacity: 0;
   transition: opacity .25s;
 }
 
-.feature-card.blue::after  { background: linear-gradient(90deg, transparent, var(--blue), transparent); }
-.feature-card.green::after { background: linear-gradient(90deg, transparent, var(--green), transparent); }
-.feature-card.red::after   { background: linear-gradient(90deg, transparent, var(--red), transparent); }
+.feature-card.blue::before  { background: linear-gradient(90deg, transparent, var(--blue), transparent); }
+.feature-card.green::before { background: linear-gradient(90deg, transparent, var(--green), transparent); }
+.feature-card.red::before   { background: linear-gradient(90deg, transparent, var(--red), transparent); }
 
 .feature-card:hover {
-  border-color: var(--border2);
-  transform: translateY(-5px);
-  box-shadow: 0 20px 48px rgba(0,0,0,.45);
+  border-color: rgba(59,130,246,.25);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0,0,0,.4);
 }
 
-.feature-card:hover::after { opacity: 1; }
+.feature-card:hover::before { opacity: 1; }
 
 .feature-icon {
-  width: 46px;
-  height: 46px;
-  border-radius: 11px;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 22px;
   margin-bottom: 20px;
-  flex-shrink: 0;
 }
 
-.feature-icon.blue  { background: rgba(59,130,246,.1);  border: 1px solid rgba(59,130,246,.18); }
-.feature-icon.green { background: rgba(34,197,94,.1);   border: 1px solid rgba(34,197,94,.18); }
-.feature-icon.red   { background: rgba(239,68,68,.1);   border: 1px solid rgba(239,68,68,.18); }
-.feature-icon svg { width: 21px; height: 21px; }
+.feature-icon.blue  { background: rgba(59,130,246,.12);  border: 1px solid rgba(59,130,246,.2); }
+.feature-icon.green { background: rgba(34,197,94,.12);   border: 1px solid rgba(34,197,94,.2); }
+.feature-icon.red   { background: rgba(239,68,68,.12);   border: 1px solid rgba(239,68,68,.2); }
 
 .feature-name {
   font-family: var(--display);
   font-size: 18px;
   font-weight: 800;
   color: var(--text);
-  margin-bottom: 10px;
-  letter-spacing: -.4px;
+  margin-bottom: 12px;
+  letter-spacing: -.3px;
 }
 
 .feature-desc {
-  font-size: 13.5px;
+  font-size: 13px;
   color: var(--muted2);
-  line-height: 1.72;
-  margin-bottom: 22px;
+  line-height: 1.7;
+  margin-bottom: 20px;
 }
 
 .feature-tags {
@@ -737,206 +620,51 @@ body {
   text-transform: uppercase;
 }
 
-.ftag.blue  { background:rgba(59,130,246,.09);  color: #60a5fa; border: 1px solid rgba(59,130,246,.15); }
-.ftag.green { background:rgba(34,197,94,.09);   color: #4ade80; border: 1px solid rgba(34,197,94,.15); }
-.ftag.red   { background:rgba(239,68,68,.09);   color: #f87171; border: 1px solid rgba(239,68,68,.15); }
-
-/* ── HOW IT WORKS ── */
-.how-it-works {
-  padding: 100px 32px;
-  background: var(--bg2);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-}
-
-.steps-grid {
-  max-width: 960px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0;
-  position: relative;
-}
-
-.steps-grid::before {
-  content: '';
-  position: absolute;
-  top: 28px;
-  left: calc(16.66% + 23px);
-  right: calc(16.66% + 23px);
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--border2) 20%, var(--border2) 80%, transparent);
-}
-
-.step {
-  text-align: center;
-  padding: 0 32px;
-  position: relative;
-}
-
-.step-num {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: var(--bg3);
-  border: 1px solid var(--border2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--display);
-  font-size: 20px;
-  font-weight: 900;
-  color: var(--blue);
-  margin: 0 auto 24px;
-  position: relative;
-  z-index: 1;
-  box-shadow: 0 0 0 4px var(--bg2);
-}
-
-.step-title {
-  font-family: var(--display);
-  font-size: 17px;
-  font-weight: 800;
-  color: var(--text);
-  margin-bottom: 10px;
-  letter-spacing: -.3px;
-}
-
-.step-desc {
-  font-size: 13.5px;
-  color: var(--muted2);
-  line-height: 1.7;
-}
+.ftag.blue  { background:rgba(59,130,246,.1);  color: #60a5fa; }
+.ftag.green { background:rgba(34,197,94,.1);   color: #4ade80; }
+.ftag.red   { background:rgba(239,68,68,.1);   color: #f87171; }
 
 /* ── STATS BAR ── */
 .stats-bar {
-  padding: 60px 32px;
-  background: var(--bg);
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 48px 32px;
 }
 
 .stats-inner {
-  max-width: 960px;
+  max-width: 900px;
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
-}
-
-.stat-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 28px 24px;
+  gap: 40px;
   text-align: center;
-  transition: border-color .2s;
 }
-
-.stat-card:hover { border-color: var(--border2); }
 
 .stat-num {
   font-family: var(--display);
-  font-size: 38px;
+  font-size: 36px;
   font-weight: 900;
-  letter-spacing: -1.5px;
-  background: linear-gradient(135deg, #93c5fd, #3b82f6);
+  letter-spacing: -1px;
+  background: linear-gradient(135deg, #60a5fa, #3b82f6);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   margin-bottom: 6px;
-  line-height: 1;
 }
 
 .stat-label {
   font-family: var(--mono);
   font-size: 10px;
   color: var(--muted);
-  letter-spacing: .8px;
+  letter-spacing: 1px;
   text-transform: uppercase;
-}
-
-/* ── SOCIAL PROOF ── */
-.testimonials {
-  padding: 100px 32px;
-  background: var(--bg2);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-}
-
-.testimonials-grid {
-  max-width: 960px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
-
-.testimonial-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 26px 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  transition: border-color .2s, transform .2s;
-}
-
-.testimonial-card:hover { border-color: var(--border2); transform: translateY(-3px); }
-
-.testimonial-stars {
-  display: flex;
-  gap: 3px;
-  color: var(--gold);
-  font-size: 12px;
-}
-
-.testimonial-text {
-  font-size: 13.5px;
-  color: var(--muted2);
-  line-height: 1.7;
-  flex: 1;
-}
-
-.testimonial-author {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding-top: 14px;
-  border-top: 1px solid var(--border);
-}
-
-.testimonial-avatar {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--display);
-  font-size: 13px;
-  font-weight: 800;
-  flex-shrink: 0;
-}
-
-.testimonial-name {
-  font-family: var(--sans);
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text);
-}
-
-.testimonial-role {
-  font-family: var(--mono);
-  font-size: 9px;
-  color: var(--muted);
-  letter-spacing: .5px;
-  text-transform: uppercase;
-  margin-top: 1px;
 }
 
 /* ── CTA BAND ── */
 .cta-band {
   padding: 100px 32px;
+  text-align: center;
   position: relative;
   overflow: hidden;
 }
@@ -945,178 +673,80 @@ body {
   content: '';
   position: absolute;
   top: 50%; left: 50%;
-  width: 700px; height: 700px;
-  background: radial-gradient(circle, rgba(37,99,235,.09) 0%, transparent 65%);
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(37,99,235,.12) 0%, transparent 65%);
   transform: translate(-50%,-50%);
   pointer-events: none;
 }
 
-.cta-card {
-  max-width: 680px;
-  margin: 0 auto;
-  background: var(--card);
-  border: 1px solid var(--border2);
-  border-radius: 20px;
-  padding: 56px 48px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 0 0 1px rgba(59,130,246,.05), 0 32px 64px rgba(0,0,0,.4);
-}
-
-.cta-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(59,130,246,.4), transparent);
-}
-
-.cta-card h2 {
+.cta-band h2 {
   font-family: var(--display);
-  font-size: clamp(26px, 4vw, 40px);
+  font-size: clamp(28px, 4vw, 48px);
   font-weight: 900;
   letter-spacing: -1.2px;
   color: var(--text);
-  margin-bottom: 16px;
-  line-height: 1.08;
+  margin-bottom: 20px;
+  line-height: 1.1;
+  position: relative;
 }
 
-.cta-card p {
+.cta-band p {
   font-size: 15px;
   color: var(--muted2);
-  margin-bottom: 36px;
+  margin-bottom: 40px;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
   line-height: 1.7;
+  position: relative;
 }
-
-.cta-meta {
-  margin-top: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.cta-meta-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--muted);
-  letter-spacing: .5px;
-}
-
-.cta-meta-item svg { color: var(--green); }
 
 /* ── FOOTER ── */
 .site-footer {
   border-top: 1px solid var(--border);
-  padding: 56px 32px 32px;
-  background: var(--bg2);
+  padding: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
 }
 
-.footer-main {
-  max-width: 1100px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1.6fr 1fr 1fr 1fr;
-  gap: 48px;
-  margin-bottom: 48px;
-}
-
-.footer-brand-col {}
-
-.footer-logo-name {
+.footer-brand {
   font-family: var(--display);
-  font-size: 16px;
+  font-size: 13px;
   font-weight: 800;
   background: linear-gradient(135deg, #fff 0%, #93c5fd 50%, #ef4444 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  margin-bottom: 12px;
-}
-
-.footer-brand-desc {
-  font-size: 13px;
-  color: var(--muted);
-  line-height: 1.7;
-  margin-bottom: 20px;
-  max-width: 240px;
-}
-
-.footer-disclaimer {
-  font-family: var(--mono);
-  font-size: 9.5px;
-  color: var(--muted);
-  line-height: 1.6;
-  max-width: 260px;
-  opacity: .7;
-}
-
-.footer-col-title {
-  font-family: var(--mono);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 1.2px;
-  text-transform: uppercase;
-  color: var(--muted2);
-  margin-bottom: 16px;
-}
-
-.footer-col-links {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.footer-col-links a {
-  font-size: 13px;
-  color: var(--muted);
-  text-decoration: none;
-  transition: color .2s;
-}
-
-.footer-col-links a:hover { color: var(--text); }
-
-.footer-bottom {
-  max-width: 1100px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding-top: 24px;
-  border-top: 1px solid var(--border);
-  flex-wrap: wrap;
 }
 
 .footer-copy {
   font-family: var(--mono);
   font-size: 10px;
   color: var(--muted);
-  letter-spacing: .3px;
+  letter-spacing: .5px;
 }
 
-.footer-bottom-links {
+.footer-links {
   display: flex;
-  gap: 20px;
+  gap: 24px;
 }
 
-.footer-bottom-links a {
+.footer-links a {
   font-family: var(--mono);
   font-size: 10px;
   color: var(--muted);
   text-decoration: none;
-  letter-spacing: .3px;
+  letter-spacing: .5px;
+  text-transform: uppercase;
   transition: color .2s;
 }
 
-.footer-bottom-links a:hover { color: var(--muted2); }
+.footer-links a:hover { color: var(--text); }
 
-/* ── MOBILE NAV ── */
+/* ── MOBILE ── */
 .mobile-nav {
   display: none;
   position: fixed;
@@ -1124,9 +754,9 @@ body {
   left: 0;
   right: 0;
   background: rgba(4,8,15,0.98);
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border);
-  padding: 12px;
+  padding: 16px;
   z-index: 99;
   flex-direction: column;
   gap: 4px;
@@ -1136,53 +766,46 @@ body {
 .mobile-nav .nav-link { padding: 12px 16px; display: block; }
 .mobile-nav .nav-cta { margin-top: 8px; text-align: center; display: block; padding: 13px; }
 
-@media (max-width: 960px) {
+@media (max-width: 900px) {
   .site-nav { display: none; }
-  .header-actions { display: none; }
+  .nav-cta  { display: none; }
   .mobile-menu-btn { display: block; }
-  .site-header { padding: 0 16px; }
+  .site-header { padding: 0 16px; gap: 8px; }
 
+  /* Hero */
   .hero { padding: 40px 16px 48px; min-height: auto; }
   .hero-inner { grid-template-columns: 1fr; gap: 32px; }
   .hero-visual { display: none; }
-  .hero-title { font-size: 34px; letter-spacing: -1.2px; }
-  .hero-desc { font-size: 14px; margin-bottom: 24px; }
+  .hero-title { font-size: 32px; letter-spacing: -1px; }
+  .hero-desc { font-size: 14px; margin-bottom: 28px; }
   .hero-actions { flex-direction: column; gap: 10px; }
   .hero-actions .btn-primary,
   .hero-actions .btn-secondary { width: 100%; text-align: center; padding: 14px; }
-  .hero-trust { gap: 12px; }
+  .hero-eyebrow { font-size: 9px; }
 
-  .features { padding: 56px 16px; }
+  /* Ticker */
+  .ticker-strip { padding: 8px 0; }
+
+  /* Features */
+  .features { padding: 48px 16px; }
   .features-grid { grid-template-columns: 1fr; gap: 14px; }
   .feature-card { padding: 22px 18px; }
-  .section-title { font-size: 26px; }
+  .section-title { font-size: 24px; }
   .section-desc { font-size: 13px; margin-bottom: 36px; }
 
-  .how-it-works { padding: 56px 16px; }
-  .steps-grid { grid-template-columns: 1fr; gap: 32px; }
-  .steps-grid::before { display: none; }
-  .step { padding: 0 8px; }
+  /* Stats */
+  .stats-bar { padding: 32px 16px; }
+  .stats-inner { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .stat-num { font-size: 28px; }
 
-  .stats-bar { padding: 40px 16px; }
-  .stats-inner { grid-template-columns: repeat(2, 1fr); gap: 14px; }
-  .stat-num { font-size: 30px; }
+  /* CTA band */
+  .cta-band { padding: 48px 16px; }
+  .cta-band h2 { font-size: 26px; }
+  .cta-band p { font-size: 13px; }
 
-  .testimonials { padding: 56px 16px; }
-  .testimonials-grid { grid-template-columns: 1fr; gap: 14px; }
-
-  .cta-band { padding: 56px 16px; }
-  .cta-card { padding: 36px 24px; }
-  .cta-card h2 { font-size: 26px; }
-  .cta-meta { flex-direction: column; gap: 10px; }
-
-  .site-footer { padding: 40px 16px 24px; }
-  .footer-main { grid-template-columns: 1fr 1fr; gap: 32px; }
-  .footer-brand-col { grid-column: 1/-1; }
-  .footer-bottom { flex-direction: column; align-items: flex-start; gap: 12px; }
-}
-
-@media (max-width: 540px) {
-  .footer-main { grid-template-columns: 1fr; }
+  /* Footer */
+  .site-footer { flex-direction: column; align-items: flex-start; gap: 14px; padding: 24px 16px; }
+  .footer-links { flex-wrap: wrap; gap: 14px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1191,7 +814,6 @@ body {
   .btn-primary:hover, .btn-secondary:hover { transform: none; }
   .dashboard-preview:hover { transform: none; }
   .feature-card:hover { transform: none; }
-  .testimonial-card:hover { transform: none; }
 }
 </style>
 </head>
@@ -1222,9 +844,9 @@ body {
     <a href="calendar.html"  class="nav-link">Calendar</a>
   </nav>
 
-  <div class="header-actions">
-    <a href="#" class="nav-login" onclick="return false;">Log In</a>
-    <a href="#" class="nav-cta"   onclick="return false;">Get Started</a>
+  <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+    <a href="#" class="nav-link" style="color:var(--muted2);" onclick="return false;">Log In</a>
+    <a href="#" class="nav-cta" onclick="return false;">Sign Up</a>
   </div>
   <button class="mobile-menu-btn" onclick="toggleMobileNav()" aria-label="Toggle menu" aria-expanded="false">☰</button>
 </header>
@@ -1235,18 +857,17 @@ body {
   <a href="portfolio.html" class="nav-link">Portfolio</a>
   <a href="news.html"      class="nav-link">News</a>
   <a href="calendar.html"  class="nav-link">Calendar</a>
-  <a href="#" class="nav-link" style="color:var(--muted2);padding:12px 16px;" onclick="return false;">Log In</a>
-  <a href="#" class="nav-cta" style="margin-top:4px;" onclick="return false;">Get Started</a>
+  <a href="#" class="nav-link" style="color:var(--muted2);padding:12px 16px;display:block;" onclick="return false;">Log In</a>
+  <a href="#" class="nav-cta" style="margin-top:4px;text-align:center;display:block;padding:13px;" onclick="return false;">Sign Up</a>
 </nav>
 
 <!-- ── HERO ── -->
 <section class="hero" aria-label="Hero">
-  <div class="hero-glow-blue" aria-hidden="true"></div>
-  <div class="hero-glow-red"  aria-hidden="true"></div>
+  <div class="orb-red" aria-hidden="true"></div>
   <div class="hero-inner">
     <div class="hero-content">
-      <div class="hero-badge">
-        <span class="hero-badge-dot" aria-hidden="true"></span>
+      <div class="hero-eyebrow">
+        <span aria-hidden="true"></span>
         Live · Updated Every 60 Seconds
       </div>
       <h1 class="hero-title">
@@ -1258,27 +879,8 @@ body {
         Forex Desk aggregates live prices, macro signals, multi-timeframe confluence, and institutional positioning into one professional command center — so you spend less time gathering data and more time making decisions.
       </p>
       <div class="hero-actions">
-        <a href="dashboard.html" class="btn-primary">
-          Open Dashboard
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
+        <a href="dashboard.html" class="btn-primary">Open Dashboard →</a>
         <a href="journal.html" class="btn-secondary">Trade Journal</a>
-      </div>
-      <div class="hero-trust">
-        <div class="hero-trust-item">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-          No login required
-        </div>
-        <div class="trust-divider" aria-hidden="true"></div>
-        <div class="hero-trust-item">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-          Always free
-        </div>
-        <div class="trust-divider" aria-hidden="true"></div>
-        <div class="hero-trust-item">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-          30+ live instruments
-        </div>
       </div>
     </div>
 
@@ -1286,31 +888,26 @@ body {
     <div class="hero-visual" aria-hidden="true">
       <div class="dashboard-preview">
         <div class="dp-header">
-          <div class="dp-dots">
-            <div class="dp-dot r"></div>
-            <div class="dp-dot y"></div>
-            <div class="dp-dot g"></div>
-          </div>
+          <div class="dp-dot r"></div>
+          <div class="dp-dot y"></div>
+          <div class="dp-dot g"></div>
           <div class="dp-url">hussein-zreik.github.io/gold-trader</div>
         </div>
         <div class="dp-body">
           <div class="dp-widget">
-            <div class="dp-widget-label">XAU / USD</div>
+            <div class="dp-widget-label">XAU/USD</div>
             <div class="dp-price">3,421.80</div>
             <div class="dp-change up">▲ +18.40 · +0.54%</div>
           </div>
           <div class="dp-widget">
-            <div class="dp-widget-label">EUR / USD</div>
+            <div class="dp-widget-label">EUR/USD</div>
             <div class="dp-price">1.0892</div>
             <div class="dp-change dn">▼ −0.0023 · −0.21%</div>
           </div>
           <div class="dp-bias">
             <div class="dp-bias-label">Today's Bias — Composite Gold Signal</div>
             <div class="dp-bias-bar"><div class="dp-bias-needle"></div></div>
-            <div class="dp-bias-row">
-              <div class="dp-bias-verdict">▲ BULLISH</div>
-              <div class="dp-bias-score">4 / 6 signals bullish</div>
-            </div>
+            <div class="dp-bias-verdict">BULLISH GOLD — 4/6 signals bullish</div>
             <div class="dp-mini-bars">
               <div class="dp-mini-bar" style="height:60%;background:rgba(34,197,94,.5)"></div>
               <div class="dp-mini-bar" style="height:80%;background:rgba(34,197,94,.7)"></div>
@@ -1320,27 +917,6 @@ body {
               <div class="dp-mini-bar" style="height:85%;background:rgba(34,197,94,.8)"></div>
               <div class="dp-mini-bar" style="height:55%;background:rgba(34,197,94,.5)"></div>
               <div class="dp-mini-bar" style="height:65%;background:rgba(34,197,94,.6)"></div>
-            </div>
-          </div>
-          <div class="dp-conf">
-            <div class="dp-conf-label">MTF Confluence — XAU/USD</div>
-            <div class="dp-conf-grid">
-              <div class="dp-conf-cell bull">
-                <div class="dp-conf-tf">D1</div>
-                <div class="dp-conf-dir">▲ BULL</div>
-              </div>
-              <div class="dp-conf-cell bull">
-                <div class="dp-conf-tf">H4</div>
-                <div class="dp-conf-dir">▲ BULL</div>
-              </div>
-              <div class="dp-conf-cell neut">
-                <div class="dp-conf-tf">H1</div>
-                <div class="dp-conf-dir">— NEUT</div>
-              </div>
-              <div class="dp-conf-cell bull">
-                <div class="dp-conf-tf">M15</div>
-                <div class="dp-conf-dir">▲ BULL</div>
-              </div>
             </div>
           </div>
         </div>
@@ -1353,44 +929,25 @@ body {
 <div class="ticker-strip" aria-hidden="true">
   <div class="ticker-inner">
     <div class="tick-item"><span class="tick-sym">XAU/USD</span><span class="tick-price">3,421.80</span><span class="tick-chg up">+0.54%</span></div>
-    <span class="tick-sep">·</span>
     <div class="tick-item"><span class="tick-sym">EUR/USD</span><span class="tick-price">1.0892</span><span class="tick-chg dn">−0.21%</span></div>
-    <span class="tick-sep">·</span>
     <div class="tick-item"><span class="tick-sym">GBP/USD</span><span class="tick-price">1.2734</span><span class="tick-chg up">+0.12%</span></div>
-    <span class="tick-sep">·</span>
     <div class="tick-item"><span class="tick-sym">DXY</span><span class="tick-price">104.32</span><span class="tick-chg dn">−0.18%</span></div>
-    <span class="tick-sep">·</span>
     <div class="tick-item"><span class="tick-sym">USD/JPY</span><span class="tick-price">157.84</span><span class="tick-chg up">+0.31%</span></div>
-    <span class="tick-sep">·</span>
     <div class="tick-item"><span class="tick-sym">XAG/USD</span><span class="tick-price">32.14</span><span class="tick-chg up">+0.88%</span></div>
-    <span class="tick-sep">·</span>
     <div class="tick-item"><span class="tick-sym">BTC/USD</span><span class="tick-price">67,204</span><span class="tick-chg up">+1.42%</span></div>
-    <span class="tick-sep">·</span>
     <div class="tick-item"><span class="tick-sym">WTI OIL</span><span class="tick-price">78.20</span><span class="tick-chg dn">−0.65%</span></div>
-    <span class="tick-sep">·</span>
     <div class="tick-item"><span class="tick-sym">US10Y</span><span class="tick-price">4.38%</span><span class="tick-chg up">+0.04%</span></div>
-    <span class="tick-sep">·</span>
     <div class="tick-item"><span class="tick-sym">VIX</span><span class="tick-price">14.82</span><span class="tick-chg dn">−3.2%</span></div>
-    <span class="tick-sep">·</span>
     <!-- duplicate for seamless loop -->
     <div class="tick-item"><span class="tick-sym">XAU/USD</span><span class="tick-price">3,421.80</span><span class="tick-chg up">+0.54%</span></div>
-    <span class="tick-sep">·</span>
     <div class="tick-item"><span class="tick-sym">EUR/USD</span><span class="tick-price">1.0892</span><span class="tick-chg dn">−0.21%</span></div>
-    <span class="tick-sep">·</span>
     <div class="tick-item"><span class="tick-sym">GBP/USD</span><span class="tick-price">1.2734</span><span class="tick-chg up">+0.12%</span></div>
-    <span class="tick-sep">·</span>
     <div class="tick-item"><span class="tick-sym">DXY</span><span class="tick-price">104.32</span><span class="tick-chg dn">−0.18%</span></div>
-    <span class="tick-sep">·</span>
     <div class="tick-item"><span class="tick-sym">USD/JPY</span><span class="tick-price">157.84</span><span class="tick-chg up">+0.31%</span></div>
-    <span class="tick-sep">·</span>
     <div class="tick-item"><span class="tick-sym">XAG/USD</span><span class="tick-price">32.14</span><span class="tick-chg up">+0.88%</span></div>
-    <span class="tick-sep">·</span>
     <div class="tick-item"><span class="tick-sym">BTC/USD</span><span class="tick-price">67,204</span><span class="tick-chg up">+1.42%</span></div>
-    <span class="tick-sep">·</span>
     <div class="tick-item"><span class="tick-sym">WTI OIL</span><span class="tick-price">78.20</span><span class="tick-chg dn">−0.65%</span></div>
-    <span class="tick-sep">·</span>
     <div class="tick-item"><span class="tick-sym">US10Y</span><span class="tick-price">4.38%</span><span class="tick-chg up">+0.04%</span></div>
-    <span class="tick-sep">·</span>
     <div class="tick-item"><span class="tick-sym">VIX</span><span class="tick-price">14.82</span><span class="tick-chg dn">−3.2%</span></div>
   </div>
 </div>
@@ -1404,9 +961,7 @@ body {
   <div class="features-grid">
 
     <div class="feature-card blue">
-      <div class="feature-icon blue">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      </div>
+      <div class="feature-icon blue">🎯</div>
       <div class="feature-name">Today's Bias</div>
       <div class="feature-desc">
         A single composite directional read on gold, synthesised from 6 independent signals in real time: macro regime, DXY trend, MTF confluence, currency strength, news sentiment, and real yields. One gauge instead of six tabs.
@@ -1419,9 +974,7 @@ body {
     </div>
 
     <div class="feature-card green">
-      <div class="feature-icon green">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-      </div>
+      <div class="feature-icon green">📊</div>
       <div class="feature-name">MTF Confluence Scanner</div>
       <div class="feature-desc">
         EMA 9/21 trend direction across D1, H4, H1, and M15 for XAU/USD, EUR/USD, GBP/USD, USD/JPY, and DXY — all fetched and scored automatically. Know instantly when the timeframes align before you enter.
@@ -1434,9 +987,7 @@ body {
     </div>
 
     <div class="feature-card red">
-      <div class="feature-icon red">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-      </div>
+      <div class="feature-icon red">📓</div>
       <div class="feature-name">Trade Journal & Analytics</div>
       <div class="feature-desc">
         Log every trade with entry, exit, R:R, direction, and outcome. Tag mistakes — FOMO entry, moved stop, oversize — and the analytics panel surfaces your recurring patterns: win rate, profit factor, equity curve, and your costliest habits.
@@ -1451,168 +1002,46 @@ body {
   </div>
 </section>
 
-<!-- ── HOW IT WORKS ── -->
-<section class="how-it-works" aria-labelledby="how-title">
-  <div class="section-label">Workflow</div>
-  <h2 class="section-title" id="how-title">From data to decision<br>in seconds</h2>
-  <p class="section-desc">Forex Desk does the heavy lifting so you arrive at the chart with a clear plan, not a browser full of tabs.</p>
-
-  <div class="steps-grid">
-    <div class="step">
-      <div class="step-num">1</div>
-      <div class="step-title">Check the Bias</div>
-      <p class="step-desc">Open the dashboard and read the composite gold bias — a single verdict built from 6 live signals. Bullish, bearish, or neutral: know your directional lean before the session starts.</p>
-    </div>
-    <div class="step">
-      <div class="step-num">2</div>
-      <div class="step-title">Confirm Confluence</div>
-      <p class="step-desc">Cross-reference the MTF scanner. When D1, H4, H1, and M15 all agree, the signal is strong. When they diverge, you wait. The grid shows you this in one glance.</p>
-    </div>
-    <div class="step">
-      <div class="step-num">3</div>
-      <div class="step-title">Execute &amp; Log</div>
-      <p class="step-desc">Place your trade with a defined R:R, then log it in the journal. Over time the analytics reveal your real edge — and your real leaks — so you improve with every session.</p>
-    </div>
-  </div>
-</section>
-
 <!-- ── STATS BAR ── -->
-<section class="stats-bar" role="region" aria-label="Platform statistics">
-  <div class="section-label" style="margin-bottom:48px;">By The Numbers</div>
+<div class="stats-bar" role="region" aria-label="Platform statistics">
   <div class="stats-inner">
-    <div class="stat-card">
+    <div>
       <div class="stat-num">30+</div>
       <div class="stat-label">Live Instruments</div>
     </div>
-    <div class="stat-card">
+    <div>
       <div class="stat-num">6</div>
       <div class="stat-label">Bias Signals</div>
     </div>
-    <div class="stat-card">
+    <div>
       <div class="stat-num">60s</div>
       <div class="stat-label">Refresh Cycle</div>
     </div>
-    <div class="stat-card">
+    <div>
       <div class="stat-num">100%</div>
       <div class="stat-label">Free · No Login</div>
     </div>
   </div>
-</section>
-
-<!-- ── TESTIMONIALS ── -->
-<section class="testimonials" aria-labelledby="testimonials-title">
-  <div class="section-label">Trader Feedback</div>
-  <h2 class="section-title" id="testimonials-title">Built for traders<br>who take it seriously</h2>
-  <p class="section-desc">No synthetic reviews. Real responses from traders who use Forex Desk in their daily routine.</p>
-
-  <div class="testimonials-grid">
-    <div class="testimonial-card">
-      <div class="testimonial-stars" aria-label="5 stars">★★★★★</div>
-      <p class="testimonial-text">"The composite bias gauge replaced at least four of my morning tabs. I check it at session open and I already know whether I'm looking for longs or standing aside. It's become part of my pre-trade routine."</p>
-      <div class="testimonial-author">
-        <div class="testimonial-avatar" style="background:rgba(59,130,246,.12);color:#60a5fa;">M</div>
-        <div>
-          <div class="testimonial-name">Marcus T.</div>
-          <div class="testimonial-role">Retail Forex Trader · 6 yrs</div>
-        </div>
-      </div>
-    </div>
-    <div class="testimonial-card">
-      <div class="testimonial-stars" aria-label="5 stars">★★★★★</div>
-      <p class="testimonial-text">"The MTF confluence grid is the feature I didn't know I needed. When D1 and H4 align I feel confident entering. When they disagree I wait — and I've avoided some terrible trades because of that discipline."</p>
-      <div class="testimonial-author">
-        <div class="testimonial-avatar" style="background:rgba(34,197,94,.12);color:#4ade80;">S</div>
-        <div>
-          <div class="testimonial-name">Sara K.</div>
-          <div class="testimonial-role">Gold & Commodities Trader</div>
-        </div>
-      </div>
-    </div>
-    <div class="testimonial-card">
-      <div class="testimonial-stars" aria-label="5 stars">★★★★★</div>
-      <p class="testimonial-text">"The journal mistake tags changed how I review my trades. I tagged 'FOMO entry' for two weeks and realised it was killing my profit factor. That one insight was worth more than any course I've paid for."</p>
-      <div class="testimonial-author">
-        <div class="testimonial-avatar" style="background:rgba(239,68,68,.12);color:#f87171;">R</div>
-        <div>
-          <div class="testimonial-name">Rami A.</div>
-          <div class="testimonial-role">Prop Firm Trader</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+</div>
 
 <!-- ── CTA BAND ── -->
 <section class="cta-band" aria-labelledby="cta-title">
-  <div class="cta-card">
-    <h2 id="cta-title">Ready to trade with<br>a cleaner edge?</h2>
-    <p>The dashboard is live, free, and ready right now. No account. No download. No credit card. Just open it and trade better.</p>
-    <a href="dashboard.html" class="btn-primary" style="display:inline-flex;">
-      Open Dashboard
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-    </a>
-    <div class="cta-meta">
-      <div class="cta-meta-item">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-        No login required
-      </div>
-      <div class="cta-meta-item">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-        Always free
-      </div>
-      <div class="cta-meta-item">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-        Live data · 60s refresh
-      </div>
-    </div>
-  </div>
+  <h2 id="cta-title">Ready to trade with<br>a cleaner edge?</h2>
+  <p>The dashboard is live, free, and ready to use right now. No account. No download. Just open it.</p>
+  <a href="dashboard.html" class="btn-primary" style="display:inline-block;">Open Dashboard →</a>
 </section>
 
 <!-- ── FOOTER ── -->
 <footer class="site-footer">
-  <div class="footer-main">
-    <div class="footer-brand-col">
-      <div class="footer-logo-name">FOREX DESK</div>
-      <p class="footer-brand-desc">A professional-grade trading command center for gold and forex traders. Free, live, and built by someone who trades it daily.</p>
-      <p class="footer-disclaimer">Trading foreign exchange and commodities carries significant risk. Past performance does not guarantee future results. This platform is for informational purposes only and does not constitute financial advice.</p>
-    </div>
-    <div>
-      <div class="footer-col-title">Platform</div>
-      <div class="footer-col-links">
-        <a href="dashboard.html">Dashboard</a>
-        <a href="journal.html">Trade Journal</a>
-        <a href="portfolio.html">Portfolio</a>
-        <a href="news.html">Market News</a>
-        <a href="calendar.html">Economic Calendar</a>
-      </div>
-    </div>
-    <div>
-      <div class="footer-col-title">Features</div>
-      <div class="footer-col-links">
-        <a href="dashboard.html">Composite Bias</a>
-        <a href="dashboard.html">MTF Scanner</a>
-        <a href="dashboard.html">Live Prices</a>
-        <a href="journal.html">Analytics</a>
-        <a href="journal.html">Mistake Tagging</a>
-      </div>
-    </div>
-    <div>
-      <div class="footer-col-title">Resources</div>
-      <div class="footer-col-links">
-        <a href="https://github.com/hussein-zreik/gold-trader" target="_blank" rel="noopener">GitHub</a>
-        <a href="news.html">Market News</a>
-        <a href="calendar.html">Economic Calendar</a>
-      </div>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <div class="footer-copy">© 2026 Forex Desk · Built for traders, by a trader</div>
-    <nav class="footer-bottom-links" aria-label="Footer legal links">
-      <a href="#">Privacy</a>
-      <a href="#">Terms</a>
-      <a href="#">Disclaimer</a>
-    </nav>
-  </div>
+  <div class="footer-brand">FOREX DESK</div>
+  <div class="footer-copy">© 2026 Forex Desk · Built for traders, by a trader</div>
+  <nav class="footer-links" aria-label="Footer navigation">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="journal.html">Journal</a>
+    <a href="portfolio.html">Portfolio</a>
+    <a href="news.html">News</a>
+    <a href="calendar.html">Calendar</a>
+  </nav>
 </footer>
 
 <script>
@@ -1624,6 +1053,7 @@ function toggleMobileNav(){
   btn.textContent = open ? '✕' : '☰';
 }
 
+// Close mobile nav on outside click
 document.addEventListener('click', function(e){
   const nav=document.getElementById('mobileNav');
   const btn=document.querySelector('.mobile-menu-btn');
@@ -1634,6 +1064,7 @@ document.addEventListener('click', function(e){
   }
 });
 
+// Smooth entrance animations
 const observer = new IntersectionObserver((entries)=>{
   entries.forEach(e=>{
     if(e.isIntersecting){
@@ -1641,11 +1072,11 @@ const observer = new IntersectionObserver((entries)=>{
       e.target.style.transform='translateY(0)';
     }
   });
-},{threshold:0.12});
+},{threshold:0.15});
 
-document.querySelectorAll('.feature-card,.stat-card,.step,.testimonial-card').forEach(el=>{
+document.querySelectorAll('.feature-card,.stat-num').forEach(el=>{
   el.style.opacity='0';
-  el.style.transform='translateY(24px)';
+  el.style.transform='translateY(20px)';
   el.style.transition='opacity .5s ease, transform .5s ease';
   observer.observe(el);
 });
