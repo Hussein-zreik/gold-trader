@@ -28,8 +28,8 @@
   --btn-blue-bg:  #2563EB;
   --sans:    'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
   --mono:    'Inter', monospace;
-  --display: 'Manrope', 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
-  --heading: 'Manrope', 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+  --display: Syne, 'Plus Jakarta Sans', sans-serif;
+  --heading: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
 }
 
 /* Light mode overrides */
