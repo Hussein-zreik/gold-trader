@@ -403,10 +403,14 @@
 <script src="shared.js"></script>
 <script>
 // ── CONFIG ──
-const FF_API   = 'https://nfs.faireconomy.media/ff_calendar_thisweek.json';
-const FF_NEXT  = 'https://nfs.faireconomy.media/ff_calendar_nextweek.json';
-const FF_LAST  = 'https://nfs.faireconomy.media/ff_calendar_lastweek.json';
+const FX_PROXY = 'https://forex-desk-proxy.zreik111.workers.dev/?url=';
+const FF_BASE  = 'https://nfs.faireconomy.media/ff_calendar_';
 const CAL_CACHE_TTL = 15 * 60 * 1000; // 15 min
+
+function ffUrl(period){
+  const slug = period==='next' ? 'nextweek' : period==='last' ? 'lastweek' : 'thisweek';
+  return `${FF_BASE}${slug}.json`;
+}
 
 const CURRENCY_FLAGS = {
   USD:'🇺🇸', EUR:'🇪🇺', GBP:'🇬🇧', JPY:'🇯🇵', AUD:'🇦🇺',
@@ -460,27 +464,34 @@ async function fetchCalendar(period='this'){
     }
   }catch(e){}
 
-  const url = period==='next' ? FF_NEXT : period==='last' ? FF_LAST : FF_API;
+  const directUrl = ffUrl(period);
+  const proxyUrl  = `${FX_PROXY}${encodeURIComponent(directUrl)}`;
 
-  try{
-    const r = await Promise.race([
-      fetch(url, {cache:'no-store'}),
-      new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),10000))
-    ]);
-    if(!r.ok) throw new Error('HTTP '+r.status);
-    const data = await r.json();
+  let data = null;
+  for(const url of [proxyUrl, directUrl]){
+    try{
+      const r = await Promise.race([
+        fetch(url, {cache:'no-store'}),
+        new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),12000))
+      ]);
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      data = await r.json();
+      if(Array.isArray(data) && data.length) break;
+    }catch(e){ data=null; }
+  }
+  if(data && data.length){
     allEvents = data;
     try{ localStorage.setItem(cacheKey, JSON.stringify({ts:Date.now(), data})); }catch(e){}
     status.textContent = `✓ ${allEvents.length} events loaded · Updated ${new Date().toLocaleTimeString()}`;
     buildDateStrip();
     renderCalendar();
-  }catch(e){
+  } else {
     status.textContent = '⚠ Could not load live calendar — showing static schedule below.';
     status.className = 'cal-status error';
     el.innerHTML = `<div class="cal-loading" style="padding:30px;">
       <div style="font-size:28px;margin-bottom:10px;">📅</div>
       <div>Live feed unavailable. <a href="https://www.forexfactory.com/calendar" target="_blank" rel="noopener" style="color:var(--blue);">Open Forex Factory ↗</a></div>
-      <div style="font-size:11px;color:var(--muted);margin-top:6px;">The Forex Factory API sometimes blocks certain browsers. Try refreshing.</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:6px;">Try refreshing in a moment.</div>
     </div>`;
     allEvents = [];
     buildDateStrip();
