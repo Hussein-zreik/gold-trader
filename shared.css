@@ -228,6 +228,23 @@ body.light-mode .logo-name {
 body.light-mode .hdr-icon-btn:hover { background: rgba(0,0,0,.08); }
 body.light-mode .hdr-search-icon { color: #5B7A96; }
 
+/* ── MOBILE PAGE TITLE (shown only when nav is hidden) ── */
+.hdr-page-title {
+  display: none;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text);
+  flex: 1;
+  text-align: center;
+  pointer-events: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 /* ── HEADER RIGHT WRAPPER ── */
 .hdr-right {
   display: flex;
@@ -597,6 +614,7 @@ body.light-mode .search-result-item.focused {
   .nav-cta         { display: none; }
   .hdr-search      { display: none; }
   #hdrTime         { display: none; }
+  .hdr-page-title  { display: block; }
   .mobile-menu-btn { display: block; }
   .site-header     { padding: 0 16px; gap: 8px; }
   .page-wrap       { padding: 24px 16px; }

@@ -48,6 +48,12 @@
       return `<a href="${item.href}" class="nav-link ${active}">${item.label}</a>`;
     }).join('');
 
+    // Mobile-only page title (replaces the hidden nav on small screens)
+    const currentItem = NAV_ITEMS.find(i => i.id === page);
+    const mobilePageTitle = currentItem
+      ? `<span class="hdr-page-title" aria-hidden="true">${currentItem.label}</span>`
+      : '';
+
     // Right side: landing gets "Open Dashboard →", other pages get utility buttons
     const rightSide = isLanding
       ? `<a href="dashboard.html" class="nav-cta">Open Dashboard →</a>
@@ -80,6 +86,7 @@
     </div>
   </a>
   <nav class="site-nav" aria-label="Main navigation">${navLinks}</nav>
+  ${mobilePageTitle}
   ${rightSide}
 </header>
 <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
