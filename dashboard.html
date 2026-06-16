@@ -1929,20 +1929,21 @@ addPostRefreshHook(()=>{updateSMC(),updateMacroRegime(),loadOptionssentiment()})
 /* ── Dual-panel sync-scroll trading terminal layout ── */
 #page-dashboard>.wrap{padding:0!important;gap:0!important;}
 .dashboard-layout{height:calc(100dvh - var(--above-dash,132px));overflow:hidden!important;align-items:stretch!important;gap:0!important;}
-.sidebar{position:relative!important;top:0!important;height:100%!important;max-height:100%!important;overflow:visible!important;border-left:1px solid rgba(255,255,255,.07);display:flex!important;flex-direction:column!important;transition:width .25s ease;}
+.sidebar{position:relative!important;top:0!important;height:100%!important;max-height:100%!important;overflow:visible!important;border-left:1px solid rgba(255,255,255,.07);display:flex!important;flex-direction:column!important;z-index:5;transition:width .25s ease;}
 .sidebar.collapsed{overflow:hidden!important;border-left-color:transparent!important;}
 .dashboard-layout.sidebar-collapsed{grid-template-columns:1fr 1px!important;}
-/* Invisible drag strip — sits on left edge, widens hit area for resize cursor */
-.sb-drag-edge{position:absolute;left:-4px;top:0;width:8px;height:100%;cursor:ew-resize;z-index:15;}
-.sb-drag-edge::after{content:'';position:absolute;left:3px;top:0;width:2px;height:100%;background:transparent;transition:background .2s;}
-.sb-drag-edge:hover::after{background:rgba(59,130,246,.35);}
-/* Floating toggle button — position:fixed bypasses overflow:hidden clipping */
-.sb-toggle-btn{position:fixed;width:22px;height:22px;border-radius:50%;background:var(--bg2);border:1px solid rgba(255,255,255,.1);box-shadow:0 2px 8px rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transition:opacity .15s,color .15s,background .15s,border-color .15s,box-shadow .2s;color:var(--muted2);z-index:9999;padding:0;pointer-events:none;}
+/* Drag strip — inside sidebar boundary (z-index on sidebar ensures it's above main-col) */
+.sb-drag-edge{position:absolute;left:0;top:0;width:6px;height:100%;cursor:ew-resize;z-index:10;}
+.sb-drag-edge::after{content:'';position:absolute;left:2px;top:0;width:2px;height:100%;background:transparent;transition:background .2s;}
+.sb-drag-edge:hover::after{background:rgba(59,130,246,.4);}
+/* Floating toggle button — position:fixed bypasses all overflow:hidden clipping */
+.sb-toggle-btn{position:fixed;width:28px;height:28px;border-radius:50%;background:var(--bg3);border:1px solid rgba(255,255,255,.12);box-shadow:0 2px 10px rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transition:opacity .15s,color .15s,background .15s,border-color .15s,box-shadow .2s;color:var(--muted);z-index:9999;padding:0;pointer-events:none;}
 .sb-toggle-btn.visible{opacity:1;pointer-events:auto;}
-.sb-toggle-btn:hover{background:var(--bg4);color:#60A5FA;border-color:rgba(59,130,246,.5);box-shadow:0 2px 12px rgba(0,0,0,.5),0 0 0 3px rgba(59,130,246,.1);}
+.sb-toggle-btn:hover{background:var(--bg4);color:#60A5FA;border-color:rgba(59,130,246,.5);box-shadow:0 2px 14px rgba(0,0,0,.55),0 0 0 3px rgba(59,130,246,.12);}
 .sb-toggle-btn svg{transition:transform .3s cubic-bezier(.4,0,.2,1);display:block;}
 .sb-toggle-btn.arrow-flip svg{transform:rotate(180deg);}
-.sb-content{flex:1;min-height:0;overflow-y:scroll;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:var(--border) transparent;transition:opacity .2s;}
+/* sb-content: flex:1 fills remaining sidebar height; padding-left clears drag strip */
+.sb-content{flex:1;min-height:0;overflow-y:scroll;overflow-x:hidden;padding:12px 10px 16px 10px;scrollbar-width:thin;scrollbar-color:var(--border) transparent;transition:opacity .2s;}
 .sidebar.collapsed .sb-content{opacity:0;pointer-events:none;}
 .main-col{height:100%!important;overflow-y:scroll!important;overflow-x:hidden;padding:12px 16px 16px 12px;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
 @media(max-width:780px){
@@ -2368,10 +2369,12 @@ document.addEventListener('DOMContentLoaded', function(){
   function posBtn(){
     if(!sb||!btn) return;
     var r=sb.getBoundingClientRect();
-    btn.style.left=(r.left-11)+'px';              /* 11px = half of 22px button, sticks outside */
-    btn.style.top=(r.top+r.height/2-11)+'px';    /* vertically centred in sidebar */
+    if(!r.width) return; /* layout not ready yet */
+    btn.style.left=(r.left-14)+'px';             /* 14px = half of 28px, sticks outside edge */
+    btn.style.top=(r.top+r.height/2-14)+'px';   /* vertically centred in sidebar */
   }
-  window._sbPos=posBtn;
+  function posBtnRAF(){ requestAnimationFrame(posBtn); }
+  window._sbPos=posBtnRAF;
 
   /* ── Restore collapsed + saved width ── */
   try{
@@ -2384,8 +2387,9 @@ document.addEventListener('DOMContentLoaded', function(){
     }
   }catch(e){}
 
-  posBtn();
-  window.addEventListener('resize', posBtn);
+  /* Run after layout is painted */
+  requestAnimationFrame(posBtn);
+  window.addEventListener('resize', posBtnRAF);
 
   if(!btn||!sb) return;
 
