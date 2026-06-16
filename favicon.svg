@@ -1,10 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Background -->
   <rect width="32" height="32" rx="6" fill="#04080F"/>
-  <!-- F: vertical bar + top bar + mid bar -->
-  <rect x="3"  y="7"   width="3"   height="18"  fill="#3b82f6"/>
-  <rect x="3"  y="7"   width="10"  height="3"   fill="#3b82f6"/>
-  <rect x="3"  y="14"  width="7"   height="2.5" fill="#3b82f6"/>
-  <!-- D: vertical bar + curved right half -->
-  <rect x="17" y="7"   width="3"   height="18"  fill="#3b82f6"/>
-  <path d="M20,7 L23,7 Q30,8 30,16 Q30,24 23,25 L20,25 Z" fill="#3b82f6"/>
+  <!-- Subtle inner border -->
+  <rect x="0.5" y="0.5" width="31" height="31" rx="5.5" fill="none" stroke="#1a2a3d" stroke-width="1"/>
+  <!-- 5 bars — exact heights/colors from the header logo, bottom-aligned -->
+  <!-- b1 red  8px tall  -->
+  <rect x="2"  y="21" width="4" height="8"  rx="1" fill="#ef4444"/>
+  <!-- b2 steel 15px tall -->
+  <rect x="8"  y="14" width="4" height="15" rx="1" fill="#8bafd1"/>
+  <!-- b3 sky  11px tall -->
+  <rect x="14" y="18" width="4" height="11" rx="1" fill="#60a5fa"/>
+  <!-- b4 blue 22px tall — dominant bar -->
+  <rect x="20" y="7"  width="4" height="22" rx="1" fill="#3b82f6"/>
+  <!-- b4 top highlight for depth -->
+  <rect x="20" y="7"  width="4" height="4"  rx="1" fill="#93c5fd" opacity="0.7"/>
+  <!-- b5 green 17px tall -->
+  <rect x="26" y="12" width="4" height="17" rx="1" fill="#22c55e"/>
 </svg>
