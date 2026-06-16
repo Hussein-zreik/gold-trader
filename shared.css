@@ -30,6 +30,16 @@
   --mono:    'Inter', monospace;
   --display: Syne, 'Plus Jakarta Sans', sans-serif;
   --heading: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+  /* Spacing tokens */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
 }
 
 /* Light mode overrides */
@@ -979,3 +989,29 @@ body.light-mode .fx-toast {
   .page-wrap { padding: 0 !important; max-width: 100% !important; }
   @page { margin: 2cm; }
 }
+
+/* ── UTILITY CLASSES (reduce inline style repetition) ── */
+.u-mono    { font-family: var(--mono) !important; }
+.u-sans    { font-family: var(--sans) !important; }
+.u-heading { font-family: var(--heading) !important; }
+.u-muted   { color: var(--muted) !important; }
+.u-muted2  { color: var(--muted2) !important; }
+.u-gold    { color: var(--gold) !important; }
+.u-green   { color: var(--green) !important; }
+.u-red     { color: var(--red) !important; }
+.u-blue    { color: var(--blue) !important; }
+.u-fs-9    { font-size: 9px !important; }
+.u-fs-10   { font-size: 10px !important; }
+.u-fs-11   { font-size: 11px !important; }
+.u-fs-12   { font-size: 12px !important; }
+.u-fs-13   { font-size: 13px !important; }
+.u-bold    { font-weight: 700 !important; }
+.u-upper   { text-transform: uppercase !important; letter-spacing: .5px !important; }
+.u-nowrap  { white-space: nowrap !important; }
+.u-flex    { display: flex !important; }
+.u-gap-2   { gap: var(--sp-1) !important; }
+.u-gap-4   { gap: var(--sp-2) !important; }
+.u-gap-6   { gap: 6px !important; }
+.u-gap-8   { gap: var(--sp-2) !important; }
+.u-align-c { align-items: center !important; }
+.u-wrap    { flex-wrap: wrap !important; }

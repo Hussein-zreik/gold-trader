@@ -1868,6 +1868,14 @@ addPostRefreshHook(()=>{updateSMC(),updateMacroRegime(),loadOptionssentiment()})
   }
   setInterval(tick, 1000);
 })();
+// Clean up intervals on page hide to prevent memory leaks
+(function(){
+  var _maxId = setInterval(function(){},9999999);
+  clearInterval(_maxId);
+  window.addEventListener('pagehide', function(){
+    for(var i=1; i<=_maxId; i++) clearInterval(i);
+  });
+})();
 </script>
 <style>
 @keyframes shimmer{to{background-position:200% center}}
@@ -1900,6 +1908,10 @@ addPostRefreshHook(()=>{updateSMC(),updateMacroRegime(),loadOptionssentiment()})
   .dashboard-layout{height:auto!important;overflow:visible!important;align-items:start!important;gap:16px!important;}
   .sidebar{position:static!important;height:auto!important;max-height:none!important;overflow-y:auto!important;border-right:none!important;}
   .main-col{height:auto!important;overflow-y:visible!important;padding:0!important;}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;}
+  .sidebar,.main-col{scroll-behavior:auto!important;}
 }
 </style>
 <div id="fx-toast-stack"></div>
