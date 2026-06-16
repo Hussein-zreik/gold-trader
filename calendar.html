@@ -475,12 +475,19 @@ async function fetchCalendar(){
 
   const url=`${FF_BASE}${slug}.json`;
   let data=null;
-  for(const src of [`${FX_PROXY}${encodeURIComponent(url)}`, url]){
+  const SOURCES=[
+    `${FX_PROXY}${encodeURIComponent(url)}`,                                      // own worker (with Referer fix)
+    `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,              // public CORS fallback
+    `https://corsproxy.io/?${encodeURIComponent(url)}`,                           // second public fallback
+    url,                                                                           // direct (fails with CORS, last resort)
+  ];
+  for(const src of SOURCES){
     try{
-      const r=await Promise.race([fetch(src,{cache:'no-store'}),new Promise((_,rej)=>setTimeout(()=>rej('timeout'),12000))]);
+      const r=await Promise.race([fetch(src,{cache:'no-store'}),new Promise((_,rej)=>setTimeout(()=>rej('timeout'),10000))]);
       if(!r.ok) continue;
-      data=await r.json();
-      if(Array.isArray(data)&&data.length) break;
+      const raw=await r.json();
+      const arr=Array.isArray(raw)?raw:null;
+      if(arr&&arr.length){ data=arr; break; }
     }catch(e){ data=null; }
   }
 
