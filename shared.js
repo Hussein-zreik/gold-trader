@@ -130,6 +130,18 @@ ${!isLanding ? `<div class="mobile-search-overlay" id="mobileSearchOverlay" hidd
       tm.name = 'theme-color'; tm.content = '#04080F';
       document.head.appendChild(tm);
     }
+    // Favicon
+    if(!document.querySelector('link[rel="icon"]')){
+      var fi = document.createElement('link');
+      fi.rel = 'icon'; fi.type = 'image/svg+xml'; fi.href = 'favicon.svg';
+      document.head.appendChild(fi);
+    }
+    // Apple touch icon
+    if(!document.querySelector('link[rel="apple-touch-icon"]')){
+      var ai = document.createElement('link');
+      ai.rel = 'apple-touch-icon'; ai.href = 'favicon.svg';
+      document.head.appendChild(ai);
+    }
     // Service worker
     if('serviceWorker' in navigator){
       navigator.serviceWorker.register('sw.js').then(function(reg){

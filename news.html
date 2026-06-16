@@ -5,6 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Economy News — Forex Desk</title>
 <meta name="description" content="Live aggregated global economy and financial news from 40,000+ sources.">
+<meta property="og:type"        content="website">
+<meta property="og:title"       content="Economy News — Forex Desk">
+<meta property="og:description" content="Live aggregated global economy and financial news from 40,000+ sources.">
+<meta property="og:url"         content="https://hussein-zreik.github.io/gold-trader/news.html">
+<meta property="og:image"       content="https://hussein-zreik.github.io/gold-trader/og-image.svg">
+<meta name="twitter:card"       content="summary_large_image">
+<meta name="twitter:title"      content="Economy News — Forex Desk">
+<meta name="twitter:description" content="Live aggregated global economy and financial news from 40,000+ sources.">
+<meta name="twitter:image"      content="https://hussein-zreik.github.io/gold-trader/og-image.svg">
+<link rel="canonical"           href="https://hussein-zreik.github.io/gold-trader/news.html">
 <meta name="theme-color" content="#04080F">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -60,7 +70,7 @@ body.light-mode .enews-card:hover{box-shadow:0 4px 20px rgba(0,0,0,.12)}
     <div class="enews-grid" id="enewsFeed"></div>
   </div>
 </main>
-<script src="shared.js"></script>
+<script src="shared.js" defer></script>
 <script>
 const $=e=>document.getElementById(e);
 function _fetchTimeout(e){return new Promise((t,n)=>setTimeout(()=>n(new Error("timeout")),e))}
@@ -138,16 +148,20 @@ function renderEconomyNews(){
     feed.innerHTML='<div class="enews-empty"><div class="ico">🔍</div><div>No articles found</div><div style="margin-top:6px;font-size:10px;">Try a different search term or category</div></div>';
     return;
   }
+  const esc=s=>(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const safeUrl=u=>/^https?:\/\//i.test(u)?u:'#';
   feed.innerHTML=filtered.map(n=>{
     const dt=new Date(n.publishedAt);
-    const img=n.urlToImage?`<img src="${n.urlToImage}" alt="" class="enews-img" onerror="this.style.display='none'">`:'';
-    const src=(n.source?.name||'Unknown').substring(0,30);
+    const imgSrc=safeUrl(n.urlToImage||'');
+    const img=imgSrc&&imgSrc!=='#'?`<img src="${imgSrc}" alt="${esc(n.title?.substring(0,80)||'News article image')}" class="enews-img" loading="lazy" onerror="this.style.display='none'">`:'';
+    const src=esc((n.source?.name||'Unknown').substring(0,30));
     const sent=goldSentiment(n.title,n.description);
-    return `<div class="enews-card" onclick="window.open('${n.url}','_blank','noopener')">
+    const href=safeUrl(n.url||'');
+    return `<div class="enews-card" onclick="window.open('${href}','_blank','noopener noreferrer')">
       ${img}
       <div class="enews-card-hdr"><span class="enews-source">${src}</span><span style="font-family:var(--mono);font-size:9px;font-weight:700;padding:2px 8px;border-radius:4px;background:${sent.bg};color:${sent.color};letter-spacing:.5px;">⬤ ${sent.label}</span></div>
-      <div class="enews-title">${n.title||''}</div>
-      <div class="enews-summary">${n.description||'No description available'}</div>
+      <div class="enews-title">${esc(n.title||'')}</div>
+      <div class="enews-summary">${esc(n.description||'No description available')}</div>
       <div class="enews-footer"><span>📅 ${isNaN(dt)?'—':timeAgo(dt)}</span><span class="rd">Read full story →</span></div>
     </div>`;
   }).join('');

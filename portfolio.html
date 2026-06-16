@@ -5,6 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Portfolio — Forex Desk</title>
 <meta name="description" content="Track your open positions and portfolio P&L with Forex Desk's live portfolio tracker.">
+<meta property="og:type"        content="website">
+<meta property="og:title"       content="Portfolio — Forex Desk">
+<meta property="og:description" content="Track your open positions and portfolio P&L with Forex Desk's live portfolio tracker.">
+<meta property="og:url"         content="https://hussein-zreik.github.io/gold-trader/portfolio.html">
+<meta property="og:image"       content="https://hussein-zreik.github.io/gold-trader/og-image.svg">
+<meta name="twitter:card"       content="summary_large_image">
+<meta name="twitter:title"      content="Portfolio — Forex Desk">
+<meta name="twitter:description" content="Track your open positions and portfolio P&L with Forex Desk's live portfolio tracker.">
+<meta name="twitter:image"      content="https://hussein-zreik.github.io/gold-trader/og-image.svg">
+<link rel="canonical"           href="https://hussein-zreik.github.io/gold-trader/portfolio.html">
 <meta name="theme-color" content="#04080F">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -78,12 +88,12 @@
       </div>
       <!-- Add position form -->
       <div class="port-add-row" style="margin-top:12px;">
-        <input class="port-input" id="portSym" aria-label="Symbol" placeholder="Symbol (e.g. XAUUSD)" style="max-width:130px;">
+        <input class="port-input" id="portSym" aria-label="Symbol" placeholder="Symbol (e.g. XAUUSD)" style="max-width:130px;" required>
         <select class="port-input" id="portDir" aria-label="Direction" style="max-width:90px;cursor:pointer;">
           <option value="BUY">BUY</option>
           <option value="SELL">SELL</option>
         </select>
-        <input class="port-input" id="portEntry" aria-label="Entry price" type="number" placeholder="Entry price" style="max-width:120px;">
+        <input class="port-input" id="portEntry" aria-label="Entry price" type="number" placeholder="Entry price" style="max-width:120px;" required>
         <input class="port-input" id="portLots" aria-label="Lot size" type="number" placeholder="Lots" step="0.01" style="max-width:80px;" value="0.1">
         <input class="port-input" id="portCurrent" aria-label="Current price" type="number" placeholder="Current (auto-fetched)" style="max-width:140px;">
         <button type="button" class="port-btn" onclick="addPortPosition()">+ ADD</button>
@@ -95,7 +105,7 @@
     </div>
   </div>
 </main>
-<script src="shared.js"></script>
+<script src="shared.js" defer></script>
 <script>
 const $=e=>document.getElementById(e);
 function _fetchTimeout(e){return new Promise((t,n)=>setTimeout(()=>n(new Error("timeout")),e))}

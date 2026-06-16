@@ -5,7 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Forex Desk — Live Trading Dashboard</title>
 <meta name="description" content="Live forex trading dashboard with real-time gold, silver, currency pairs, crypto prices, economic calendar, COT report, fear & greed index, portfolio tracker and trade journal.">
+<meta property="og:type"        content="website">
+<meta property="og:title"       content="Forex Desk — Live Trading Dashboard">
+<meta property="og:description" content="Live forex trading dashboard with real-time gold, silver, currency pairs, crypto prices, economic calendar, COT report, fear & greed index, portfolio tracker and trade journal.">
+<meta property="og:url"         content="https://hussein-zreik.github.io/gold-trader/dashboard.html">
+<meta property="og:image"       content="https://hussein-zreik.github.io/gold-trader/og-image.svg">
+<meta name="twitter:card"       content="summary_large_image">
+<meta name="twitter:title"      content="Forex Desk — Live Trading Dashboard">
+<meta name="twitter:description" content="Live forex trading dashboard with real-time gold, silver, currency pairs, crypto prices, economic calendar, COT report, fear & greed index, portfolio tracker and trade journal.">
+<meta name="twitter:image"      content="https://hussein-zreik.github.io/gold-trader/og-image.svg">
+<link rel="canonical"           href="https://hussein-zreik.github.io/gold-trader/dashboard.html">
 <meta name="theme-color" content="#04080F">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="apple-touch-icon" href="favicon.svg">
+<link rel="manifest" href="manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800;900&display=swap">
@@ -1577,6 +1590,8 @@ async function fetchEconomyNews(){
 function renderEconomyNews(){
   const feed=$('enewsFeed'), search=$('enewsSearch');
   if(!feed) return;
+  const esc=s=>(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const safeUrl=u=>/^https?:\/\//i.test(u)?u:'#';
   const term=(search?.value||'').toLowerCase();
   const filtered=enewsArticles.filter(n=>n.title?.toLowerCase().includes(term) || n.description?.toLowerCase().includes(term));
   if(!filtered.length){
@@ -1585,13 +1600,15 @@ function renderEconomyNews(){
   }
   feed.innerHTML=filtered.map(n=>{
     const dt=new Date(n.publishedAt);
-    const img=n.urlToImage?`<img src="${n.urlToImage}" alt="" class="enews-img" onerror="this.style.display='none'">`:'';
-    const src=(n.source?.name||'Unknown').substring(0,30);
-    return `<div class="enews-card" onclick="window.open('${n.url}','_blank','noopener')">
+    const imgSrc=safeUrl(n.urlToImage||'');
+    const img=imgSrc&&imgSrc!=='#'?`<img src="${imgSrc}" alt="${esc(n.title?.substring(0,80)||'News image')}" class="enews-img" loading="lazy" onerror="this.style.display='none'">`:'';
+    const src=esc((n.source?.name||'Unknown').substring(0,30));
+    const href=safeUrl(n.url||'');
+    return `<div class="enews-card" onclick="window.open('${href}','_blank','noopener noreferrer')">
       ${img}
       <div class="enews-card-hdr"><span class="enews-source">${src}</span></div>
-      <div class="enews-title">${n.title||''}</div>
-      <div class="enews-summary">${n.description||'No description available'}</div>
+      <div class="enews-title">${esc(n.title||'')}</div>
+      <div class="enews-summary">${esc(n.description||'No description available')}</div>
       <div class="enews-footer"><span>📅 ${isNaN(dt)?'—':timeAgo(dt)}</span><span class="rd">Read full story →</span></div>
     </div>`;
   }).join('');

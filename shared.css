@@ -963,3 +963,19 @@ body.light-mode .fx-toast {
   .price-flash-up, .price-flash-dn { animation: none; }
   .fx-toast, .fx-toast.leaving { animation: none; opacity: 1; }
 }
+
+/* ── PRINT STYLES ── */
+@media print {
+  .site-header, .site-nav, .mobile-menu-btn, .hdr, .ticker-bar,
+  .sessions-bar, .site-footer, .fx-toast-stack, #fx-toast-stack,
+  .search-overlay, .w-handle { display: none !important; }
+  body { background: #fff !important; color: #111 !important; font-size: 12pt; }
+  .card { border: 1px solid #ccc !important; box-shadow: none !important; background: #fff !important; }
+  .badge { border: 1px solid #ccc !important; color: #333 !important; background: #f5f5f5 !important; }
+  a { color: #111 !important; text-decoration: underline; }
+  a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 9pt; color: #555; }
+  .page-section:not(.active) { display: none !important; }
+  .widget { break-inside: avoid; margin-bottom: 16pt; }
+  .page-wrap { padding: 0 !important; max-width: 100% !important; }
+  @page { margin: 2cm; }
+}

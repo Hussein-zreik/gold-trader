@@ -5,6 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Trade Journal — Forex Desk</title>
 <meta name="description" content="Log, review, and analyze your gold and forex trades with Forex Desk's professional trade journal.">
+<meta property="og:type"        content="website">
+<meta property="og:title"       content="Trade Journal — Forex Desk">
+<meta property="og:description" content="Log, review, and analyze your gold and forex trades with Forex Desk's professional trade journal.">
+<meta property="og:url"         content="https://hussein-zreik.github.io/gold-trader/journal.html">
+<meta property="og:image"       content="https://hussein-zreik.github.io/gold-trader/og-image.svg">
+<meta name="twitter:card"       content="summary_large_image">
+<meta name="twitter:title"      content="Trade Journal — Forex Desk">
+<meta name="twitter:description" content="Log, review, and analyze your gold and forex trades with Forex Desk's professional trade journal.">
+<meta name="twitter:image"      content="https://hussein-zreik.github.io/gold-trader/og-image.svg">
+<link rel="canonical"           href="https://hussein-zreik.github.io/gold-trader/journal.html">
 <meta name="theme-color" content="#04080F">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -118,8 +128,8 @@
       <div class="journal-form-inner portfolio-wrap">
       <div style="font-family:var(--mono);font-size:11px;color:var(--muted2);letter-spacing:1px;margin-bottom:10px;">NEW TRADE ENTRY</div>
       <div class="j-form-r4">
-        <input class="journal-input" id="jPair" aria-label="Currency pair" placeholder="Pair (XAUUSD)">
-        <select class="journal-input" id="jDir" aria-label="Trade direction" style="cursor:pointer;">
+        <input class="journal-input" id="jPair" aria-label="Currency pair" placeholder="Pair (XAUUSD)" required>
+        <select class="journal-input" id="jDir" aria-label="Trade direction" style="cursor:pointer;" required>
           <option value="BUY">BUY</option>
           <option value="SELL">SELL</option>
         </select>
@@ -198,7 +208,7 @@
     </div>
   </div>
 </main>
-<script src="shared.js"></script>
+<script src="shared.js" defer></script>
 <script>
 const $=e=>document.getElementById(e);
 function _fetchTimeout(e){return new Promise((t,n)=>setTimeout(()=>n(new Error("timeout")),e))}
@@ -255,7 +265,8 @@ Import ${result.entries.length} new trade${result.entries.length!==1?'s':''}?`;
 }
 
 function parseMT4CSV(text){
-  const lines=text.split(/?
+  const lines=text.split(/
+?
 /).map(l=>l.trim()).filter(Boolean);
   if(lines.length<2)throw new Error('File appears empty');
   

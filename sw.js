@@ -1,5 +1,5 @@
 /* Forex Desk — Service Worker (app-shell cache) */
-const CACHE = 'fxdesk-v1';
+const CACHE = 'fxdesk-v2';
 const SHELL = [
   '/',
   '/index.html',
@@ -10,7 +10,9 @@ const SHELL = [
   '/calendar.html',
   '/shared.css',
   '/shared.js',
-  '/manifest.json'
+  '/manifest.json',
+  '/favicon.svg',
+  '/offline.html'
 ];
 
 self.addEventListener('install', function(e){
@@ -30,11 +32,23 @@ self.addEventListener('activate', function(e){
 });
 
 self.addEventListener('fetch', function(e){
-  // Only cache-first for same-origin shell assets
   var url = new URL(e.request.url);
   if(url.origin !== self.location.origin) return;
   if(e.request.method !== 'GET') return;
 
+  // Navigation requests: serve from cache or fall back to offline page
+  if(e.request.mode === 'navigate'){
+    e.respondWith(
+      caches.match(e.request).then(function(cached){
+        return cached || fetch(e.request).catch(function(){
+          return caches.match('/offline.html');
+        });
+      })
+    );
+    return;
+  }
+
+  // Shell assets: cache-first, update in background
   e.respondWith(
     caches.match(e.request).then(function(cached){
       var network = fetch(e.request).then(function(res){
