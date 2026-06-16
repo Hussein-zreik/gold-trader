@@ -23,27 +23,186 @@
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800;900&display=swap"></noscript>
 <link rel="stylesheet" href="shared.css">
 <style>
-.enews-controls{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
-.enews-input{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:9px 12px;border-radius:10px;font-family:var(--sans);font-size:13px;flex:1;min-width:140px;transition:border-color .2s}
-.enews-input:focus{border-color:var(--blue);outline:0}
-.enews-status{font-family:var(--sans);font-size:12px;color:var(--muted2);padding:10px 14px;background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--blue);border-radius:12px;margin-bottom:14px}
-.enews-status.error{color:var(--badge-red);border-left-color:var(--red)}
-.enews-status.success{color:var(--green);border-left-color:var(--green)}
-.enews-grid{display:grid;gap:14px}
-@media(min-width:700px){.enews-grid{grid-template-columns:repeat(2,1fr)}}
-.enews-card{background:var(--bg2);border:1px solid rgba(255,255,255,0.04);border-radius:18px;padding:18px;cursor:pointer;transition:border-color .2s,box-shadow .2s;display:flex;flex-direction:column;gap:8px;box-shadow:0 4px 24px rgba(0,0,0,0.45)}
-.enews-card:hover{box-shadow:0 8px 32px rgba(0,0,0,0.55),0 0 0 1px rgba(59,130,246,0.12);transform:translateY(-2px)}
-.enews-card-hdr{display:flex;justify-content:space-between;align-items:start;gap:10px}
-.enews-source{font-family:var(--mono);font-size:9px;font-weight:700;padding:3px 8px;border-radius:20px;background:rgba(59,130,246,.1);color:var(--badge-blue);text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
-.enews-img{width:100%;height:180px;object-fit:cover;border-radius:12px}
-.enews-title{font-family:var(--heading);font-size:14px;font-weight:700;color:var(--text);line-height:1.4}
-.enews-summary{font-family:var(--sans);font-size:12px;color:var(--muted2);line-height:1.6;flex:1}
-.enews-footer{display:flex;justify-content:space-between;align-items:center;font-family:var(--sans);font-size:10px;color:var(--muted);padding-top:8px;border-top:1px solid var(--border)}
-.enews-footer .rd{color:var(--blue)}
-.enews-empty{text-align:center;padding:60px 20px;font-family:var(--sans);font-size:13px;color:var(--muted2);background:var(--bg2);border:1px solid rgba(255,255,255,0.04);border-radius:18px;box-shadow:0 4px 24px rgba(0,0,0,0.45)}
-.enews-empty .ico{font-size:40px;margin-bottom:12px}
-.port-btn{background:var(--btn-blue-bg);color:#fff;border:none;padding:9px 20px;border-radius:7px;font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;cursor:pointer;transition:background .2s;white-space:nowrap}
-.port-btn:hover{background:#1d4ed8}
+/* ===== Linear / Modern — news.html scoped redesign ===== */
+:root{
+  --lx-glass:linear-gradient(to bottom,rgba(255,255,255,.055),rgba(255,255,255,.02));
+  --lx-bd:rgba(255,255,255,.06);
+  --lx-bd-h:rgba(255,255,255,.10);
+  --lx-bd-a:rgba(94,106,210,.30);
+  --lx-accent:#5E6AD2;
+  --lx-accent-h:#6872D9;
+  --lx-card-sh:0 0 0 1px rgba(255,255,255,.06),0 2px 20px rgba(0,0,0,.4),0 0 40px rgba(0,0,0,.2);
+  --lx-card-sh-h:0 0 0 1px rgba(255,255,255,.10),0 8px 40px rgba(0,0,0,.55),0 0 80px rgba(94,106,210,.12);
+  --lx-ease:cubic-bezier(.16,1,.3,1);
+}
+
+/* Header */
+.page-wrap .page-title{
+  background:linear-gradient(180deg,#fff 0%,rgba(255,255,255,.70) 100%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+  letter-spacing:-.02em;
+}
+.page-wrap .page-sub{color:var(--muted);max-width:62ch}
+
+/* Controls row */
+.enews-controls{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 14px;align-items:center}
+
+/* Search + select inputs */
+.enews-input{
+  background:#0F0F12;border:1px solid var(--lx-bd-h);color:var(--text);
+  padding:10px 13px;border-radius:8px;font-family:var(--sans);font-size:13px;
+  flex:1;min-width:160px;transition:border-color .2s var(--lx-ease),box-shadow .2s var(--lx-ease);
+}
+.enews-input::placeholder{color:var(--muted)}
+.enews-input:focus{border-color:var(--lx-accent);outline:0;box-shadow:0 0 0 3px rgba(94,106,210,.22)}
+/* search field with icon */
+.enews-search-wrap{position:relative;flex:1;min-width:200px;display:flex}
+.enews-search-wrap .enews-input{padding-left:36px;width:100%}
+.enews-search-wrap svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:var(--muted);pointer-events:none}
+select.enews-input{flex:0;min-width:170px;cursor:pointer}
+
+/* Pill filter / action button */
+.port-btn{
+  background:rgba(94,106,210,.12);color:var(--lx-accent-h);
+  border:1px solid var(--lx-bd-a);padding:10px 18px;border-radius:9999px;
+  font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;
+  cursor:pointer;white-space:nowrap;transition:background .2s var(--lx-ease),border-color .2s var(--lx-ease),transform .2s var(--lx-ease);
+}
+.port-btn:hover{background:rgba(94,106,210,.22);border-color:var(--lx-accent);transform:translateY(-1px)}
+.port-btn:active{transform:translateY(0)}
+
+/* Status pill with pulsing dot */
+.enews-status{
+  display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:12px;
+  color:var(--muted);padding:8px 15px;background:var(--lx-glass);
+  border:1px solid var(--lx-bd);border-radius:9999px;margin-bottom:18px;
+  box-shadow:0 0 0 1px rgba(255,255,255,.04);transition:color .2s,border-color .2s;
+}
+.enews-status::before{
+  content:"";width:8px;height:8px;border-radius:9999px;flex:none;
+  background:var(--muted);box-shadow:0 0 0 0 rgba(138,143,152,.4);
+}
+.enews-status.success{color:var(--green);border-color:rgba(34,197,94,.30)}
+.enews-status.success::before{background:#22C55E;animation:lx-pulse 2s var(--lx-ease) infinite}
+.enews-status.error{color:#F87171;border-color:rgba(239,68,68,.30)}
+.enews-status.error::before{background:#F87171}
+@keyframes lx-pulse{
+  0%{box-shadow:0 0 0 0 rgba(34,197,94,.45)}
+  70%{box-shadow:0 0 0 7px rgba(34,197,94,0)}
+  100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}
+}
+
+/* ===== Bento feed grid ===== */
+.enews-grid{display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:768px){
+  .enews-grid{grid-template-columns:repeat(6,1fr)}
+  /* default: each card spans 2 of 6 cols -> 3-up */
+  .enews-card{grid-column:span 2}
+  /* featured lead article spans 4 cols (2/3 width) with side-by-side layout */
+  .enews-card:first-child{grid-column:span 4}
+  .enews-card:first-child .enews-img{height:240px}
+  .enews-card:first-child .enews-title{font-size:19px}
+}
+@media(min-width:1100px){
+  /* on wide screens the lead spans 3, plus a tall second feature */
+  .enews-card:first-child{grid-column:span 3}
+}
+
+/* ===== Card glass ===== */
+.enews-card{
+  position:relative;background:var(--lx-glass);
+  border:1px solid var(--lx-bd);border-radius:16px;padding:18px;cursor:pointer;
+  display:flex;flex-direction:column;gap:10px;overflow:hidden;
+  box-shadow:var(--lx-card-sh);
+  transition:transform .25s var(--lx-ease),border-color .25s var(--lx-ease),box-shadow .25s var(--lx-ease);
+}
+/* top inner-glow line */
+.enews-card::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.16),transparent);
+  pointer-events:none;
+}
+.enews-card:hover{
+  transform:translateY(-4px);border-color:var(--lx-bd-a);box-shadow:var(--lx-card-sh-h);
+}
+.enews-card-hdr{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.enews-source{
+  font-family:var(--mono);font-size:9px;font-weight:700;padding:4px 9px;border-radius:9999px;
+  background:rgba(94,106,210,.12);color:var(--lx-accent-h);border:1px solid var(--lx-bd-a);
+  text-transform:uppercase;letter-spacing:.6px;white-space:nowrap;
+}
+/* sentiment pill (JS emits .enews-sent + modifier class) */
+.enews-sent{
+  font-family:var(--mono);font-size:9px;font-weight:700;padding:4px 9px;border-radius:9999px;
+  letter-spacing:.6px;white-space:nowrap;border:1px solid;
+}
+.enews-sent.pos{color:#4ADE80;background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.30)}
+.enews-sent.neg{color:#F87171;background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.30)}
+.enews-sent.neu{color:var(--lx-accent-h);background:rgba(94,106,210,.12);border-color:var(--lx-bd-a)}
+.enews-img{
+  width:100%;height:170px;object-fit:cover;border-radius:12px;
+  border:1px solid var(--lx-bd);
+}
+.enews-title{font-family:var(--heading);font-size:15px;font-weight:600;color:var(--text);line-height:1.35;letter-spacing:-.01em}
+.enews-summary{font-family:var(--sans);font-size:12.5px;color:var(--muted);line-height:1.6;flex:1}
+.enews-footer{
+  display:flex;justify-content:space-between;align-items:center;
+  font-family:var(--mono);font-size:10px;color:var(--muted);
+  padding-top:10px;border-top:1px solid var(--lx-bd);margin-top:2px;
+}
+.enews-footer .rd{color:var(--lx-accent-h);transition:color .2s var(--lx-ease)}
+.enews-card:hover .enews-footer .rd{color:#fff}
+
+/* ===== Empty / error states ===== */
+.enews-empty{
+  grid-column:1/-1;text-align:center;padding:64px 24px;font-family:var(--sans);font-size:13px;
+  color:var(--muted);background:var(--lx-glass);border:1px solid var(--lx-bd);
+  border-radius:16px;box-shadow:var(--lx-card-sh);
+}
+.enews-empty .ico{font-size:40px;margin-bottom:12px;opacity:.7}
+.error-retry-banner{
+  grid-column:1/-1;text-align:center;padding:40px 24px;font-family:var(--sans);font-size:13px;
+  color:#F87171;background:var(--lx-glass);border:1px solid rgba(239,68,68,.30);
+  border-radius:16px;box-shadow:var(--lx-card-sh);
+}
+.error-retry-btn{
+  margin-left:6px;background:rgba(94,106,210,.12);color:var(--lx-accent-h);
+  border:1px solid var(--lx-bd-a);padding:7px 16px;border-radius:9999px;
+  font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;
+  cursor:pointer;transition:background .2s var(--lx-ease),border-color .2s var(--lx-ease);
+}
+.error-retry-btn:hover{background:rgba(94,106,210,.22);border-color:var(--lx-accent)}
+
+/* ===== Skeleton loading ===== */
+.enews-skel{
+  grid-column:span 2;background:var(--lx-glass);border:1px solid var(--lx-bd);
+  border-radius:16px;padding:18px;min-height:220px;position:relative;overflow:hidden;
+  box-shadow:var(--lx-card-sh);
+}
+.enews-skel::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent);
+  transform:translateX(-100%);animation:lx-shimmer 1.4s infinite;
+}
+@media(min-width:768px){.enews-skel:first-child{grid-column:span 4}}
+@keyframes lx-shimmer{100%{transform:translateX(100%)}}
+
+/* ===== Entrance animation ===== */
+.lx-reveal{opacity:0;transform:translateY(16px)}
+.lx-reveal.lx-in{opacity:1;transform:none;transition:opacity .6s var(--lx-ease),transform .6s var(--lx-ease)}
+
+/* ===== A11y ===== */
+.enews-input:focus-visible,.port-btn:focus-visible,.error-retry-btn:focus-visible,.enews-card:focus-visible{
+  outline:2px solid rgba(94,106,210,.6);outline-offset:2px;
+}
+@media(prefers-reduced-motion:reduce){
+  .enews-card,.port-btn,.enews-input{transition:none!important}
+  .enews-status.success::before{animation:none}
+  .enews-skel::after{animation:none}
+  .lx-reveal{opacity:1;transform:none}
+  .lx-reveal.lx-in{transition:none}
+}
+
 body.light-mode .enews-card:hover{box-shadow:0 4px 20px rgba(0,0,0,.12)}
 </style>
 </head>
@@ -53,8 +212,11 @@ body.light-mode .enews-card:hover{box-shadow:0 4px 20px rgba(0,0,0,.12)}
     <div class="page-title">📰 Economy News</div>
     <div class="page-sub">Aggregated financial &amp; economic news from 40,000+ sources. Powered by your Render backend.</div>
     <div class="enews-controls">
-      <input type="text" id="enewsSearch" class="enews-input" aria-label="Search news articles" placeholder="Search articles...">
-      <select id="enewsCategory" class="enews-input" aria-label="News category" style="flex:0;min-width:160px;">
+      <span class="enews-search-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" id="enewsSearch" class="enews-input" aria-label="Search news articles" placeholder="Search articles...">
+      </span>
+      <select id="enewsCategory" class="enews-input" aria-label="News category">
         <option value="economy">Economy</option>
         <option value="finance">Finance</option>
         <option value="business">Business</option>
@@ -95,9 +257,9 @@ function goldSentiment(title,desc){
   let s=0;
   GOLD_BULL.forEach(w=>{if(t.includes(w))s++;});
   GOLD_BEAR.forEach(w=>{if(t.includes(w))s--;});
-  if(s>0)return{label:'BULLISH',color:'var(--green)',bg:'rgba(34,197,94,.15)'};
-  if(s<0)return{label:'BEARISH',color:'#F87171',bg:'rgba(239,68,68,.12)'};
-  return{label:'NEUTRAL',color:'var(--muted2)',bg:'rgba(139,175,209,.08)'};
+  if(s>0)return{label:'BULLISH',cls:'pos'};
+  if(s<0)return{label:'BEARISH',cls:'neg'};
+  return{label:'NEUTRAL',cls:'neu'};
 }
 
 async function fetchEconomyNews(){
@@ -157,19 +319,42 @@ function renderEconomyNews(){
     const src=esc((n.source?.name||'Unknown').substring(0,30));
     const sent=goldSentiment(n.title,n.description);
     const href=safeUrl(n.url||'');
-    return `<div class="enews-card" onclick="window.open('${href}','_blank','noopener noreferrer')">
+    return `<article class="enews-card lx-reveal" tabindex="0" role="link" aria-label="${esc(n.title?.substring(0,120)||'News article')}" onclick="window.open('${href}','_blank','noopener noreferrer')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();window.open('${href}','_blank','noopener noreferrer')}">
       ${img}
-      <div class="enews-card-hdr"><span class="enews-source">${src}</span><span style="font-family:var(--mono);font-size:9px;font-weight:700;padding:2px 8px;border-radius:4px;background:${sent.bg};color:${sent.color};letter-spacing:.5px;">⬤ ${sent.label}</span></div>
+      <div class="enews-card-hdr"><span class="enews-source">${src}</span><span class="enews-sent ${sent.cls}">⬤ ${sent.label}</span></div>
       <div class="enews-title">${esc(n.title||'')}</div>
       <div class="enews-summary">${esc(n.description||'No description available')}</div>
       <div class="enews-footer"><span>📅 ${isNaN(dt)?'—':timeAgo(dt)}</span><span class="rd">Read full story →</span></div>
-    </div>`;
+    </article>`;
   }).join('');
+  lxObserveCards();
 }
 
 if($('enewsSearch')){let _st;$('enewsSearch').addEventListener('input',function(){clearTimeout(_st);_st=setTimeout(renderEconomyNews,200);});}
 if($('enewsCategory')) $('enewsCategory').addEventListener('change', fetchEconomyNews);
 addPostRefreshHook(()=>{updateSMC(),updateMacroRegime(),loadOptionssentiment()}),window.addEventListener("load",()=>{setTimeout(()=>{loadOptionssentiment(),loadRealYield()},2e3)}),updateMarketStatus(),setInterval(updateMarketStatus,6e4),addPostRefreshHook(()=>{}),window.addEventListener("load",()=>{const _hash=window.location.hash.replace('#','');const _savedPage=_hash&&['dashboard','journal','portfolio','news','calendar'].includes(_hash)?_hash:null;try{const e=_savedPage||localStorage.getItem("fxdesk_page");if(e&&"dashboard"!==e)switchPage(e,null)}catch(e){}}),window.addEventListener("unhandledrejection",e=>{const t=e?.reason?.message||"";(t.includes("Failed to fetch")||t.includes("NetworkError")||t.includes("Load failed"))&&e.preventDefault()});
+/* Entrance reveal — runs after each render; observes newly added cards once, staggered. */
+let _lxObs=null;
+function lxObserveCards(){
+  const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const cards=document.querySelectorAll('#enewsFeed .enews-card.lx-reveal');
+  if(reduce||!('IntersectionObserver'in window)){cards.forEach(c=>c.classList.add('lx-in'));return;}
+  if(!_lxObs){
+    _lxObs=new IntersectionObserver((entries,obs)=>{
+      entries.forEach(en=>{
+        if(en.isIntersecting){
+          const el=en.target;
+          const i=Array.prototype.indexOf.call(el.parentNode.children,el);
+          el.style.transitionDelay=Math.min(i,8)*60+'ms';
+          el.classList.add('lx-in');
+          obs.unobserve(el);
+        }
+      });
+    },{threshold:0.15});
+  }
+  cards.forEach(c=>{if(!c.classList.contains('lx-in'))_lxObs.observe(c);});
+}
+
 window.addEventListener('load', function(){
   fetchEconomyNews();
 });

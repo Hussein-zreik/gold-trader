@@ -1362,6 +1362,196 @@ input,select,textarea{background:#0F0F12!important;border:1px solid rgba(255,255
 input:focus,select:focus,textarea:focus{border-color:#5E6AD2!important;box-shadow:0 0 0 3px rgba(94,106,210,.22)!important;outline:none!important}
 a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid rgba(94,106,210,.6)!important;outline-offset:2px!important}
 </style>
+<style>
+/* ════ LINEAR / MODERN — STRUCTURAL REDESIGN (index.html only) ════ */
+:root{
+  --lx-ease:cubic-bezier(.16,1,.3,1);
+  --lx-canvas:#050506;--lx-elev:#0a0a0c;--lx-deep:#020203;
+  --lx-text:#EDEDEF;--lx-muted:#8A8F98;--lx-subtle:rgba(255,255,255,.60);
+  --lx-acc:#5E6AD2;--lx-acc-h:#6872D9;--lx-acc-glow:rgba(94,106,210,.30);
+  --lx-bord:rgba(255,255,255,.06);--lx-bord-h:rgba(255,255,255,.10);
+  --lx-surface:linear-gradient(to bottom,rgba(255,255,255,.055),rgba(255,255,255,.02));
+}
+
+/* ── Typography: gradient headlines ── */
+.hero-title,.section-title,.cta-card h2{
+  font-family:var(--display)!important;
+  font-weight:600!important;
+  letter-spacing:-.03em!important;
+  line-height:1.05!important;
+  background:linear-gradient(to bottom,#fff,rgba(255,255,255,.70))!important;
+  -webkit-background-clip:text!important;background-clip:text!important;
+  color:transparent!important;-webkit-text-fill-color:transparent!important;
+}
+.lx-shimmer{
+  background:linear-gradient(90deg,#5E6AD2,#8A93E0,#5E6AD2)!important;
+  background-size:200% auto!important;
+  -webkit-background-clip:text!important;background-clip:text!important;
+  color:transparent!important;-webkit-text-fill-color:transparent!important;
+  animation:lxShimmer 5s linear infinite;
+}
+@keyframes lxShimmer{0%{background-position:0% center}100%{background-position:200% center}}
+
+.section-label,.hero-badge{font-family:var(--mono)!important;}
+.section-label{font-size:12px!important;letter-spacing:.15em!important;text-transform:uppercase!important;color:var(--lx-muted)!important;font-weight:500!important;}
+.hero-desc,.section-desc,.feature-desc,.step-desc,.testimonial-text,.cta-card p{color:var(--lx-muted)!important;line-height:1.7!important;}
+
+/* ── Hero badge ── */
+.hero-badge{
+  color:var(--lx-subtle)!important;
+  background:rgba(255,255,255,.04)!important;
+  border:1px solid var(--lx-bord)!important;
+  font-size:11px!important;letter-spacing:.12em!important;
+  border-radius:9999px!important;
+  box-shadow:inset 0 1px 0 0 rgba(255,255,255,.06)!important;
+}
+.hero-badge-dot{background:var(--lx-acc)!important;box-shadow:0 0 8px rgba(94,106,210,.8)!important;}
+
+/* ── Hero content (parallax target) ── */
+.hero-content{will-change:transform,opacity;}
+
+/* ── Buttons: primary with shine sweep ── */
+.btn-primary{
+  background:var(--lx-acc)!important;color:#fff!important;
+  border:none!important;border-radius:8px!important;
+  padding:12px 22px!important;font-weight:600!important;
+  box-shadow:0 0 0 1px rgba(94,106,210,.5),0 4px 12px rgba(94,106,210,.35),inset 0 1px 0 0 rgba(255,255,255,.2)!important;
+  transition:background .25s var(--lx-ease),transform .25s var(--lx-ease),box-shadow .25s var(--lx-ease)!important;
+  position:relative!important;overflow:hidden!important;
+}
+.btn-primary::before{
+  content:'';position:absolute;top:0;left:-120%;width:80%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.28),transparent);
+  transform:skewX(-18deg);transition:left .6s var(--lx-ease);pointer-events:none;
+}
+.btn-primary:hover{background:var(--lx-acc-h)!important;transform:translateY(-2px)!important;box-shadow:0 0 0 1px rgba(94,106,210,.6),0 8px 26px rgba(94,106,210,.5),0 0 50px rgba(94,106,210,.25),inset 0 1px 0 0 rgba(255,255,255,.25)!important;}
+.btn-primary:hover::before{left:130%;}
+.btn-primary:active{transform:scale(.98)!important;}
+
+.btn-secondary{
+  background:rgba(255,255,255,.05)!important;color:var(--lx-text)!important;
+  border:1px solid var(--lx-bord-h)!important;border-radius:8px!important;
+  padding:12px 22px!important;font-weight:600!important;
+  transition:background .25s var(--lx-ease),border-color .25s var(--lx-ease),transform .25s var(--lx-ease)!important;
+}
+.btn-secondary:hover{background:rgba(255,255,255,.08)!important;border-color:rgba(255,255,255,.16)!important;color:var(--lx-text)!important;transform:translateY(-2px)!important;}
+
+/* ── BENTO FEATURE GRID ── */
+.features-grid{
+  max-width:1100px;margin:0 auto;
+  display:grid!important;
+  grid-template-columns:repeat(6,1fr)!important;
+  grid-auto-rows:minmax(200px,auto)!important;
+  gap:18px!important;
+}
+.feature-card{
+  padding:30px 28px!important;
+  display:flex!important;flex-direction:column!important;
+}
+/* bento spans */
+.bento-hero{grid-column:span 4!important;grid-row:span 2!important;}
+.bento-tall{grid-column:span 2!important;grid-row:span 2!important;}
+.bento-wide{grid-column:span 3!important;}
+.bento-sm{grid-column:span 2!important;}
+.bento-half{grid-column:span 2!important;}
+
+.bento-hero .feature-name{font-size:24px!important;}
+.bento-hero .feature-desc{font-size:15px!important;max-width:560px;}
+
+.feature-icon{
+  border-radius:12px!important;
+  width:44px!important;height:44px!important;
+  background:rgba(255,255,255,.04)!important;
+  border:1px solid var(--lx-bord-h)!important;
+  box-shadow:inset 0 1px 0 0 rgba(255,255,255,.06)!important;
+  margin-bottom:18px!important;
+}
+.feature-icon svg{stroke:var(--lx-acc)!important;}
+.feature-name{font-family:var(--display)!important;font-size:19px!important;font-weight:600!important;letter-spacing:-.02em!important;color:var(--lx-text)!important;margin-bottom:10px!important;}
+.feature-card .feature-tags{margin-top:auto!important;}
+.ftag{
+  font-family:var(--mono)!important;border-radius:9999px!important;
+  background:rgba(255,255,255,.04)!important;color:var(--lx-muted)!important;
+  border:1px solid var(--lx-bord)!important;text-transform:uppercase!important;
+}
+
+/* ── Bento mini visual inside hero card ── */
+.bento-visual{margin-top:auto;display:flex;align-items:flex-end;gap:5px;height:60px;padding-top:18px;}
+.bento-visual span{flex:1;border-radius:3px 3px 0 0;background:linear-gradient(to top,rgba(94,106,210,.5),rgba(94,106,210,.12));min-height:8px;}
+
+/* ── Steps ── */
+.step-num{
+  background:var(--lx-surface)!important;
+  border:1px solid var(--lx-bord-h)!important;
+  color:var(--lx-acc)!important;
+  font-family:var(--display)!important;font-weight:600!important;
+  box-shadow:inset 0 1px 0 0 rgba(255,255,255,.08),0 0 0 4px var(--lx-elev)!important;
+}
+.step-title{font-family:var(--display)!important;font-weight:600!important;letter-spacing:-.02em!important;color:var(--lx-text)!important;}
+.steps-grid::before{background:linear-gradient(90deg,transparent,var(--lx-bord-h) 20%,var(--lx-bord-h) 80%,transparent)!important;}
+
+/* ── Stats ── */
+.stat-num{
+  background:linear-gradient(to bottom,#fff,rgba(255,255,255,.65))!important;
+  -webkit-background-clip:text!important;background-clip:text!important;
+  -webkit-text-fill-color:transparent!important;color:transparent!important;
+  font-family:var(--display)!important;font-weight:600!important;letter-spacing:-.03em!important;
+}
+.stat-label{font-family:var(--mono)!important;color:var(--lx-muted)!important;letter-spacing:.08em!important;}
+
+/* ── Testimonials ── */
+.testimonial-stars{color:var(--lx-acc)!important;}
+.testimonial-name{color:var(--lx-text)!important;}
+.testimonial-role{font-family:var(--mono)!important;color:var(--lx-muted)!important;}
+
+/* ── CTA ── */
+.cta-card{border-radius:16px!important;}
+.cta-band::before{background:radial-gradient(circle,rgba(94,106,210,.12) 0%,transparent 65%)!important;}
+
+/* ── Footer ── */
+.site-footer{background:var(--lx-deep)!important;border-top:1px solid var(--lx-bord)!important;}
+.footer-logo-name{
+  background:linear-gradient(to bottom,#fff,rgba(255,255,255,.7))!important;
+  -webkit-background-clip:text!important;background-clip:text!important;
+  -webkit-text-fill-color:transparent!important;color:transparent!important;
+  font-family:var(--display)!important;font-weight:600!important;
+}
+.footer-col-title{font-family:var(--mono)!important;color:var(--lx-muted)!important;letter-spacing:.12em!important;}
+
+/* ── Refined mobile menu ── */
+.mobile-nav{
+  background:rgba(5,5,6,.97)!important;
+  backdrop-filter:blur(22px)!important;-webkit-backdrop-filter:blur(22px)!important;
+  border-bottom:1px solid var(--lx-bord)!important;
+  padding:16px 16px 20px!important;gap:6px!important;
+  box-shadow:0 24px 48px rgba(0,0,0,.6)!important;
+}
+.mobile-nav .nav-link{
+  font-family:var(--mono)!important;border-radius:8px!important;
+  color:var(--lx-muted)!important;transition:background .2s var(--lx-ease),color .2s var(--lx-ease)!important;
+}
+.mobile-nav .nav-link:hover{background:rgba(255,255,255,.05)!important;color:var(--lx-text)!important;}
+.mobile-nav .nav-cta{width:100%!important;text-align:center!important;border-radius:8px!important;padding:14px!important;margin-top:10px!important;}
+
+/* ── Reveal entrance system (new elements) ── */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s var(--lx-ease),transform .6s var(--lx-ease);}
+.reveal.is-in{opacity:1;transform:translateY(0);}
+
+/* ── Bento responsive collapse ── */
+@media(max-width:768px){
+  .features-grid{grid-template-columns:1fr!important;grid-auto-rows:auto!important;}
+  .bento-hero,.bento-tall,.bento-wide,.bento-sm,.bento-half{grid-column:1/-1!important;grid-row:auto!important;}
+  .bento-hero .feature-name{font-size:21px!important;}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .lx-shimmer{animation:none!important;}
+  .btn-primary:hover,.btn-secondary:hover{transform:none!important;}
+  .btn-primary::before{display:none!important;}
+  .reveal{opacity:1!important;transform:none!important;transition:none!important;}
+  .hero-content{transform:none!important;opacity:1!important;}
+}
+</style>
 </head>
 <body>
 <div class="lx-blob b1" aria-hidden="true"></div>
@@ -1423,8 +1613,8 @@ a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid 
       </div>
       <h1 class="hero-title">
         Your Edge in<br>
-        <span class="hl-blue">Gold &amp; Forex</span><br>
-        Starts <span class="hl-red">Here.</span>
+        <span class="lx-shimmer">Gold &amp; Forex</span><br>
+        Starts Here.
       </h1>
       <p class="hero-desc">
         Forex Desk aggregates live prices, macro signals, multi-timeframe confluence, and institutional positioning into one professional command center — so you spend less time gathering data and more time making decisions.
@@ -1569,28 +1759,31 @@ a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid 
 
 <!-- ── FEATURES ── -->
 <section class="features" aria-labelledby="features-title">
-  <div class="section-label">What's Inside</div>
-  <h2 class="section-title" id="features-title">Everything a serious<br>gold trader needs</h2>
-  <p class="section-desc">Built by a trader, for traders. No bloat, no paywalls, no distractions — just the signals that move the market.</p>
+  <div class="section-label reveal">What's Inside</div>
+  <h2 class="section-title reveal" id="features-title">Everything a serious<br><span class="lx-shimmer">gold trader</span> needs</h2>
+  <p class="section-desc reveal">Built by a trader, for traders. No bloat, no paywalls, no distractions — just the signals that move the market.</p>
 
   <div class="features-grid">
 
-    <div class="feature-card blue">
+    <div class="feature-card blue bento-hero reveal">
       <div class="feature-icon blue">
         <svg viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
       </div>
       <div class="feature-name">Today's Bias</div>
       <div class="feature-desc">
-        A single composite directional read on gold, synthesised from 6 independent signals in real time: macro regime, DXY trend, MTF confluence, currency strength, news sentiment, and real yields. One gauge instead of six tabs.
+        A single composite directional read on gold, synthesised from 6 independent signals in real time: macro regime, DXY trend, MTF confluence, currency strength, news sentiment, and real yields. One gauge instead of six tabs — so you arrive at the chart already knowing your lean.
       </div>
       <div class="feature-tags">
         <span class="ftag blue">Auto · Live</span>
         <span class="ftag blue">6 Signals</span>
         <span class="ftag blue">Composite</span>
       </div>
+      <div class="bento-visual" aria-hidden="true">
+        <span style="height:58%"></span><span style="height:80%"></span><span style="height:44%"></span><span style="height:72%"></span><span style="height:34%"></span><span style="height:88%"></span><span style="height:56%"></span><span style="height:66%"></span><span style="height:48%"></span><span style="height:78%"></span><span style="height:40%"></span><span style="height:84%"></span>
+      </div>
     </div>
 
-    <div class="feature-card green">
+    <div class="feature-card green bento-tall reveal">
       <div class="feature-icon green">
         <svg viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
       </div>
@@ -1605,13 +1798,13 @@ a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid 
       </div>
     </div>
 
-    <div class="feature-card red">
+    <div class="feature-card red bento-half reveal">
       <div class="feature-icon red">
         <svg viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
       </div>
       <div class="feature-name">Trade Journal & Analytics</div>
       <div class="feature-desc">
-        Log every trade with entry, exit, R:R, direction, and outcome. Tag mistakes — FOMO entry, moved stop, oversize — and the analytics panel surfaces your recurring patterns: win rate, profit factor, equity curve, and your costliest habits.
+        Log every trade with entry, exit, R:R, direction, and outcome. Tag mistakes — FOMO entry, moved stop, oversize — and the analytics surface your recurring patterns: win rate, profit factor, equity curve.
       </div>
       <div class="feature-tags">
         <span class="ftag red">Analytics</span>
@@ -1620,14 +1813,42 @@ a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid 
       </div>
     </div>
 
+    <div class="feature-card blue bento-sm reveal">
+      <div class="feature-icon blue">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+      </div>
+      <div class="feature-name">Live Prices</div>
+      <div class="feature-desc">
+        30+ instruments — gold, FX majors, indices, crypto, yields — refreshed on a 60-second cycle.
+      </div>
+      <div class="feature-tags">
+        <span class="ftag blue">30+ Symbols</span>
+        <span class="ftag blue">60s Refresh</span>
+      </div>
+    </div>
+
+    <div class="feature-card green bento-sm reveal">
+      <div class="feature-icon green">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      </div>
+      <div class="feature-name">News & Calendar</div>
+      <div class="feature-desc">
+        Market-moving headlines and the economic calendar, filtered to what actually impacts gold and the dollar.
+      </div>
+      <div class="feature-tags">
+        <span class="ftag green">High-Impact</span>
+        <span class="ftag green">Curated</span>
+      </div>
+    </div>
+
   </div>
 </section>
 
 <!-- ── HOW IT WORKS ── -->
 <section class="how-it-works" aria-labelledby="how-title">
-  <div class="section-label">Workflow</div>
-  <h2 class="section-title" id="how-title">From data to decision<br>in seconds</h2>
-  <p class="section-desc">Forex Desk does the heavy lifting so you arrive at the chart with a clear plan, not a browser full of tabs.</p>
+  <div class="section-label reveal">Workflow</div>
+  <h2 class="section-title reveal" id="how-title">From data to <span class="lx-shimmer">decision</span><br>in seconds</h2>
+  <p class="section-desc reveal">Forex Desk does the heavy lifting so you arrive at the chart with a clear plan, not a browser full of tabs.</p>
 
   <div class="steps-grid">
     <div class="step">
@@ -1673,9 +1894,9 @@ a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid 
 
 <!-- ── TESTIMONIALS ── -->
 <section class="testimonials" aria-labelledby="testimonials-title">
-  <div class="section-label">Trader Feedback</div>
-  <h2 class="section-title" id="testimonials-title">Built for traders<br>who take it seriously</h2>
-  <p class="section-desc">No synthetic reviews. Real responses from traders who use Forex Desk in their daily routine.</p>
+  <div class="section-label reveal">Trader Feedback</div>
+  <h2 class="section-title reveal" id="testimonials-title">Built for <span class="lx-shimmer">traders</span><br>who take it seriously</h2>
+  <p class="section-desc reveal">No synthetic reviews. Real responses from traders who use Forex Desk in their daily routine.</p>
 
   <div class="testimonials-grid">
     <div class="testimonial-card">
@@ -1717,7 +1938,7 @@ a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid 
 <!-- ── CTA BAND ── -->
 <section class="cta-band" aria-labelledby="cta-title">
   <div class="cta-card">
-    <h2 id="cta-title">Ready to trade with<br>a cleaner edge?</h2>
+    <h2 id="cta-title">Ready to trade with<br>a <span class="lx-shimmer">cleaner edge?</span></h2>
     <p>The dashboard is live, free, and ready right now. No account. No download. No credit card. Just open it and trade better.</p>
     <a href="dashboard.html" class="btn-primary" style="display:inline-flex;">
       Open Dashboard
@@ -1867,6 +2088,49 @@ document.querySelectorAll('.feature-card,.stat-card,.step,.testimonial-card').fo
   },{passive:true});
   if(document.readyState!=='loading')addSpots();else document.addEventListener('DOMContentLoaded',addSpots);
   setTimeout(addSpots,1500);setTimeout(addSpots,4000);
+})();
+</script>
+<script>
+/* ── Hero scroll-parallax (Linear/Modern redesign) ── */
+(function(){
+  if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+  var hero=document.querySelector('.hero-content');
+  if(!hero)return;
+  var ticking=false;
+  function update(){
+    ticking=false;
+    var vh=window.innerHeight||1;
+    var p=Math.min(Math.max(window.pageYOffset/(vh*0.5),0),1);
+    hero.style.opacity=String(1-p);
+    hero.style.transform='translateY('+(p*60).toFixed(2)+'px) scale('+(1-p*0.03).toFixed(4)+')';
+  }
+  window.addEventListener('scroll',function(){
+    if(!ticking){ticking=true;requestAnimationFrame(update);}
+  },{passive:true});
+  update();
+})();
+</script>
+<script>
+/* ── Scroll-triggered entrance reveals with stagger (Linear/Modern redesign) ── */
+(function(){
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var els=document.querySelectorAll('.reveal');
+  if(reduce){
+    els.forEach(function(el){el.classList.add('is-in');});
+    return;
+  }
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(!e.isIntersecting)return;
+      var el=e.target;
+      var sibs=el.parentElement?el.parentElement.querySelectorAll(':scope > .reveal'):[el];
+      var idx=Array.prototype.indexOf.call(sibs,el);
+      el.style.transitionDelay=(Math.max(idx,0)*80)+'ms';
+      el.classList.add('is-in');
+      io.unobserve(el);
+    });
+  },{threshold:0.15});
+  els.forEach(function(el){io.observe(el);});
 })();
 </script>
 </body>

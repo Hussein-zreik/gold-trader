@@ -23,87 +23,154 @@
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800;900&display=swap"></noscript>
 <link rel="stylesheet" href="shared.css">
 <style>
-.sec-lbl{font-family:var(--heading);font-size:11px;font-weight:700;letter-spacing:.5px;color:var(--badge-blue);text-transform:uppercase;padding:0 2px 8px;display:block}
-.card{background:var(--bg2);border-radius:18px;box-shadow:0 2px 14px rgba(0,0,0,0.4);overflow:visible}
-.ch{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--border);background:var(--bg3);gap:10px;flex-wrap:wrap}
-.ct{font-size:12px;font-weight:700;letter-spacing:.3px;color:var(--blue);font-family:var(--heading)}
-.badge{font-family:var(--sans);font-size:10px;font-weight:600;padding:3px 8px;border-radius:4px;letter-spacing:.3px;white-space:nowrap}
-.b-blue{background:rgba(59,130,246,.1);color:var(--badge-blue);border:1px solid rgba(59,130,246,.2)}
-.portfolio-wrap{padding:14px}
-.port-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
-.port-stat{background:var(--bg3);border-radius:14px;box-shadow:0 2px 14px rgba(0,0,0,0.4);padding:9px}
-.port-stat-l{font-family:var(--sans);font-size:10px;font-weight:500;color:var(--muted2);letter-spacing:.3px}
-.port-stat-v{font-family:var(--heading);font-size:17px;font-weight:700;margin-top:4px}
-.port-table{width:100%;border-collapse:collapse}
-.port-table th{font-family:var(--sans);font-size:10px;font-weight:600;color:var(--muted2);letter-spacing:.3px;padding:8px 10px;border-bottom:1px solid rgba(255,255,255,0.06);text-align:left}
-.port-table td{font-family:var(--sans);font-size:11px;padding:9px 10px;border-bottom:1px solid rgba(255,255,255,0.04)}
-.port-table tr:hover td{background:rgba(255,255,255,.012)}
-.port-add-row{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
-.port-input{background:var(--bg3);border:1px solid rgba(59,130,246,.35);color:var(--text);padding:7px 10px;border-radius:10px;font-family:var(--sans);font-size:11px;flex:1;min-width:80px}
-.port-input:focus{border-color:var(--blue);outline:0}
-.port-btn{background:var(--blue);color:#fff;border:none;padding:6px 14px;border-radius:10px;font-family:var(--mono);font-size:10px;cursor:pointer;white-space:nowrap}
-.port-btn.danger{background:0 0;color:var(--badge-red);border:1px solid rgba(239,68,68,.3)}
-.port-empty{text-align:center;padding:20px;font-family:var(--mono);font-size:10px;color:var(--muted2)}
-.up{color:var(--green)}.dn{color:var(--badge-red)}
-.stale{color:var(--orange)!important}
+/* ===== Portfolio page — Linear / Modern design system ===== */
+
+/* Page header */
+.port-head{margin-bottom:26px}
+.port-eyebrow{font-family:var(--heading,var(--sans));font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);display:inline-flex;align-items:center;gap:7px}
+.port-eyebrow::before{content:"";width:6px;height:6px;border-radius:9999px;background:var(--blue);box-shadow:0 0 10px 1px rgba(94,106,210,.6)}
+.port-title{font-family:var(--heading,var(--sans));font-weight:800;font-size:clamp(28px,4vw,42px);line-height:1.08;letter-spacing:-.02em;margin:14px 0 10px;background:linear-gradient(180deg,#fff 0%,rgba(237,237,239,.7) 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:#fff}
+.port-subtitle{font-size:15px;line-height:1.55;color:var(--muted);max-width:60ch;margin:0}
+
+/* Section label */
+.sec-lbl{font-family:var(--heading,var(--sans));font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;padding:0 2px 12px;display:block}
+
+/* Glass card — keep shared.css .card glass, layer Linear shadows + radius */
+.card{border-radius:16px;overflow:hidden;box-shadow:0 0 0 1px rgba(255,255,255,.06),0 2px 20px rgba(0,0,0,.4),0 0 40px rgba(0,0,0,.2);transition:box-shadow .25s cubic-bezier(.16,1,.3,1),transform .25s cubic-bezier(.16,1,.3,1)}
+.card:hover{box-shadow:0 0 0 1px rgba(255,255,255,.10),0 2px 20px rgba(0,0,0,.4),0 8px 40px rgba(0,0,0,.55),0 0 80px rgba(94,106,210,.12)}
+
+/* Card header */
+.ch{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid rgba(255,255,255,.06);gap:12px;flex-wrap:wrap}
+.ct{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text);font-family:var(--heading,var(--sans))}
+.ch-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+
+/* Pills / badges */
+.badge{font-family:var(--sans);font-size:10px;font-weight:600;padding:5px 11px;border-radius:9999px;letter-spacing:.04em;white-space:nowrap;display:inline-flex;align-items:center;gap:5px}
+.b-blue{background:rgba(94,106,210,.12);color:#A6ADE6;border:1px solid rgba(94,106,210,.30)}
+/* Ghost / secondary buttons */
+.btn-ghost{cursor:pointer;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);color:var(--text);transition:background .2s cubic-bezier(.16,1,.3,1),border-color .2s cubic-bezier(.16,1,.3,1)}
+.btn-ghost:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16)}
+
+.portfolio-wrap{padding:20px}
+
+/* Stat tiles — bento glass row */
+.port-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.port-stat{position:relative;background:linear-gradient(to bottom,rgba(255,255,255,.055),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:16px 16px 14px;transition:border-color .2s cubic-bezier(.16,1,.3,1),transform .2s cubic-bezier(.16,1,.3,1)}
+.port-stat:hover{border-color:rgba(255,255,255,.10);transform:translateY(-2px)}
+/* primary tile (Total Value) — subtle accent glow */
+.port-stat--primary{border-color:rgba(94,106,210,.30);box-shadow:0 0 40px rgba(94,106,210,.10),inset 0 1px 0 rgba(255,255,255,.05)}
+.port-stat--primary:hover{border-color:rgba(94,106,210,.45)}
+.port-stat-l{font-family:var(--sans);font-size:10px;font-weight:600;text-transform:uppercase;color:var(--muted);letter-spacing:.08em}
+.port-stat-v{font-family:var(--heading,var(--sans));font-size:24px;font-weight:700;margin-top:8px;letter-spacing:-.01em;font-variant-numeric:tabular-nums;line-height:1.1}
+
+/* Holdings data table */
+.port-table-wrap{border:1px solid rgba(255,255,255,.06);border-radius:14px;overflow:hidden;overflow-x:auto}
+.port-table{width:100%;border-collapse:collapse;min-width:640px}
+.port-table th{font-family:var(--sans);font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.06);text-align:left;background:rgba(255,255,255,.02)}
+.port-table td{font-family:var(--sans);font-size:13px;padding:13px 14px;border-bottom:1px solid rgba(255,255,255,.06);font-variant-numeric:tabular-nums;color:var(--text)}
+.port-table tbody tr:last-child td{border-bottom:none}
+.port-table tbody tr{transition:background .18s cubic-bezier(.16,1,.3,1)}
+.port-table tbody tr:hover td{background:rgba(255,255,255,.03)}
+
+/* Add position form */
+.port-add-row{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;align-items:stretch}
+.port-input{background:#0F0F12;border:1px solid rgba(255,255,255,.10);color:var(--text);padding:10px 12px;border-radius:8px;font-family:var(--sans);font-size:13px;flex:1;min-width:80px;transition:border-color .2s cubic-bezier(.16,1,.3,1),box-shadow .2s cubic-bezier(.16,1,.3,1)}
+.port-input::placeholder{color:var(--muted)}
+.port-input:focus{border-color:var(--blue);outline:0;box-shadow:0 0 0 3px rgba(94,106,210,.22)}
+select.port-input{cursor:pointer}
+
+/* Primary CTA — indigo with glow + shine sweep */
+.port-btn{position:relative;overflow:hidden;background:var(--blue);color:#fff;border:none;padding:10px 18px;border-radius:8px;font-family:var(--sans);font-weight:600;font-size:13px;cursor:pointer;white-space:nowrap;box-shadow:0 0 0 1px rgba(94,106,210,.5),0 4px 12px rgba(94,106,210,.35),inset 0 1px 0 0 rgba(255,255,255,.2);transition:background .2s cubic-bezier(.16,1,.3,1),transform .12s cubic-bezier(.16,1,.3,1),box-shadow .2s cubic-bezier(.16,1,.3,1)}
+.port-btn::before{content:"";position:absolute;top:0;left:-120%;width:60%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-18deg);transition:left .6s cubic-bezier(.16,1,.3,1);pointer-events:none}
+.port-btn:hover{background:#6872D9;box-shadow:0 0 0 1px rgba(94,106,210,.6),0 6px 18px rgba(94,106,210,.45),inset 0 1px 0 0 rgba(255,255,255,.25)}
+.port-btn:hover::before{left:130%}
+.port-btn:active{transform:scale(.98)}
+/* Delete / destructive ghost button */
+.port-btn.danger{background:rgba(255,255,255,.05);color:var(--muted);border:1px solid rgba(255,255,255,.10);box-shadow:none;font-weight:600;transition:background .2s cubic-bezier(.16,1,.3,1),border-color .2s cubic-bezier(.16,1,.3,1),color .2s cubic-bezier(.16,1,.3,1),transform .12s cubic-bezier(.16,1,.3,1)}
+.port-btn.danger::before{display:none}
+.port-btn.danger:hover{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.35);color:var(--red)}
+.port-btn.danger:active{transform:scale(.98)}
+
+/* Empty state */
+.port-empty{text-align:center;padding:40px 20px;font-family:var(--sans);font-size:13px;color:var(--muted)}
+.port-empty .port-empty-icon{display:block;font-size:30px;margin-bottom:10px;opacity:.7}
+
+.port-hint{margin-top:12px;font-family:var(--sans);font-size:12px;color:var(--muted);line-height:1.5}
+#portRefreshTs{margin-top:6px;font-family:var(--sans);font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+
+.up{color:var(--green)}.dn{color:var(--red)}
+.stale{color:var(--orange,#F59E0B)!important}
+
+/* Focus-visible rings */
+.port-btn:focus-visible,.badge:focus-visible,.port-input:focus-visible,.btn-ghost:focus-visible{outline:2px solid rgba(94,106,210,.6);outline-offset:2px}
+
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* Entrance animation */
+.reveal{opacity:0;transform:translateY(16px)}
+.reveal.is-in{opacity:1;transform:none;transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1)}
+
 @media(max-width:768px){.port-summary{grid-template-columns:1fr 1fr}}
-@media(max-width:600px){.port-summary{grid-template-columns:1fr 1fr}.port-add-row{flex-direction:column}.port-input{max-width:100%;width:100%}}
+@media(max-width:600px){.port-summary{grid-template-columns:1fr 1fr}.port-add-row{flex-direction:column}.port-input{max-width:100%!important;width:100%}}
+@media(prefers-reduced-motion:reduce){.reveal,.reveal.is-in{opacity:1!important;transform:none!important;transition:none!important}.card,.port-btn,.port-stat,.port-input,.port-table tbody tr{transition:none!important}.port-btn::before{display:none}}
 </style>
 </head>
 <body>
 <main id="main-content">
   <div class="page-wrap">
-    <div class="page-title">💼 Portfolio</div>
-    <div class="page-sub">Track your open positions and live P&amp;L. All data saved locally in your browser.</div>
-    <h2 class="sec-lbl">PORTFOLIO TRACKER — LOCAL STORAGE</h2>
-  <div class="card">
+    <header class="port-head reveal">
+      <span class="port-eyebrow">Portfolio Tracker</span>
+      <h1 class="port-title">Your Positions &amp; Live P&amp;L</h1>
+      <p class="port-subtitle">Track open positions with auto-fetched prices and real-time profit/loss. All data is saved locally in your browser.</p>
+    </header>
+    <h2 class="sec-lbl">Portfolio Tracker — Local Storage</h2>
+  <div class="card reveal">
     <div class="ch">
-      <div class="ct">MY PORTFOLIO</div>
-      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
-        <span class="badge b-blue">SAVED LOCALLY</span>
-        <button type="button" class="badge" id="portRefreshBtn" style="cursor:pointer;background:rgba(59,130,246,.1);color:var(--badge-blue);border:1px solid rgba(59,130,246,.2);" aria-label="Refresh live prices" onclick="refreshPortPrices()">↻ REFRESH PRICES</button>
-        <button type="button" class="badge" style="cursor:pointer;background:rgba(249,115,22,.1);color:var(--orange);border:1px solid rgba(249,115,22,.2);" aria-label="Export portfolio as JSON" onclick="exportPortfolio()">⬇ EXPORT</button>
+      <div class="ct">My Portfolio</div>
+      <div class="ch-actions">
+        <span class="badge b-blue">Saved Locally</span>
+        <button type="button" class="badge btn-ghost" id="portRefreshBtn" aria-label="Refresh live prices" onclick="refreshPortPrices()">↻ Refresh Prices</button>
+        <button type="button" class="badge btn-ghost" aria-label="Export portfolio as JSON" onclick="exportPortfolio()">⬇ Export</button>
       </div>
     </div>
     <div class="portfolio-wrap">
       <!-- Summary stats -->
       <div class="port-summary">
-        <div class="port-stat"><div class="port-stat-l">TOTAL VALUE</div><div class="port-stat-v" id="portTotal" style="color:var(--blue)">$0.00</div></div>
-        <div class="port-stat"><div class="port-stat-l">TOTAL P&amp;L</div><div class="port-stat-v" id="portPnl">$0.00</div></div>
+        <div class="port-stat port-stat--primary"><div class="port-stat-l">Total Value</div><div class="port-stat-v" id="portTotal" style="color:var(--blue)">$0.00</div></div>
+        <div class="port-stat"><div class="port-stat-l">Total P&amp;L</div><div class="port-stat-v" id="portPnl">$0.00</div></div>
         <div class="port-stat"><div class="port-stat-l">P&amp;L %</div><div class="port-stat-v" id="portPnlPct">0.00%</div></div>
-        <div class="port-stat"><div class="port-stat-l">POSITIONS</div><div class="port-stat-v" id="portCount" style="color:var(--text)">0</div></div>
+        <div class="port-stat"><div class="port-stat-l">Positions</div><div class="port-stat-v" id="portCount" style="color:var(--text)">0</div></div>
       </div>
       <!-- Table -->
-      <div style="overflow-x:auto;">
+      <div class="port-table-wrap">
         <table class="port-table">
           <thead>
             <tr>
-              <th>SYMBOL</th><th>DIRECTION</th><th>ENTRY</th><th>LOTS</th><th>CURRENT</th><th>P&amp;L</th><th>P&amp;L%</th><th></th>
+              <th>Symbol</th><th>Direction</th><th>Entry</th><th>Lots</th><th>Current</th><th>P&amp;L</th><th>P&amp;L%</th><th><span class="sr-only">Actions</span></th>
             </tr>
           </thead>
           <tbody id="portBody">
-            <tr><td colspan="8" class="port-empty">No positions yet. Add one below.</td></tr>
+            <tr><td colspan="8" class="port-empty"><span class="port-empty-icon" aria-hidden="true">💼</span>No positions yet. Add one below.</td></tr>
           </tbody>
         </table>
       </div>
       <!-- Add position form -->
-      <div class="port-add-row" style="margin-top:12px;">
-        <input class="port-input" id="portSym" aria-label="Symbol" placeholder="Symbol (e.g. XAUUSD)" style="max-width:130px;" required>
-        <select class="port-input" id="portDir" aria-label="Direction" style="max-width:90px;cursor:pointer;">
+      <div class="port-add-row">
+        <input class="port-input" id="portSym" aria-label="Symbol" placeholder="Symbol (e.g. XAUUSD)" style="max-width:150px;" required>
+        <select class="port-input" id="portDir" aria-label="Direction" style="max-width:100px;">
           <option value="BUY">BUY</option>
           <option value="SELL">SELL</option>
         </select>
-        <input class="port-input" id="portEntry" aria-label="Entry price" type="number" placeholder="Entry price" style="max-width:120px;" required>
-        <input class="port-input" id="portLots" aria-label="Lot size" type="number" placeholder="Lots" step="0.01" style="max-width:80px;" value="0.1">
-        <input class="port-input" id="portCurrent" aria-label="Current price" type="number" placeholder="Current (auto-fetched)" style="max-width:140px;">
-        <button type="button" class="port-btn" onclick="addPortPosition()">+ ADD</button>
+        <input class="port-input" id="portEntry" aria-label="Entry price" type="number" placeholder="Entry price" style="max-width:130px;" required>
+        <input class="port-input" id="portLots" aria-label="Lot size" type="number" placeholder="Lots" step="0.01" style="max-width:90px;" value="0.1">
+        <input class="port-input" id="portCurrent" aria-label="Current price" type="number" placeholder="Current (auto-fetched)" style="max-width:160px;">
+        <button type="button" class="port-btn" onclick="addPortPosition()">+ Add Position</button>
       </div>
-      <div style="margin-top:6px;font-family:var(--mono);font-size:10px;color:var(--muted2);">P&amp;L = (Current − Entry) × Lots × 100 &nbsp;|&nbsp; Data saved in browser storage</div>
-      <div id="portRefreshTs" style="margin-top:4px;font-family:var(--mono);font-size:10px;color:var(--muted2);"></div>
+      <div class="port-hint">P&amp;L = (Current − Entry) × Lots × 100 &nbsp;|&nbsp; Data saved in browser storage</div>
+      <div id="portRefreshTs"></div>
     </div>
   </div>
     </div>
-  </div>
 </main>
 <script src="shared.js" defer></script>
 <script>
@@ -170,6 +237,29 @@ window.addEventListener('load', function(){
   refreshPortPrices();
   setInterval(refreshPortPrices, 60000);
 });
+</script>
+<script>
+/* Entrance polish — IntersectionObserver fade-up, staggered, once, reduced-motion aware */
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var els = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+  if(reduce || !('IntersectionObserver' in window)){
+    els.forEach(function(el){el.classList.add('is-in');});
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        var el = entry.target;
+        var i = els.indexOf(el);
+        el.style.transitionDelay = Math.max(0,i) * 60 + 'ms';
+        el.classList.add('is-in');
+        io.unobserve(el);
+      }
+    });
+  }, {threshold:0.15});
+  els.forEach(function(el){io.observe(el);});
+})();
 </script>
 </body>
 </html>

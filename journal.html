@@ -23,74 +23,146 @@
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800;900&display=swap"></noscript>
 <link rel="stylesheet" href="shared.css">
 <style>
-/* Journal-specific styles */
+/* ===== Journal — Linear / Modern redesign ===== */
+:root{
+  --lx-accent:#5E6AD2;
+  --lx-accent-hover:#6872D9;
+  --lx-glass:linear-gradient(to bottom,rgba(255,255,255,.055),rgba(255,255,255,.02));
+  --lx-bd:rgba(255,255,255,.06);
+  --lx-bd-hover:rgba(255,255,255,.10);
+  --lx-bd-accent:rgba(94,106,210,.30);
+  --lx-input-bg:#0F0F12;
+  --lx-shadow:0 0 0 1px rgba(255,255,255,.06),0 2px 20px rgba(0,0,0,.4),0 0 40px rgba(0,0,0,.2);
+  --lx-shadow-hover:0 0 0 1px rgba(255,255,255,.10),0 8px 40px rgba(0,0,0,.55),0 0 80px rgba(94,106,210,.12);
+  --lx-cta:0 0 0 1px rgba(94,106,210,.5),0 4px 12px rgba(94,106,210,.35),inset 0 1px 0 0 rgba(255,255,255,.2);
+  --lx-ease:cubic-bezier(.16,1,.3,1);
+}
 .journal-wrap{padding:0}
-.sec-lbl{font-family:var(--heading);font-size:11px;font-weight:700;letter-spacing:.5px;color:var(--badge-blue);text-transform:uppercase;padding:0 2px 8px;display:block}
-.card{background:var(--bg2);border-radius:18px;box-shadow:0 4px 24px rgba(0,0,0,0.5);overflow:visible}
-.ch{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--border);background:var(--bg3);gap:10px;flex-wrap:wrap}
-.ct{font-size:12px;font-weight:700;letter-spacing:.3px;color:var(--blue);font-family:var(--heading);white-space:nowrap}
-.badge{font-family:var(--sans);font-size:10px;font-weight:600;padding:3px 8px;border-radius:4px;letter-spacing:.3px;white-space:nowrap}
-.b-blue{background:rgba(59,130,246,.1);color:var(--badge-blue);border:1px solid rgba(59,130,246,.2)}
+
+/* Page header */
+.page-title{font-weight:600;letter-spacing:-.02em;background:linear-gradient(180deg,#fff,rgba(237,237,239,.7));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+.page-sub{color:var(--muted)}
+.sec-lbl{font-family:var(--heading);font-size:11px;font-weight:600;letter-spacing:.04em;color:var(--muted);text-transform:uppercase;padding:0 2px 12px;display:block}
+
+/* Card — keep shared.css glass, just tune radius/shadow */
+.card{border-radius:16px;box-shadow:var(--lx-shadow);overflow:visible;transition:box-shadow .25s var(--lx-ease)}
+
+/* Card header */
+.ch{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--lx-bd);gap:10px;flex-wrap:wrap}
+.ct{font-size:12px;font-weight:600;letter-spacing:-.01em;color:var(--text);font-family:var(--heading);white-space:nowrap}
+
+/* Badges / header action chips */
+.badge{font-family:var(--sans);font-size:10px;font-weight:600;padding:5px 10px;border-radius:9999px;letter-spacing:.02em;white-space:nowrap;transition:transform .2s var(--lx-ease),border-color .2s var(--lx-ease),background .2s var(--lx-ease)}
+button.badge:hover{transform:translateY(-1px);border-color:var(--lx-bd-hover)}
+button.badge:active{transform:translateY(0) scale(.98)}
+.b-blue{background:rgba(94,106,210,.12);color:var(--blue);border:1px solid var(--lx-bd-accent)}
 .b-green{background:rgba(34,197,94,.1);color:var(--green);border:1px solid rgba(34,197,94,.2)}
-.portfolio-wrap{padding:14px}
-.journal-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
-.jstat{background:var(--bg3);border-radius:14px;box-shadow:0 2px 14px rgba(0,0,0,0.4);padding:8px}
-.jstat-l{font-family:var(--sans);font-size:10px;font-weight:500;color:var(--muted2);letter-spacing:.3px}
-.jstat-v{font-family:var(--heading);font-size:16px;font-weight:700;margin-top:4px}
-.journal-filter{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
-.jfilter-btn{background:var(--bg3);border:1px solid var(--border);color:var(--muted2);padding:5px 12px;border-radius:20px;font-family:var(--sans);font-size:11px;font-weight:500;cursor:pointer}
-.jfilter-btn.active{background:var(--btn-blue-bg);color:#fff;border-color:var(--btn-blue-bg)}
-.mistake-chip{background:var(--bg3);border:1px solid var(--border);color:var(--muted2);padding:4px 10px;border-radius:14px;font-family:var(--sans);font-size:10px;font-weight:500;cursor:pointer}
+
+.portfolio-wrap{padding:16px}
+
+/* Stat tiles */
+.journal-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.jstat{background:var(--lx-glass);border:1px solid var(--lx-bd);border-radius:12px;box-shadow:0 2px 14px rgba(0,0,0,.3);padding:12px 14px;transition:border-color .25s var(--lx-ease),transform .25s var(--lx-ease)}
+.jstat:hover{border-color:var(--lx-bd-hover);transform:translateY(-2px)}
+.jstat-l{font-family:var(--sans);font-size:10px;font-weight:500;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.jstat-v{font-family:var(--heading);font-size:20px;font-weight:600;letter-spacing:-.02em;margin-top:6px;font-variant-numeric:tabular-nums}
+
+/* Filter / chip rows */
+.journal-filter{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.jfilter-btn{background:rgba(255,255,255,.05);border:1px solid var(--lx-bd);color:var(--muted);padding:6px 14px;border-radius:9999px;font-family:var(--sans);font-size:11px;font-weight:500;cursor:pointer;transition:all .2s var(--lx-ease)}
+.jfilter-btn:hover{border-color:var(--lx-bd-hover);color:var(--text)}
+.jfilter-btn.active{background:rgba(94,106,210,.15);color:var(--blue);border-color:var(--lx-bd-accent)}
+.mistake-chip{background:rgba(255,255,255,.05);border:1px solid var(--lx-bd);color:var(--muted);padding:5px 12px;border-radius:9999px;font-family:var(--sans);font-size:10px;font-weight:500;cursor:pointer;transition:all .2s var(--lx-ease)}
+.mistake-chip:hover{border-color:var(--lx-bd-hover);color:var(--text)}
 .mistake-chip.active{background:rgba(239,68,68,.15);color:var(--badge-red);border-color:rgba(239,68,68,.3)}
-.journal-list{display:flex;flex-direction:column;gap:8px}
-.journal-entry{background:var(--bg3);border:1px solid rgba(255,255,255,0.04);border-radius:16px;box-shadow:0 3px 16px rgba(0,0,0,0.4);padding:12px;position:relative}
-.journal-entry:hover{border-color:rgba(59,130,246,0.4)}
-.je-meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:7px}
-.je-pair{font-family:var(--heading);font-size:11px;font-weight:700;color:var(--blue)}
-.je-dir{font-family:var(--mono);font-size:9px;padding:2px 8px;border-radius:4px}
+
+/* Entries */
+.journal-list{display:flex;flex-direction:column;gap:10px}
+.journal-entry{background:var(--lx-glass);border:1px solid var(--lx-bd);border-radius:16px;box-shadow:0 2px 16px rgba(0,0,0,.35);padding:14px 16px;position:relative;overflow:hidden;transition:border-color .25s var(--lx-ease),transform .25s var(--lx-ease),box-shadow .25s var(--lx-ease)}
+.journal-entry::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.16),transparent);pointer-events:none}
+.journal-entry:hover{border-color:var(--lx-bd-accent);transform:translateY(-3px);box-shadow:var(--lx-shadow-hover)}
+.je-meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+.je-pair{font-family:var(--heading);font-size:12px;font-weight:600;letter-spacing:-.01em;color:var(--text)}
+.je-dir{font-family:var(--mono);font-size:9px;padding:3px 9px;border-radius:9999px}
 .je-dir.buy{background:rgba(34,197,94,.15);color:var(--green);border:1px solid rgba(34,197,94,.3)}
 .je-dir.sell{background:rgba(239,68,68,.15);color:var(--badge-red);border:1px solid rgba(239,68,68,.3)}
-.je-outcome{font-family:var(--mono);font-size:9px;padding:2px 8px;border-radius:4px}
+.je-outcome{font-family:var(--mono);font-size:9px;padding:3px 9px;border-radius:9999px}
 .je-outcome.win{background:rgba(34,197,94,.1);color:var(--green)}
 .je-outcome.loss{background:rgba(239,68,68,.1);color:var(--badge-red)}
 .je-outcome.open{background:rgba(249,115,22,.1);color:var(--orange)}
-.je-date{font-family:var(--mono);font-size:10px;color:var(--muted2);margin-left:auto}
+.je-date{font-family:var(--mono);font-size:10px;color:var(--muted);margin-left:auto;font-variant-numeric:tabular-nums}
 .je-note{font-family:var(--sans);font-size:12px;color:var(--text);line-height:1.6;word-break:break-word}
-.je-pnl{font-family:var(--mono);font-size:11px;margin-top:5px}
-.je-del{position:absolute;top:10px;right:10px;background:0 0;border:none;color:var(--muted2);cursor:pointer;font-size:14px;line-height:1;padding:2px 5px;border-radius:4px}
-.je-del:hover{color:var(--badge-red)}
+.je-pnl{font-family:var(--mono);font-size:11px;margin-top:6px;font-variant-numeric:tabular-nums}
+.je-del{position:absolute;top:12px;right:12px;background:0 0;border:none;color:var(--muted);cursor:pointer;font-size:14px;line-height:1;padding:3px 6px;border-radius:8px;transition:color .2s var(--lx-ease),background .2s var(--lx-ease);z-index:1}
+.je-del:hover{color:var(--badge-red);background:rgba(239,68,68,.1)}
+
 .journal-controls{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
-.journal-input{background:var(--bg3);border:1px solid rgba(59,130,246,.35);color:var(--text);padding:7px 10px;border-radius:10px;font-family:var(--sans);font-size:11px}
-.journal-input:focus{border-color:var(--blue);outline:0}
-.journal-textarea{width:100%;background:var(--bg3);border:1px solid rgba(59,130,246,.35);color:var(--text);padding:10px;border-radius:10px;font-family:var(--sans);font-size:12px;line-height:1.5;resize:vertical;min-height:80px;margin-bottom:8px}
-.journal-btn{background:var(--blue);color:#fff;border:none;padding:7px 16px;border-radius:10px;font-family:var(--mono);font-size:10px;cursor:pointer;letter-spacing:1px;white-space:nowrap}
-.journal-btn.sec{background:0 0;border:1px solid rgba(59,130,246,.35);color:var(--text)}
-.port-empty{text-align:center;padding:20px;font-family:var(--mono);font-size:10px;color:var(--muted2)}
+
+/* Inputs / selects */
+.journal-input{background:var(--lx-input-bg);border:1px solid var(--lx-bd-hover);color:var(--text);padding:9px 11px;border-radius:8px;font-family:var(--sans);font-size:11px;transition:border-color .2s var(--lx-ease),box-shadow .2s var(--lx-ease)}
+.journal-input:focus{border-color:var(--lx-accent);outline:0;box-shadow:0 0 0 3px rgba(94,106,210,.22)}
+.journal-input::placeholder{color:var(--muted)}
+.journal-textarea{width:100%;background:var(--lx-input-bg);border:1px solid var(--lx-bd-hover);color:var(--text);padding:11px;border-radius:8px;font-family:var(--sans);font-size:12px;line-height:1.5;resize:vertical;min-height:80px;margin-bottom:10px;transition:border-color .2s var(--lx-ease),box-shadow .2s var(--lx-ease)}
+.journal-textarea:focus{border-color:var(--lx-accent);outline:0;box-shadow:0 0 0 3px rgba(94,106,210,.22)}
+.journal-textarea::placeholder{color:var(--muted)}
+
+/* Buttons */
+.journal-btn{position:relative;background:var(--lx-accent);color:#fff;border:none;padding:9px 18px;border-radius:8px;font-family:var(--mono);font-size:10px;cursor:pointer;letter-spacing:.08em;white-space:nowrap;overflow:hidden;box-shadow:var(--lx-cta);transition:background .2s var(--lx-ease),transform .2s var(--lx-ease)}
+.journal-btn::before{content:"";position:absolute;top:0;left:-120%;width:80%;height:100%;background:linear-gradient(105deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-18deg);transition:left .6s var(--lx-ease)}
+.journal-btn:hover{background:var(--lx-accent-hover)}
+.journal-btn:hover::before{left:140%}
+.journal-btn:active{transform:scale(.98)}
+.journal-btn.sec{background:rgba(255,255,255,.05);border:1px solid var(--lx-bd-hover);color:var(--text);box-shadow:none}
+.journal-btn.sec::before{display:none}
+.journal-btn.sec:hover{background:rgba(255,255,255,.08);border-color:var(--lx-bd-accent)}
+
+.port-empty{text-align:center;padding:28px 20px;font-family:var(--mono);font-size:10px;color:var(--muted)}
+
+/* Equity bars */
 .ry-chart{display:flex;align-items:flex-end;gap:3px;height:60px;padding:8px 0}
-.ry-bar{flex:1;border-radius:2px 2px 0 0;min-height:4px}
-.monthly-bar-wrap{display:flex;flex-direction:column;align-items:center;gap:2px;flex:1;min-width:22px;max-width:40px}
-.monthly-bar-pos{border-radius:2px 2px 0 0;min-height:4px;width:100%;background:var(--green)}
-.monthly-bar-neg{border-radius:0 0 2px 2px;min-height:4px;width:100%;background:var(--red)}
-.monthly-bar-lbl{font-family:var(--mono);font-size:8px;color:var(--muted2);letter-spacing:.5px;white-space:nowrap}
+.ry-bar{flex:1;border-radius:3px 3px 0 0;min-height:4px;transition:filter .2s var(--lx-ease)}
+.ry-bar:hover{filter:brightness(1.25)}
+
+/* Monthly P&L bars */
+.monthly-bar-wrap{display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;min-width:22px;max-width:40px}
+.monthly-bar-pos{border-radius:4px 4px 0 0;min-height:4px;width:100%;background:linear-gradient(180deg,#34d399,#16a34a);transition:filter .2s var(--lx-ease),box-shadow .2s var(--lx-ease)}
+.monthly-bar-pos:hover{filter:brightness(1.15);box-shadow:0 0 12px rgba(34,197,94,.45)}
+.monthly-bar-neg{border-radius:0 0 4px 4px;min-height:4px;width:100%;background:linear-gradient(180deg,#ef4444,#b91c1c);transition:filter .2s var(--lx-ease),box-shadow .2s var(--lx-ease)}
+.monthly-bar-neg:hover{filter:brightness(1.15);box-shadow:0 0 12px rgba(239,68,68,.45)}
+.monthly-bar-lbl{font-family:var(--mono);font-size:8px;color:var(--muted);letter-spacing:.04em;white-space:nowrap}
 .monthly-chart-container{display:flex;align-items:flex-end;gap:3px;height:80px;padding:4px 0 0;overflow-x:auto;scrollbar-width:none}
 .monthly-chart-container::-webkit-scrollbar{display:none}
+
+/* Pivot / breakdown rows */
 .pivot-levels{display:flex;flex-direction:column;gap:4px}
-.pivot-row{display:flex;justify-content:space-between;align-items:center;padding:5px 8px;background:var(--bg3);border-radius:6px}
-.pivot-row-lbl{font-family:var(--sans);font-size:10px;font-weight:600;color:var(--muted2)}
-.pivot-row-val{font-family:var(--heading);font-size:12px;font-weight:700}
+.pivot-row{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-bottom:1px solid var(--lx-bd);border-radius:6px;transition:background .2s var(--lx-ease)}
+.pivot-row:hover{background:rgba(255,255,255,.03)}
+.pivot-row-lbl{font-family:var(--sans);font-size:10px;font-weight:500;color:var(--muted)}
+.pivot-row-val{font-family:var(--heading);font-size:12px;font-weight:600;color:var(--text);font-variant-numeric:tabular-nums}
 .pivot-s{color:var(--green)}.pivot-r{color:var(--badge-red)}
-.sent-bar-wrap{padding:14px 14px 8px}
-.sent-bar-bg{height:10px;background:linear-gradient(90deg,var(--red),var(--orange),var(--green));border-radius:5px;position:relative;margin:8px 0 4px}
+
+/* Sentiment (retained for parity) */
+.sent-bar-wrap{padding:16px 16px 8px}
+.sent-bar-bg{height:10px;background:linear-gradient(90deg,var(--red),var(--orange),var(--green));border-radius:9999px;position:relative;margin:8px 0 4px}
 .sent-needle{position:absolute;top:-5px;width:4px;height:20px;background:#fff;border-radius:2px;transform:translateX(-50%);transition:left 1s;box-shadow:0 0 6px rgba(0,0,0,.5)}
-.sent-labels{display:flex;justify-content:space-between;font-family:var(--sans);font-size:9px;color:var(--muted2)}
-.sent-score{font-family:var(--heading);font-size:28px;font-weight:800;text-align:center;margin-top:6px}
-.sent-verdict{font-family:var(--heading);font-size:12px;font-weight:700;text-align:center;letter-spacing:.5px;margin-top:2px}
-.port-btn{background:var(--blue);color:#fff;border:none;padding:6px 14px;border-radius:7px;font-family:var(--mono);font-size:10px;cursor:pointer;white-space:nowrap}
-.port-input{background:var(--bg3);border:1px solid rgba(59,130,246,.35);color:var(--text);padding:7px 10px;border-radius:7px;font-family:var(--sans);font-size:11px;flex:1;min-width:80px}
-.port-input:focus{border-color:var(--blue);outline:0}
+.sent-labels{display:flex;justify-content:space-between;font-family:var(--sans);font-size:9px;color:var(--muted)}
+.sent-score{font-family:var(--heading);font-size:28px;font-weight:700;text-align:center;margin-top:6px}
+.sent-verdict{font-family:var(--heading);font-size:12px;font-weight:600;text-align:center;letter-spacing:.04em;margin-top:2px}
+
+/* Portfolio controls */
+.port-btn{position:relative;background:var(--lx-accent);color:#fff;border:none;padding:8px 16px;border-radius:8px;font-family:var(--mono);font-size:10px;cursor:pointer;white-space:nowrap;box-shadow:var(--lx-cta);transition:background .2s var(--lx-ease),transform .2s var(--lx-ease)}
+.port-btn:hover{background:var(--lx-accent-hover)}
+.port-btn:active{transform:scale(.98)}
+.port-input{background:var(--lx-input-bg);border:1px solid var(--lx-bd-hover);color:var(--text);padding:9px 11px;border-radius:8px;font-family:var(--sans);font-size:11px;flex:1;min-width:80px;transition:border-color .2s var(--lx-ease),box-shadow .2s var(--lx-ease)}
+.port-input:focus{border-color:var(--lx-accent);outline:0;box-shadow:0 0 0 3px rgba(94,106,210,.22)}
 .port-add-row{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
-.j-form-r4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:8px}
-.j-form-r3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px}
+
+/* Form grids */
+.j-form-r4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:10px}
+.j-form-r3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px}
+.j-form-lbl{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.08em;margin-bottom:12px}
+.j-sub-lbl{font-family:var(--sans);font-size:10px;color:var(--muted);margin:14px 0 6px}
+
 @media(max-width:600px){
   .journal-stats{grid-template-columns:1fr 1fr}
   .j-form-r4{grid-template-columns:1fr 1fr}
@@ -99,9 +171,21 @@
 @media(max-width:380px){
   .j-form-r4,.j-form-r3{grid-template-columns:1fr}
 }
-#journalFormWrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows .28s ease;overflow:hidden}
+#journalFormWrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows .28s var(--lx-ease);overflow:hidden}
 #journalFormWrap.open{grid-template-rows:1fr}
 #journalFormWrap > div{min-height:0}
+
+/* Focus-visible a11y */
+.journal-btn:focus-visible,.port-btn:focus-visible,.jfilter-btn:focus-visible,.mistake-chip:focus-visible,.badge:focus-visible,.je-del:focus-visible,.journal-input:focus-visible,.journal-textarea:focus-visible{outline:2px solid rgba(94,106,210,.6);outline-offset:2px}
+
+/* Entrance animation */
+.lx-reveal{opacity:0;transform:translateY(16px)}
+.lx-reveal.lx-in{opacity:1;transform:none;transition:opacity .6s var(--lx-ease),transform .6s var(--lx-ease)}
+@media(prefers-reduced-motion:reduce){
+  .lx-reveal,.lx-reveal.lx-in{opacity:1!important;transform:none!important;transition:none!important}
+  .journal-btn::before{display:none}
+  *{scroll-behavior:auto!important}
+}
 </style>
 </head>
 <body>
@@ -111,7 +195,7 @@
     <div class="page-title">📓 Trade Journal</div>
     <div class="page-sub">Log, review, and analyze your trades. All data saved locally in your browser.</div>
     <h2 class="sec-lbl">TRADE JOURNAL — LOCAL STORAGE</h2>
-  <div class="card">
+  <div class="card lx-reveal">
     <div class="ch">
       <div class="ct">TRADE JOURNAL</div>
       <div style="display:flex;gap:6px;">
@@ -124,9 +208,9 @@
         <button type="button" class="badge" style="cursor:pointer;background:rgba(59,130,246,.1);color:var(--blue);border:1px solid rgba(59,130,246,.2);" aria-label="Add new journal entry" onclick="toggleJournalForm()">+ NEW ENTRY</button>
       </div>
     </div>
-    <div id="journalFormWrap" style="border-bottom:1px solid var(--border);">
+    <div id="journalFormWrap" style="border-bottom:1px solid var(--lx-bd);">
       <div class="journal-form-inner portfolio-wrap">
-      <div style="font-family:var(--mono);font-size:11px;color:var(--muted2);letter-spacing:1px;margin-bottom:10px;">NEW TRADE ENTRY</div>
+      <div class="j-form-lbl">NEW TRADE ENTRY</div>
       <div class="j-form-r4">
         <input class="journal-input" id="jPair" aria-label="Currency pair" placeholder="Pair (XAUUSD)" required>
         <select class="journal-input" id="jDir" aria-label="Trade direction" style="cursor:pointer;" required>
@@ -147,7 +231,7 @@
         <input class="journal-input" id="jRR" aria-label="Risk to reward ratio" placeholder="R:R (e.g. 1:2)">
       </div>
       <textarea class="journal-textarea" id="jNote" aria-label="Trade notes" placeholder="Trade notes: setup, confluences, emotions, lessons learned..."></textarea>
-      <div style="font-family:var(--sans);font-size:10px;color:var(--muted2);margin:8px 0 6px;">Mistakes (optional, tap to tag):</div>
+      <div class="j-sub-lbl">Mistakes (optional, tap to tag):</div>
       <div class="journal-filter" id="jMistakes" style="margin-bottom:8px;">
         <button type="button" class="mistake-chip" data-tag="No SL" onclick="toggleMistakeChip(this)">No SL</button>
         <button type="button" class="mistake-chip" data-tag="FOMO Entry" onclick="toggleMistakeChip(this)">FOMO Entry</button>
@@ -164,19 +248,19 @@
       </div>
       </div>
     </div>
-    <div class="portfolio-wrap" id="journalAnalyticsWrap" style="display:none;border-bottom:1px solid var(--border);">
-      <div style="font-family:var(--mono);font-size:11px;color:var(--muted2);letter-spacing:1px;margin-bottom:10px;">PERFORMANCE ANALYTICS</div>
+    <div class="portfolio-wrap" id="journalAnalyticsWrap" style="display:none;border-bottom:1px solid var(--lx-bd);">
+      <div class="j-form-lbl">PERFORMANCE ANALYTICS</div>
       <div class="journal-stats" style="margin-bottom:14px;">
         <div class="jstat"><div class="jstat-l">AVG WIN</div><div class="jstat-v" id="jAvgWin" style="color:var(--green)">—</div></div>
         <div class="jstat"><div class="jstat-l">AVG LOSS</div><div class="jstat-v" id="jAvgLoss" style="color:var(--red)">—</div></div>
         <div class="jstat"><div class="jstat-l">PROFIT FACTOR</div><div class="jstat-v" id="jProfitFactor">—</div></div>
         <div class="jstat"><div class="jstat-l">BEST PAIR</div><div class="jstat-v" id="jBestPair" style="font-size:13px;">—</div></div>
       </div>
-      <div style="font-family:var(--sans);font-size:10px;color:var(--muted2);margin-bottom:6px;">EQUITY CURVE — CUMULATIVE P&amp;L</div>
+      <div class="j-sub-lbl" style="margin-top:0;">EQUITY CURVE — CUMULATIVE P&amp;L</div>
       <div class="ry-chart" id="jEquityChart"></div>
-      <div style="font-family:var(--sans);font-size:10px;color:var(--muted2);margin:14px 0 6px;">MISTAKE BREAKDOWN</div>
+      <div class="j-sub-lbl">MISTAKE BREAKDOWN</div>
       <div class="pivot-levels" id="jMistakeBreakdown"></div>
-      <div style="font-family:var(--sans);font-size:10px;color:var(--muted2);margin:14px 0 6px;">MONTHLY RETURNS</div>
+      <div class="j-sub-lbl">MONTHLY RETURNS</div>
       <div class="monthly-chart-container" id="jMonthlyChart"></div>
     </div>
     <div class="portfolio-wrap">
@@ -362,6 +446,34 @@ function exportJournalCSV(){
 window.addEventListener('load', function(){
   loadJournal();
 });
+</script>
+<script>
+/* Linear/Modern entrance polish — fade-up on scroll, staggered, once. */
+(function(){
+  if(window.__lxJournalReveal)return;window.__lxJournalReveal=true;
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  function init(){
+    var nodes=document.querySelectorAll('.lx-reveal');
+    if(reduce||!('IntersectionObserver'in window)){
+      nodes.forEach(function(n){n.classList.add('lx-in');});
+      return;
+    }
+    var io=new IntersectionObserver(function(entries,obs){
+      var n=0;
+      entries.forEach(function(en){
+        if(en.isIntersecting){
+          var el=en.target;
+          el.style.transitionDelay=(n*60)+'ms';n++;
+          el.classList.add('lx-in');
+          obs.unobserve(el);
+        }
+      });
+    },{threshold:0.15});
+    nodes.forEach(function(n){io.observe(n);});
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);
+  else init();
+})();
 </script>
 </body>
 </html>
