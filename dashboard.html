@@ -1936,6 +1936,52 @@ addPostRefreshHook(()=>{updateSMC(),updateMacroRegime(),loadOptionssentiment()})
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;}
   .sidebar,.main-col{scroll-behavior:auto!important;}
 }
+
+/* ── Modern widget redesign ── */
+
+/* Main cards */
+.card{border-radius:18px!important;border:1px solid rgba(255,255,255,0.035)!important;box-shadow:0 4px 28px rgba(0,0,0,0.55),0 1px 4px rgba(0,0,0,0.4)!important;overflow:hidden!important;background:var(--bg2)!important;}
+
+/* Card header — clean, no gradient/left-border */
+.ch{background:transparent!important;border-left:none!important;padding:16px 18px 14px!important;border-bottom:1px solid rgba(255,255,255,0.04)!important;}
+.ct{font-size:10px!important;font-weight:700!important;letter-spacing:1.2px!important;color:var(--muted)!important;text-transform:uppercase!important;}
+
+/* Section label */
+.sec-lbl{font-size:9px!important;font-weight:700!important;letter-spacing:2px!important;color:var(--muted)!important;padding:0 0 10px!important;display:flex!important;align-items:center!important;gap:8px!important;}
+.sec-lbl::before{content:'';display:block;width:3px;height:12px;border-radius:2px;background:var(--blue);flex-shrink:0;}
+
+/* Mini stat cards (Key Gold Drivers) */
+.mc{background:var(--bg3)!important;border:none!important;border-radius:16px!important;box-shadow:0 2px 18px rgba(0,0,0,0.4)!important;padding:16px 14px 14px!important;transition:transform .2s,box-shadow .2s!important;}
+.mc:hover{transform:translateY(-3px)!important;box-shadow:0 8px 28px rgba(0,0,0,0.55),0 0 0 1px rgba(59,130,246,0.12)!important;}
+.mc-n{font-size:9px!important;font-weight:700!important;letter-spacing:1.5px!important;color:var(--muted)!important;margin-bottom:10px!important;text-transform:uppercase!important;}
+.mc-p{font-size:24px!important;font-weight:800!important;letter-spacing:-1px!important;line-height:1!important;margin-bottom:6px!important;font-family:var(--heading)!important;}
+
+/* Sidebar cards */
+.sb-card{background:var(--bg3)!important;border:none!important;border-radius:18px!important;overflow:hidden!important;box-shadow:0 4px 20px rgba(0,0,0,0.45)!important;margin-bottom:12px!important;transition:box-shadow .2s!important;}
+.sb-card:hover{box-shadow:0 8px 30px rgba(0,0,0,0.55)!important;}
+.sb-card-gold{border-top:2px solid rgba(239,68,68,0.6)!important;background:var(--bg3)!important;}
+.sb-card-blue{border-top:2px solid rgba(59,130,246,0.6)!important;background:var(--bg3)!important;}
+
+/* Sidebar header — no separate bg strip */
+.sb-hdr{background:transparent!important;border-bottom:none!important;padding:14px 14px 4px!important;font-size:8px!important;font-weight:700!important;letter-spacing:2px!important;color:var(--muted)!important;text-transform:uppercase!important;}
+
+/* Sidebar price */
+.sb-price-main{font-size:30px!important;font-weight:800!important;letter-spacing:-1.5px!important;line-height:1.05!important;font-family:var(--heading)!important;}
+.sb-body{padding:4px 14px 14px!important;}
+
+/* Sidebar change: pill badge */
+.sb-chg{display:inline-flex!important;align-items:center!important;padding:3px 9px!important;border-radius:20px!important;font-size:11px!important;font-weight:700!important;margin:8px 0 10px!important;background:rgba(255,255,255,0.06)!important;}
+
+/* Sidebar rows */
+.sb-row{border-bottom:1px solid rgba(255,255,255,0.04)!important;padding:7px 0!important;}
+.sb-row-label{font-size:10px!important;color:var(--muted)!important;}
+.sb-row-val{font-family:var(--heading)!important;font-size:12px!important;font-weight:700!important;}
+
+/* Sidebar signal */
+.sb-signal{border-radius:10px!important;margin-top:10px!important;font-size:10px!important;font-weight:700!important;letter-spacing:1px!important;padding:9px!important;}
+
+/* Row-4 mini card grid */
+.row4{gap:12px!important;}
 </style>
 <div id="fx-toast-stack"></div>
 <script>
