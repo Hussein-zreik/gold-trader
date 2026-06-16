@@ -168,6 +168,14 @@ ${!isLanding ? `<div class="mobile-search-overlay" id="mobileSearchOverlay" hidd
         document.body.insertBefore(n, document.body.firstChild);
     });
 
+    // Inject Linear skin blobs if not already present
+    if(!document.querySelector('.lx-blob')){
+      var blobHtml='<div class="lx-blob b1" aria-hidden="true"></div><div class="lx-blob b2" aria-hidden="true"></div><div class="lx-blob b3" aria-hidden="true"></div><div class="lx-blob b4" aria-hidden="true"></div>';
+      var blobWrap=document.createElement('div');
+      blobWrap.innerHTML=blobHtml;
+      Array.from(blobWrap.childNodes).forEach(function(n){document.body.insertBefore(n,document.body.firstChild);});
+    }
+
     // Insert footer before </body>
     const footerEl = document.createElement('div');
     footerEl.innerHTML = buildFooter();
@@ -458,6 +466,21 @@ ${!isLanding ? `<div class="mobile-search-overlay" id="mobileSearchOverlay" hidd
     initSearch();
     initToast();
     initPWA();
+    // Spotlight listener for Linear skin
+    (function(){
+      function addSpots(){
+        var els=document.querySelectorAll('.card,.cal-card,.enews-card');
+        for(var i=0;i<els.length;i++){var c=els[i];if(c.querySelector('.lx-spot'))continue;var s=document.createElement('div');s.className='lx-spot';s.setAttribute('aria-hidden','true');c.insertBefore(s,c.firstChild);}
+      }
+      document.addEventListener('mousemove',function(e){
+        var t=e.target;if(!t||!t.closest)return;
+        var c=t.closest('.card,.cal-card,.enews-card');if(!c)return;
+        var r=c.getBoundingClientRect();
+        c.style.setProperty('--mx',(e.clientX-r.left)+'px');
+        c.style.setProperty('--my',(e.clientY-r.top)+'px');
+      },{passive:true});
+      addSpots();setTimeout(addSpots,1500);setTimeout(addSpots,4000);
+    })();
     // Start clock if on dashboard
     if(document.getElementById('hdrTime')){
       tickClock();

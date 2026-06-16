@@ -9,7 +9,19 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg?v=5">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#04080F;--bg2:#0F1A28;--text:#E2EAF4;--muted:#6A86A0;--border:#1A2A3D;--red:#EF4444;--gold:#C9A84C;--blue:#3B82F6}
+:root{--bg:#050506;--bg2:#0a0a0c;--text:#EDEDEF;--muted:#8A8F98;--border:#1c1d24;--red:#F85149;--gold:#5E6AD2;--blue:#5E6AD2}
+html{background:#050506!important}
+.lx-blob{position:fixed;border-radius:50%;z-index:-1;pointer-events:none;will-change:transform;transform:translateZ(0)}
+.lx-blob.b1{top:-220px;left:50%;width:1000px;height:1000px;margin-left:-500px;background:radial-gradient(circle,rgba(94,106,210,.22),transparent 70%);filter:blur(55px);animation:lxf1 9s ease-in-out infinite}
+.lx-blob.b2{top:24%;left:-160px;width:650px;height:800px;background:radial-gradient(circle,rgba(139,92,246,.15),transparent 70%);filter:blur(45px);animation:lxf2 11s ease-in-out infinite}
+.lx-blob.b3{top:14%;right:-140px;width:560px;height:720px;background:radial-gradient(circle,rgba(80,120,220,.12),transparent 70%);filter:blur(40px);animation:lxf3 10s ease-in-out infinite}
+.lx-blob.b4{bottom:-220px;left:50%;width:760px;height:520px;margin-left:-380px;background:radial-gradient(circle,rgba(94,106,210,.10),transparent 70%);filter:blur(50px);animation:lxpulse 8s ease-in-out infinite}
+@keyframes lxf1{0%,100%{transform:translateZ(0) translateY(0)}50%{transform:translateZ(0) translateY(-26px)}}
+@keyframes lxf2{0%,100%{transform:translateZ(0) translateY(0) rotate(0)}50%{transform:translateZ(0) translateY(-22px) rotate(1deg)}}
+@keyframes lxf3{0%,100%{transform:translateZ(0) translateY(0) rotate(0)}50%{transform:translateZ(0) translateY(-30px) rotate(-1deg)}}
+@keyframes lxpulse{0%,100%{opacity:.45;transform:translateZ(0) scale(1)}50%{opacity:.7;transform:translateZ(0) scale(1.06)}}
+@media(prefers-reduced-motion:reduce){.lx-blob{animation:none!important}}
+@media(max-width:780px){.lx-blob.b2,.lx-blob.b3{display:none}}
 body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;padding:32px;text-align:center}
 .code{font-size:96px;font-weight:900;line-height:1;color:var(--red);opacity:.25;font-variant-numeric:tabular-nums}
 .title{font-size:28px;font-weight:800;letter-spacing:-0.5px;margin-top:-16px}
@@ -22,6 +34,10 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,
 </style>
 </head>
 <body>
+<div class="lx-blob b1" aria-hidden="true"></div>
+<div class="lx-blob b2" aria-hidden="true"></div>
+<div class="lx-blob b3" aria-hidden="true"></div>
+<div class="lx-blob b4" aria-hidden="true"></div>
 <div class="code">500</div>
 <div class="title">Something went wrong</div>
 <p class="sub">We hit an unexpected error on our end. This is on us — please try again in a moment.</p>
