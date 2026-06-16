@@ -26,7 +26,7 @@
 /* Journal-specific styles */
 .journal-wrap{padding:0}
 .sec-lbl{font-family:var(--heading);font-size:11px;font-weight:700;letter-spacing:.5px;color:var(--badge-blue);text-transform:uppercase;padding:0 2px 8px;display:block}
-.card{background:var(--bg2);border:1px solid var(--border);border-radius:11px;overflow:visible}
+.card{background:var(--bg2);border-radius:18px;box-shadow:0 4px 24px rgba(0,0,0,0.5);overflow:visible}
 .ch{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--border);background:var(--bg3);gap:10px;flex-wrap:wrap}
 .ct{font-size:12px;font-weight:700;letter-spacing:.3px;color:var(--blue);font-family:var(--heading);white-space:nowrap}
 .badge{font-family:var(--sans);font-size:10px;font-weight:600;padding:3px 8px;border-radius:4px;letter-spacing:.3px;white-space:nowrap}
@@ -34,7 +34,7 @@
 .b-green{background:rgba(34,197,94,.1);color:var(--green);border:1px solid rgba(34,197,94,.2)}
 .portfolio-wrap{padding:14px}
 .journal-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
-.jstat{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px}
+.jstat{background:var(--bg3);border-radius:14px;box-shadow:0 2px 14px rgba(0,0,0,0.4);padding:8px}
 .jstat-l{font-family:var(--sans);font-size:10px;font-weight:500;color:var(--muted2);letter-spacing:.3px}
 .jstat-v{font-family:var(--heading);font-size:16px;font-weight:700;margin-top:4px}
 .journal-filter{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
@@ -43,8 +43,8 @@
 .mistake-chip{background:var(--bg3);border:1px solid var(--border);color:var(--muted2);padding:4px 10px;border-radius:14px;font-family:var(--sans);font-size:10px;font-weight:500;cursor:pointer}
 .mistake-chip.active{background:rgba(239,68,68,.15);color:var(--badge-red);border-color:rgba(239,68,68,.3)}
 .journal-list{display:flex;flex-direction:column;gap:8px}
-.journal-entry{background:var(--bg3);border:1px solid var(--border);border-radius:9px;padding:12px;position:relative}
-.journal-entry:hover{border-color:rgba(59,130,246,.3)}
+.journal-entry{background:var(--bg3);border:1px solid rgba(255,255,255,0.04);border-radius:16px;box-shadow:0 3px 16px rgba(0,0,0,0.4);padding:12px;position:relative}
+.journal-entry:hover{border-color:rgba(59,130,246,0.4)}
 .je-meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:7px}
 .je-pair{font-family:var(--heading);font-size:11px;font-weight:700;color:var(--blue)}
 .je-dir{font-family:var(--mono);font-size:9px;padding:2px 8px;border-radius:4px}
@@ -60,10 +60,10 @@
 .je-del{position:absolute;top:10px;right:10px;background:0 0;border:none;color:var(--muted2);cursor:pointer;font-size:14px;line-height:1;padding:2px 5px;border-radius:4px}
 .je-del:hover{color:var(--badge-red)}
 .journal-controls{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
-.journal-input{background:var(--bg3);border:1px solid rgba(59,130,246,.35);color:var(--text);padding:7px 10px;border-radius:7px;font-family:var(--sans);font-size:11px}
+.journal-input{background:var(--bg3);border:1px solid rgba(59,130,246,.35);color:var(--text);padding:7px 10px;border-radius:10px;font-family:var(--sans);font-size:11px}
 .journal-input:focus{border-color:var(--blue);outline:0}
-.journal-textarea{width:100%;background:var(--bg3);border:1px solid rgba(59,130,246,.35);color:var(--text);padding:10px;border-radius:8px;font-family:var(--sans);font-size:12px;line-height:1.5;resize:vertical;min-height:80px;margin-bottom:8px}
-.journal-btn{background:var(--blue);color:#fff;border:none;padding:7px 16px;border-radius:7px;font-family:var(--mono);font-size:10px;cursor:pointer;letter-spacing:1px;white-space:nowrap}
+.journal-textarea{width:100%;background:var(--bg3);border:1px solid rgba(59,130,246,.35);color:var(--text);padding:10px;border-radius:10px;font-family:var(--sans);font-size:12px;line-height:1.5;resize:vertical;min-height:80px;margin-bottom:8px}
+.journal-btn{background:var(--blue);color:#fff;border:none;padding:7px 16px;border-radius:10px;font-family:var(--mono);font-size:10px;cursor:pointer;letter-spacing:1px;white-space:nowrap}
 .journal-btn.sec{background:0 0;border:1px solid rgba(59,130,246,.35);color:var(--text)}
 .port-empty{text-align:center;padding:20px;font-family:var(--mono);font-size:10px;color:var(--muted2)}
 .ry-chart{display:flex;align-items:flex-end;gap:3px;height:60px;padding:8px 0}
