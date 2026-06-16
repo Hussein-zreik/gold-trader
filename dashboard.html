@@ -1546,49 +1546,6 @@
         </button>
       </div>
 
-      <!-- Navigation links -->
-      <nav class="sb-nav">
-        <a class="sb-nav-item active" href="dashboard.html">
-          <svg class="sb-nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8"/>
-            <rect x="14" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8"/>
-            <rect x="3" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8"/>
-            <rect x="14" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8"/>
-          </svg>
-          <span class="sb-nav-label">Dashboard</span>
-        </a>
-        <a class="sb-nav-item" href="journal.html">
-          <svg class="sb-nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-          </svg>
-          <span class="sb-nav-label">Journal</span>
-        </a>
-        <a class="sb-nav-item" href="portfolio.html">
-          <svg class="sb-nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <rect x="2" y="7" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/>
-            <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" stroke="currentColor" stroke-width="1.8"/>
-          </svg>
-          <span class="sb-nav-label">Portfolio</span>
-        </a>
-        <a class="sb-nav-item" href="news.html">
-          <svg class="sb-nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10l6 6v8a2 2 0 0 1-2 2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-            <polyline points="17,13 7,13 7,21 17,21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-            <polyline points="7,3 7,8 15,8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-          </svg>
-          <span class="sb-nav-label">News</span>
-        </a>
-        <a class="sb-nav-item" href="calendar.html">
-          <svg class="sb-nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.8"/>
-            <line x1="16" y1="2" x2="16" y2="6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-            <line x1="8" y1="2" x2="8" y2="6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-            <line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-          </svg>
-          <span class="sb-nav-label">Calendar</span>
-        </a>
-      </nav>
     </div><!-- /sb-content -->
   </aside>
   </div><!-- /dashboard-layout -->
@@ -1978,7 +1935,7 @@ addPostRefreshHook(()=>{updateSMC(),updateMacroRegime(),loadOptionssentiment()})
 .dashboard-layout{height:calc(100dvh - var(--above-dash,132px));overflow:hidden!important;align-items:stretch!important;gap:0!important;}
 /* ── Sidebar: nav panel (flex-row, right column) ── */
 .sidebar{position:relative!important;height:100%!important;overflow:visible!important;display:flex!important;flex-direction:row!important;z-index:5;transition:width .25s ease;}
-.dashboard-layout.sidebar-collapsed{grid-template-columns:1fr 52px!important;}
+.dashboard-layout.sidebar-collapsed{grid-template-columns:1fr 44px!important;}
 
 /* Thin drag-only strip */
 .sb-drag-strip{width:8px;flex-shrink:0;cursor:ew-resize;border-left:1px solid rgba(255,255,255,.07);transition:border-color .2s;}
@@ -2000,15 +1957,7 @@ addPostRefreshHook(()=>{updateSMC(),updateMacroRegime(),loadOptionssentiment()})
 .sidebar.collapsed .sb-ico-closed{display:flex;}
 
 /* Nav items */
-.sb-nav{display:flex;flex-direction:column;gap:2px;padding:0 8px;flex:1;}
-.sb-nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:10px;color:var(--muted);text-decoration:none;font-size:13px;font-weight:500;transition:background .15s,color .15s;white-space:nowrap;overflow:hidden;cursor:pointer;}
-.sb-nav-item:hover{background:var(--bg3);color:var(--text);}
-.sb-nav-item.active{background:rgba(59,130,246,.15);color:#60A5FA;}
-.sb-nav-icon{flex-shrink:0;display:block;}
-.sb-nav-label{transition:opacity .2s,width .25s;overflow:hidden;}
-.sidebar.collapsed .sb-nav-label{opacity:0;width:0;pointer-events:none;}
-.sidebar.collapsed .sb-nav-item{justify-content:center;padding:9px 0;}
-.sidebar.collapsed .sb-nav{padding:0 4px;}
+
 /* Market data strip in main content */
 .mkt-strip{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px;}
 .main-col{height:100%!important;overflow-y:scroll!important;overflow-x:hidden;padding:12px 16px 16px 12px;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
