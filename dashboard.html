@@ -1942,7 +1942,7 @@ addPostRefreshHook(()=>{updateSMC(),updateMacroRegime(),loadOptionssentiment()})
 .sb-drag-strip:hover{border-left-color:rgba(59,130,246,.4);}
 
 /* Scrollable content fills full sidebar height via flex cross-axis stretch */
-.sb-content{flex:1;min-width:0;overflow-y:auto;overflow-x:hidden;padding:8px 0 16px;scrollbar-width:thin;scrollbar-color:var(--border) transparent;display:flex;flex-direction:column;}
+.sb-content{flex:1;min-width:0;overflow-y:auto;overflow-x:hidden;padding:8px 0 16px;scrollbar-width:thin;scrollbar-color:var(--border) transparent;display:flex;flex-direction:column;mask-image:linear-gradient(to bottom,transparent 0,black 28px,black calc(100% - 40px),transparent 100%);-webkit-mask-image:linear-gradient(to bottom,transparent 0,black 28px,black calc(100% - 40px),transparent 100%);}
 
 /* Header: holds «/» toggle button */
 .sb-header{display:flex;justify-content:flex-end;padding:10px 10px 6px;flex-shrink:0;}
