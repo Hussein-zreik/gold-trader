@@ -133,13 +133,13 @@ ${!isLanding ? `<div class="mobile-search-overlay" id="mobileSearchOverlay" hidd
     // Favicon
     if(!document.querySelector('link[rel="icon"]')){
       var fi = document.createElement('link');
-      fi.rel = 'icon'; fi.type = 'image/svg+xml'; fi.href = 'favicon.svg';
+      fi.rel = 'icon'; fi.type = 'image/svg+xml'; fi.href = 'favicon.svg?v=4';
       document.head.appendChild(fi);
     }
     // Apple touch icon
     if(!document.querySelector('link[rel="apple-touch-icon"]')){
       var ai = document.createElement('link');
-      ai.rel = 'apple-touch-icon'; ai.href = 'favicon.svg';
+      ai.rel = 'apple-touch-icon'; ai.href = 'favicon.svg?v=4';
       document.head.appendChild(ai);
     }
     // Service worker
