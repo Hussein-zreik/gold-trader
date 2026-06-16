@@ -1,0 +1,26 @@
+{
+  "name": "Forex Desk",
+  "short_name": "FxDesk",
+  "description": "Professional gold & forex trading command center — live prices, journal, portfolio, news.",
+  "start_url": "dashboard.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#04080F",
+  "theme_color": "#04080F",
+  "categories": ["finance", "productivity"],
+  "icons": [
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIj48cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgcng9IjMyIiBmaWxsPSIjMDQwODBGIi8+PHJlY3QgeD0iMzYiIHk9IjEyMCIgd2lkdGg9IjE2IiBoZWlnaHQ9IjMyIiByeD0iMyIgZmlsbD0iI2VmNDQ0NCIvPjxyZWN0IHg9IjYwIiB5PSI5NiIgd2lkdGg9IjE2IiBoZWlnaHQ9IjU2IiByeD0iMyIgZmlsbD0iIzhiYWZkMSIvPjxyZWN0IHg9Ijg0IiB5PSIxMDgiIHdpZHRoPSIxNiIgaGVpZ2h0PSI0NCIgcng9IjMiIGZpbGw9IiM2MGE1ZmEiLz48cmVjdCB4PSIxMDgiIHk9IjUyIiB3aWR0aD0iMTYiIGhlaWdodD0iMTAwIiByeD0iMyIgZmlsbD0iIzNiODJmNiIvPjxyZWN0IHg9IjEzMiIgeT0iNzYiIHdpZHRoPSIxNiIgaGVpZ2h0PSI3NiIgcng9IjMiIGZpbGw9IiMyMmM1NWUiLz48L3N2Zz4=",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9Ijg4IiBmaWxsPSIjMDQwODBGIi8+PHJlY3QgeD0iODAiIHk9IjMxMiIgd2lkdGg9IjQ0IiBoZWlnaHQ9IjkyIiByeD0iOCIgZmlsbD0iI2VmNDQ0NCIvPjxyZWN0IHg9IjE0NCIgeT0iMjQ4IiB3aWR0aD0iNDQiIGhlaWdodD0iMTU2IiByeD0iOCIgZmlsbD0iIzhiYWZkMSIvPjxyZWN0IHg9IjIwOCIgeT0iMjg0IiB3aWR0aD0iNDQiIGhlaWdodD0iMTIwIiByeD0iOCIgZmlsbD0iIzYwYTVmYSIvPjxyZWN0IHg9IjI3MiIgeT0iMTI4IiB3aWR0aD0iNDQiIGhlaWdodD0iMjc2IiByeD0iOCIgZmlsbD0iIzNiODJmNiIvPjxyZWN0IHg9IjMzNiIgeT0iMTk2IiB3aWR0aD0iNDQiIGhlaWdodD0iMjA4IiByeD0iOCIgZmlsbD0iIzIyYzU1ZSIvPjwvc3ZnPg==",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

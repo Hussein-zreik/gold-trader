@@ -478,8 +478,8 @@ async function fetchCalendar(){
     try{ localStorage.setItem(cacheKey,JSON.stringify({ts:Date.now(),data})); }catch(e){}
     setStatus(`✓ ${data.length} events loaded · ${new Date().toLocaleTimeString()}`,false);
   } else {
-    setStatus('⚠ Live feed unavailable — CB meetings shown below',true);
     allEvents=[];
+    setStatusRetry();
   }
   afterFetch();
 }
@@ -497,6 +497,13 @@ function setStatus(msg,err){
   const bar=document.getElementById('calStatusBar');
   if(el) el.textContent=msg;
   if(bar) bar.className='cal-status-bar'+(err?' error':'');
+}
+
+function setStatusRetry(){
+  const bar=document.getElementById('calStatusBar');
+  if(!bar) return;
+  bar.className='cal-status-bar error';
+  bar.innerHTML=`<div class="error-retry-banner" style="width:100%;">⚠ Could not reach the calendar feed. It may be waking up — <button class='error-retry-btn' onclick='fetchCalendar()'>Retry</button></div>`;
 }
 
 // ── DATE STRIP ──

@@ -125,7 +125,7 @@ async function fetchEconomyNews(){
   }catch(e){
     status.textContent='❌ Could not reach the news server. It may be waking up from sleep (free hosting) — try Refresh again in ~30s.';
     status.className='enews-status error';
-    feed.innerHTML=`<div class="enews-empty"><div class="ico">⚠️</div><div>Failed to load news</div><div style="margin-top:6px;font-size:10px;">Backend: ${ENEWS_BACKEND_URL}</div></div>`;
+    feed.innerHTML=`<div class="error-retry-banner">⚠ Could not reach the news server. It may be waking up — <button class='error-retry-btn' onclick='fetchEconomyNews()'>Retry</button></div>`;
   }
 }
 

@@ -116,6 +116,36 @@ ${!isLanding ? `<div class="mobile-search-overlay" id="mobileSearchOverlay" hidd
 </footer>`;
   }
 
+  /* ── PWA ── */
+  function initPWA(){
+    // Manifest link
+    if(!document.querySelector('link[rel="manifest"]')){
+      var ml = document.createElement('link');
+      ml.rel = 'manifest'; ml.href = 'manifest.json';
+      document.head.appendChild(ml);
+    }
+    // Theme color meta
+    if(!document.querySelector('meta[name="theme-color"]')){
+      var tm = document.createElement('meta');
+      tm.name = 'theme-color'; tm.content = '#04080F';
+      document.head.appendChild(tm);
+    }
+    // Service worker
+    if('serviceWorker' in navigator){
+      navigator.serviceWorker.register('sw.js').then(function(reg){
+        reg.addEventListener('updatefound', function(){
+          var w = reg.installing;
+          if(w) w.addEventListener('statechange', function(){
+            if(w.state === 'installed' && navigator.serviceWorker.controller){
+              if(window.FXShared && FXShared.toast)
+                FXShared.toast('App updated — reload for latest version', 'info', 5000);
+            }
+          });
+        });
+      }).catch(function(){});
+    }
+  }
+
   /* ── INJECT ── */
   function inject(){
     // Insert header before <body>'s first child
@@ -357,11 +387,55 @@ ${!isLanding ? `<div class="mobile-search-overlay" id="mobileSearchOverlay" hidd
     }
   });
 
+  /* ── TOAST NOTIFICATIONS ── */
+  var _toastStack = null;
+  var _toastCount = 0;
+
+  function initToast(){
+    _toastStack = document.createElement('div');
+    _toastStack.id = 'fx-toast-stack';
+    _toastStack.setAttribute('aria-live', 'polite');
+    _toastStack.setAttribute('aria-atomic', 'false');
+    document.body.appendChild(_toastStack);
+  }
+
+  function showToast(msg, type, duration){
+    if(!_toastStack) return;
+    type = type || 'info';
+    duration = duration || 3500;
+
+    // limit to 3 visible toasts
+    var existing = _toastStack.querySelectorAll('.fx-toast');
+    if(existing.length >= 3) existing[0].remove();
+
+    var icons = { success:'✓', error:'✕', info:'ℹ' };
+    var t = document.createElement('div');
+    t.className = 'fx-toast ' + type;
+    t.setAttribute('role', 'status');
+    t.innerHTML =
+      '<span class="fx-toast-icon">' + (icons[type] || icons.info) + '</span>' +
+      '<span class="fx-toast-msg">' + msg + '</span>';
+    _toastStack.appendChild(t);
+    _toastCount++;
+
+    var id = setTimeout(function(){
+      t.classList.add('leaving');
+      t.addEventListener('animationend', function(){ t.remove(); }, { once: true });
+    }, duration);
+
+    t.addEventListener('click', function(){
+      clearTimeout(id);
+      t.classList.add('leaving');
+      t.addEventListener('animationend', function(){ t.remove(); }, { once: true });
+    });
+  }
+
   /* ── PUBLIC API ── */
   window.FXShared = {
     toggleTheme: function(){ applyTheme(document.body.classList.contains('light-mode')); },
     toggleMobile: toggleMobile,
     toggleMobileSearch: toggleMobileSearch,
+    toast: showToast,
   };
 
   /* ── INIT ── */
@@ -369,6 +443,8 @@ ${!isLanding ? `<div class="mobile-search-overlay" id="mobileSearchOverlay" hidd
     inject();
     initTheme();
     initSearch();
+    initToast();
+    initPWA();
     // Start clock if on dashboard
     if(document.getElementById('hdrTime')){
       tickClock();
