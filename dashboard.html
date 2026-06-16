@@ -1849,9 +1849,63 @@ addPostRefreshHook(()=>{updateSMC(),updateMacroRegime(),loadOptionssentiment()})
   setInterval(tick, 1000);
 })();
 </script>
+<style>
+@keyframes shimmer{to{background-position:200% center}}
+.skel{background:linear-gradient(90deg,var(--bg3) 25%,var(--border) 50%,var(--bg3) 75%);background-size:200% auto;animation:shimmer 1.4s linear infinite;border-radius:4px;display:block}
+.skel-line{height:11px;width:75%;margin:5px 0}
+.skel-price{height:26px;width:55%}
+.skel-block{height:68px;width:100%;border-radius:8px}
+.skel-text{height:10px;width:90%}
+.skel-sm{height:9px;width:40%}
+@keyframes flash-up{0%{background:rgba(34,197,94,.28)}100%{background:transparent}}
+@keyframes flash-dn{0%{background:rgba(239,68,68,.28)}100%{background:transparent}}
+.price-flash-up{animation:flash-up .7s ease forwards;border-radius:4px}
+.price-flash-dn{animation:flash-dn .7s ease forwards;border-radius:4px}
+@keyframes toast-in{from{opacity:0;transform:translateY(14px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes toast-out{to{opacity:0;transform:translateY(-8px) scale(.96)}}
+#fx-toast-stack{position:fixed;bottom:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.fx-toast{display:flex;align-items:center;gap:10px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:11px 16px;font-family:var(--mono);font-size:11px;color:var(--text);box-shadow:0 8px 32px rgba(0,0,0,.5);animation:toast-in .22s ease forwards;pointer-events:auto;max-width:320px;cursor:pointer}
+.fx-toast.success{border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.06)}
+.fx-toast.error{border-color:rgba(239,68,68,.35);background:rgba(239,68,68,.06)}
+.fx-toast.info{border-color:rgba(59,130,246,.35);background:rgba(59,130,246,.06)}
+.fx-toast.leaving{animation:toast-out .2s ease forwards}
+</style>
+<div id="fx-toast-stack"></div>
 <script>
-/* ── PRICE FLASH + REFRESH TIMESTAMP ── */
+/* ── PRICE FLASH + TOAST + REFRESH TIMESTAMP ── */
 (function(){
+  /* Inline toast system — dashboard is standalone (no shared.js) */
+  if (!window.FXShared) window.FXShared = {};
+  if (!window.FXShared.toast) {
+    var _stack = null;
+    var _toasts = [];
+    var _icons = { success:'✓', error:'✕', info:'ℹ' };
+    window.FXShared.toast = function(msg, type, duration) {
+      if (!_stack) { _stack = document.getElementById('fx-toast-stack'); }
+      if (!_stack) return;
+      type = type || 'info';
+      duration = duration || 3000;
+      if (_toasts.length >= 3) {
+        var oldest = _toasts.shift();
+        oldest.classList.add('leaving');
+        oldest.addEventListener('animationend', function(){ oldest.remove(); }, { once: true });
+      }
+      var t = document.createElement('div');
+      t.className = 'fx-toast ' + type;
+      t.innerHTML = '<span>' + (_icons[type]||'ℹ') + '</span><span>' + msg + '</span>';
+      t.onclick = function(){ dismiss(t); };
+      _stack.appendChild(t);
+      _toasts.push(t);
+      function dismiss(el) {
+        var i = _toasts.indexOf(el);
+        if (i > -1) _toasts.splice(i, 1);
+        el.classList.add('leaving');
+        el.addEventListener('animationend', function(){ el.remove(); }, { once: true });
+      }
+      setTimeout(function(){ dismiss(t); }, duration);
+    };
+  }
+
   var _prev = {};
 
   function flashEl(el, isUp) {
@@ -1866,7 +1920,6 @@ addPostRefreshHook(()=>{updateSMC(),updateMacroRegime(),loadOptionssentiment()})
     return parseFloat(txt.replace(/[$,]/g,''));
   }
 
-  // Watch specific price elements for text changes
   var watchIds = [
     'sbGoldPrice','gPrice','euP','gbpP','jpyP','dxyP','vixP','tnxP','spP','btcP',
     'oilP','silP','ethP','auP','cadP','chfP'
@@ -1886,20 +1939,16 @@ addPostRefreshHook(()=>{updateSMC(),updateMacroRegime(),loadOptionssentiment()})
     obs.observe(el, { childList: true, characterData: true, subtree: true });
   }
 
-  // Setup after DOM is ready
   function init() {
     watchIds.forEach(setupObserver);
 
-    // Show last-refresh toast after each refreshAll via post-refresh hook
     if (typeof addPostRefreshHook === 'function') {
       addPostRefreshHook(function(){
         var now = new Date();
         var hh = String(now.getUTCHours()).padStart(2,'0');
         var mm = String(now.getUTCMinutes()).padStart(2,'0');
         var ss = String(now.getUTCSeconds()).padStart(2,'0');
-        if (window.FXShared && FXShared.toast) {
-          FXShared.toast('Data refreshed · ' + hh + ':' + mm + ':' + ss + ' UTC', 'success', 2500);
-        }
+        window.FXShared.toast('Data refreshed · ' + hh + ':' + mm + ':' + ss + ' UTC', 'success', 2500);
       });
     }
   }
