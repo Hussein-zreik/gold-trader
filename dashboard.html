@@ -42,7 +42,26 @@
 .enews-footer{display:flex;justify-content:space-between;align-items:center;font-family:var(--sans);font-size:10px;color:var(--muted);padding-top:10px;border-top:1px solid var(--border)}
 .enews-footer .rd{color:var(--blue)}
 .enews-empty{text-align:center;padding:40px 20px;font-family:var(--sans);font-size:12px;color:var(--muted2);background:var(--bg2);border:1px solid var(--border);border-radius:10px}
-.enews-empty .ico{font-size:36px;margin-bottom:10px}.cal-page-title{font-family:var(--heading);font-size:22px;font-weight:800;color:var(--text);margin-bottom:20px}body.light-mode .page-nav{background:var(--bg2);border-color:var(--border)}body.light-mode .page-nav-btn.active{color:var(--blue)}</style>
+.enews-empty .ico{font-size:36px;margin-bottom:10px}.cal-page-title{font-family:var(--heading);font-size:22px;font-weight:800;color:var(--text);margin-bottom:20px}body.light-mode .page-nav{background:var(--bg2);border-color:var(--border)}body.light-mode .page-nav-btn.active{color:var(--blue)}
+/* ── HEADER SEARCH (matches shared.css pattern) ── */
+.hdr-search{position:relative;display:flex;align-items:center}
+.hdr-search-icon{position:absolute;left:9px;color:var(--muted2);font-size:13px;pointer-events:none;line-height:1;z-index:1}
+.hdr-search-input{width:160px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--mono);font-size:11px;padding:6px 28px 6px 28px;transition:border-color .2s,background .2s,width .25s;outline:none;appearance:none;-webkit-appearance:none}
+.hdr-search-input::placeholder{color:var(--muted)}
+.hdr-search-input:focus{border-color:rgba(59,130,246,.5);background:rgba(59,130,246,.05);width:220px}
+.hdr-search-kbd{position:absolute;right:8px;font-family:var(--mono);font-size:9px;color:var(--muted);background:var(--bg3);border:1px solid var(--border);border-radius:3px;padding:1px 5px;pointer-events:none;transition:opacity .2s}
+.hdr-search-input:focus ~ .hdr-search-kbd{opacity:0}
+.hdr-search-results{position:absolute;top:calc(100% + 8px);left:0;width:320px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;box-shadow:0 16px 48px rgba(0,0,0,.6);z-index:9998;overflow:hidden;max-height:420px;overflow-y:auto}
+.hdr-search-results[hidden]{display:none}
+.ds-item{display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:11px;color:var(--text);text-decoration:none;transition:background .1s}
+.ds-item:hover,.ds-item.focused{background:rgba(59,130,246,.1)}
+.ds-item:last-child{border-bottom:none}
+.ds-icon{font-size:15px;width:22px;text-align:center;flex-shrink:0}
+.ds-title{font-weight:700}
+.ds-desc{font-size:9px;color:var(--muted2);margin-top:1px}
+@media(max-width:900px){.hdr-search{display:none}}
+
+</style>
 <style>
 /* ═══ PROFESSIONAL DASHBOARD POLISH ═══ */
 
@@ -138,23 +157,16 @@
     <button type="button" class="hdr-icon-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle light/dark theme">🌙</button>
     <button type="button" class="hdr-icon-btn" onclick="showKbd()" aria-label="Keyboard shortcuts" title="Keyboard shortcuts (?)">⌨</button>
     <button type="button" class="hdr-icon-btn" id="editToggle" aria-label="Toggle layout edit mode" onclick="toggleEditMode()">✎</button>
-    <button type="button" class="hdr-icon-btn" id="dashSearchBtn" onclick="openDashSearch()" aria-label="Search dashboard" title="Search (/)">🔍</button>
+    <div class="hdr-search" id="hdrSearch">
+      <span class="hdr-search-icon" aria-hidden="true">⚲</span>
+      <input type="search" class="hdr-search-input" id="hdrSearchInput" placeholder="Search…" autocomplete="off" spellcheck="false" aria-label="Search pages and features" aria-expanded="false" aria-controls="dashSearchResults">
+      <span class="hdr-search-kbd" id="hdrSearchKbd" aria-hidden="true">/</span>
+      <div id="dashSearchResults" class="hdr-search-results" role="listbox" hidden></div>
+    </div>
     <button type="button" class="nav-cta-dash" aria-label="Refresh all data" onclick="refreshAllWithGlow()">↻ Refresh</button>
   </div>
 </header>
 
-<!-- SEARCH OVERLAY -->
-<div id="dashSearchOverlay" role="dialog" aria-modal="true" aria-label="Search" style="display:none;position:fixed;inset:0;z-index:9998;background:rgba(4,8,15,.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:80px 16px 0;">
-  <div style="max-width:560px;margin:0 auto;">
-    <div style="display:flex;align-items:center;gap:10px;background:var(--bg2);border:1px solid var(--border-gold,rgba(59,130,246,.35));border-radius:12px;padding:12px 16px;box-shadow:0 24px 64px rgba(0,0,0,.7);">
-      <span style="font-size:16px;opacity:.6;" aria-hidden="true">🔍</span>
-      <input type="search" id="dashSearchInput" placeholder="Search pages, widgets, actions…" autocomplete="off" spellcheck="false" aria-label="Search dashboard"
-        style="flex:1;background:none;border:none;outline:none;font-family:var(--mono);font-size:14px;color:var(--text);">
-      <kbd style="font-family:var(--mono);font-size:10px;color:var(--muted2);background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:2px 6px;">ESC</kbd>
-    </div>
-    <div id="dashSearchResults" role="listbox" style="margin-top:8px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 16px 48px rgba(0,0,0,.6);max-height:calc(100vh - 200px);overflow-y:auto;"></div>
-  </div>
-</div>
 
 
 <!-- PAGE NAVIGATION BAR -->
@@ -2057,59 +2069,51 @@ addPostRefreshHook(()=>{updateSMC(),updateMacroRegime(),loadOptionssentiment()})
 
 <!-- DASHBOARD SEARCH -->
 <style>
-#dashSearchOverlay .ds-item{display:flex;align-items:center;gap:12px;padding:10px 16px;cursor:pointer;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:12px;color:var(--text);text-decoration:none;transition:background .1s;}
-#dashSearchOverlay .ds-item:hover,#dashSearchOverlay .ds-item.focused{background:rgba(59,130,246,.1);}
-#dashSearchOverlay .ds-item:last-child{border-bottom:none;}
-#dashSearchOverlay .ds-icon{font-size:16px;width:24px;text-align:center;flex-shrink:0;}
-#dashSearchOverlay .ds-title{font-weight:700;color:var(--text);}
-#dashSearchOverlay .ds-desc{font-size:10px;color:var(--muted2);margin-top:2px;}
-#dashSearchOverlay .ds-section{padding:6px 16px 4px;font-size:9px;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase;border-bottom:1px solid var(--border);}
-#dashSearchInput::placeholder{color:var(--muted);}
+.hdr-search-results .ds-item{display:flex;align-items:center;gap:12px;padding:10px 16px;cursor:pointer;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:12px;color:var(--text);text-decoration:none;transition:background .1s;}
+.hdr-search-results .ds-item:hover,.hdr-search-results .ds-item.focused{background:rgba(59,130,246,.1);}
+.hdr-search-results .ds-item:last-child{border-bottom:none;}
+.hdr-search-results .ds-icon{font-size:16px;width:24px;text-align:center;flex-shrink:0;}
+.hdr-search-results .ds-title{font-weight:700;color:var(--text);}
+.hdr-search-results .ds-desc{font-size:10px;color:var(--muted2);margin-top:2px;}
 </style>
 <script>
 (function(){
-  const DASH_SEARCH_INDEX=[
-    // Pages
-    {icon:'📊',title:'Dashboard',desc:'Live prices, COT, spreads, bias',action:()=>{}},
-    {icon:'📓',title:'Trade Journal',desc:'Log and review your trades',action:()=>window.location.href='journal.html'},
-    {icon:'💼',title:'Portfolio',desc:'Track open positions and P&L',action:()=>window.location.href='portfolio.html'},
-    {icon:'📰',title:'News',desc:'Economy news and sentiment',action:()=>window.location.href='news.html'},
-    {icon:'📅',title:'Economic Calendar',desc:'High-impact USD events',action:()=>window.location.href='calendar.html'},
-    // Dashboard sections
-    {icon:'🥇',title:'XAU/USD Price',desc:'Live gold spot price',action:()=>document.getElementById('gPrice')?.scrollIntoView({behavior:'smooth',block:'center'})},
-    {icon:'💱',title:'EUR/USD',desc:'Euro vs Dollar live rate',action:()=>document.getElementById('euP')?.scrollIntoView({behavior:'smooth',block:'center'})},
-    {icon:'📈',title:'DXY Index',desc:'US Dollar Index',action:()=>document.getElementById('dxyP')?.scrollIntoView({behavior:'smooth',block:'center'})},
-    {icon:'📉',title:'COT Report',desc:'Commitment of Traders positioning',action:()=>{const w=document.querySelector('[data-widget="cot"]');w?.scrollIntoView({behavior:'smooth',block:'start'});}},
-    {icon:'📡',title:'Today's Bias',desc:'Bullish/bearish market bias signal',action:()=>{const w=document.querySelector('[data-widget="todaysbias"]');w?.scrollIntoView({behavior:'smooth',block:'start'});}},
-    {icon:'💰',title:'Crypto & Sentiment',desc:'BTC, ETH, Fear & Greed index',action:()=>{const w=document.querySelector('[data-widget="cryptofg"]');w?.scrollIntoView({behavior:'smooth',block:'start'});}},
-    {icon:'🗞',title:'News Feed',desc:'Live economy news in dashboard',action:()=>{const w=document.querySelector('[data-widget="newsfeed"]');w?.scrollIntoView({behavior:'smooth',block:'start'});}},
-    {icon:'🕐',title:'Trading Sessions',desc:'NY, London, Tokyo, Sydney sessions',action:()=>document.querySelector('.sessions-bar')?.scrollIntoView({behavior:'smooth',block:'center'})},
-    {icon:'📊',title:'TradingView Chart',desc:'Interactive price chart',action:()=>{const w=document.querySelector('[data-widget="chart"]');w?.scrollIntoView({behavior:'smooth',block:'start'});}},
-    // Actions
-    {icon:'↻',title:'Refresh All Data',desc:'Force refresh all prices and data',action:()=>{closeDashSearch();refreshAllWithGlow();}},
-    {icon:'✎',title:'Edit Widget Layout',desc:'Rearrange or remove dashboard widgets',action:()=>{closeDashSearch();toggleEditMode();}},
-    {icon:'🌙',title:'Toggle Light/Dark Mode',desc:'Switch between dark and light theme',action:()=>{closeDashSearch();toggleTheme();}},
-    {icon:'⌨',title:'Keyboard Shortcuts',desc:'View all keyboard shortcuts',action:()=>{closeDashSearch();showKbd();}},
+  var _focused=-1;
+  var _open=false;
+
+  var DASH_SEARCH_INDEX=[
+    {icon:'📊',title:'Dashboard',desc:'Live prices, COT, spreads, bias',action:function(){}},
+    {icon:'📓',title:'Trade Journal',desc:'Log and review your trades',action:function(){window.location.href='journal.html';}},
+    {icon:'💼',title:'Portfolio',desc:'Track open positions and P&L',action:function(){window.location.href='portfolio.html';}},
+    {icon:'📰',title:'News',desc:'Economy news and sentiment',action:function(){window.location.href='news.html';}},
+    {icon:'📅',title:'Economic Calendar',desc:'High-impact USD events',action:function(){window.location.href='calendar.html';}},
+    {icon:'🥇',title:'XAU/USD Price',desc:'Live gold spot price',action:function(){var e=document.getElementById('gPrice');if(e)e.scrollIntoView({behavior:'smooth',block:'center'});}},
+    {icon:'💱',title:'EUR/USD',desc:'Euro vs Dollar live rate',action:function(){var e=document.getElementById('euP');if(e)e.scrollIntoView({behavior:'smooth',block:'center'});}},
+    {icon:'📈',title:'DXY Index',desc:'US Dollar Index',action:function(){var e=document.getElementById('dxyP');if(e)e.scrollIntoView({behavior:'smooth',block:'center'});}},
+    {icon:'📉',title:'COT Report',desc:'Commitment of Traders positioning',action:function(){var w=document.querySelector('[data-widget="cot"]');if(w)w.scrollIntoView({behavior:'smooth',block:'start'});}},
+    {icon:'📡',title:"Today's Bias",desc:'Bullish/bearish market bias signal',action:function(){var w=document.querySelector('[data-widget="todaysbias"]');if(w)w.scrollIntoView({behavior:'smooth',block:'start'});}},
+    {icon:'💰',title:'Crypto & Sentiment',desc:'BTC, ETH, Fear & Greed index',action:function(){var w=document.querySelector('[data-widget="cryptofg"]');if(w)w.scrollIntoView({behavior:'smooth',block:'start'});}},
+    {icon:'🗞',title:'News Feed',desc:'Live economy news in dashboard',action:function(){var w=document.querySelector('[data-widget="newsfeed"]');if(w)w.scrollIntoView({behavior:'smooth',block:'start'});}},
+    {icon:'🕐',title:'Trading Sessions',desc:'NY, London, Tokyo, Sydney sessions',action:function(){var e=document.querySelector('.sessions-bar');if(e)e.scrollIntoView({behavior:'smooth',block:'center'});}},
+    {icon:'📊',title:'TradingView Chart',desc:'Interactive price chart',action:function(){var w=document.querySelector('[data-widget="chart"]');if(w)w.scrollIntoView({behavior:'smooth',block:'start'});}},
+    {icon:'↻',title:'Refresh All Data',desc:'Force refresh all prices and data',action:function(){hideResults();refreshAllWithGlow();}},
+    {icon:'✎',title:'Edit Widget Layout',desc:'Rearrange or remove dashboard widgets',action:function(){hideResults();toggleEditMode();}},
+    {icon:'🌙',title:'Toggle Light/Dark Mode',desc:'Switch between dark and light theme',action:function(){hideResults();toggleTheme();}},
+    {icon:'⌨',title:'Keyboard Shortcuts',desc:'View all keyboard shortcuts',action:function(){hideResults();showKbd();}},
   ];
 
-  var _focused = -1;
-
-  function openDashSearch(){
-    var ov=document.getElementById('dashSearchOverlay');
-    var inp=document.getElementById('dashSearchInput');
-    if(!ov) return;
-    ov.style.display='block';
-    inp.value='';
-    _focused=-1;
-    renderDashResults('');
-    setTimeout(function(){ inp.focus(); }, 50);
-    document.body.style.overflow='hidden';
+  function showResults(){
+    var res=document.getElementById('dashSearchResults');
+    var inp=document.getElementById('hdrSearchInput');
+    if(res){ res.removeAttribute('hidden'); _open=true; }
+    if(inp) inp.setAttribute('aria-expanded','true');
   }
 
-  function closeDashSearch(){
-    var ov=document.getElementById('dashSearchOverlay');
-    if(ov) ov.style.display='none';
-    document.body.style.overflow='';
+  function hideResults(){
+    var res=document.getElementById('dashSearchResults');
+    var inp=document.getElementById('hdrSearchInput');
+    if(res){ res.setAttribute('hidden',''); _open=false; }
+    if(inp){ inp.setAttribute('aria-expanded','false'); }
     _focused=-1;
   }
 
@@ -2122,6 +2126,7 @@ addPostRefreshHook(()=>{updateSMC(),updateMacroRegime(),loadOptionssentiment()})
       : DASH_SEARCH_INDEX;
     if(!items.length){
       res.innerHTML='<div style="padding:20px;text-align:center;font-family:var(--mono);font-size:12px;color:var(--muted2);">No results for "'+q+'"</div>';
+      showResults();
       return;
     }
     res.innerHTML=items.map(function(item,idx){
@@ -2131,21 +2136,27 @@ addPostRefreshHook(()=>{updateSMC(),updateMacroRegime(),loadOptionssentiment()})
         '</div>';
     }).join('');
     res.querySelectorAll('.ds-item').forEach(function(el,idx){
+      el.addEventListener('mousedown',function(e){ e.preventDefault(); }); // keep focus on input
       el.addEventListener('click',function(){
-        closeDashSearch();
+        var inp=document.getElementById('hdrSearchInput');
+        if(inp){ inp.value=''; inp.blur(); }
+        hideResults();
         items[idx].action();
       });
     });
     _focused=-1;
+    showResults();
   }
 
-  window.openDashSearch = openDashSearch;
-  window.closeDashSearch = closeDashSearch;
+  // Keep as no-ops for legacy callers
+  window.openDashSearch=function(){ var inp=document.getElementById('hdrSearchInput'); if(inp) inp.focus(); };
+  window.closeDashSearch=hideResults;
 
-  document.addEventListener('DOMContentLoaded', function(){
-    var inp=document.getElementById('dashSearchInput');
-    var ov=document.getElementById('dashSearchOverlay');
+  document.addEventListener('DOMContentLoaded',function(){
+    var inp=document.getElementById('hdrSearchInput');
     if(!inp) return;
+
+    inp.addEventListener('focus',function(){ renderDashResults(inp.value); });
 
     inp.addEventListener('input',function(){ _focused=-1; renderDashResults(inp.value); });
 
@@ -2153,31 +2164,39 @@ addPostRefreshHook(()=>{updateSMC(),updateMacroRegime(),loadOptionssentiment()})
       var items=document.querySelectorAll('#dashSearchResults .ds-item');
       if(e.key==='ArrowDown'){
         e.preventDefault();
-        _focused=Math.min(_focused+1, items.length-1);
-        items.forEach(function(el,i){ el.classList.toggle('focused', i===_focused); });
+        if(!_open) renderDashResults(inp.value);
+        _focused=Math.min(_focused+1,items.length-1);
+        items.forEach(function(el,i){ el.classList.toggle('focused',i===_focused); });
         if(items[_focused]) items[_focused].scrollIntoView({block:'nearest'});
       } else if(e.key==='ArrowUp'){
         e.preventDefault();
-        _focused=Math.max(_focused-1, -1);
-        items.forEach(function(el,i){ el.classList.toggle('focused', i===_focused); });
-        if(_focused>=0 && items[_focused]) items[_focused].scrollIntoView({block:'nearest'});
+        _focused=Math.max(_focused-1,-1);
+        items.forEach(function(el,i){ el.classList.toggle('focused',i===_focused); });
+        if(_focused>=0&&items[_focused]) items[_focused].scrollIntoView({block:'nearest'});
       } else if(e.key==='Enter'){
-        if(_focused>=0 && items[_focused]) items[_focused].click();
+        if(_focused>=0&&items[_focused]) items[_focused].click();
       } else if(e.key==='Escape'){
-        closeDashSearch();
+        inp.blur(); hideResults();
       }
     });
 
-    // Close on backdrop click
-    ov.addEventListener('click',function(e){ if(e.target===ov) closeDashSearch(); });
+    inp.addEventListener('blur',function(){
+      setTimeout(function(){
+        var res=document.getElementById('dashSearchResults');
+        if(res&&!res.contains(document.activeElement)) hideResults();
+      },150);
+    });
 
-    // "/" shortcut to open search
     document.addEventListener('keydown',function(e){
-      if(e.key==='/' && !['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)){
-        e.preventDefault();
-        openDashSearch();
+      if(e.key==='/'&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)){
+        e.preventDefault(); inp.focus(); inp.select();
       }
-      if(e.key==='Escape' && ov && ov.style.display!=='none') closeDashSearch();
+      if(e.key==='Escape'&&_open){ inp.blur(); hideResults(); }
+    });
+
+    document.addEventListener('click',function(e){
+      var wrap=document.getElementById('hdrSearch');
+      if(wrap&&!wrap.contains(e.target)) hideResults();
     });
   });
 })();
