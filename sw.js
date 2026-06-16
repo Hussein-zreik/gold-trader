@@ -1,5 +1,5 @@
 /* Forex Desk — Service Worker (app-shell cache) */
-const CACHE = 'fxdesk-v2';
+const CACHE = 'fxdesk-v3';
 const SHELL = [
   '/',
   '/index.html',
