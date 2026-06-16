@@ -2017,27 +2017,7 @@ addPostRefreshHook(()=>{updateSMC(),updateMacroRegime(),loadOptionssentiment()})
     var sidebar = document.querySelector('.sidebar');
     var mainCol = document.getElementById('mainCol');
     if (!sidebar || !mainCol) return;
-    var _sync = false;
-
-    mainCol.addEventListener('scroll', function() {
-      if (_sync) return; _sync = true;
-      var maxMain = mainCol.scrollHeight - mainCol.clientHeight;
-      var maxSide = sidebar.scrollHeight - sidebar.clientHeight;
-      if (maxMain > 0 && maxSide > 0) {
-        sidebar.scrollTop = (mainCol.scrollTop / maxMain) * maxSide;
-      }
-      requestAnimationFrame(function() { _sync = false; });
-    }, { passive: true });
-
-    sidebar.addEventListener('scroll', function() {
-      if (_sync) return; _sync = true;
-      var maxSide = sidebar.scrollHeight - sidebar.clientHeight;
-      var maxMain = mainCol.scrollHeight - mainCol.clientHeight;
-      if (maxSide > 0 && maxMain > 0) {
-        mainCol.scrollTop = (sidebar.scrollTop / maxSide) * maxMain;
-      }
-      requestAnimationFrame(function() { _sync = false; });
-    }, { passive: true });
+    
   }
 
   function init() {
