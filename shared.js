@@ -193,10 +193,11 @@ ${!isLanding ? `<div class="mobile-search-overlay" id="mobileSearchOverlay" hidd
     const el = document.getElementById('hdrTime');
     if(!el) return;
     const now = new Date();
-    const hh = String(now.getUTCHours()).padStart(2,'0');
-    const mm = String(now.getUTCMinutes()).padStart(2,'0');
-    const ss = String(now.getUTCSeconds()).padStart(2,'0');
-    el.textContent = `${hh}:${mm}:${ss} UTC`;
+    const hh = String(now.getHours()).padStart(2,'0');
+    const mm = String(now.getMinutes()).padStart(2,'0');
+    const ss = String(now.getSeconds()).padStart(2,'0');
+    const tz = now.toLocaleTimeString('en-US',{timeZoneName:'short'}).split(' ').pop();
+    el.textContent = `${hh}:${mm}:${ss} ${tz}`;
   }
 
   /* ── SEARCH ── */
