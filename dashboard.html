@@ -640,14 +640,14 @@
     <div class="cot-grid">
       <div class="cot-item">
         <div class="cot-label">📈 COMMERCIALS (NET)</div>
-        <div class="cot-val" id="cotComm" style="color:var(--red)">Loading...</div>
+        <div class="cot-val" id="cotComm" style="color:var(--red)"><span class="skel skel-price" style="width:70px;height:22px;display:inline-block;" aria-label="Loading..."></span></div>
         <div class="cot-bar-bg"><div class="cot-bar" id="cotCommBar" style="width:40%;background:var(--red);"></div></div>
         <div class="cot-change" id="cotCommChg">—</div>
         <div style="font-size:10px;color:var(--muted2);margin-top:4px;">Hedgers — bearish when net short ↓ gold</div>
       </div>
       <div class="cot-item">
         <div class="cot-label">🐂 NON-COMMERCIALS (NET)</div>
-        <div class="cot-val" id="cotSpec" style="color:var(--green)">Loading...</div>
+        <div class="cot-val" id="cotSpec" style="color:var(--green)"><span class="skel skel-price" style="width:70px;height:22px;display:inline-block;" aria-label="Loading..."></span></div>
         <div class="cot-bar-bg"><div class="cot-bar" id="cotSpecBar" style="width:60%;background:var(--green);"></div></div>
         <div class="cot-change" id="cotSpecChg">—</div>
         <div style="font-size:10px;color:var(--muted2);margin-top:4px;">Speculators — bullish when net long ↑ gold</div>
@@ -1000,7 +1000,7 @@
     <h2 class="sec-lbl">GOLD ETF FLOW TRACKER</h2>
     <div class="card">
       <div class="ch"><div class="ct">GLD &amp; IAU — VOLUME-BASED FLOW PROXY</div><span class="badge b-purple">AUTO · LIVE</span></div>
-      <div class="pivot-levels" id="etfFlowList" style="padding:14px;">Loading ETF volume data…</div>
+      <div class="pivot-levels" id="etfFlowList" style="padding:14px;"><span class="skel skel-block" aria-label="Loading ETF data..."></span><span class="skel skel-line" style="margin-top:8px;"></span></div>
       <div style="font-family:var(--sans);font-size:10px;color:var(--muted2);margin:0 14px 14px;text-align:center;">No free source publishes daily GLD/IAU tonnage. This compares each fund's trading volume to its 20-day average — a volume spike alongside a price move often signals large creation/redemption (institutional flow) activity. Treat as a directional hint, not exact AUM data.</div>
     </div>
   </div>
@@ -1131,7 +1131,7 @@
         <span class="badge b-blue">RSS · KITCO + FXSTREET + REUTERS</span>
       </div>
       <div id="newsBody">
-        <div style="padding:16px;text-align:center;font-family:var(--mono);font-size:10px;color:var(--muted2);">Loading news...</div>
+        <div style="padding:16px;display:flex;flex-direction:column;gap:8px;" aria-label="Loading news..."><span class="skel skel-block" style="height:56px;"></span><span class="skel skel-block" style="height:56px;"></span><span class="skel skel-block" style="height:56px;"></span></div>
       </div>
       <div style="padding:9px 13px;border-top:1px solid var(--border);display:flex;gap:12px;flex-wrap:wrap;">
         <a href="https://www.kitco.com/news/" target="_blank" rel="noopener noreferrer" style="font-family:var(--mono);font-size:9px;color:var(--gold);text-decoration:none;">→ KITCO ↗</a>
@@ -1190,7 +1190,7 @@
           <div class="dxy-bar-label"><span style="color:var(--green);">DXY BEARISH → Gold Bullish</span><span style="color:var(--red);">DXY Bullish → Gold Bearish</span></div>
           <div class="dxy-bar-bg"><div class="dxy-bar-fill" id="dxyStrengthBar" style="width:50%;background:var(--muted);"></div></div>
         </div>
-        <div class="dxy-summary" id="dxyStrengthSummary">Loading DXY trend data...</div>
+        <div class="dxy-summary" id="dxyStrengthSummary"><span class="skel skel-text" aria-label="Loading..."></span><span class="skel skel-sm" style="margin-top:6px;"></span></div>
       </div>
     </div>
   </div>
@@ -1256,7 +1256,7 @@
     <h2 class="sec-lbl">DAILY / WEEKLY HIGH-LOW BREAKOUT TRACKER</h2>
     <div class="card">
       <div class="ch"><div class="ct">RANGE CONTEXT &amp; BREAKOUT STATUS</div><span class="badge b-purple">AUTO · LIVE</span></div>
-      <div class="pivot-levels" id="hiloList" style="padding:14px;">Loading daily/weekly ranges…</div>
+      <div class="pivot-levels" id="hiloList" style="padding:14px;"><span class="skel skel-block" aria-label="Loading ranges..."></span><span class="skel skel-line" style="margin-top:8px;"></span></div>
     </div>
   </div>
 
@@ -1295,7 +1295,7 @@
         <span class="badge b-purple">MOVES GOLD 30–80 PIPS INSTANTLY</span>
       </div>
       <div class="cb-calendar-wrap" id="cbCalendar">
-        <div style="text-align:center;padding:16px;font-family:var(--sans);font-size:11px;color:var(--muted2);">Loading calendar...</div>
+        <div style="padding:14px;display:flex;flex-direction:column;gap:8px;" aria-label="Loading calendar..."><span class="skel skel-block" style="height:44px;"></span><span class="skel skel-block" style="height:44px;"></span><span class="skel skel-block" style="height:44px;"></span></div>
       </div>
     </div>
   </div>
@@ -1422,7 +1422,7 @@
           <div class="opts-card">
             <div class="opts-lbl">MARKET POSITIONING</div>
             <div class="opts-val" id="optsPos" style="font-size:18px;">—</div>
-            <div class="opts-sub" id="optsPosSub">Loading...</div>
+            <div class="opts-sub" id="optsPosSub"><span class="skel skel-line" style="width:80px;height:9px;" aria-label="Loading..."></span></div>
           </div>
         </div>
         <div class="opts-gauge"><div class="opts-fill" id="optsFill" style="width:50%;background:var(--muted);"></div></div>
@@ -1485,7 +1485,7 @@
         <div class="macro-regime-banner" id="macroRegimeBanner" style="background:var(--bg3);border:1px solid var(--border);">
           <div class="macro-regime-title" id="macroRegimeTitle">Calculating...</div>
           <div class="macro-regime-sub" id="macroRegimeSub">Analyzing live market conditions</div>
-          <div class="macro-regime-gold" id="macroRegimeGold" style="background:var(--bg);color:var(--muted2);">Gold Impact: Loading</div>
+          <div class="macro-regime-gold" id="macroRegimeGold" style="background:var(--bg);color:var(--muted2);"><span class="skel skel-line" style="width:120px;height:10px;" aria-label="Loading gold impact..."></span></div>
         </div>
         <div class="macro-grid">
           <div class="macro-card">
@@ -1847,6 +1847,68 @@ addPostRefreshHook(()=>{updateSMC(),updateMacroRegime(),loadOptionssentiment()})
     cp('btcC','mhBtcD',true);
   }
   setInterval(tick, 1000);
+})();
+</script>
+<script>
+/* ── PRICE FLASH + REFRESH TIMESTAMP ── */
+(function(){
+  var _prev = {};
+
+  function flashEl(el, isUp) {
+    if (!el) return;
+    el.classList.remove('price-flash-up','price-flash-dn');
+    void el.offsetWidth;
+    el.classList.add(isUp ? 'price-flash-up' : 'price-flash-dn');
+  }
+
+  function parseNum(txt) {
+    if (!txt) return NaN;
+    return parseFloat(txt.replace(/[$,]/g,''));
+  }
+
+  // Watch specific price elements for text changes
+  var watchIds = [
+    'sbGoldPrice','gPrice','euP','gbpP','jpyP','dxyP','vixP','tnxP','spP','btcP',
+    'oilP','silP','ethP','auP','cadP','chfP'
+  ];
+
+  function setupObserver(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    _prev[id] = parseNum(el.textContent);
+    var obs = new MutationObserver(function(){
+      var newVal = parseNum(el.textContent);
+      if (!isNaN(newVal) && !isNaN(_prev[id]) && newVal !== _prev[id]) {
+        flashEl(el, newVal > _prev[id]);
+      }
+      _prev[id] = newVal;
+    });
+    obs.observe(el, { childList: true, characterData: true, subtree: true });
+  }
+
+  // Setup after DOM is ready
+  function init() {
+    watchIds.forEach(setupObserver);
+
+    // Show last-refresh toast after each refreshAll via post-refresh hook
+    if (typeof addPostRefreshHook === 'function') {
+      addPostRefreshHook(function(){
+        var now = new Date();
+        var hh = String(now.getUTCHours()).padStart(2,'0');
+        var mm = String(now.getUTCMinutes()).padStart(2,'0');
+        var ss = String(now.getUTCSeconds()).padStart(2,'0');
+        if (window.FXShared && FXShared.toast) {
+          FXShared.toast('Data refreshed · ' + hh + ':' + mm + ':' + ss + ' UTC', 'success', 2500);
+        }
+      });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    setTimeout(init, 500);
+  }
 })();
 </script>
 </body>

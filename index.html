@@ -1193,6 +1193,109 @@ body {
   .feature-card:hover { transform: none; }
   .testimonial-card:hover { transform: none; }
 }
+
+/* ── GOLD PRICE LIVE ANIMATION ── */
+@keyframes goldPricePulse {
+  0%   { opacity: 1; }
+  8%   { opacity: .55; }
+  16%  { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+.dp-price.live-gold {
+  animation: goldPricePulse 4.5s ease-in-out infinite;
+  position: relative;
+}
+
+/* Subtle colour shift to reinforce "live" feel */
+@keyframes goldPriceColour {
+  0%,45%,100% { color: var(--text); }
+  50%          { color: #f59e0b; }
+  55%          { color: var(--text); }
+}
+
+.dp-price.live-gold {
+  animation: goldPricePulse 4.5s ease-in-out infinite,
+             goldPriceColour 9s ease-in-out infinite;
+}
+
+/* ── LEGAL MODAL ── */
+#legalModal {
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-radius: 16px;
+  padding: 0;
+  max-width: 540px;
+  width: calc(100vw - 32px);
+  color: var(--text);
+  box-shadow: 0 32px 80px rgba(0,0,0,.75), 0 0 0 1px rgba(59,130,246,.08);
+}
+
+#legalModal::backdrop {
+  background: rgba(4,8,15,0.80);
+  backdrop-filter: blur(6px);
+}
+
+.legal-modal-inner {
+  padding: 36px 32px 28px;
+}
+
+#legalModalTitle {
+  font-family: var(--display);
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -.4px;
+  color: var(--text);
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.legal-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 24px;
+  max-height: 52vh;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.legal-modal-body p {
+  font-size: 13px;
+  color: var(--muted2);
+  line-height: 1.72;
+}
+
+.legal-modal-body strong {
+  color: var(--text);
+  font-family: var(--display);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.legal-modal-close {
+  display: block;
+  width: 100%;
+  padding: 11px;
+  background: var(--blue2);
+  color: #fff;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background .2s;
+}
+
+.legal-modal-close:hover { background: var(--blue3); }
+
+@media (max-width: 540px) {
+  .legal-modal-inner { padding: 24px 18px 20px; }
+}
 </style>
 </head>
 <body>
@@ -1223,8 +1326,8 @@ body {
   </nav>
 
   <div class="header-actions">
-    <a href="#" class="nav-login" onclick="return false;">Log In</a>
-    <a href="#" class="nav-cta"   onclick="return false;">Get Started</a>
+    <a href="dashboard.html" class="nav-login">Log In</a>
+    <a href="dashboard.html" class="nav-cta">Get Started</a>
   </div>
   <button class="mobile-menu-btn" onclick="toggleMobileNav()" aria-label="Toggle menu" aria-expanded="false">☰</button>
 </header>
@@ -1235,8 +1338,8 @@ body {
   <a href="portfolio.html" class="nav-link">Portfolio</a>
   <a href="news.html"      class="nav-link">News</a>
   <a href="calendar.html"  class="nav-link">Calendar</a>
-  <a href="#" class="nav-link" style="color:var(--muted2);padding:12px 16px;" onclick="return false;">Log In</a>
-  <a href="#" class="nav-cta" style="margin-top:4px;" onclick="return false;">Get Started</a>
+  <a href="dashboard.html" class="nav-link" style="color:var(--muted2);padding:12px 16px;">Log In</a>
+  <a href="dashboard.html" class="nav-cta" style="margin-top:4px;">Get Started</a>
 </nav>
 
 <!-- ── HERO ── -->
@@ -1296,7 +1399,7 @@ body {
         <div class="dp-body">
           <div class="dp-widget">
             <div class="dp-widget-label">XAU / USD</div>
-            <div class="dp-price">3,421.80</div>
+            <div class="dp-price live-gold" id="heroGoldPrice">3,421.80</div>
             <div class="dp-change up">▲ +18.40 · +0.54%</div>
           </div>
           <div class="dp-widget">
@@ -1608,12 +1711,30 @@ body {
   <div class="footer-bottom">
     <div class="footer-copy">© 2026 Forex Desk · Built for traders, by a trader</div>
     <nav class="footer-bottom-links" aria-label="Footer legal links">
-      <a href="#">Privacy</a>
-      <a href="#">Terms</a>
-      <a href="#">Disclaimer</a>
+      <a href="#" onclick="document.getElementById('legalModal').showModal();return false;">Privacy</a>
+      <a href="#" onclick="document.getElementById('legalModal').showModal();return false;">Terms</a>
+      <a href="#" onclick="document.getElementById('legalModal').showModal();return false;">Disclaimer</a>
     </nav>
   </div>
 </footer>
+
+<!-- ── LEGAL MODAL ── -->
+<dialog id="legalModal" aria-labelledby="legalModalTitle">
+  <div class="legal-modal-inner">
+    <h3 id="legalModalTitle">Legal &amp; Disclaimer</h3>
+    <div class="legal-modal-body">
+      <p><strong>Risk Disclosure</strong><br>
+      Trading foreign exchange, gold, and other financial instruments carries a high level of risk and may not be suitable for all investors. You may lose some or all of your invested capital. Do not trade with money you cannot afford to lose.</p>
+      <p><strong>No Financial Advice</strong><br>
+      Forex Desk is an informational and analytical tool only. Nothing on this platform constitutes financial, investment, or trading advice. All content is provided for educational and informational purposes. You are solely responsible for your own trading decisions.</p>
+      <p><strong>Privacy</strong><br>
+      Forex Desk does not collect personal data, require account registration, or use tracking cookies. Any trade journal data you enter is stored locally in your browser and is never transmitted to any server.</p>
+      <p><strong>Terms of Use</strong><br>
+      By using Forex Desk you agree to use it for lawful personal purposes only. The platform is provided "as is" without warranty of any kind. We are not liable for any losses arising from use of this platform.</p>
+    </div>
+    <button class="legal-modal-close" onclick="document.getElementById('legalModal').close()" aria-label="Close dialog">Close</button>
+  </div>
+</dialog>
 
 <script>
 function toggleMobileNav(){
@@ -1649,6 +1770,18 @@ document.querySelectorAll('.feature-card,.stat-card,.step,.testimonial-card').fo
   el.style.transition='opacity .5s ease, transform .5s ease';
   observer.observe(el);
 });
+
+// Cycle the hero mockup gold price between realistic values to feel live
+(function(){
+  const el = document.getElementById('heroGoldPrice');
+  if(!el) return;
+  const prices = ['3,415.20','3,417.50','3,419.80','3,421.80','3,424.10','3,426.30','3,428.00','3,425.60','3,422.40','3,418.90'];
+  let idx = 3; // start at the displayed value
+  setInterval(function(){
+    idx = (idx + 1) % prices.length;
+    el.textContent = prices[idx];
+  }, 4500);
+})();
 </script>
 </body>
 </html>
