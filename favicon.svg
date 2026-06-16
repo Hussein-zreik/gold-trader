@@ -1,11 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <!-- Background -->
   <rect width="32" height="32" rx="6" fill="#04080F"/>
-  <!-- F — vertical bar + two horizontal bars -->
-  <rect x="3"  y="7"  width="3.5" height="18"  fill="#C9A84C"/>
-  <rect x="3"  y="7"  width="11"  height="3.5"  fill="#C9A84C"/>
-  <rect x="3"  y="14" width="8"   height="3"    fill="#C9A84C"/>
-  <!-- X — two crossing diagonals -->
-  <line x1="17" y1="7"  x2="29" y2="25" stroke="#C9A84C" stroke-width="3.5" stroke-linecap="round"/>
-  <line x1="29" y1="7"  x2="17" y2="25" stroke="#C9A84C" stroke-width="3.5" stroke-linecap="round"/>
+  <!-- 5 bars matching the header logo colors, bottom-aligned -->
+  <rect x="3"  y="22" width="4" height="7"  rx="1.5" fill="#dc2626"/>
+  <rect x="9"  y="16" width="4" height="13" rx="1.5" fill="#475569"/>
+  <rect x="15" y="18" width="4" height="11" rx="1.5" fill="#3b82f6"/>
+  <rect x="21" y="9"  width="4" height="20" rx="1.5" fill="#1d4ed8"/>
+  <rect x="27" y="13" width="2" height="16" rx="1"   fill="#16a34a"/>
 </svg>
