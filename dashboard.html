@@ -63,60 +63,52 @@
 
 </style>
 <style>
-/* ═══ PROFESSIONAL DASHBOARD POLISH ═══ */
+/* ═══ PROFESSIONAL FINTECH POLISH ═══ */
 
-/* Market hero strip */
-.mkt-hero{display:flex;align-items:center;background:linear-gradient(90deg,var(--bg2),var(--bg3));border-bottom:2px solid var(--border);padding:0 24px;gap:0;overflow-x:auto;scrollbar-width:none;min-height:64px}
+/* ── Header ── */
+.hdr{border-bottom:1px solid rgba(22,32,50,.9)!important;box-shadow:0 2px 20px rgba(0,0,0,.45)!important}
+
+/* Active nav — bottom tab indicator */
+.hdr-nav-link.active{color:var(--text)!important;background:rgba(59,130,246,.07)!important;position:relative!important}
+.hdr-nav-link.active::after{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:20px;height:2px;background:var(--blue);border-radius:2px 2px 0 0}
+
+/* Refresh CTA */
+.nav-cta-dash{border:1px solid rgba(59,130,246,.3)!important;box-shadow:0 2px 8px rgba(37,99,235,.2)!important;letter-spacing:.6px!important}
+.nav-cta-dash:hover{box-shadow:0 4px 14px rgba(59,130,246,.3)!important}
+
+/* ── Ticker bar ── */
+.ticker-sym{letter-spacing:.7px!important;font-weight:700!important}
+.ticker-price{font-variant-numeric:tabular-nums!important;font-weight:700!important}
+
+/* ── Sessions bar ── */
+.sess-pill{font-weight:600!important;font-size:9px!important;letter-spacing:.5px!important;padding:3px 9px!important}
+@keyframes sess-pulse{0%,100%{box-shadow:0 0 3px rgba(34,197,94,.5)}50%{box-shadow:0 0 8px rgba(34,197,94,.85),0 0 14px rgba(34,197,94,.25)}}
+.sess-open .sess-dot{animation:sess-pulse 2.5s ease-in-out infinite!important}
+
+/* ── Market hero strip ── */
+.mkt-hero{display:flex;align-items:center;background:linear-gradient(90deg,var(--bg2),var(--bg3));border-bottom:1px solid rgba(22,32,50,.9);padding:0 24px;gap:0;overflow-x:auto;scrollbar-width:none;min-height:60px}
 .mkt-hero::-webkit-scrollbar{display:none}
 .mh-item{display:flex;flex-direction:column;padding:10px 28px 10px 0;flex-shrink:0;gap:1px}
-.mh-label{font-family:var(--mono);font-size:9px;font-weight:700;color:var(--muted);letter-spacing:1.8px;text-transform:uppercase;margin-bottom:3px}
-.mh-val{font-family:var(--mono);font-size:22px;font-weight:800;color:var(--text);letter-spacing:-.5px;line-height:1}
+.mh-label{font-family:var(--mono);font-size:9px;font-weight:700;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:3px}
+.mh-val{font-family:var(--mono);font-size:22px;font-weight:800;color:var(--text);letter-spacing:-.5px;line-height:1;font-variant-numeric:tabular-nums}
 .mh-val.mh-sm{font-size:15px;letter-spacing:-.2px}
-.mh-delta{font-family:var(--mono);font-size:10px;min-height:14px;line-height:1.4}
+.mh-delta{font-family:var(--mono);font-size:10px;min-height:14px;line-height:1.4;font-variant-numeric:tabular-nums}
 .mh-delta .up,.mh-delta span.up{color:var(--green)}
 .mh-delta .dn,.mh-delta span.dn{color:var(--red)}
-.mh-sep{width:1px;height:44px;background:var(--border);margin:0 28px 0 0;flex-shrink:0;align-self:center}
+.mh-sep{width:1px;height:40px;background:rgba(22,32,50,.9);margin:0 28px 0 0;flex-shrink:0;align-self:center}
 .mh-gold .mh-val{color:#F59E0B}
 @media(max-width:900px){.mkt-hero{display:none}}
 
-/* Section labels with horizontal rule */
-.sec-lbl{display:flex!important;align-items:center;gap:12px;overflow:visible!important;white-space:nowrap;letter-spacing:1.5px!important;color:rgba(96,165,250,.85)!important}
-.sec-lbl::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(59,130,246,.25),transparent)}
+/* ── Tabular numerics for all price elements ── */
+.fg-score,.calc-res-v,.cd-num,.mh-val{font-variant-numeric:tabular-nums}
 
-/* Card headers — blue left accent + subtle gradient */
-.ch{background:linear-gradient(90deg,rgba(59,130,246,.06) 0%,var(--bg3) 70%)!important;border-left:3px solid rgba(59,130,246,.5)!important}
-.ct{letter-spacing:.5px!important}
-
-/* Market driver cards */
-.mc{transition:transform .18s,box-shadow .18s,border-color .18s!important;border-left:2px solid rgba(59,130,246,.35)!important}
-.mc:hover{transform:translateY(-2px)!important;border-left-color:var(--blue)!important;box-shadow:0 6px 24px rgba(0,0,0,.4),0 0 0 1px rgba(59,130,246,.12)!important}
-.mc-n{font-size:9px!important;letter-spacing:2px!important;font-weight:800!important;color:var(--muted)!important;margin-bottom:8px!important;text-transform:uppercase}
-.mc-p{font-size:20px!important;font-weight:800!important;letter-spacing:-.5px!important;line-height:1!important;margin-bottom:3px!important;font-family:var(--mono)!important}
-.mc-note{font-size:9px!important;letter-spacing:.5px!important;padding:3px 7px!important;border-radius:4px!important;background:rgba(0,0,0,.25)!important;border-left-width:2px!important}
-
-/* Sidebar improvements */
-.sb-hdr{font-size:9px!important;letter-spacing:2px!important;font-weight:800!important}
-.sb-price-main{font-size:28px!important;font-weight:800!important;letter-spacing:-1.2px!important;line-height:1!important;font-family:var(--mono)!important}
-.sb-row-label{font-size:10px!important;letter-spacing:.4px!important}
-.sb-row-val{font-family:var(--mono)!important;font-size:11px!important;font-weight:700!important}
-.sb-card-gold{background:linear-gradient(160deg,var(--bg2) 70%,rgba(239,68,68,.04) 100%)!important}
-
-/* COT section */
-.cot-item{border-left:2px solid rgba(59,130,246,.25)!important}
-.cot-label{letter-spacing:1.5px!important}
-.cot-bar-bg{height:5px!important;border-radius:3px!important;background:rgba(255,255,255,.06)!important;margin:5px 0 3px!important}
-.cot-bar{height:5px!important;border-radius:3px!important}
-
-/* Sessions pills */
-.sess-pill{font-weight:600!important;font-size:10px!important;letter-spacing:.3px!important}
-
-/* General polish */
-.card{box-shadow:0 2px 12px rgba(0,0,0,.2)!important}
-.badge{letter-spacing:.8px!important}
-.sent-bar-bg{border-radius:4px!important}
+/* ── Sentiment verdict ── */
 .sent-verdict{font-size:13px!important;font-weight:700!important;letter-spacing:1px!important}
-.w-handle .w-btn{opacity:.3!important;transition:opacity .15s!important}
-.widget:hover .w-handle .w-btn{opacity:1!important}
+
+/* ── Widget drag handles — fade in on hover ── */
+.w-handle .w-btn{opacity:0!important;transition:opacity .15s!important}
+.widget:hover .w-handle .w-btn{opacity:.35!important}
+.widget:hover .w-handle .w-btn:hover{opacity:1!important}
 </style>
 </head>
 <body>
@@ -324,11 +316,11 @@
   <div class="sb-card">
     <div class="sb-hdr">KEY DRIVERS</div>
     <div class="sb-body" style="padding:8px 10px;">
-      <div class="sb-row"><span class="sb-row-label">🇺🇸 DXY</span><span class="sb-row-val" id="sbDxy">—</span></div>
-      <div class="sb-row"><span class="sb-row-label">📈 US10Y</span><span class="sb-row-val" id="sbTnx">—</span></div>
-      <div class="sb-row"><span class="sb-row-label">😰 VIX</span><span class="sb-row-val" id="sbVix">—</span></div>
-      <div class="sb-row"><span class="sb-row-label">🛢 OIL</span><span class="sb-row-val" id="sbOil">—</span></div>
-      <div class="sb-row"><span class="sb-row-label">📊 SP500</span><span class="sb-row-val" id="sbSp">—</span></div>
+      <div class="sb-row"><span class="sb-row-label">DXY</span><span class="sb-row-val" id="sbDxy">—</span></div>
+      <div class="sb-row"><span class="sb-row-label">US 10Y</span><span class="sb-row-val" id="sbTnx">—</span></div>
+      <div class="sb-row"><span class="sb-row-label">VIX</span><span class="sb-row-val" id="sbVix">—</span></div>
+      <div class="sb-row"><span class="sb-row-label">WTI OIL</span><span class="sb-row-val" id="sbOil">—</span></div>
+      <div class="sb-row"><span class="sb-row-label">SPX</span><span class="sb-row-val" id="sbSp">—</span></div>
       <div class="sb-divider"></div>
       <div class="sb-row"><span class="sb-row-label">GBP/USD</span><span class="sb-row-val" id="sbGbp">—</span></div>
       <div class="sb-row"><span class="sb-row-label">USD/JPY</span><span class="sb-row-val" id="sbJpy">—</span></div>
@@ -1977,49 +1969,64 @@ addPostRefreshHook(()=>{updateSMC(),updateMacroRegime(),loadOptionssentiment()})
 
 /* ── Modern widget redesign ── */
 
-/* Main cards */
-.card{border-radius:18px!important;border:1px solid rgba(255,255,255,0.035)!important;box-shadow:0 4px 28px rgba(0,0,0,0.55),0 1px 4px rgba(0,0,0,0.4)!important;overflow:hidden!important;background:var(--bg2)!important;}
+/* Main cards — shadow-first, subtle glass border */
+.card{border-radius:16px!important;border:1px solid rgba(255,255,255,0.04)!important;box-shadow:0 4px 28px rgba(0,0,0,0.55),0 1px 4px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.03)!important;overflow:hidden!important;background:var(--bg2)!important;}
 
-/* Card header — clean, no gradient/left-border */
-.ch{background:transparent!important;border-left:none!important;padding:16px 18px 14px!important;border-bottom:1px solid rgba(255,255,255,0.04)!important;}
+/* Card header — clean, minimal separator */
+.ch{background:transparent!important;border-left:none!important;padding:14px 18px 12px!important;border-bottom:1px solid rgba(255,255,255,0.045)!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;}
 .ct{font-size:10px!important;font-weight:700!important;letter-spacing:1.2px!important;color:var(--muted)!important;text-transform:uppercase!important;}
 
-/* Section label */
-.sec-lbl{font-size:9px!important;font-weight:700!important;letter-spacing:2px!important;color:var(--muted)!important;padding:0 0 10px!important;display:flex!important;align-items:center!important;gap:8px!important;}
-.sec-lbl::before{content:'';display:block;width:3px;height:12px;border-radius:2px;background:var(--blue);flex-shrink:0;}
+/* Section label — blue bar + slightly more visible */
+.sec-lbl{font-size:9px!important;font-weight:700!important;letter-spacing:2.5px!important;color:rgba(96,165,250,.7)!important;padding:0 0 10px!important;display:flex!important;align-items:center!important;gap:8px!important;}
+.sec-lbl::before{content:'';display:block;width:2px;height:11px;border-radius:1px;background:var(--blue);flex-shrink:0;opacity:.8;}
 
-/* Mini stat cards (Key Gold Drivers) */
-.mc{background:var(--bg3)!important;border:none!important;border-radius:16px!important;box-shadow:0 2px 18px rgba(0,0,0,0.4)!important;padding:16px 14px 14px!important;transition:transform .2s,box-shadow .2s!important;}
-.mc:hover{transform:translateY(-3px)!important;box-shadow:0 8px 28px rgba(0,0,0,0.55),0 0 0 1px rgba(59,130,246,0.12)!important;}
-.mc-n{font-size:9px!important;font-weight:700!important;letter-spacing:1.5px!important;color:var(--muted)!important;margin-bottom:10px!important;text-transform:uppercase!important;}
-.mc-p{font-size:24px!important;font-weight:800!important;letter-spacing:-1px!important;line-height:1!important;margin-bottom:6px!important;font-family:var(--heading)!important;}
+/* Badges — compact terminal style */
+.badge{font-size:9px!important;font-weight:700!important;letter-spacing:1px!important;padding:2px 7px!important;border-radius:3px!important;text-transform:uppercase!important;}
 
-/* Sidebar cards */
-.sb-card{background:var(--bg3)!important;border:none!important;border-radius:18px!important;overflow:hidden!important;box-shadow:0 4px 20px rgba(0,0,0,0.45)!important;margin-bottom:12px!important;transition:box-shadow .2s!important;}
-.sb-card:hover{box-shadow:0 8px 30px rgba(0,0,0,0.55)!important;}
-.sb-card-gold{border-top:2px solid rgba(239,68,68,0.6)!important;background:var(--bg3)!important;}
-.sb-card-blue{border-top:2px solid rgba(59,130,246,0.6)!important;background:var(--bg3)!important;}
+/* Mini stat cards (Key Gold Drivers) — fintech terminal look */
+.mc{background:var(--bg3)!important;border:none!important;border-radius:14px!important;box-shadow:0 2px 18px rgba(0,0,0,0.4)!important;padding:14px 14px 12px!important;transition:transform .2s,box-shadow .2s!important;}
+.mc:hover{transform:translateY(-2px)!important;box-shadow:0 8px 28px rgba(0,0,0,0.55),0 0 0 1px rgba(59,130,246,0.12)!important;}
+.mc-n{font-size:9px!important;font-weight:700!important;letter-spacing:1.8px!important;color:var(--muted)!important;margin-bottom:10px!important;text-transform:uppercase!important;}
+.mc-p{font-size:22px!important;font-weight:800!important;letter-spacing:-.8px!important;line-height:1!important;margin-bottom:4px!important;font-family:var(--mono)!important;font-variant-numeric:tabular-nums!important;}
+.mc-c{font-size:11px!important;font-variant-numeric:tabular-nums!important;}
+.mc-note{font-size:9px!important;letter-spacing:.3px!important;padding:3px 8px!important;border-radius:4px!important;background:rgba(0,0,0,.35)!important;margin-top:6px!important;border:none!important;color:var(--muted)!important;}
+.mc-ts{font-size:9px!important;color:var(--muted)!important;margin-top:5px!important;letter-spacing:.3px!important;}
 
-/* Sidebar header — no separate bg strip */
-.sb-hdr{background:transparent!important;border-bottom:none!important;padding:14px 14px 4px!important;font-size:8px!important;font-weight:700!important;letter-spacing:2px!important;color:var(--muted)!important;text-transform:uppercase!important;}
+/* Sidebar cards — rounded, shadow-lifted */
+.sb-card{background:var(--bg3)!important;border:none!important;border-radius:16px!important;overflow:hidden!important;box-shadow:0 4px 20px rgba(0,0,0,0.45)!important;margin-bottom:12px!important;transition:box-shadow .2s,transform .2s!important;}
+.sb-card:hover{box-shadow:0 8px 32px rgba(0,0,0,0.58)!important;transform:translateY(-1px)!important;}
+.sb-card-gold{border-top:1px solid rgba(239,68,68,0.45)!important;background:var(--bg3)!important;}
+.sb-card-blue{border-top:1px solid rgba(59,130,246,0.45)!important;background:var(--bg3)!important;}
 
-/* Sidebar price */
-.sb-price-main{font-size:30px!important;font-weight:800!important;letter-spacing:-1.5px!important;line-height:1.05!important;font-family:var(--heading)!important;}
+/* Sidebar header */
+.sb-hdr{background:transparent!important;border-bottom:none!important;padding:14px 14px 4px!important;font-size:8px!important;font-weight:700!important;letter-spacing:2.5px!important;color:var(--muted)!important;text-transform:uppercase!important;}
+
+/* Sidebar price — monospace + tabular nums for clean alignment */
+.sb-price-main{font-size:28px!important;font-weight:800!important;letter-spacing:-1.2px!important;line-height:1.05!important;font-family:var(--mono)!important;font-variant-numeric:tabular-nums!important;}
 .sb-body{padding:4px 14px 14px!important;}
 
-/* Sidebar change: pill badge */
-.sb-chg{display:inline-flex!important;align-items:center!important;padding:3px 9px!important;border-radius:20px!important;font-size:11px!important;font-weight:700!important;margin:8px 0 10px!important;background:rgba(255,255,255,0.06)!important;}
+/* Sidebar change: subtle pill */
+.sb-chg{display:inline-flex!important;align-items:center!important;padding:3px 9px!important;border-radius:20px!important;font-size:11px!important;font-weight:700!important;margin:6px 0 10px!important;background:rgba(255,255,255,0.05)!important;font-variant-numeric:tabular-nums!important;}
 
 /* Sidebar rows */
-.sb-row{border-bottom:1px solid rgba(255,255,255,0.04)!important;padding:7px 0!important;}
-.sb-row-label{font-size:10px!important;color:var(--muted)!important;}
-.sb-row-val{font-family:var(--heading)!important;font-size:12px!important;font-weight:700!important;}
+.sb-row{border-bottom:1px solid rgba(255,255,255,0.035)!important;padding:7px 0!important;}
+.sb-row-label{font-size:10px!important;color:var(--muted)!important;letter-spacing:.4px!important;}
+.sb-row-val{font-family:var(--mono)!important;font-size:11px!important;font-weight:700!important;font-variant-numeric:tabular-nums!important;}
 
-/* Sidebar signal */
-.sb-signal{border-radius:10px!important;margin-top:10px!important;font-size:10px!important;font-weight:700!important;letter-spacing:1px!important;padding:9px!important;}
+/* Sidebar signal badge */
+.sb-signal{border-radius:8px!important;margin-top:10px!important;font-size:10px!important;font-weight:700!important;letter-spacing:1.2px!important;padding:8px!important;}
+
+/* Sentiment bar */
+.sent-bar-bg{border-radius:3px!important;height:7px!important;}
+.sent-needle{width:3px!important;border-radius:2px!important;box-shadow:0 0 6px rgba(255,255,255,.4)!important;}
+
+/* COT bars */
+.cot-bar-bg{height:4px!important;border-radius:2px!important;background:rgba(255,255,255,.05)!important;margin:5px 0 3px!important;}
+.cot-bar{height:4px!important;border-radius:2px!important;}
+.cot-item{padding-left:10px!important;border-left:2px solid rgba(59,130,246,.2)!important;}
 
 /* Row-4 mini card grid */
-.row4{gap:12px!important;}
+.row4{gap:10px!important;}
 </style>
 <div id="fx-toast-stack"></div>
 <script>
