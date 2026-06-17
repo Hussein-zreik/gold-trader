@@ -61,6 +61,299 @@
 .ds-desc{font-size:9px;color:var(--muted2);margin-top:1px}
 @media(max-width:900px){.hdr-search{display:none}}
 
+/* ── LIGHT MODE ── */
+body.light-mode .page-title{background-image:linear-gradient(to bottom,#09090B,rgba(9,9,11,.70)) !important;-webkit-background-clip:text !important;background-clip:text !important;color:transparent !important;}
+body.light-mode .page-sub{color:#52525B !important;}
+
+/* Badges */
+body.light-mode .badge{background:rgba(0,0,0,.04) !important;border-color:rgba(0,0,0,.08) !important;color:#52525B !important;}
+body.light-mode .cb-badge{background:rgba(79,70,229,.10) !important;border-color:rgba(79,70,229,.22) !important;color:#4F46E5 !important;}
+body.light-mode .cb-countdown,
+body.light-mode .countdown-timer,
+body.light-mode .countdown-wrap{color:#4F46E5 !important;}
+
+/* Charts / buttons */
+body.light-mode .chart-btn{background:rgba(0,0,0,.04) !important;border-color:rgba(0,0,0,.08) !important;color:#52525B !important;}
+body.light-mode .chart-btn:hover{background:rgba(0,0,0,.07) !important;color:#09090B !important;}
+body.light-mode .chart-btn.active{background:rgba(79,70,229,.10) !important;border-color:rgba(79,70,229,.25) !important;color:#4F46E5 !important;}
+body.light-mode .chart-fullscreen-btn{background:rgba(0,0,0,.04) !important;border-color:rgba(0,0,0,.08) !important;color:#52525B !important;}
+body.light-mode .edit-toggle{background:rgba(0,0,0,.04) !important;border-color:rgba(0,0,0,.08) !important;color:#52525B !important;}
+body.light-mode .collapse-btn{color:#52525B !important;}
+body.light-mode .copy-btn{background:rgba(0,0,0,.04) !important;border-color:rgba(0,0,0,.08) !important;color:#52525B !important;}
+
+/* Alert inputs */
+body.light-mode .alert-input,
+body.light-mode .alert-select{background:#FFFFFF !important;border-color:rgba(0,0,0,.12) !important;color:#09090B !important;}
+body.light-mode .alert-input:focus,
+body.light-mode .alert-select:focus{border-color:#4F46E5 !important;box-shadow:0 0 0 3px rgba(79,70,229,.15) !important;}
+body.light-mode .alert-form{background:rgba(0,0,0,.03) !important;border-color:rgba(0,0,0,.06) !important;}
+body.light-mode .alert-add-btn,
+body.light-mode .add-item-btn{background:#4F46E5 !important;color:#fff !important;box-shadow:0 0 0 1px rgba(79,70,229,.4),0 4px 12px rgba(79,70,229,.25),inset 0 1px 0 0 rgba(255,255,255,.2) !important;}
+body.light-mode .alert-add-btn:hover,
+body.light-mode .add-item-btn:hover{background:#4338CA !important;}
+body.light-mode .alert-status{color:#16A34A !important;}
+
+/* Calculator */
+body.light-mode .calc-input{background:#FFFFFF !important;border-color:rgba(0,0,0,.12) !important;color:#09090B !important;}
+body.light-mode .calc-input:focus{border-color:#4F46E5 !important;box-shadow:0 0 0 3px rgba(79,70,229,.15) !important;}
+body.light-mode .calc-res{background:rgba(0,0,0,.03) !important;border-color:rgba(0,0,0,.06) !important;}
+body.light-mode .calc-res-l{color:#52525B !important;}
+body.light-mode .calc-res-v{color:#09090B !important;}
+body.light-mode .calc-res-v.pos{color:#16A34A !important;}
+body.light-mode .calc-res-v.neg{color:#DC2626 !important;}
+
+/* Event rows */
+body.light-mode .evt-row{border-bottom-color:rgba(0,0,0,.06) !important;color:#09090B !important;}
+body.light-mode .evt-row:hover{background:rgba(0,0,0,.02) !important;}
+body.light-mode .high-row{border-left-color:#DC2626 !important;background:rgba(220,38,38,.02) !important;}
+body.light-mode .med-row{border-left-color:#D97706 !important;background:rgba(217,119,6,.02) !important;}
+body.light-mode .cb-row{border-left-color:#4F46E5 !important;background:rgba(79,70,229,.02) !important;}
+body.light-mode .imp-dot.high{background:#DC2626 !important;box-shadow:none !important;}
+body.light-mode .imp-dot.med{background:#D97706 !important;box-shadow:none !important;}
+body.light-mode .imp-dot.low{background:#71717A !important;box-shadow:none !important;}
+body.light-mode .imp-dot.cb{background:#4F46E5 !important;box-shadow:none !important;}
+body.light-mode .evt-time,
+body.light-mode .evt-flag,
+body.light-mode .evt-flag-cur{color:#52525B !important;}
+body.light-mode .evt-name{color:#09090B !important;}
+body.light-mode .evt-num.better{color:#16A34A !important;}
+body.light-mode .evt-num.worse{color:#DC2626 !important;}
+body.light-mode .evt-num.empty{color:#A1A1AA !important;}
+
+/* DXY / strength bars */
+body.light-mode .dxy-strength-wrap{background:rgba(0,0,0,.03) !important;border-color:rgba(0,0,0,.06) !important;}
+body.light-mode .fg-bar-row{border-bottom-color:rgba(0,0,0,.06) !important;}
+body.light-mode .fg-bar-label{color:#52525B !important;}
+body.light-mode .fg-bar-track{background:rgba(0,0,0,.06) !important;}
+
+/* News cards */
+body.light-mode .enews-card{color:#09090B !important;border-color:rgba(0,0,0,.08) !important;}
+body.light-mode .enews-card:hover{border-color:rgba(79,70,229,.3) !important;box-shadow:0 2px 12px rgba(0,0,0,.06) !important;}
+body.light-mode .enews-source,
+body.light-mode .enews-time{color:#52525B !important;}
+body.light-mode .enews-source{background:rgba(79,70,229,.08) !important;color:#4F46E5 !important;}
+body.light-mode .enews-title{color:#09090B !important;}
+body.light-mode .enews-summary{color:#52525B !important;}
+body.light-mode .enews-footer{color:#52525B !important;border-top-color:rgba(0,0,0,.06) !important;}
+body.light-mode .enews-footer .rd{color:#4F46E5 !important;}
+body.light-mode .enews-status{background:#FFFFFF !important;border-color:rgba(0,0,0,.08) !important;border-left-color:#4F46E5 !important;color:#52525B !important;}
+body.light-mode .enews-status.error{color:#DC2626 !important;border-left-color:#DC2626 !important;}
+body.light-mode .enews-status.success{color:#16A34A !important;border-left-color:#16A34A !important;}
+body.light-mode .enews-empty{background:#FFFFFF !important;border-color:rgba(0,0,0,.08) !important;color:#52525B !important;}
+body.light-mode .enews-input{background:#FFFFFF !important;border-color:rgba(0,0,0,.12) !important;color:#09090B !important;}
+body.light-mode .enews-input:focus{border-color:#4F46E5 !important;}
+body.light-mode .enews-sent.pos{background:rgba(22,163,74,.10) !important;border-color:rgba(22,163,74,.22) !important;color:#16A34A !important;}
+body.light-mode .enews-sent.neg{background:rgba(220,38,38,.10) !important;border-color:rgba(220,38,38,.22) !important;color:#DC2626 !important;}
+body.light-mode .enews-sent.neu{background:rgba(79,70,229,.08) !important;border-color:rgba(79,70,229,.20) !important;color:#4F46E5 !important;}
+
+/* Correlation table */
+body.light-mode .corr-cell{color:#09090B !important;background:rgba(0,0,0,.02) !important;}
+body.light-mode .corr-cell.pos{background:rgba(22,163,74,.12) !important;color:#16A34A !important;}
+body.light-mode .corr-cell.neg{background:rgba(220,38,38,.12) !important;color:#DC2626 !important;}
+body.light-mode .corr-cell.neu{background:rgba(0,0,0,.04) !important;color:#52525B !important;}
+body.light-mode .corr-label{background:rgba(0,0,0,.04) !important;color:#52525B !important;}
+
+/* Edit / export buttons */
+body.light-mode .eb-btn{background:rgba(0,0,0,.04) !important;border-color:rgba(0,0,0,.08) !important;color:#52525B !important;}
+body.light-mode .eb-btn:hover{background:rgba(0,0,0,.07) !important;color:#09090B !important;}
+body.light-mode .eb-btn.active{background:rgba(79,70,229,.10) !important;border-color:rgba(79,70,229,.25) !important;color:#4F46E5 !important;}
+
+/* Sessions bar */
+body.light-mode .sessions-bar{background:rgba(0,0,0,.03) !important;border-color:rgba(0,0,0,.06) !important;}
+
+/* Live price widgets */
+body.light-mode .live-gold,
+body.light-mode .live-price{color:#09090B !important;}
+
+/* Card header / title */
+body.light-mode .card-header{border-bottom-color:rgba(0,0,0,.06) !important;background:rgba(0,0,0,.02) !important;}
+body.light-mode .card-title{color:#4F46E5 !important;}
+
+/* Market mini-cards (.mc) */
+body.light-mode .gs{background:rgba(0,0,0,.03) !important;border-color:rgba(0,0,0,.06) !important;}
+body.light-mode .mc-note{background:rgba(0,0,0,.03) !important;border-left-color:rgba(0,0,0,.12) !important;color:#52525B !important;}
+body.light-mode .mc:hover{box-shadow:0 0 0 1px rgba(79,70,229,.12),0 2px 12px rgba(0,0,0,.06) !important;}
+
+/* Calendar items */
+body.light-mode .cal-item:hover{background:rgba(0,0,0,.02) !important;}
+body.light-mode .news-item:hover{background:rgba(0,0,0,.02) !important;}
+
+/* Quick links */
+body.light-mode .lnk{border-bottom-color:rgba(0,0,0,.06) !important;}
+body.light-mode .lnk:hover{background:rgba(0,0,0,.02) !important;}
+
+/* Portfolio table */
+body.light-mode .port-table td{border-bottom-color:rgba(0,0,0,.06) !important;}
+body.light-mode .port-table tr:hover td{background:rgba(0,0,0,.02) !important;}
+body.light-mode .port-table th{color:#52525B !important;border-bottom-color:rgba(0,0,0,.08) !important;}
+body.light-mode .port-input{background:#FFFFFF !important;border-color:rgba(0,0,0,.12) !important;color:#09090B !important;}
+body.light-mode .port-input:focus{border-color:#4F46E5 !important;}
+body.light-mode .port-btn{background:#4F46E5 !important;color:#fff !important;}
+body.light-mode .port-btn.danger{background:transparent !important;color:#DC2626 !important;border-color:rgba(220,38,38,.3) !important;}
+body.light-mode .port-empty{color:#52525B !important;}
+
+/* Sidebar rows */
+body.light-mode .sb-row{border-bottom-color:rgba(0,0,0,.06) !important;}
+body.light-mode .sb-row-label{color:#52525B !important;}
+body.light-mode .sb-card:hover{border-color:rgba(79,70,229,.3) !important;box-shadow:0 0 0 1px rgba(79,70,229,.10),0 4px 16px rgba(0,0,0,.06) !important;}
+
+/* Keyboard overlay */
+body.light-mode .kbd-overlay{background:rgba(0,0,0,.35) !important;}
+body.light-mode .kbd-key{background:rgba(0,0,0,.05) !important;border-color:rgba(0,0,0,.12) !important;color:#09090B !important;}
+body.light-mode .kbd-desc{color:#52525B !important;}
+
+/* Header icon/search */
+body.light-mode .hdr-icon-btn:hover{background:rgba(0,0,0,.05) !important;color:#09090B !important;}
+body.light-mode .hdr-search-input{background:#FFFFFF !important;border-color:rgba(0,0,0,.12) !important;color:#09090B !important;}
+body.light-mode .hdr-search-input:focus{border-color:#4F46E5 !important;background:rgba(79,70,229,.04) !important;}
+body.light-mode .hdr-search-results{background:#FFFFFF !important;border-color:rgba(0,0,0,.10) !important;box-shadow:0 16px 48px rgba(0,0,0,.12) !important;}
+body.light-mode .hdr-search-kbd{background:rgba(0,0,0,.04) !important;border-color:rgba(0,0,0,.10) !important;color:#52525B !important;}
+body.light-mode .ds-item{color:#09090B !important;border-bottom-color:rgba(0,0,0,.06) !important;}
+body.light-mode .ds-item:hover,
+body.light-mode .ds-item.focused{background:rgba(79,70,229,.06) !important;}
+body.light-mode .ds-desc{color:#52525B !important;}
+
+/* Journal */
+body.light-mode .journal-input,
+body.light-mode .journal-textarea{background:#FFFFFF !important;border-color:rgba(0,0,0,.12) !important;color:#09090B !important;}
+body.light-mode .journal-input:focus,
+body.light-mode .journal-textarea:focus{border-color:#4F46E5 !important;}
+body.light-mode .journal-btn{background:#4F46E5 !important;color:#fff !important;}
+body.light-mode .journal-btn.sec{background:transparent !important;border-color:rgba(0,0,0,.12) !important;color:#09090B !important;}
+body.light-mode .journal-btn.del{background:transparent !important;border-color:rgba(220,38,38,.3) !important;color:#DC2626 !important;}
+body.light-mode .journal-entry{background:rgba(0,0,0,.02) !important;border-color:rgba(0,0,0,.08) !important;}
+body.light-mode .journal-entry:hover{border-color:rgba(79,70,229,.25) !important;}
+body.light-mode .je-date{color:#52525B !important;}
+body.light-mode .je-note{color:#09090B !important;}
+body.light-mode .jstat{background:rgba(0,0,0,.03) !important;border-color:rgba(0,0,0,.06) !important;}
+body.light-mode .jstat-l{color:#52525B !important;}
+body.light-mode .jfilter-btn{background:rgba(0,0,0,.03) !important;border-color:rgba(0,0,0,.08) !important;color:#52525B !important;}
+body.light-mode .jfilter-btn.active{background:#4F46E5 !important;border-color:#4F46E5 !important;color:#fff !important;}
+body.light-mode .mistake-chip{background:rgba(0,0,0,.03) !important;border-color:rgba(0,0,0,.08) !important;color:#52525B !important;}
+body.light-mode .mistake-chip.active{background:rgba(220,38,38,.10) !important;border-color:rgba(220,38,38,.25) !important;color:#DC2626 !important;}
+
+/* Pivot points */
+body.light-mode .pivot-card{background:rgba(0,0,0,.03) !important;border-color:rgba(0,0,0,.06) !important;}
+body.light-mode .pivot-lbl{color:#52525B !important;}
+body.light-mode .pivot-type-btn{background:rgba(0,0,0,.03) !important;border-color:rgba(0,0,0,.08) !important;color:#52525B !important;}
+body.light-mode .pivot-type-btn.active{background:rgba(79,70,229,.10) !important;border-color:rgba(79,70,229,.25) !important;color:#4F46E5 !important;}
+body.light-mode .rate-input{color:#09090B !important;}
+
+/* Sentiment widget */
+body.light-mode .sent-score{color:#09090B !important;}
+body.light-mode .sent-verdict{color:#09090B !important;}
+body.light-mode .sent-labels{color:#52525B !important;}
+
+/* DXY timeframe cards */
+body.light-mode .dxy-tf-card{background:rgba(0,0,0,.03) !important;border-color:rgba(0,0,0,.06) !important;}
+body.light-mode .dxy-tf-label{color:#52525B !important;}
+body.light-mode .dxy-tf-sub{color:#52525B !important;}
+body.light-mode .dxy-bar-bg{background:rgba(0,0,0,.07) !important;}
+body.light-mode .dxy-bar-label{color:#52525B !important;}
+body.light-mode .dxy-summary{background:rgba(0,0,0,.03) !important;color:#52525B !important;}
+
+/* Support/Resistance levels */
+body.light-mode .level-row:hover{background:rgba(0,0,0,.03) !important;}
+body.light-mode .level-row.current-price{background:rgba(79,70,229,.05) !important;border-color:rgba(79,70,229,.20) !important;}
+body.light-mode .level-price{color:#09090B !important;}
+body.light-mode .level-dist{color:#52525B !important;}
+
+/* Central bank calendar */
+body.light-mode .cb-event{background:rgba(0,0,0,.02) !important;border-color:rgba(0,0,0,.08) !important;}
+body.light-mode .cb-event:hover{border-color:rgba(79,70,229,.25) !important;}
+body.light-mode .cb-event.next-up{border-color:rgba(217,119,6,.35) !important;background:rgba(217,119,6,.03) !important;}
+body.light-mode .cb-date{color:#09090B !important;}
+body.light-mode .cb-date-month{color:#52525B !important;}
+body.light-mode .cb-bank{color:#09090B !important;}
+body.light-mode .cb-detail{color:#52525B !important;}
+body.light-mode .cb-divider{background:rgba(0,0,0,.08) !important;}
+
+/* Spread monitor */
+body.light-mode .spread-card{background:rgba(0,0,0,.02) !important;border-color:rgba(0,0,0,.08) !important;}
+body.light-mode .spread-card.spread-normal{border-color:rgba(22,163,74,.20) !important;}
+body.light-mode .spread-card.spread-wide{border-color:rgba(217,119,6,.30) !important;}
+body.light-mode .spread-card.spread-danger{border-color:rgba(220,38,38,.35) !important;background:rgba(220,38,38,.02) !important;}
+body.light-mode .spread-sym{color:#52525B !important;}
+body.light-mode .spread-unit{color:#52525B !important;}
+body.light-mode .spread-alert-bar{background:rgba(0,0,0,.03) !important;}
+
+/* Heatmap */
+body.light-mode .hm-session-labels{border-top-color:rgba(0,0,0,.08) !important;}
+
+/* SMC concepts */
+body.light-mode .smc-section-title{color:#52525B !important;border-bottom-color:rgba(0,0,0,.08) !important;}
+body.light-mode .smc-item{background:rgba(0,0,0,.02) !important;border-color:rgba(0,0,0,.08) !important;}
+body.light-mode .smc-item:hover{border-color:rgba(79,70,229,.25) !important;}
+body.light-mode .smc-price{color:#09090B !important;}
+body.light-mode .smc-desc{color:#52525B !important;}
+body.light-mode .smc-empty{color:#52525B !important;}
+body.light-mode .smc-bias-bar{background:rgba(0,0,0,.03) !important;border-color:rgba(0,0,0,.08) !important;}
+body.light-mode .smc-bias-sub{color:#52525B !important;}
+body.light-mode .smc-ob{background:rgba(79,70,229,.10) !important;border-color:rgba(79,70,229,.22) !important;color:#4F46E5 !important;}
+
+/* Options / volatility */
+body.light-mode .opts-card{background:rgba(0,0,0,.02) !important;border-color:rgba(0,0,0,.08) !important;}
+body.light-mode .opts-lbl{color:#52525B !important;}
+body.light-mode .opts-sub{color:#52525B !important;}
+body.light-mode .opts-gauge{background:rgba(0,0,0,.06) !important;}
+body.light-mode .opts-interp{background:rgba(0,0,0,.03) !important;color:#52525B !important;}
+body.light-mode .opts-hist-card{background:rgba(0,0,0,.03) !important;border-color:rgba(0,0,0,.06) !important;}
+body.light-mode .opts-hist-lbl{color:#52525B !important;}
+
+/* Real yield */
+body.light-mode .ry-main{background:rgba(0,0,0,.03) !important;border-color:rgba(0,0,0,.06) !important;}
+body.light-mode .ry-label{color:#52525B !important;}
+body.light-mode .ry-formula{color:#52525B !important;}
+body.light-mode .ry-trend-card{background:rgba(0,0,0,.03) !important;border-color:rgba(0,0,0,.06) !important;}
+body.light-mode .ry-trend-lbl{color:#52525B !important;}
+body.light-mode .ry-desc{background:rgba(0,0,0,.03) !important;color:#52525B !important;}
+
+/* Macro regime */
+body.light-mode .macro-card{background:rgba(0,0,0,.03) !important;border-color:rgba(0,0,0,.06) !important;}
+body.light-mode .macro-card-title{color:#52525B !important;}
+body.light-mode .macro-card-sub{color:#52525B !important;}
+body.light-mode .macro-drivers{background:rgba(0,0,0,.03) !important;color:#52525B !important;}
+
+/* Gold / EUR hero */
+body.light-mode .gh-price{color:#4F46E5 !important;}
+body.light-mode .gs-v{color:#09090B !important;}
+body.light-mode .gs-l{color:#52525B !important;}
+
+/* Ratio widget */
+body.light-mode .ratio-main{background:rgba(0,0,0,.03) !important;border-color:rgba(0,0,0,.06) !important;}
+body.light-mode .ratio-num{color:#4F46E5 !important;}
+body.light-mode .ratio-lbl{color:#52525B !important;}
+body.light-mode .ratio-context{color:#52525B !important;}
+body.light-mode .ratio-hist-card{background:rgba(0,0,0,.03) !important;border-color:rgba(0,0,0,.06) !important;}
+body.light-mode .ratio-hist-lbl{color:#52525B !important;}
+body.light-mode .ratio-hist-val{color:#09090B !important;}
+
+/* Fear & Greed */
+body.light-mode .fg-hist-item{background:rgba(0,0,0,.03) !important;border-color:rgba(0,0,0,.06) !important;}
+body.light-mode .fg-hist-l{color:#52525B !important;}
+
+/* MTF analysis */
+body.light-mode .mtf-cell{background:rgba(0,0,0,.02) !important;}
+body.light-mode .mtf-hdr{color:#52525B !important;}
+body.light-mode .mtf-tf{color:#52525B !important;}
+
+/* COT data */
+body.light-mode .cot-item{background:rgba(0,0,0,.02) !important;border-color:rgba(0,0,0,.08) !important;}
+body.light-mode .cot-label{color:#52525B !important;}
+body.light-mode .cot-bar-bg{background:rgba(0,0,0,.08) !important;}
+body.light-mode .cot-change{color:#52525B !important;}
+body.light-mode .cot-ts{color:#52525B !important;}
+
+/* Seasonality chart */
+body.light-mode .season-month{color:#52525B !important;}
+
+/* Market hero strip */
+body.light-mode .mkt-hero{background:linear-gradient(90deg,#FFFFFF,#FAF8F6) !important;border-bottom-color:rgba(0,0,0,.08) !important;}
+body.light-mode .mh-sep{background:rgba(0,0,0,.08) !important;}
+body.light-mode .mh-label{color:#52525B !important;}
+body.light-mode .mh-val{color:#09090B !important;}
+body.light-mode .mh-gold .mh-val{color:#B45309 !important;}
+
 </style>
 <style>
 /* ═══ PROFESSIONAL FINTECH POLISH ═══ */
