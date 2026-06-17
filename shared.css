@@ -44,23 +44,24 @@
 
 /* Light mode overrides */
 body.light-mode {
-  --bg:      #F0F4F8;
+  /* Linear / Modern — Light Mode palette (see consolidated block lower in file) */
+  --bg:      #FAF8F6;
   --bg2:     #FFFFFF;
-  --bg3:     #EBF0F6;
+  --bg3:     #F4F4F6;
   --card:    #FFFFFF;
-  --border:  #CBD5E1;
-  --text:    #1A2332;
-  --muted:   #475569;
-  --muted2:  #334155;
-  --blue:    #2563EB;
-  --blue2:   #1D4ED8;
-  --gold:    #D97706;
-  --orange:  #EA580C;
+  --border:  rgba(0,0,0,0.06);
+  --text:    #09090B;
+  --muted:   #52525B;
+  --muted2:  #71717A;
+  --blue:    #4F46E5;
+  --blue2:   #4338CA;
+  --gold:    #4F46E5;
+  --orange:  #D97706;
   --purple:  #7C3AED;
-  --badge-blue:   #1D4ED8;
-  --badge-purple: #6D28D9;
-  --badge-red:    #991B1B;
-  --btn-blue-bg:  #2563EB;
+  --badge-blue:   #4F46E5;
+  --badge-purple: #7C3AED;
+  --badge-red:    #DC2626;
+  --btn-blue-bg:  #4F46E5;
 }
 
 /* ── RESET ── */
@@ -102,8 +103,8 @@ html, body {
 }
 
 body.light-mode .site-header {
-  background: rgba(240,246,255,0.95);
-  box-shadow: 0 2px 16px rgba(15,40,80,.1);
+  background: rgba(250,248,246,0.92);
+  box-shadow: 0 2px 16px rgba(0,0,0,.06);
 }
 
 /* ── LOGO ── */
@@ -143,7 +144,7 @@ body.light-mode .logo-bar.b5 { background:#16a34a; box-shadow:none; }
 }
 
 body.light-mode .logo-divider {
-  background: linear-gradient(180deg, transparent, #cbd5e1, transparent);
+  background: linear-gradient(180deg, transparent, rgba(0,0,0,0.12), transparent);
 }
 
 .logo-name {
@@ -159,7 +160,7 @@ body.light-mode .logo-divider {
 }
 
 body.light-mode .logo-name {
-  background: linear-gradient(135deg, #0f172a 0%, #1d4ed8 45%, #dc2626 100%);
+  background: linear-gradient(135deg, #09090B 0%, #4F46E5 55%, #4338CA 100%);
   -webkit-background-clip: text;
   background-clip: text;
 }
@@ -210,12 +211,12 @@ body.light-mode .logo-name {
 }
 
 body.light-mode .nav-link:hover {
-  background: rgba(37,99,235,.07);
+  background: rgba(79,70,229,.07);
 }
 
 body.light-mode .nav-link.active {
-  background: rgba(37,99,235,.1);
-  border-color: rgba(37,99,235,.25);
+  background: rgba(79,70,229,.10);
+  border-color: rgba(79,70,229,.25);
 }
 
 /* ── CTA BUTTON ── */
@@ -256,7 +257,7 @@ body.light-mode .nav-link.active {
 .hdr-icon-btn.active { color: var(--blue); }
 
 body.light-mode .hdr-icon-btn:hover { background: rgba(0,0,0,.08); }
-body.light-mode .hdr-search-icon { color: #5B7A96; }
+body.light-mode .hdr-search-icon { color: #52525B; }
 
 /* ── MOBILE PAGE TITLE (shown only when nav is hidden) ── */
 .hdr-page-title {
@@ -324,12 +325,12 @@ body.light-mode .hdr-search-icon { color: #5B7A96; }
 }
 
 body.light-mode .hdr-search-input {
-  background: #DDE6F0;
-  border-color: #A8BECE;
-  color: #1A2332;
+  background: #FFFFFF;
+  border-color: rgba(0,0,0,.12);
+  color: #09090B;
 }
 body.light-mode .hdr-search-input::placeholder {
-  color: #5B7A96;
+  color: #A1A1AA;
 }
 body.light-mode .hdr-search-input:focus {
   background: #D0DCF0;
@@ -350,9 +351,9 @@ body.light-mode .hdr-search-input:focus {
 }
 
 body.light-mode .hdr-search-results {
-  background: #EBF0F6;
-  border-color: #A8BECE;
-  box-shadow: 0 8px 24px rgba(15,40,80,.18);
+  background: #FFFFFF;
+  border-color: rgba(0,0,0,.10);
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
 }
 
 .hdr-search-results[hidden] { display: none; }
@@ -377,7 +378,7 @@ body.light-mode .hdr-search-results {
 
 body.light-mode .hdr-search-kbd {
   background: rgba(0,0,0,.05);
-  border-color: #B8C8D8;
+  border-color: rgba(0,0,0,.12);
 }
 
 /* ── UTC LIVE CLOCK ── */
@@ -433,12 +434,12 @@ body.light-mode #hdrTime {
 }
 
 body.light-mode .search-result-item + .search-result-item {
-  border-top-color: #C0D0E0;
+  border-top-color: rgba(0,0,0,.08);
 }
 
 body.light-mode .search-result-item:hover,
 body.light-mode .search-result-item.focused {
-  background: rgba(37,99,235,.13);
+  background: rgba(79,70,229,.12);
 }
 
 .search-result-icon { font-size: 18px; flex-shrink: 0; }
@@ -530,17 +531,17 @@ body.light-mode .mobile-search-close-btn:hover { background: rgba(0,0,0,.06); }
 .mobile-search-overlay-input:focus { border-color: var(--blue); }
 
 body.light-mode .mobile-search-overlay {
-  background: #EBF0F6;
-  box-shadow: 0 8px 24px rgba(15,40,80,.15);
+  background: #FFFFFF;
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
 }
 
 body.light-mode .mobile-search-overlay-input {
-  background: #DDE6F0;
-  border-color: #A8BECE;
-  color: #1A2332;
+  background: #FFFFFF;
+  border-color: rgba(0,0,0,.12);
+  color: #09090B;
 }
 
-body.light-mode .mobile-search-overlay-input::placeholder { color: #5B7A96; }
+body.light-mode .mobile-search-overlay-input::placeholder { color: #A1A1AA; }
 
 .mobile-search-overlay-results {
   margin-top: 8px;
@@ -618,7 +619,7 @@ body.light-mode .mobile-menu-btn:hover {
 }
 
 body.light-mode .mobile-nav {
-  background: rgba(240,246,255,0.98);
+  background: rgba(250,248,246,0.98);
 }
 
 .mobile-nav .nav-link {
@@ -637,8 +638,8 @@ body.light-mode .mobile-nav {
 }
 
 body.light-mode .mobile-nav .nav-link.active {
-  background: rgba(37,99,235,.08);
-  border-color: rgba(37,99,235,.2);
+  background: rgba(79,70,229,.10);
+  border-color: rgba(79,70,229,.25);
 }
 
 .mobile-nav .nav-cta { margin-top: 10px; text-align: center; display: block; padding: 13px; }
@@ -717,7 +718,7 @@ body.light-mode .mobile-nav .nav-link.active {
 
 body.light-mode .card {
   border-color: var(--border);
-  box-shadow: 0 2px 16px rgba(15,40,80,.1);
+  box-shadow: 0 2px 16px rgba(0,0,0,.06);
 }
 
 .card-header {
@@ -917,7 +918,7 @@ body.light-mode .card-header {
 .fx-toast-msg { flex: 1; }
 
 body.light-mode .fx-toast {
-  box-shadow: 0 4px 24px rgba(15,40,80,.2);
+  box-shadow: 0 4px 24px rgba(0,0,0,.14);
 }
 
 @media (max-width: 480px) {
@@ -1102,26 +1103,33 @@ a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid 
 
 /* Re-declare CSS vars for light mode (body.light-mode inherits to all children) */
 body.light-mode {
-  --bg:         #FAF8F6;
-  --bg2:        #FFFFFF;
-  --bg3:        #F4F4F6;
-  --bg4:        #EFEFEF;
-  --border:     rgba(0,0,0,.06);
-  --border-gold:rgba(79,70,229,.20);
-  --text:       #09090B;
-  --muted:      #52525B;
-  --muted2:     #71717A;
-  --green:      #16A34A;
-  --red:        #DC2626;
-  --orange:     #D97706;
-  --blue:       #4F46E5;
-  --blue2:      #4338CA;
-  --accent-blue:#4F46E5;
-  --btn-blue-bg:#4F46E5;
-  --gold:       #4F46E5;
-  --gold-dim:   #6366F1;
-  --gold-bright:#818CF8;
-  --accent-glow:rgba(79,70,229,.12);
+  /* Linear / Modern — Light Mode tokens. !important so these beat the dark
+     :root block above, which also declares these vars with !important. */
+  --bg:         #FAF8F6!important;  /* background-base  */
+  --bg2:        #FFFFFF!important;  /* background-elevated */
+  --bg3:        #F4F4F6!important;  /* background-deep  */
+  --bg4:        #EFEFEF!important;
+  --card:       #FFFFFF!important;
+  --border:     rgba(0,0,0,.06)!important;   /* border-default */
+  --border-gold:rgba(79,70,229,.25)!important; /* border-accent */
+  --text:       #09090B!important;  /* foreground */
+  --muted:      #52525B!important;  /* foreground-muted */
+  --muted2:     #71717A!important;
+  --green:      #16A34A!important;
+  --red:        #DC2626!important;
+  --orange:     #D97706!important;
+  --purple:     #7C3AED!important;
+  --blue:       #4F46E5!important;  /* accent */
+  --blue2:      #4338CA!important;  /* accent-bright */
+  --accent-blue:#4F46E5!important;
+  --btn-blue-bg:#4F46E5!important;
+  --badge-blue:   #4F46E5!important;
+  --badge-purple: #7C3AED!important;
+  --badge-red:    #DC2626!important;
+  --gold:       #4F46E5!important;  /* accent (site primary accent) */
+  --gold-dim:   #6366F1!important;
+  --gold-bright:#818CF8!important;
+  --accent-glow:rgba(79,70,229,.12)!important; /* accent-glow */
 }
 
 /* Light canvas — uses html.light-mode toggled by applyTheme() */
