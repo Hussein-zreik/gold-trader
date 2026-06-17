@@ -7,25 +7,25 @@
 
 /* ── VARIABLES ── */
 :root {
-  --bg:      #04080F;
-  --bg2:     #080F1A;
-  --bg3:     #0D1520;
-  --card:    #0F1A28;
-  --border:  #1A2A3D;
-  --text:    #E2EAF4;
-  --muted:   #6B8CAE;
-  --muted2:  #8BAFD1;
-  --blue:    #3B82F6;
-  --blue2:   #2563EB;
+  --bg:      #050506;
+  --bg2:     #0a0a0c;
+  --bg3:     #101014;
+  --card:    #0a0a0c;
+  --border:  #1c1d24;
+  --text:    #EDEDEF;
+  --muted:   #8A8F98;
+  --muted2:  #A6ACB8;
+  --blue:    #5E6AD2;
+  --blue2:   #5E6AD2;
   --red:     #EF4444;
   --green:   #22C55E;
   --gold:    #F59E0B;
   --orange:  #F97316;
   --purple:  #A855F7;
-  --badge-blue:   #60A5FA;
+  --badge-blue:   #8A93E0;
   --badge-purple: #C084FC;
   --badge-red:    #F87171;
-  --btn-blue-bg:  #2563EB;
+  --btn-blue-bg:  #5E6AD2;
   --sans:    'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
   --mono:    'Inter', monospace;
   --display: Syne, 'Plus Jakarta Sans', sans-serif;
@@ -90,7 +90,7 @@ html, body {
   position: sticky;
   top: 0;
   z-index: 200;
-  background: rgba(4,8,15,0.94);
+  background: rgba(5,5,6,0.94);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
@@ -139,7 +139,7 @@ body.light-mode .logo-bar.b5 { background:#16a34a; box-shadow:none; }
 .logo-divider {
   width: 1px;
   height: 20px;
-  background: linear-gradient(180deg, transparent, #1e3a5f, transparent);
+  background: linear-gradient(180deg, transparent, #1c1d24, transparent);
   margin: 0 4px;
 }
 
@@ -201,13 +201,13 @@ body.light-mode .logo-name {
 
 .nav-link:hover {
   color: var(--text);
-  background: rgba(59,130,246,.07);
+  background: rgba(94,106,210,.07);
 }
 
 .nav-link.active {
   color: var(--badge-blue);
-  background: rgba(59,130,246,.1);
-  border-color: rgba(59,130,246,.22);
+  background: rgba(94,106,210,.1);
+  border-color: rgba(94,106,210,.22);
 }
 
 body.light-mode .nav-link:hover {
@@ -238,7 +238,7 @@ body.light-mode .nav-link.active {
   white-space: nowrap;
 }
 
-.nav-cta:hover { background: #1d4ed8; transform: translateY(-1px); }
+.nav-cta:hover { background: #6872D9; transform: translateY(-1px); }
 
 /* ── ICON BUTTONS (theme, keyboard, edit) ── */
 .hdr-icon-btn {
@@ -320,7 +320,7 @@ body.light-mode .hdr-search-icon { color: #52525B; }
 .hdr-search-input::-webkit-search-cancel-button { -webkit-appearance: none; }
 .hdr-search-input:focus {
   border-color: var(--blue);
-  background: rgba(59,130,246,0.06);
+  background: rgba(94,106,210,0.06);
   width: 220px;
 }
 
@@ -430,7 +430,7 @@ body.light-mode #hdrTime {
 
 .search-result-item:hover,
 .search-result-item.focused {
-  background: rgba(59,130,246,.08);
+  background: rgba(94,106,210,.08);
 }
 
 body.light-mode .search-result-item + .search-result-item {
@@ -594,7 +594,7 @@ body.light-mode .mobile-menu-btn:hover {
   position: fixed;
   top: 64px;
   left: 0; right: 0;
-  background: rgba(4,8,15,0.98);
+  background: rgba(5,5,6,0.98);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
@@ -631,8 +631,8 @@ body.light-mode .mobile-nav {
 
 .mobile-nav .nav-link.active {
   color: var(--blue);
-  background: rgba(59,130,246,.08);
-  border-color: rgba(59,130,246,.18);
+  background: rgba(94,106,210,.08);
+  border-color: rgba(94,106,210,.18);
   border-left: 3px solid var(--blue);
   padding-left: 13px;
 }
@@ -752,7 +752,7 @@ body.light-mode .card-header {
   white-space: nowrap;
 }
 
-.b-blue   { background:rgba(59,130,246,.1);  color:var(--badge-blue);   border:1px solid rgba(59,130,246,.2); }
+.b-blue   { background:rgba(94,106,210,.1);  color:var(--badge-blue);   border:1px solid rgba(94,106,210,.2); }
 .b-green  { background:rgba(34,197,94,.1);   color:var(--green);         border:1px solid rgba(34,197,94,.2);  }
 .b-red    { background:rgba(239,68,68,.1);   color:var(--badge-red);    border:1px solid rgba(239,68,68,.2);  }
 .b-purple { background:rgba(168,85,247,.1);  color:var(--badge-purple); border:1px solid rgba(168,85,247,.2); }
@@ -773,7 +773,7 @@ body.light-mode .card-header {
 .field-input:focus {
   border-color: var(--blue);
   outline: 0;
-  box-shadow: 0 0 0 3px rgba(59,130,246,.12);
+  box-shadow: 0 0 0 3px rgba(94,106,210,.12);
 }
 
 .btn-primary {
@@ -792,7 +792,7 @@ body.light-mode .card-header {
   white-space: nowrap;
 }
 
-.btn-primary:hover { background: #1d4ed8; transform: translateY(-1px); }
+.btn-primary:hover { background: #6872D9; transform: translateY(-1px); }
 
 .btn-secondary {
   padding: 10px 22px;
@@ -825,7 +825,7 @@ body.light-mode .card-header {
 
 /* ── FOCUS ── */
 :focus-visible {
-  outline: 2px solid #60A5FA;
+  outline: 2px solid #8A93E0;
   outline-offset: 3px;
   border-radius: 4px;
 }
@@ -903,7 +903,7 @@ body.light-mode .card-header {
 
 .fx-toast.success { border-color: rgba(34,197,94,.35);  background: rgba(34,197,94,.06); }
 .fx-toast.error   { border-color: rgba(239,68,68,.35);  background: rgba(239,68,68,.06); }
-.fx-toast.info    { border-color: rgba(59,130,246,.35); background: rgba(59,130,246,.06); }
+.fx-toast.info    { border-color: rgba(94,106,210,.35); background: rgba(94,106,210,.06); }
 .fx-toast.leaving { animation: toast-out .2s ease forwards; }
 
 .fx-toast-icon {
@@ -1066,7 +1066,7 @@ body{background:transparent!important}
 @keyframes lxpulse{0%,100%{opacity:.45;transform:translateZ(0) scale(1)}50%{opacity:.7;transform:translateZ(0) scale(1.06)}}
 @media(prefers-reduced-motion:reduce){.lx-blob{animation:none!important}}
 @media(max-width:780px){.lx-blob.b2,.lx-blob.b3{display:none}}
-.lx-spot{position:absolute;inset:0;z-index:-1;opacity:0;transition:opacity .3s;pointer-events:none;background:radial-gradient(300px circle at var(--mx,50%) var(--my,50%),rgba(94,106,210,.15),transparent 65%)}
+.lx-spot{position:absolute;inset:0;z-index:-1;opacity:0;transition:opacity .3s;pointer-events:none;background:radial-gradient(200px circle at var(--mx,50%) var(--my,50%),rgba(94,106,210,.07),transparent 60%)}
 .card:hover .lx-spot,.cal-card:hover .lx-spot,.enews-card:hover .lx-spot{opacity:1}
 .card, .cal-card, .enews-card {
   position: relative!important;
@@ -1144,7 +1144,7 @@ body.light-mode .lx-blob.b4 { background: radial-gradient(circle, rgba(79,70,229
 
 /* Mouse-tracking spotlight — soft white refraction in light mode */
 body.light-mode .lx-spot {
-  background: radial-gradient(300px circle at var(--mx,50%) var(--my,50%), rgba(79,70,229,.09), transparent 65%) !important;
+  background: radial-gradient(200px circle at var(--mx,50%) var(--my,50%), rgba(79,70,229,.06), transparent 60%) !important;
 }
 
 /* Glass card surfaces — light mode */
