@@ -467,6 +467,133 @@
   .cal-card { will-change: auto; }
   * { scroll-behavior: auto !important; }
 }
+
+/* ── LIGHT MODE ── */
+
+/* Page header — .cal-title is the actual class used in this page */
+body.light-mode .cal-title { background-image: linear-gradient(to bottom,#09090B,rgba(9,9,11,.70)) !important; -webkit-background-clip:text !important; background-clip:text !important; -webkit-text-fill-color:transparent !important; color:transparent !important; }
+body.light-mode .cal-subtitle,
+body.light-mode .page-sub { color: #52525B !important; }
+
+/* Calendar card */
+body.light-mode .cal-card { background: #FFFFFF !important; box-shadow: 0 0 0 1px rgba(0,0,0,.06), 0 2px 20px rgba(0,0,0,.08) !important; }
+body.light-mode .cal-toolbar { background: rgba(0,0,0,.02) !important; border-bottom-color: rgba(0,0,0,.06) !important; }
+
+/* Nav links */
+body.light-mode .cal-nav-link { color: #52525B !important; }
+body.light-mode .cal-nav-link:hover { color: #09090B !important; background: rgba(0,0,0,.04) !important; }
+body.light-mode .cal-nav-link.active { color: #4F46E5 !important; background: rgba(79,70,229,.08) !important; }
+body.light-mode .cal-nav-divider,
+body.light-mode .cal-sep { color: rgba(0,0,0,.12) !important; background: rgba(0,0,0,.12) !important; }
+
+/* View buttons (segmented control) */
+body.light-mode .cal-view-btns { background: rgba(0,0,0,.05) !important; border-color: rgba(0,0,0,.08) !important; }
+body.light-mode .cal-view-btn { color: #52525B !important; }
+body.light-mode .cal-view-btn:hover { background: rgba(0,0,0,.05) !important; color: #09090B !important; }
+body.light-mode .cal-view-btn.active { background: #FFFFFF !important; color: #4F46E5 !important; box-shadow: 0 0 0 1px rgba(79,70,229,.20),inset 0 0 0 2px rgba(79,70,229,.12) !important; }
+
+/* Filter buttons */
+body.light-mode .cal-filter-btn { background: rgba(0,0,0,.04) !important; border-color: rgba(0,0,0,.08) !important; color: #52525B !important; }
+body.light-mode .cal-filter-btn:hover { background: rgba(0,0,0,.07) !important; color: #09090B !important; }
+body.light-mode .cal-filter-btn.active { background: rgba(79,70,229,.10) !important; border-color: rgba(79,70,229,.25) !important; color: #4F46E5 !important; }
+
+/* Timezone pill */
+body.light-mode .cal-tz { background: rgba(0,0,0,.03) !important; border-color: rgba(0,0,0,.08) !important; color: #52525B !important; }
+
+/* Status bar */
+body.light-mode .cal-status-bar { background: rgba(0,0,0,.03) !important; border-bottom-color: rgba(0,0,0,.06) !important; color: #52525B !important; }
+body.light-mode .cal-status-bar.error { color: #DC2626 !important; }
+body.light-mode #calStatusText,
+body.light-mode .cal-status-text { color: #52525B !important; }
+body.light-mode .cal-status-dot { background: #A1A1AA !important; box-shadow: none !important; }
+body.light-mode .cal-status-bar.live .cal-status-dot { background: #16A34A !important; box-shadow: 0 0 6px rgba(22,163,74,.6) !important; }
+body.light-mode .cal-status-bar.error .cal-status-dot { background: #DC2626 !important; box-shadow: 0 0 6px rgba(220,38,38,.6) !important; }
+
+/* Date strip bar + arrows */
+body.light-mode .date-strip-bar { background: rgba(0,0,0,.02) !important; border-bottom-color: rgba(0,0,0,.06) !important; }
+body.light-mode .strip-arrow { background: rgba(0,0,0,.04) !important; border-color: rgba(0,0,0,.08) !important; color: #09090B !important; }
+body.light-mode .strip-arrow:hover { background: rgba(0,0,0,.08) !important; border-color: rgba(0,0,0,.14) !important; }
+
+/* Date strip */
+body.light-mode .date-strip,
+body.light-mode #dateStrip { border-bottom-color: rgba(0,0,0,.06) !important; background: rgba(0,0,0,.02) !important; }
+body.light-mode .date-col { color: #52525B !important; }
+body.light-mode .date-col:hover { background: rgba(0,0,0,.04) !important; }
+body.light-mode .date-col.active { background: rgba(79,70,229,.08) !important; box-shadow: inset 0 0 0 1px rgba(79,70,229,.20) !important; }
+body.light-mode .date-col.weekend { opacity: .55 !important; }
+body.light-mode .date-col-month { color: #52525B !important; }
+body.light-mode .date-col-num { color: #09090B !important; }
+body.light-mode .date-col-day { color: #71717A !important; }
+body.light-mode .date-col-today-pill { background: rgba(79,70,229,.12) !important; color: #4F46E5 !important; border-color: rgba(79,70,229,.25) !important; box-shadow: 0 0 8px rgba(79,70,229,.20) !important; }
+body.light-mode .date-col.weekend .date-col-num { color: #71717A !important; }
+body.light-mode .date-col.active .date-col-num { color: #4F46E5 !important; }
+body.light-mode .date-col.today-col .date-col-day { color: #4F46E5 !important; }
+
+/* Day sections */
+body.light-mode .day-section { border-bottom-color: rgba(0,0,0,.06) !important; }
+
+/* Day headers */
+body.light-mode .day-header-row { background: rgba(0,0,0,.02) !important; border-bottom-color: rgba(0,0,0,.06) !important; }
+body.light-mode .day-header-month-lbl { color: #52525B !important; }
+body.light-mode .day-header-day-num { color: #09090B !important; }
+body.light-mode .day-header-name { color: #09090B !important; border-left-color: rgba(0,0,0,.12) !important; }
+body.light-mode .day-col-hdr { color: #71717A !important; border-bottom-color: rgba(0,0,0,.06) !important; }
+
+/* Event rows */
+body.light-mode .evt-row { border-bottom-color: rgba(0,0,0,.06) !important; color: #09090B !important; }
+body.light-mode .evt-row:hover { background: rgba(0,0,0,.02) !important; }
+body.light-mode .evt-time { color: #52525B !important; }
+body.light-mode .evt-flag,
+body.light-mode .evt-flag-cur { color: #52525B !important; }
+body.light-mode .evt-cur,
+body.light-mode .evt-name,
+body.light-mode .cb-name { color: #09090B !important; }
+body.light-mode .evt-name.cb-name { color: #4F46E5 !important; }
+
+/* Impact rows — keep exact class names; change only colors */
+body.light-mode .high-row { border-left-color: #DC2626 !important; background: rgba(220,38,38,.025) !important; }
+body.light-mode .high-row:hover { background: rgba(220,38,38,.05) !important; }
+body.light-mode .med-row  { border-left-color: #D97706 !important; background: rgba(217,119,6,.025) !important; }
+body.light-mode .med-row:hover  { background: rgba(217,119,6,.05) !important; }
+body.light-mode .cb-row   { border-left-color: #4F46E5 !important; background: rgba(79,70,229,.025) !important; }
+body.light-mode .cb-row:hover   { background: rgba(79,70,229,.05) !important; }
+
+/* Impact dots */
+body.light-mode .imp-dot.high { background: #DC2626 !important; box-shadow: 0 0 4px rgba(220,38,38,.4) !important; }
+body.light-mode .imp-dot.med  { background: #D97706 !important; box-shadow: 0 0 4px rgba(217,119,6,.4) !important; }
+body.light-mode .imp-dot.low  { background: #52525B !important; box-shadow: none !important; }
+body.light-mode .imp-dot.cb   { background: #4F46E5 !important; box-shadow: 0 0 4px rgba(79,70,229,.4) !important; }
+
+/* Event numbers */
+body.light-mode .evt-num { color: #52525B !important; }
+body.light-mode .evt-num.actual { color: #09090B !important; }
+body.light-mode .evt-num.better { color: #16A34A !important; }
+body.light-mode .evt-num.worse  { color: #DC2626 !important; }
+body.light-mode .evt-num.empty  { color: #A1A1AA !important; }
+
+/* Checkbox (cb-row) */
+body.light-mode .cb-row input[type="checkbox"] { background: rgba(0,0,0,.03) !important; border-color: rgba(0,0,0,.18) !important; }
+body.light-mode .cb-row input[type="checkbox"]:hover { border-color: rgba(79,70,229,.40) !important; }
+body.light-mode .cb-row input[type="checkbox"]:checked { background: #4F46E5 !important; border-color: #4F46E5 !important; }
+
+/* Empty / loading states */
+body.light-mode .cal-empty { color: #52525B !important; }
+body.light-mode .cal-loading-spin { border-color: rgba(0,0,0,.08) !important; border-top-color: #4F46E5 !important; color: #4F46E5 !important; }
+body.light-mode .error-retry-banner { background: rgba(220,38,38,.06) !important; border-color: rgba(220,38,38,.18) !important; color: #DC2626 !important; }
+body.light-mode .error-retry-btn { background: rgba(0,0,0,.04) !important; border-color: rgba(0,0,0,.10) !important; color: #09090B !important; }
+
+/* Date dots */
+body.light-mode .date-dot.high { background: #DC2626 !important; }
+body.light-mode .date-dot.med  { background: #D97706 !important; }
+body.light-mode .date-dot.low  { background: #71717A !important; }
+body.light-mode .date-dot.cb   { background: #4F46E5 !important; }
+
+/* Toolbar right / clock */
+body.light-mode #calClock,
+body.light-mode #calTzLabel { color: #52525B !important; }
+
+/* Filter panel */
+body.light-mode #filterPanel { background: #FFFFFF !important; border-color: rgba(0,0,0,.08) !important; box-shadow: 0 4px 20px rgba(0,0,0,.10) !important; }
 </style>
 </head>
 <body>

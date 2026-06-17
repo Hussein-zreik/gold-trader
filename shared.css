@@ -1097,3 +1097,149 @@ input,select,textarea{background:#0F0F12!important;border:1px solid rgba(255,255
 input:focus,select:focus,textarea:focus{border-color:#5E6AD2!important;box-shadow:0 0 0 3px rgba(94,106,210,.22)!important;outline:none!important}
 a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid rgba(94,106,210,.6)!important;outline-offset:2px!important}
 .site-footer{background:rgba(5,5,6,.85)!important;border-top:1px solid rgba(255,255,255,.06)!important;backdrop-filter:blur(12px)!important;-webkit-backdrop-filter:blur(12px)!important}
+
+/* ════ LINEAR SKIN — LIGHT MODE OVERRIDES ════ */
+
+/* Re-declare CSS vars for light mode (body.light-mode inherits to all children) */
+body.light-mode {
+  --bg:         #FAF8F6;
+  --bg2:        #FFFFFF;
+  --bg3:        #F4F4F6;
+  --bg4:        #EFEFEF;
+  --border:     rgba(0,0,0,.06);
+  --border-gold:rgba(79,70,229,.20);
+  --text:       #09090B;
+  --muted:      #52525B;
+  --muted2:     #71717A;
+  --green:      #16A34A;
+  --red:        #DC2626;
+  --orange:     #D97706;
+  --blue:       #4F46E5;
+  --blue2:      #4338CA;
+  --accent-blue:#4F46E5;
+  --btn-blue-bg:#4F46E5;
+  --gold:       #4F46E5;
+  --gold-dim:   #6366F1;
+  --gold-bright:#818CF8;
+  --accent-glow:rgba(79,70,229,.12);
+}
+
+/* Light canvas — uses html.light-mode toggled by applyTheme() */
+html.light-mode { background: #FAF8F6 !important; }
+body.light-mode  { background: #FAF8F6 !important; }
+
+/* Ambient mists — light mode (very low opacity, warm tones) */
+body.light-mode .lx-blob.b1 { background: radial-gradient(circle, rgba(79,70,229,.07), transparent 70%) !important; filter: blur(55px) !important; }
+body.light-mode .lx-blob.b2 { background: radial-gradient(circle, rgba(245,158,11,.05), transparent 70%) !important; filter: blur(45px) !important; }
+body.light-mode .lx-blob.b3 { background: radial-gradient(circle, rgba(100,116,139,.05), transparent 70%) !important; filter: blur(40px) !important; }
+body.light-mode .lx-blob.b4 { background: radial-gradient(circle, rgba(79,70,229,.04), transparent 70%) !important; filter: blur(50px) !important; }
+
+/* Mouse-tracking spotlight — soft white refraction in light mode */
+body.light-mode .lx-spot {
+  background: radial-gradient(300px circle at var(--mx,50%) var(--my,50%), rgba(79,70,229,.09), transparent 65%) !important;
+}
+
+/* Glass card surfaces — light mode */
+body.light-mode .card,
+body.light-mode .cal-card,
+body.light-mode .enews-card {
+  background: linear-gradient(to bottom, #FFFFFF, rgba(255,255,255,.95)) !important;
+  border: 1px solid rgba(0,0,0,.06) !important;
+  box-shadow: 0 0 0 1px rgba(0,0,0,.04), 0 1px 4px rgba(0,0,0,.05), 0 4px 16px rgba(0,0,0,.06), 0 8px 32px rgba(0,0,0,.04) !important;
+}
+body.light-mode .card:hover,
+body.light-mode .cal-card:hover,
+body.light-mode .enews-card:hover {
+  border-color: rgba(0,0,0,.10) !important;
+  box-shadow: 0 0 0 1px rgba(0,0,0,.06), 0 4px 20px rgba(0,0,0,.10), 0 12px 40px rgba(0,0,0,.08), 0 0 40px rgba(79,70,229,.06) !important;
+}
+body.light-mode .card::before,
+body.light-mode .cal-card::before,
+body.light-mode .enews-card::before {
+  background: linear-gradient(90deg, transparent, rgba(0,0,0,.05), transparent) !important;
+}
+
+/* Card header border */
+body.light-mode .card-header { border-bottom-color: rgba(0,0,0,.06) !important; }
+body.light-mode .card-title  { color: #4F46E5 !important; }
+
+/* Site header */
+body.light-mode .site-header {
+  background: rgba(250,248,246,.92) !important;
+  border-bottom: 1px solid rgba(0,0,0,.06) !important;
+  box-shadow: 0 1px 0 rgba(0,0,0,.04), 0 4px 16px rgba(0,0,0,.06) !important;
+  backdrop-filter: blur(22px) !important;
+  -webkit-backdrop-filter: blur(22px) !important;
+}
+
+/* Nav links */
+body.light-mode .nav-link { color: #52525B !important; }
+body.light-mode .nav-link:hover { color: #09090B !important; background: rgba(0,0,0,.04) !important; }
+body.light-mode .nav-link.active { color: #09090B !important; background: rgba(0,0,0,.03) !important; }
+body.light-mode .nav-link.active::after { background: #4F46E5 !important; box-shadow: 0 0 6px rgba(79,70,229,.5) !important; }
+body.light-mode .nav-cta {
+  background: #4F46E5 !important;
+  color: #fff !important;
+  box-shadow: 0 0 0 1px rgba(79,70,229,.4), 0 4px 12px rgba(79,70,229,.25), inset 0 1px 0 0 rgba(255,255,255,.2) !important;
+}
+body.light-mode .nav-cta:hover { background: #4338CA !important; box-shadow: 0 0 0 1px rgba(79,70,229,.5), 0 6px 20px rgba(79,70,229,.35), inset 0 1px 0 0 rgba(255,255,255,.25) !important; }
+
+/* Logo bars */
+body.light-mode .logo-name { color: #09090B !important; }
+
+/* Page title */
+body.light-mode .hdr-page-title { color: #52525B !important; }
+
+/* Header search */
+body.light-mode .hdr-search-input { background: rgba(0,0,0,.04) !important; border-color: rgba(0,0,0,.08) !important; color: #09090B !important; }
+body.light-mode .hdr-search-input::placeholder { color: #A1A1AA !important; }
+body.light-mode .hdr-search-input:focus { border-color: #4F46E5 !important; box-shadow: 0 0 0 3px rgba(79,70,229,.15) !important; }
+body.light-mode .hdr-search-results { background: #FFFFFF !important; border-color: rgba(0,0,0,.08) !important; box-shadow: 0 8px 32px rgba(0,0,0,.12) !important; }
+body.light-mode .search-result-item:hover,
+body.light-mode .search-result-item.focused { background: rgba(0,0,0,.04) !important; }
+
+/* Mobile nav */
+body.light-mode .mobile-nav { background: rgba(250,248,246,.97) !important; border-bottom-color: rgba(0,0,0,.06) !important; }
+
+/* Inputs / selects / textareas (global) */
+body.light-mode input,
+body.light-mode select,
+body.light-mode textarea {
+  background: #FFFFFF !important;
+  border-color: rgba(0,0,0,.12) !important;
+  color: #09090B !important;
+}
+body.light-mode input:focus,
+body.light-mode select:focus,
+body.light-mode textarea:focus {
+  border-color: #4F46E5 !important;
+  box-shadow: 0 0 0 3px rgba(79,70,229,.15) !important;
+  outline: none !important;
+}
+body.light-mode input::placeholder,
+body.light-mode textarea::placeholder { color: #A1A1AA !important; }
+
+/* Focus rings */
+body.light-mode a:focus-visible,
+body.light-mode button:focus-visible,
+body.light-mode [tabindex]:focus-visible {
+  outline: 2px solid rgba(79,70,229,.55) !important;
+  outline-offset: 2px !important;
+}
+
+/* Site footer */
+body.light-mode .site-footer {
+  background: rgba(244,244,246,.95) !important;
+  border-top: 1px solid rgba(0,0,0,.06) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+}
+body.light-mode .site-footer a,
+body.light-mode .site-footer p { color: #52525B !important; }
+body.light-mode .site-footer a:hover { color: #09090B !important; }
+
+/* Badges */
+body.light-mode .badge { border-color: rgba(0,0,0,.08) !important; }
+
+/* Toast */
+body.light-mode .fx-toast { background: #FFFFFF !important; border-color: rgba(0,0,0,.08) !important; color: #09090B !important; box-shadow: 0 4px 20px rgba(0,0,0,.12) !important; }

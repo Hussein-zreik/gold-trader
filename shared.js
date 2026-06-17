@@ -188,6 +188,7 @@ ${!isLanding ? `<div class="mobile-search-overlay" id="mobileSearchOverlay" hidd
   /* ── THEME ── */
   function applyTheme(dark){
     document.body.classList.toggle('light-mode', !dark);
+    document.documentElement.classList.toggle('light-mode', !dark);
     const btn = document.getElementById('themeBtn');
     if(btn) btn.textContent = dark ? '🌙' : '☀️';
     try { localStorage.setItem(THEME_KEY, dark ? 'dark' : 'light'); } catch(e){}

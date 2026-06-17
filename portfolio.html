@@ -113,6 +113,65 @@ select.port-input{cursor:pointer}
 @media(max-width:768px){.port-summary{grid-template-columns:1fr 1fr}}
 @media(max-width:600px){.port-summary{grid-template-columns:1fr 1fr}.port-add-row{flex-direction:column}.port-input{max-width:100%!important;width:100%}}
 @media(prefers-reduced-motion:reduce){.reveal,.reveal.is-in{opacity:1!important;transform:none!important;transition:none!important}.card,.port-btn,.port-stat,.port-input,.port-table tbody tr{transition:none!important}.port-btn::before{display:none}}
+
+/* ── LIGHT MODE ── */
+
+/* Page title */
+body.light-mode .port-title{background-image:linear-gradient(to bottom,#09090B,rgba(9,9,11,.70)) !important;-webkit-background-clip:text !important;background-clip:text !important;-webkit-text-fill-color:transparent !important;color:transparent !important}
+body.light-mode .port-subtitle{color:#52525B !important}
+body.light-mode .port-eyebrow{color:#52525B !important;border-color:rgba(0,0,0,.08) !important;background:rgba(0,0,0,.04) !important}
+
+/* Card shell */
+body.light-mode .card{box-shadow:0 0 0 1px rgba(0,0,0,.06),0 2px 8px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.04) !important}
+body.light-mode .card:hover{box-shadow:0 0 0 1px rgba(0,0,0,.10),0 2px 8px rgba(0,0,0,.06),0 8px 40px rgba(0,0,0,.10) !important}
+
+/* Card header divider */
+body.light-mode .ch{border-bottom-color:rgba(0,0,0,.06) !important}
+
+/* Ghost buttons (Refresh / Export badges) */
+body.light-mode .btn-ghost{background:rgba(0,0,0,.04) !important;border-color:rgba(0,0,0,.10) !important;color:#09090B !important}
+body.light-mode .btn-ghost:hover{background:rgba(0,0,0,.07) !important;border-color:rgba(0,0,0,.16) !important}
+
+/* Blue badge variant */
+body.light-mode .b-blue{background:rgba(79,70,229,.08) !important;color:#4F46E5 !important;border-color:rgba(79,70,229,.20) !important}
+
+/* Stat tiles */
+body.light-mode .port-stat{background:linear-gradient(to bottom,#FFFFFF,rgba(255,255,255,.95)) !important;border:1px solid rgba(0,0,0,.06) !important;box-shadow:0 0 0 1px rgba(0,0,0,.04),0 2px 8px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.04) !important}
+body.light-mode .port-stat:hover{border-color:rgba(0,0,0,.10) !important;box-shadow:0 0 0 1px rgba(0,0,0,.06),0 4px 20px rgba(0,0,0,.10) !important}
+body.light-mode .port-stat--primary{box-shadow:0 0 0 1px rgba(0,0,0,.04),0 2px 8px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.04),0 0 30px rgba(79,70,229,.08) !important}
+body.light-mode .port-stat-l{color:#52525B !important}
+body.light-mode .port-stat-v{color:#09090B !important}
+
+/* Holdings table */
+body.light-mode .port-table th{color:#52525B !important;border-bottom-color:rgba(0,0,0,.08) !important;background:rgba(0,0,0,.02) !important}
+body.light-mode .port-table td{border-bottom-color:rgba(0,0,0,.06) !important;color:#09090B !important}
+body.light-mode .port-table tr:hover td{background:rgba(0,0,0,.02) !important}
+body.light-mode .port-table-wrap{background:#FFFFFF !important;border-color:rgba(0,0,0,.06) !important}
+
+/* Add-position inputs */
+body.light-mode .port-input{background:#FFFFFF !important;border-color:rgba(0,0,0,.12) !important;color:#09090B !important}
+body.light-mode .port-input:focus{border-color:#4F46E5 !important;box-shadow:0 0 0 3px rgba(79,70,229,.15) !important}
+body.light-mode .port-input::placeholder{color:#A1A1AA !important}
+
+/* Buttons */
+body.light-mode .port-btn{background:#4F46E5 !important;color:#fff !important;box-shadow:0 0 0 1px rgba(79,70,229,.4),0 4px 12px rgba(79,70,229,.25),inset 0 1px 0 0 rgba(255,255,255,.2) !important}
+body.light-mode .port-btn:hover{background:#4338CA !important}
+body.light-mode .port-btn.danger{background:rgba(0,0,0,.04) !important;color:#DC2626 !important;border:1px solid rgba(220,38,38,.20) !important;box-shadow:none !important}
+body.light-mode .port-btn.danger:hover{background:rgba(220,38,38,.08) !important;border-color:rgba(220,38,38,.30) !important}
+
+/* Add-position row */
+body.light-mode .port-add-row{background:rgba(0,0,0,.02) !important;border-color:rgba(0,0,0,.06) !important}
+
+/* Badges */
+body.light-mode .badge{background:rgba(0,0,0,.04) !important;border-color:rgba(0,0,0,.08) !important;color:#52525B !important}
+
+/* Empty state */
+body.light-mode .port-empty{color:#52525B !important}
+body.light-mode .port-empty-icon{color:#A1A1AA !important}
+
+/* P&L coloring — keep var(--green)/var(--red) which resolve correctly via shared.css light-mode vars */
+/* Stale indicator */
+body.light-mode .stale{color:#D97706 !important}
 </style>
 </head>
 <body>

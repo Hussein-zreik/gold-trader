@@ -186,6 +186,135 @@ button.badge:active{transform:translateY(0) scale(.98)}
   .journal-btn::before{display:none}
   *{scroll-behavior:auto!important}
 }
+
+/* ── LIGHT MODE ── */
+
+/* Override page-scoped CSS vars so inline var() references resolve correctly */
+body.light-mode {
+  --lx-accent: #4F46E5;
+  --lx-accent-hover: #4338CA;
+  --lx-glass: linear-gradient(to bottom,#FFFFFF,rgba(255,255,255,.95));
+  --lx-bd: rgba(0,0,0,.06);
+  --lx-bd-hover: rgba(0,0,0,.12);
+  --lx-bd-accent: rgba(79,70,229,.25);
+  --lx-input-bg: #FFFFFF;
+  --lx-shadow: 0 0 0 1px rgba(0,0,0,.04),0 2px 8px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.04);
+  --lx-shadow-hover: 0 0 0 1px rgba(0,0,0,.06),0 4px 20px rgba(0,0,0,.10);
+  --lx-cta: 0 0 0 1px rgba(79,70,229,.4),0 4px 12px rgba(79,70,229,.25),inset 0 1px 0 0 rgba(255,255,255,.2);
+}
+
+/* Page title gradient */
+body.light-mode .page-title { background-image: linear-gradient(to bottom,#09090B,rgba(9,9,11,.70)) !important; -webkit-background-clip:text !important; background-clip:text !important; color:transparent !important; }
+body.light-mode .page-sub { color: #52525B !important; }
+body.light-mode .sec-lbl { color: #52525B !important; }
+
+/* Stat tiles */
+body.light-mode .jstat {
+  background: linear-gradient(to bottom,#FFFFFF,rgba(255,255,255,.95)) !important;
+  border: 1px solid rgba(0,0,0,.06) !important;
+  box-shadow: 0 0 0 1px rgba(0,0,0,.04),0 2px 8px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.04) !important;
+}
+body.light-mode .jstat:hover { border-color: rgba(0,0,0,.10) !important; box-shadow: 0 0 0 1px rgba(0,0,0,.06),0 4px 20px rgba(0,0,0,.10) !important; }
+body.light-mode .jstat-l { color: #52525B !important; }
+body.light-mode .jstat-v { color: #09090B !important; }
+
+/* Journal entry cards */
+body.light-mode .journal-entry {
+  background: linear-gradient(to bottom,#FFFFFF,rgba(255,255,255,.95)) !important;
+  border: 1px solid rgba(0,0,0,.06) !important;
+  box-shadow: 0 0 0 1px rgba(0,0,0,.04),0 2px 8px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.04) !important;
+}
+body.light-mode .journal-entry:hover { border-color: rgba(0,0,0,.10) !important; box-shadow: 0 0 0 1px rgba(0,0,0,.06),0 4px 20px rgba(0,0,0,.10) !important; }
+body.light-mode .journal-entry::before { background: linear-gradient(90deg,transparent,rgba(0,0,0,.04),transparent) !important; }
+body.light-mode .je-pair { color: #09090B !important; }
+body.light-mode .je-date,
+body.light-mode .je-meta { color: #52525B !important; }
+body.light-mode .je-note { color: #52525B !important; background: rgba(0,0,0,.03) !important; border-color: rgba(0,0,0,.06) !important; }
+
+/* Direction/outcome badges */
+body.light-mode .je-dir.buy   { background: rgba(22,163,74,.10) !important; color: #16A34A !important; border-color: rgba(22,163,74,.20) !important; }
+body.light-mode .je-dir.sell  { background: rgba(220,38,38,.10) !important; color: #DC2626 !important; border-color: rgba(220,38,38,.20) !important; }
+body.light-mode .je-outcome.win  { background: rgba(22,163,74,.10) !important; color: #16A34A !important; border-color: rgba(22,163,74,.20) !important; }
+body.light-mode .je-outcome.loss { background: rgba(220,38,38,.10) !important; color: #DC2626 !important; border-color: rgba(220,38,38,.20) !important; }
+body.light-mode .je-outcome.open { background: rgba(79,70,229,.10) !important; color: #4F46E5 !important; border-color: rgba(79,70,229,.20) !important; }
+
+/* Mistake chips */
+body.light-mode .mistake-chip { background: rgba(220,38,38,.07) !important; border-color: rgba(220,38,38,.18) !important; color: #DC2626 !important; }
+body.light-mode .mistake-chip.active,
+body.light-mode .mistake-chip.selected { background: rgba(220,38,38,.14) !important; border-color: rgba(220,38,38,.30) !important; }
+
+/* Filter buttons */
+body.light-mode .jfilter-btn { background: rgba(0,0,0,.04) !important; border-color: rgba(0,0,0,.08) !important; color: #52525B !important; }
+body.light-mode .jfilter-btn:hover { background: rgba(0,0,0,.07) !important; color: #09090B !important; }
+body.light-mode .jfilter-btn.active { background: rgba(79,70,229,.10) !important; border-color: rgba(79,70,229,.25) !important; color: #4F46E5 !important; }
+
+/* Primary action buttons */
+body.light-mode .journal-btn {
+  background: #4F46E5 !important; color: #fff !important;
+  box-shadow: 0 0 0 1px rgba(79,70,229,.4),0 4px 12px rgba(79,70,229,.25),inset 0 1px 0 0 rgba(255,255,255,.2) !important;
+}
+body.light-mode .journal-btn:hover { background: #4338CA !important; }
+body.light-mode .journal-btn.sec { background: rgba(0,0,0,.04) !important; color: #09090B !important; box-shadow: none !important; border: 1px solid rgba(0,0,0,.10) !important; }
+body.light-mode .journal-btn.sec:hover { background: rgba(0,0,0,.07) !important; border-color: rgba(0,0,0,.15) !important; }
+body.light-mode .port-btn { background: #4F46E5 !important; color: #fff !important; box-shadow: 0 0 0 1px rgba(79,70,229,.4),0 4px 12px rgba(79,70,229,.25),inset 0 1px 0 0 rgba(255,255,255,.2) !important; }
+body.light-mode .port-btn:hover { background: #4338CA !important; }
+
+/* Form inputs (page-specific) */
+body.light-mode .journal-input { background: #FFFFFF !important; border-color: rgba(0,0,0,.12) !important; color: #09090B !important; }
+body.light-mode .journal-input:focus { border-color: #4F46E5 !important; box-shadow: 0 0 0 3px rgba(79,70,229,.15) !important; }
+body.light-mode .journal-input::placeholder { color: #A1A1AA !important; }
+
+/* Textarea (page-specific — mirrors journal-input) */
+body.light-mode .journal-textarea { background: #FFFFFF !important; border-color: rgba(0,0,0,.12) !important; color: #09090B !important; }
+body.light-mode .journal-textarea:focus { border-color: #4F46E5 !important; box-shadow: 0 0 0 3px rgba(79,70,229,.15) !important; }
+body.light-mode .journal-textarea::placeholder { color: #A1A1AA !important; }
+
+/* Portfolio input */
+body.light-mode .port-input { background: #FFFFFF !important; border-color: rgba(0,0,0,.12) !important; color: #09090B !important; }
+body.light-mode .port-input:focus { border-color: #4F46E5 !important; box-shadow: 0 0 0 3px rgba(79,70,229,.15) !important; }
+
+/* Monthly P&L bars */
+body.light-mode .monthly-bar-pos { background: linear-gradient(to top,#16A34A,#4ADE80) !important; box-shadow: 0 0 8px rgba(22,163,74,.25) !important; }
+body.light-mode .monthly-bar-neg { background: linear-gradient(to top,#DC2626,#F87171) !important; box-shadow: 0 0 8px rgba(220,38,38,.25) !important; }
+body.light-mode .monthly-bar-lbl { color: #52525B !important; }
+body.light-mode .monthly-bar-wrap:hover .monthly-bar-pos,
+body.light-mode .monthly-bar-wrap:hover .monthly-bar-neg { box-shadow: 0 0 14px rgba(0,0,0,.18) !important; }
+
+/* Equity/chart bars */
+body.light-mode .ry-bar { background: rgba(79,70,229,.20) !important; }
+body.light-mode .ry-bar:hover { background: rgba(79,70,229,.35) !important; }
+
+/* Pivot rows */
+body.light-mode .pivot-row { border-bottom-color: rgba(0,0,0,.06) !important; }
+body.light-mode .pivot-row:hover { background: rgba(0,0,0,.02) !important; }
+body.light-mode .pivot-row-lbl { color: #52525B !important; }
+body.light-mode .pivot-row-val { color: #09090B !important; }
+body.light-mode .pivot-row.r { background: rgba(0,0,0,.01) !important; }
+
+/* Card header border */
+body.light-mode .ch { border-bottom-color: rgba(0,0,0,.06) !important; }
+body.light-mode .ct { color: #09090B !important; }
+
+/* Badge chips in card header */
+body.light-mode .b-blue { background: rgba(79,70,229,.10) !important; border-color: rgba(79,70,229,.20) !important; }
+
+/* Sentiment needle (white needle becomes dark for contrast on light bg) */
+body.light-mode .sent-needle { background: #09090B !important; box-shadow: 0 0 6px rgba(0,0,0,.20) !important; }
+body.light-mode .sent-labels { color: #52525B !important; }
+
+/* Focus-visible outlines */
+body.light-mode .journal-btn:focus-visible,
+body.light-mode .port-btn:focus-visible,
+body.light-mode .jfilter-btn:focus-visible,
+body.light-mode .mistake-chip:focus-visible,
+body.light-mode .badge:focus-visible,
+body.light-mode .je-del:focus-visible,
+body.light-mode .journal-input:focus-visible,
+body.light-mode .journal-textarea:focus-visible { outline-color: rgba(79,70,229,.50) !important; }
+
+/* Delete button hover */
+body.light-mode .je-del { color: #52525B !important; }
+body.light-mode .je-del:hover { color: #DC2626 !important; background: rgba(220,38,38,.08) !important; }
 </style>
 </head>
 <body>

@@ -204,6 +204,76 @@ select.enews-input{flex:0;min-width:170px;cursor:pointer}
 }
 
 body.light-mode .enews-card:hover{box-shadow:0 4px 20px rgba(0,0,0,.12)}
+
+/* ── LIGHT MODE ── */
+
+/* Page header */
+body.light-mode .page-title { background-image: linear-gradient(to bottom,#09090B,rgba(9,9,11,.70)) !important; -webkit-background-clip:text !important; background-clip:text !important; color:transparent !important; }
+body.light-mode .page-sub { color: #52525B !important; }
+
+/* Status pill */
+body.light-mode .enews-status { background: rgba(0,0,0,.04) !important; border-color: rgba(0,0,0,.08) !important; color: #52525B !important; }
+body.light-mode .enews-status.success { background: rgba(22,163,74,.08) !important; border-color: rgba(22,163,74,.20) !important; color: #16A34A !important; }
+body.light-mode .enews-status.error   { background: rgba(220,38,38,.08) !important; border-color: rgba(220,38,38,.20) !important; color: #DC2626 !important; }
+body.light-mode .enews-status::before { background: #A1A1AA !important; }
+body.light-mode .enews-status.success::before { background: #16A34A !important; box-shadow: 0 0 5px rgba(22,163,74,.6) !important; }
+body.light-mode .enews-status.error::before   { background: #DC2626 !important; box-shadow: 0 0 5px rgba(220,38,38,.6) !important; }
+
+/* Article cards — enews-card glass is handled by shared.css but deepen any page-specific overrides */
+body.light-mode .enews-card { color: #09090B !important; }
+body.light-mode .enews-source,
+body.light-mode .enews-time { color: #52525B !important; }
+body.light-mode .enews-title { color: #09090B !important; }
+body.light-mode .enews-summary { color: #52525B !important; }
+body.light-mode .enews-footer .rd { color: #52525B !important; }
+
+/* Sentiment pills */
+body.light-mode .enews-sent.pos { background: rgba(22,163,74,.10) !important; border-color: rgba(22,163,74,.22) !important; color: #16A34A !important; }
+body.light-mode .enews-sent.neg { background: rgba(220,38,38,.10) !important; border-color: rgba(220,38,38,.22) !important; color: #DC2626 !important; }
+body.light-mode .enews-sent.neu { background: rgba(79,70,229,.08) !important; border-color: rgba(79,70,229,.20) !important; color: #4F46E5 !important; }
+
+/* Search/filter inputs */
+body.light-mode .enews-input { background: #FFFFFF !important; border-color: rgba(0,0,0,.12) !important; color: #09090B !important; }
+body.light-mode .enews-input:focus { border-color: #4F46E5 !important; box-shadow: 0 0 0 3px rgba(79,70,229,.15) !important; }
+body.light-mode .enews-input::placeholder { color: #A1A1AA !important; }
+body.light-mode .enews-search-wrap { background: rgba(0,0,0,.03) !important; border-color: rgba(0,0,0,.08) !important; }
+body.light-mode .enews-search-icon { color: #A1A1AA !important; }
+body.light-mode .enews-search-wrap svg { color: #A1A1AA !important; }
+
+/* Filter / refresh buttons */
+body.light-mode .port-btn { background: rgba(0,0,0,.04) !important; border-color: rgba(0,0,0,.08) !important; color: #52525B !important; box-shadow: none !important; }
+body.light-mode .port-btn:hover { background: rgba(0,0,0,.07) !important; color: #09090B !important; }
+body.light-mode .port-btn.active { background: rgba(79,70,229,.10) !important; border-color: rgba(79,70,229,.25) !important; color: #4F46E5 !important; }
+
+/* Empty / error states */
+body.light-mode .enews-empty { color: #52525B !important; }
+body.light-mode .enews-empty .ico { color: #A1A1AA !important; }
+body.light-mode .error-retry-banner { background: rgba(220,38,38,.06) !important; border-color: rgba(220,38,38,.18) !important; color: #DC2626 !important; }
+body.light-mode .error-retry-btn { background: rgba(0,0,0,.04) !important; border-color: rgba(0,0,0,.10) !important; color: #09090B !important; }
+body.light-mode .error-retry-btn:hover { background: rgba(0,0,0,.08) !important; border-color: rgba(0,0,0,.16) !important; color: #09090B !important; }
+
+/* Feed grid — no color changes needed, just transparency is fine */
+body.light-mode .enews-grid { background: transparent !important; }
+
+/* Source pill — dark accent bg/color needs to flip to light tokens */
+body.light-mode .enews-source { background: rgba(79,70,229,.08) !important; border-color: rgba(79,70,229,.18) !important; color: #4F46E5 !important; }
+
+/* Card header row */
+body.light-mode .enews-card-hdr { color: #09090B !important; }
+
+/* Card footer border and hover "Read full story" link */
+body.light-mode .enews-footer { color: #52525B !important; border-color: rgba(0,0,0,.08) !important; }
+body.light-mode .enews-card:hover .enews-footer .rd { color: #4F46E5 !important; }
+
+/* Card top inner-glow line — suppress white glow on light bg */
+body.light-mode .enews-card::before { background: linear-gradient(90deg,transparent,rgba(0,0,0,.06),transparent) !important; }
+
+/* Article image border */
+body.light-mode .enews-img { border-color: rgba(0,0,0,.06) !important; }
+
+/* Skeleton loading cards */
+body.light-mode .enews-skel { background: rgba(0,0,0,.03) !important; border-color: rgba(0,0,0,.06) !important; box-shadow: 0 0 0 1px rgba(0,0,0,.04), 0 2px 8px rgba(0,0,0,.06) !important; }
+body.light-mode .enews-skel::after { background: linear-gradient(90deg,transparent,rgba(0,0,0,.04),transparent) !important; }
 </style>
 </head>
 <body>

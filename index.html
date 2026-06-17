@@ -1551,6 +1551,137 @@ a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid 
   .reveal{opacity:1!important;transform:none!important;transition:none!important;}
   .hero-content{transform:none!important;opacity:1!important;}
 }
+
+/* ════ LINEAR / MODERN — LIGHT MODE OVERRIDES ════ */
+
+/* Canvas & body */
+body.light-mode { background: #FAF8F6 !important; color: #09090B !important; }
+html.light-mode  { background: #FAF8F6 !important; }
+
+/* Ambient blobs → light mists */
+body.light-mode .lx-blob.b1 { background: radial-gradient(circle,rgba(79,70,229,.07),transparent 70%) !important; }
+body.light-mode .lx-blob.b2 { background: radial-gradient(circle,rgba(245,158,11,.05),transparent 70%) !important; }
+body.light-mode .lx-blob.b3 { background: radial-gradient(circle,rgba(100,116,139,.05),transparent 70%) !important; }
+body.light-mode .lx-blob.b4 { background: radial-gradient(circle,rgba(79,70,229,.04),transparent 70%) !important; }
+
+/* Hero section */
+body.light-mode .hero { background: transparent !important; }
+body.light-mode .hero-glow-blue,
+body.light-mode .hero-glow-red { opacity: .15 !important; }
+body.light-mode .hero-title { background-image: linear-gradient(to bottom,#09090B,rgba(9,9,11,.70)) !important; -webkit-background-clip:text !important; background-clip:text !important; color:transparent !important; }
+body.light-mode .hero-badge { background: rgba(0,0,0,.04) !important; border: 1px solid rgba(0,0,0,.08) !important; color: #52525B !important; }
+body.light-mode .hero-badge-dot { background: #4F46E5 !important; box-shadow: 0 0 6px rgba(79,70,229,.6) !important; }
+body.light-mode .hero-desc { color: #52525B !important; }
+body.light-mode .hero-trust-item { color: #52525B !important; }
+body.light-mode .hero-trust-item strong { color: #09090B !important; }
+
+/* Dashboard preview (inside hero) */
+body.light-mode .hero-visual { opacity: .9 !important; }
+body.light-mode .dp-card,
+body.light-mode .dp-inner { background: rgba(255,255,255,.92) !important; border-color: rgba(0,0,0,.08) !important; box-shadow: 0 4px 24px rgba(0,0,0,.10) !important; }
+body.light-mode .dp-label { color: #52525B !important; }
+body.light-mode .dp-price { color: #09090B !important; }
+body.light-mode .dp-bias-row { border-color: rgba(0,0,0,.06) !important; color: #52525B !important; }
+body.light-mode .dp-conf-cell { background: rgba(0,0,0,.04) !important; color: #09090B !important; }
+body.light-mode .dp-conf-cell.active { background: rgba(79,70,229,.12) !important; color: #4F46E5 !important; }
+
+/* Section titles & eyebrows */
+body.light-mode .section-title { background-image: linear-gradient(to bottom,#09090B,rgba(9,9,11,.70)) !important; -webkit-background-clip:text !important; background-clip:text !important; color:transparent !important; }
+body.light-mode .section-eyebrow { color: #52525B !important; }
+
+/* Feature bento cards */
+body.light-mode .feature-card {
+  background: linear-gradient(to bottom,#FFFFFF,rgba(255,255,255,.95)) !important;
+  border: 1px solid rgba(0,0,0,.06) !important;
+  box-shadow: 0 0 0 1px rgba(0,0,0,.04),0 2px 8px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.04) !important;
+  color: #09090B !important;
+}
+body.light-mode .feature-card:hover {
+  border-color: rgba(0,0,0,.10) !important;
+  box-shadow: 0 0 0 1px rgba(0,0,0,.06),0 4px 20px rgba(0,0,0,.10),0 0 40px rgba(79,70,229,.06) !important;
+}
+body.light-mode .feature-card::before { background: linear-gradient(90deg,transparent,rgba(0,0,0,.04),transparent) !important; }
+body.light-mode .feature-card h3 { color: #09090B !important; }
+body.light-mode .feature-card p { color: #52525B !important; }
+body.light-mode .feat-icon-box { background: rgba(79,70,229,.08) !important; border-color: rgba(79,70,229,.18) !important; }
+body.light-mode .feat-icon-box svg,
+body.light-mode .feat-icon-box span { color: #4F46E5 !important; }
+
+/* Steps (how it works) */
+body.light-mode .step { background: rgba(0,0,0,.02) !important; }
+body.light-mode .step-num { background: rgba(79,70,229,.08) !important; border-color: rgba(79,70,229,.20) !important; color: #4F46E5 !important; box-shadow: inset 0 1px 0 rgba(255,255,255,.8) !important; }
+body.light-mode .step h3 { color: #09090B !important; }
+body.light-mode .step p { color: #52525B !important; }
+
+/* Stats bar */
+body.light-mode .stats-bar { background: rgba(0,0,0,.03) !important; border-color: rgba(0,0,0,.06) !important; }
+body.light-mode .stat-num { color: #09090B !important; }
+body.light-mode .stat-label { color: #52525B !important; }
+body.light-mode .stats-inner::after,
+body.light-mode .stats-inner::before { background: rgba(0,0,0,.08) !important; }
+
+/* Testimonials */
+body.light-mode .testimonial-card {
+  background: linear-gradient(to bottom,#FFFFFF,rgba(255,255,255,.95)) !important;
+  border-color: rgba(0,0,0,.06) !important;
+  box-shadow: 0 0 0 1px rgba(0,0,0,.04),0 2px 8px rgba(0,0,0,.06) !important;
+}
+body.light-mode .testimonial-card blockquote { color: #52525B !important; }
+body.light-mode .testimonial-author strong { color: #09090B !important; }
+body.light-mode .testimonial-author span { color: #71717A !important; }
+
+/* CTA band */
+body.light-mode .cta-band { background: rgba(79,70,229,.04) !important; border-color: rgba(79,70,229,.15) !important; }
+body.light-mode .cta-band h2 { color: #09090B !important; }
+body.light-mode .cta-band p { color: #52525B !important; }
+body.light-mode .cta-card { background: linear-gradient(to bottom,#FFFFFF,rgba(255,255,255,.95)) !important; border-color: rgba(0,0,0,.06) !important; box-shadow: 0 4px 24px rgba(0,0,0,.08) !important; }
+
+/* Buttons */
+body.light-mode .btn-primary,
+body.light-mode .cta-btn {
+  background: #4F46E5 !important;
+  color: #fff !important;
+  box-shadow: 0 0 0 1px rgba(79,70,229,.4),0 4px 12px rgba(79,70,229,.25),inset 0 1px 0 0 rgba(255,255,255,.2) !important;
+}
+body.light-mode .btn-primary:hover,
+body.light-mode .cta-btn:hover {
+  background: #4338CA !important;
+  box-shadow: 0 0 0 1px rgba(79,70,229,.5),0 6px 22px rgba(79,70,229,.35),inset 0 1px 0 0 rgba(255,255,255,.25) !important;
+}
+body.light-mode .btn-secondary {
+  background: rgba(0,0,0,.04) !important;
+  border: 1px solid rgba(0,0,0,.10) !important;
+  color: #09090B !important;
+}
+body.light-mode .btn-secondary:hover { background: rgba(0,0,0,.07) !important; }
+
+/* Feature tags / pills */
+body.light-mode .feature-tags { background: rgba(0,0,0,.03) !important; border-color: rgba(0,0,0,.06) !important; }
+body.light-mode .ftag { background: rgba(0,0,0,.04) !important; border-color: rgba(0,0,0,.08) !important; color: #52525B !important; }
+
+/* Nav & mobile menu */
+body.light-mode .site-header { background: rgba(250,248,246,.92) !important; border-bottom-color: rgba(0,0,0,.06) !important; box-shadow: 0 1px 0 rgba(0,0,0,.04),0 4px 16px rgba(0,0,0,.06) !important; }
+body.light-mode .nav-link { color: #52525B !important; }
+body.light-mode .nav-link:hover { color: #09090B !important; background: rgba(0,0,0,.04) !important; }
+body.light-mode .nav-cta { background: #4F46E5 !important; box-shadow: 0 0 0 1px rgba(79,70,229,.4),0 4px 12px rgba(79,70,229,.25),inset 0 1px 0 rgba(255,255,255,.2) !important; }
+body.light-mode .mobile-nav { background: rgba(250,248,246,.97) !important; border-bottom-color: rgba(0,0,0,.06) !important; }
+body.light-mode .mobile-menu-btn { color: #52525B !important; }
+body.light-mode .logo-name { color: #09090B !important; }
+
+/* Footer */
+body.light-mode .site-footer { background: rgba(244,244,246,.95) !important; border-top-color: rgba(0,0,0,.06) !important; }
+body.light-mode .site-footer, body.light-mode .site-footer a, body.light-mode .site-footer p { color: #52525B !important; }
+body.light-mode .site-footer a:hover { color: #09090B !important; }
+
+/* Legal modal */
+body.light-mode #legalModal { background: #FFFFFF !important; color: #09090B !important; border-color: rgba(0,0,0,.08) !important; box-shadow: 0 8px 40px rgba(0,0,0,.12) !important; }
+
+/* Hero badge shimmer headline accent */
+body.light-mode .hl-blue { color: #4F46E5 !important; }
+body.light-mode .hero-eyebrow { color: #52525B !important; border-color: rgba(0,0,0,.08) !important; background: rgba(0,0,0,.04) !important; }
+
+/* Lx-spot spotlight */
+body.light-mode .lx-spot { background: radial-gradient(300px circle at var(--mx,50%) var(--my,50%),rgba(79,70,229,.09),transparent 65%) !important; }
 </style>
 </head>
 <body>
