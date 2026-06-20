@@ -944,11 +944,11 @@ body.light-mode .fx-toast {
 .skel-sm    { height: 9px; width: 40%; }
 
 /* ── PRICE FLASH ANIMATIONS ── */
-@keyframes flash-up { 0%{background:rgba(34,197,94,.28)} 100%{background:transparent} }
-@keyframes flash-dn { 0%{background:rgba(239,68,68,.28)} 100%{background:transparent} }
+@keyframes flash-up { 0%{background:rgba(34,197,94,.28);transform:scale(1.07)} 60%{transform:scale(1.02)} 100%{background:transparent;transform:scale(1)} }
+@keyframes flash-dn { 0%{background:rgba(239,68,68,.28);transform:scale(1.07)} 60%{transform:scale(1.02)} 100%{background:transparent;transform:scale(1)} }
 
-.price-flash-up { animation: flash-up .7s ease forwards; border-radius: 4px; }
-.price-flash-dn { animation: flash-dn .7s ease forwards; border-radius: 4px; }
+.price-flash-up { animation: flash-up .7s ease forwards; border-radius: 4px; display:inline-block; }
+.price-flash-dn { animation: flash-dn .7s ease forwards; border-radius: 4px; display:inline-block; }
 
 /* ── ERROR RETRY BANNERS ── */
 .error-retry-banner {
@@ -1251,3 +1251,43 @@ body.light-mode .badge { border-color: rgba(0,0,0,.08) !important; }
 
 /* Toast */
 body.light-mode .fx-toast { background: #FFFFFF !important; border-color: rgba(0,0,0,.08) !important; color: #09090B !important; box-shadow: 0 4px 20px rgba(0,0,0,.12) !important; }
+
+/* ════ SKIP LINK ════ */
+.skip-link{position:absolute;top:8px;left:8px;z-index:10000;padding:8px 16px;background:#5E6AD2;color:#fff;font-size:13px;font-weight:600;border-radius:6px;text-decoration:none;transform:translateY(-120%);transition:transform .2s;outline:none}
+.skip-link:focus{transform:translateY(0)}
+body.light-mode .skip-link{background:#4F46E5}
+
+/* ════ PAGE-LOAD CURTAIN ════ */
+#lx-curtain{position:fixed;inset:0;z-index:9999;background:#050506;pointer-events:none;opacity:1;transition:opacity 500ms ease}
+body.light-mode #lx-curtain{background:#EBEBF0}
+
+/* ════ LIST STAGGER ANIMATION ════ */
+@keyframes lx-item-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.lx-item-in{animation:lx-item-in 300ms calc(var(--i,0)*55ms) both}
+
+/* ════ KEYBOARD SHORTCUTS MODAL ════ */
+#lx-shortcuts-modal{position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.65);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center}
+#lx-shortcuts-modal[hidden]{display:none!important}
+.lx-shortcuts-box{background:#0a0a0c;border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:24px;min-width:300px;max-width:90vw;box-shadow:0 8px 40px rgba(0,0,0,.6)}
+.lx-shortcuts-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.lx-shortcuts-title{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted2)}
+.lx-shortcuts-close{background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:4px 6px;line-height:1;border-radius:4px;transition:color .15s}
+.lx-shortcuts-close:hover{color:var(--text)}
+.lx-shortcut-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:13px;color:var(--text)}
+.lx-shortcut-row:last-child{border-bottom:none}
+.lx-shortcut-row span{color:var(--muted2)}
+kbd{display:inline-flex;align-items:center;justify-content:center;min-width:26px;padding:3px 6px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);border-radius:5px;font-family:var(--mono);font-size:11px;font-weight:700;color:var(--text);letter-spacing:.5px}
+
+/* prefers-reduced-motion: stop logo bar + stagger animations */
+@media(prefers-reduced-motion:reduce){.logo-bar{animation:none!important}.lx-item-in{animation:none!important;opacity:1!important;transform:none!important}}
+
+/* Shortcuts modal light mode */
+body.light-mode .lx-shortcuts-box{background:#FFFFFF;border-color:rgba(0,0,0,.08);box-shadow:0 8px 40px rgba(0,0,0,.12)}
+body.light-mode .lx-shortcut-row{border-bottom-color:rgba(0,0,0,.06)}
+body.light-mode .lx-shortcut-row span{color:#52525B}
+body.light-mode kbd{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.10);color:#09090B}
+
+/* PAGE TRANSITIONS */
+@keyframes lx-page-leave{from{opacity:1}to{opacity:0}}
+html.page-leaving{animation:lx-page-leave 200ms ease forwards}
+@media(prefers-reduced-motion:reduce){html.page-leaving{animation:none}}

@@ -1680,6 +1680,28 @@ body.light-mode .site-footer a:hover { color: #09090B !important; }
 /* Legal modal */
 body.light-mode #legalModal { background: #FFFFFF !important; color: #09090B !important; border-color: rgba(0,0,0,.08) !important; box-shadow: 0 8px 40px rgba(0,0,0,.12) !important; }
 
+/* ── Skip link ── */
+.skip-link-idx{position:absolute;top:8px;left:8px;z-index:10000;padding:8px 16px;background:#5E6AD2;color:#fff;font-size:13px;font-weight:600;border-radius:6px;text-decoration:none;transform:translateY(-120%);transition:transform .2s;outline:none}
+.skip-link-idx:focus{transform:translateY(0)}
+body.light-mode .skip-link-idx{background:#4F46E5}
+
+/* ── Page-load curtain ── */
+#lx-curtain{position:fixed;inset:0;z-index:9999;background:#050506;pointer-events:none;opacity:1;transition:opacity 500ms ease}
+body.light-mode #lx-curtain{background:#EBEBF0}
+@keyframes lx-page-leave{from{opacity:1}to{opacity:0}}
+html.page-leaving{animation:lx-page-leave 200ms ease forwards}
+@media(prefers-reduced-motion:reduce){html.page-leaving{animation:none}}
+
+/* ── Modal entrance animation ── */
+@keyframes modal-in{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+@keyframes backdrop-in{from{opacity:0}to{opacity:1}}
+#legalModal[open]{animation:modal-in .25s both}
+#legalModal[open]::backdrop{animation:backdrop-in .25s both}
+@supports(selector(dialog:has(+*)) and (not (display: none))){
+  @starting-style{#legalModal[open]{opacity:0;transform:scale(.96)}}
+  @starting-style{#legalModal[open]::backdrop{opacity:0}}
+}
+
 /* Hero badge shimmer headline accent */
 body.light-mode .hl-blue { color: #4F46E5 !important; }
 body.light-mode .hero-eyebrow { color: #52525B !important; border-color: rgba(0,0,0,.08) !important; background: rgba(0,0,0,.04) !important; }
@@ -1689,6 +1711,8 @@ body.light-mode .lx-spot { background: radial-gradient(200px circle at var(--mx,
 </style>
 </head>
 <body>
+<div id="lx-curtain"></div>
+<a class="skip-link-idx" href="#main-content">Skip to main content</a>
 <div class="lx-blob b1" aria-hidden="true"></div>
 <div class="lx-blob b2" aria-hidden="true"></div>
 <div class="lx-blob b3" aria-hidden="true"></div>
@@ -1737,7 +1761,7 @@ body.light-mode .lx-spot { background: radial-gradient(200px circle at var(--mx,
 </nav>
 
 <!-- ── HERO ── -->
-<section class="hero" aria-label="Hero">
+<section class="hero" aria-label="Hero" id="main-content">
   <div class="hero-glow-blue" aria-hidden="true"></div>
   <div class="hero-glow-red"  aria-hidden="true"></div>
   <div class="hero-inner">
@@ -2009,19 +2033,19 @@ body.light-mode .lx-spot { background: radial-gradient(200px circle at var(--mx,
   <div class="section-label" style="margin-bottom:48px;">By The Numbers</div>
   <div class="stats-inner">
     <div class="stat-card">
-      <div class="stat-num">30+</div>
+      <div class="stat-num" data-count="30" data-suffix="+">30+</div>
       <div class="stat-label">Live Instruments</div>
     </div>
     <div class="stat-card">
-      <div class="stat-num">6</div>
+      <div class="stat-num" data-count="6">6</div>
       <div class="stat-label">Bias Signals</div>
     </div>
     <div class="stat-card">
-      <div class="stat-num">60s</div>
+      <div class="stat-num" data-count="60" data-suffix="s">60s</div>
       <div class="stat-label">Refresh Cycle</div>
     </div>
     <div class="stat-card">
-      <div class="stat-num">100%</div>
+      <div class="stat-num" data-count="100" data-suffix="%">100%</div>
       <div class="stat-label">Free · No Login</div>
     </div>
   </div>
@@ -2234,6 +2258,35 @@ document.querySelectorAll('.feature-card,.stat-card,.step,.testimonial-card').fo
 })();
 </script>
 <script>
+/* ── Page-load curtain fade-out ── */
+(function(){
+  var _ct; try{_ct=localStorage.getItem('fxdesk_theme_v1');}catch(e){}
+  var cur=document.getElementById('lx-curtain');
+  if(cur&&_ct==='light')cur.style.background='#EBEBF0';
+  requestAnimationFrame(function(){requestAnimationFrame(function(){
+    var c=document.getElementById('lx-curtain');
+    if(c){c.style.opacity='0';c.addEventListener('transitionend',function(){c.remove();},{once:true});}
+  });});
+  /* ── Stat counter animation ── */
+  function animCount(el,to,suffix,dur){
+    if(!el)return;
+    if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches){el.textContent=to+suffix;return;}
+    var start=null,fmt=function(v){return Math.round(v)+suffix;};
+    function step(ts){if(!start)start=ts;var p=Math.min((ts-start)/dur,1),e=1-Math.pow(1-p,3);el.textContent=fmt(to*e);if(p<1)requestAnimationFrame(step);}
+    requestAnimationFrame(step);
+  }
+  var countersRan=false;
+  var statObs=new IntersectionObserver(function(entries){
+    if(countersRan)return;
+    var anyIn=entries.some(function(e){return e.isIntersecting;});
+    if(!anyIn)return;
+    countersRan=true;
+    document.querySelectorAll('.stat-num[data-count]').forEach(function(el){
+      animCount(el,parseInt(el.dataset.count,10),el.dataset.suffix||'',900);
+    });
+  },{threshold:0.2});
+  document.querySelectorAll('.stat-card').forEach(function(c){statObs.observe(c);});
+})();
 /* ── Hero scroll-parallax (Linear/Modern redesign) ── */
 (function(){
   if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches)return;
@@ -2274,6 +2327,24 @@ document.querySelectorAll('.feature-card,.stat-card,.step,.testimonial-card').fo
     });
   },{threshold:0.15});
   els.forEach(function(el){io.observe(el);});
+})();
+</script>
+<script>
+/* ── Page transitions ── */
+(function(){
+  document.addEventListener('click',function(e){
+    var a=e.target.closest('a[href]');
+    if(!a)return;
+    var href=a.getAttribute('href');
+    if(!href||href.startsWith('#')||href.startsWith('mailto:')||href.startsWith('javascript:'))return;
+    if(a.target==='_blank'||e.ctrlKey||e.metaKey||e.shiftKey||e.altKey)return;
+    try{var url=new URL(href,location.href);if(url.origin!==location.origin)return;if(!/\.html(\?|#|$)/.test(url.pathname)&&url.pathname!=='/'&&!url.pathname.endsWith('/'))return;}catch(err){return;}
+    e.preventDefault();
+    var dest=a.href;
+    if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches){location.href=dest;return;}
+    document.documentElement.classList.add('page-leaving');
+    setTimeout(function(){location.href=dest;},200);
+  });
 })();
 </script>
 </body>

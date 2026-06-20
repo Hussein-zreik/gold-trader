@@ -100,7 +100,7 @@ ${!isLanding ? `<div class="mobile-search-overlay" id="mobileSearchOverlay" hidd
     <input type="search" class="mobile-search-overlay-input" id="mobileSearchOverlayInput" placeholder="Search pages and features…" autocomplete="off" spellcheck="false" aria-label="Search pages and features">
     <button type="button" class="mobile-search-close-btn" onclick="FXShared.toggleMobileSearch()" aria-label="Close search">✕</button>
   </div>
-  <div class="mobile-search-overlay-results" id="mobileSearchOverlayResults"></div>
+  <div class="mobile-search-overlay-results" id="mobileSearchOverlayResults" role="listbox"></div>
 </div>` : ''}`;
   }
 
@@ -160,6 +160,25 @@ ${!isLanding ? `<div class="mobile-search-overlay" id="mobileSearchOverlay" hidd
 
   /* ── INJECT ── */
   function inject(){
+    // Page-load curtain (fades out after first paint)
+    if(!document.getElementById('lx-curtain')){
+      var curtainEl = document.createElement('div');
+      curtainEl.id = 'lx-curtain';
+      // Read theme from localStorage so curtain colour matches background immediately
+      var _ct; try { _ct = localStorage.getItem('fxdesk_theme_v1'); } catch(e){}
+      if(_ct === 'light') curtainEl.style.background = '#EBEBF0';
+      document.body.insertBefore(curtainEl, document.body.firstChild);
+    }
+
+    // Skip link
+    if(!document.querySelector('.skip-link')){
+      var skipEl = document.createElement('a');
+      skipEl.className = 'skip-link';
+      skipEl.href = '#main-content';
+      skipEl.textContent = 'Skip to main content';
+      document.body.insertBefore(skipEl, document.body.firstChild);
+    }
+
     // Insert header before <body>'s first child
     const headerEl = document.createElement('div');
     headerEl.innerHTML = buildHeader();
@@ -207,6 +226,25 @@ ${!isLanding ? `<div class="mobile-search-overlay" id="mobileSearchOverlay" hidd
     if(!nav) return;
     const open = nav.classList.toggle('open');
     if(btn){ btn.setAttribute('aria-expanded', open); btn.textContent = open ? '✕' : '☰'; }
+    if(open){
+      var focusables = Array.from(nav.querySelectorAll('a,button,[tabindex]:not([tabindex="-1"])'));
+      if(focusables.length) focusables[0].focus();
+      nav._trapFn = function(e){
+        if(e.key !== 'Tab') return;
+        var items = Array.from(nav.querySelectorAll('a,button,[tabindex]:not([tabindex="-1"])'));
+        if(!items.length) return;
+        var first = items[0], last = items[items.length-1];
+        if(e.shiftKey){ if(document.activeElement === first){ e.preventDefault(); last.focus(); } }
+        else { if(document.activeElement === last){ e.preventDefault(); first.focus(); } }
+      };
+      nav.addEventListener('keydown', nav._trapFn);
+      nav._escapeFn = function(e){ if(e.key === 'Escape') toggleMobile(); };
+      document.addEventListener('keydown', nav._escapeFn);
+    } else {
+      if(nav._trapFn){ nav.removeEventListener('keydown', nav._trapFn); delete nav._trapFn; }
+      if(nav._escapeFn){ document.removeEventListener('keydown', nav._escapeFn); delete nav._escapeFn; }
+      if(btn) btn.focus();
+    }
   }
 
   /* ── CLOCK (dashboard only) ── */
@@ -452,12 +490,101 @@ ${!isLanding ? `<div class="mobile-search-overlay" id="mobileSearchOverlay" hidd
     });
   }
 
+  /* ── ANIMATED COUNTER ── */
+  function animateCount(el, from, to, duration, formatter){
+    if(!el) return;
+    if(window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches){
+      el.textContent = formatter ? formatter(to) : Math.round(to).toLocaleString();
+      return;
+    }
+    var startTime = null;
+    var range = to - from;
+    var fmt = formatter || function(v){ return Math.round(v).toLocaleString(); };
+    function step(ts){
+      if(!startTime) startTime = ts;
+      var elapsed = ts - startTime;
+      var progress = Math.min(elapsed / duration, 1);
+      var eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = fmt(from + range * eased);
+      if(progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  /* ── KEYBOARD SHORTCUTS ── */
+  function initPageTransitions(){
+    document.addEventListener('click', function(e){
+      var a = e.target.closest('a[href]');
+      if(!a) return;
+      var href = a.getAttribute('href');
+      // Only intercept same-origin internal HTML navigation
+      if(!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('javascript:')) return;
+      if(a.target === '_blank' || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
+      try {
+        var url = new URL(href, location.href);
+        if(url.origin !== location.origin) return;
+        if(!/\.html(\?|#|$)/.test(url.pathname) && url.pathname !== '/' && !url.pathname.endsWith('/')) return;
+      } catch(err){ return; }
+      e.preventDefault();
+      var dest = a.href;
+      var pref = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if(pref){ location.href = dest; return; }
+      document.documentElement.classList.add('page-leaving');
+      setTimeout(function(){ location.href = dest; }, 200);
+    });
+  }
+
+  function initKeyboardShortcuts(){
+    var NAV_SHORTCUTS = { d:'dashboard.html', j:'journal.html', p:'portfolio.html', n:'news.html', c:'calendar.html' };
+
+    // Build modal
+    var modal = document.createElement('div');
+    modal.id = 'lx-shortcuts-modal';
+    modal.setAttribute('role','dialog');
+    modal.setAttribute('aria-modal','true');
+    modal.setAttribute('aria-label','Keyboard shortcuts');
+    modal.hidden = true;
+    modal.innerHTML =
+      '<div class="lx-shortcuts-box">' +
+        '<div class="lx-shortcuts-hdr">' +
+          '<span class="lx-shortcuts-title">Keyboard Shortcuts</span>' +
+          '<button class="lx-shortcuts-close" aria-label="Close shortcuts">✕</button>' +
+        '</div>' +
+        '<div class="lx-shortcuts-list">' +
+          '<div class="lx-shortcut-row"><kbd>D</kbd><span>Dashboard</span></div>' +
+          '<div class="lx-shortcut-row"><kbd>J</kbd><span>Journal</span></div>' +
+          '<div class="lx-shortcut-row"><kbd>P</kbd><span>Portfolio</span></div>' +
+          '<div class="lx-shortcut-row"><kbd>N</kbd><span>News</span></div>' +
+          '<div class="lx-shortcut-row"><kbd>C</kbd><span>Calendar</span></div>' +
+          '<div class="lx-shortcut-row"><kbd>/</kbd><span>Focus search</span></div>' +
+          '<div class="lx-shortcut-row"><kbd>?</kbd><span>Show shortcuts</span></div>' +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(modal);
+
+    modal.querySelector('.lx-shortcuts-close').addEventListener('click', function(){ modal.hidden = true; });
+    modal.addEventListener('click', function(e){ if(e.target === modal) modal.hidden = true; });
+    document.addEventListener('keydown', function(e){
+      if(!modal.hidden && e.key === 'Escape'){ modal.hidden = true; }
+    });
+
+    document.addEventListener('keydown', function(e){
+      if(e.ctrlKey || e.metaKey || e.altKey) return;
+      var tag = (document.activeElement || {}).tagName || '';
+      if(tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+      var key = e.key.toLowerCase();
+      if(e.key === '?'){ e.preventDefault(); modal.hidden = !modal.hidden; return; }
+      if(NAV_SHORTCUTS[key] && key !== '/'){ e.preventDefault(); window.location.href = NAV_SHORTCUTS[key]; }
+    });
+  }
+
   /* ── PUBLIC API ── */
   window.FXShared = {
     toggleTheme: function(){ applyTheme(document.body.classList.contains('light-mode')); },
     toggleMobile: toggleMobile,
     toggleMobileSearch: toggleMobileSearch,
     toast: showToast,
+    animateCount: animateCount,
   };
 
   /* ── INIT ── */
@@ -467,6 +594,15 @@ ${!isLanding ? `<div class="mobile-search-overlay" id="mobileSearchOverlay" hidd
     initSearch();
     initToast();
     initPWA();
+    initKeyboardShortcuts();
+    initPageTransitions();
+    // Fade out page-load curtain after first paint
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){
+        var cur = document.getElementById('lx-curtain');
+        if(cur){ cur.style.opacity='0'; cur.addEventListener('transitionend',function(){cur.remove();},{once:true}); }
+      });
+    });
     // Spotlight listener for Linear skin
     (function(){
       function addSpots(){

@@ -597,6 +597,24 @@ body.light-mode #calTzLabel { color: #52525B !important; }
 
 /* Filter panel */
 body.light-mode #filterPanel { background: #FFFFFF !important; border-color: rgba(0,0,0,.08) !important; box-shadow: 0 4px 20px rgba(0,0,0,.10) !important; }
+
+/* ── Next Event Countdown Hero ── */
+.cal-countdown-hero{display:flex;align-items:center;gap:20px;padding:18px 24px;margin-bottom:20px;border-radius:16px;background:linear-gradient(to bottom,rgba(94,106,210,.14),rgba(94,106,210,.06));border:1px solid rgba(94,106,210,.28);box-shadow:0 0 0 1px rgba(94,106,210,.10),0 4px 20px rgba(94,106,210,.08);position:relative;overflow:hidden}
+.cal-countdown-hero::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(94,106,210,.5),transparent)}
+.cal-countdown-next-lbl{font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.cal-countdown-name{font-family:var(--heading);font-size:15px;font-weight:700;color:var(--text);line-height:1.25;max-width:340px}
+.cal-countdown-meta{display:flex;gap:8px;align-items:center;margin-top:6px;flex-wrap:wrap}
+.cal-countdown-flag{font-size:18px;line-height:1}
+.cal-countdown-cur{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.8px;color:var(--muted2)}
+.cal-countdown-badge{font-family:var(--mono);font-size:9px;font-weight:700;padding:3px 8px;border-radius:9999px;letter-spacing:.6px}
+.cal-countdown-badge.high{background:rgba(239,68,68,.15);color:#f87171;border:1px solid rgba(239,68,68,.30)}
+.cal-countdown-badge.cb{background:rgba(168,85,247,.15);color:#c084fc;border:1px solid rgba(168,85,247,.30)}
+.cal-countdown-timer{margin-left:auto;text-align:right;flex-shrink:0}
+.cal-countdown-digits{font-family:var(--mono);font-size:28px;font-weight:800;color:#5E6AD2;letter-spacing:2px;line-height:1;font-variant-numeric:tabular-nums}
+.cal-countdown-timer-lbl{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-top:4px}
+@media(max-width:600px){.cal-countdown-hero{flex-wrap:wrap}.cal-countdown-timer{margin-left:0;text-align:left}.cal-countdown-digits{font-size:22px}}
+body.light-mode .cal-countdown-hero{background:linear-gradient(to bottom,rgba(79,70,229,.08),rgba(79,70,229,.03))!important;border-color:rgba(79,70,229,.22)!important}
+body.light-mode .cal-countdown-digits{color:#4F46E5!important}
 </style>
 </head>
 <body>
@@ -604,6 +622,23 @@ body.light-mode #filterPanel { background: #FFFFFF !important; border-color: rgb
 <div class="cal-page">
   <div class="cal-title">Economic Calendar</div>
   <div class="cal-subtitle">Your trading companion for economic event risk. High-impact events move gold and forex markets instantly — don't get caught off-guard.</div>
+
+  <!-- Next Event Countdown Hero -->
+  <div class="cal-countdown-hero" id="calCountdownHero" style="display:none">
+    <div class="cal-countdown-info">
+      <div class="cal-countdown-next-lbl">Next High-Impact Event</div>
+      <div class="cal-countdown-name" id="calCdName">—</div>
+      <div class="cal-countdown-meta">
+        <span class="cal-countdown-flag" id="calCdFlag">🌐</span>
+        <span class="cal-countdown-cur" id="calCdCur"></span>
+        <span class="cal-countdown-badge" id="calCdBadge">HIGH</span>
+      </div>
+    </div>
+    <div class="cal-countdown-timer">
+      <div class="cal-countdown-digits" id="calCdTime">--:--:--</div>
+      <div class="cal-countdown-timer-lbl">Days · Hours · Mins · Secs</div>
+    </div>
+  </div>
 
   <div class="cal-card cal-reveal">
 
@@ -974,6 +1009,51 @@ function render(){
 
   if(!html) html='<div class="cal-empty">No events for this period.</div>';
   el.innerHTML=html;
+  updateCountdownHero();
+}
+
+// ── COUNTDOWN HERO ──
+var _cdInterval=null;
+function updateCountdownHero(){
+  const now=new Date();
+  const candidates=[...allEvents,...CB_EVENTS].filter(e=>{
+    if(!e.date)return false;
+    const imp=(e.impact||'').toLowerCase();
+    return (imp==='high'||imp==='cb')&&new Date(e.date)>now;
+  }).sort((a,b)=>new Date(a.date)-new Date(b.date));
+  const hero=document.getElementById('calCountdownHero');
+  if(!candidates.length){if(hero)hero.style.display='none';return;}
+  const next=candidates[0];
+  const dt=new Date(next.date);
+  if(hero)hero.style.display='flex';
+  const nameEl=document.getElementById('calCdName');
+  const flagEl=document.getElementById('calCdFlag');
+  const curEl=document.getElementById('calCdCur');
+  const badgeEl=document.getElementById('calCdBadge');
+  if(nameEl)nameEl.textContent=next.title||'—';
+  if(flagEl)flagEl.textContent=FLAGS[next.currency]||'🌐';
+  if(curEl)curEl.textContent=next.currency||'';
+  const imp=(next.impact||'').toLowerCase();
+  if(badgeEl){badgeEl.textContent=imp==='cb'?'CB MEETING':'HIGH IMPACT';badgeEl.className='cal-countdown-badge '+(imp==='cb'?'cb':'high');}
+  if(_cdInterval)clearInterval(_cdInterval);
+  function tick(){
+    const diff=new Date(next.date)-new Date();
+    const el=document.getElementById('calCdTime');
+    if(!el)return;
+    if(diff<=0){
+      el.textContent='00:00:00:00';
+      clearInterval(_cdInterval);
+      setTimeout(updateCountdownHero,1000);
+      return;
+    }
+    const d=Math.floor(diff/86400000);
+    const h=Math.floor((diff%86400000)/3600000);
+    const m=Math.floor((diff%3600000)/60000);
+    const s=Math.floor((diff%60000)/1000);
+    el.textContent=`${String(d).padStart(2,'0')}:${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  }
+  tick();
+  _cdInterval=setInterval(tick,1000);
 }
 
 // ── INIT ──

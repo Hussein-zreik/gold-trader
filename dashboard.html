@@ -374,9 +374,10 @@ body.light-mode .mh-gold .mh-val{color:#B45309 !important;}
 .ticker-price{font-variant-numeric:tabular-nums!important;font-weight:700!important}
 
 /* ── Sessions bar ── */
-.sess-pill{font-weight:600!important;font-size:9px!important;letter-spacing:.5px!important;padding:3px 9px!important}
+.sess-pill{font-weight:600!important;font-size:9px!important;letter-spacing:.5px!important;padding:3px 9px!important;display:flex!important;align-items:center!important;gap:4px!important}
 @keyframes sess-pulse{0%,100%{box-shadow:0 0 3px rgba(34,197,94,.5)}50%{box-shadow:0 0 8px rgba(34,197,94,.85),0 0 14px rgba(34,197,94,.25)}}
 .sess-open .sess-dot{animation:sess-pulse 2.5s ease-in-out infinite!important}
+.sess-cd{font-family:var(--mono);font-size:8px!important;font-weight:500!important;letter-spacing:0!important;color:var(--muted);opacity:.8;white-space:nowrap}
 
 /* ── Market hero strip ── */
 .mkt-hero{display:flex;align-items:center;background:linear-gradient(90deg,var(--bg2),var(--bg3));border-bottom:1px solid rgba(22,32,50,.9);padding:0 24px;gap:0;overflow-x:auto;scrollbar-width:none;min-height:60px}
@@ -541,10 +542,10 @@ body.light-mode .mh-gold .mh-val{color:#B45309 !important;}
 <!-- SESSION INDICATOR -->
 <div class="sessions-bar" id="sessionsBar" aria-label="Market session status">
   <span class="sess-label">SESSIONS</span>
-  <div class="sess-pill" id="sessSydney"><span class="sess-dot"></span>Sydney</div>
-  <div class="sess-pill" id="sessTokyo"><span class="sess-dot"></span>Tokyo</div>
-  <div class="sess-pill" id="sessLondon"><span class="sess-dot"></span>London</div>
-  <div class="sess-pill" id="sessNewYork"><span class="sess-dot"></span>New York</div>
+  <div class="sess-pill" id="sessSydney"><span class="sess-dot"></span>Sydney<span class="sess-cd" id="sessSydneyCD"></span></div>
+  <div class="sess-pill" id="sessTokyo"><span class="sess-dot"></span>Tokyo<span class="sess-cd" id="sessTokyoCD"></span></div>
+  <div class="sess-pill" id="sessLondon"><span class="sess-dot"></span>London<span class="sess-cd" id="sessLondonCD"></span></div>
+  <div class="sess-pill" id="sessNewYork"><span class="sess-dot"></span>New York<span class="sess-cd" id="sessNewYorkCD"></span></div>
   <span class="sess-note" id="sessNote"></span>
 </div>
 
@@ -1938,6 +1939,40 @@ function renderEconomyNews(){
 if($('enewsSearch')) $('enewsSearch').addEventListener('input', renderEconomyNews);
 if($('enewsCategory')) $('enewsCategory').addEventListener('change', fetchEconomyNews);
 addPostRefreshHook(()=>{updateSMC(),updateMacroRegime(),loadOptionssentiment()}),window.addEventListener("load",()=>{setTimeout(()=>{loadOptionssentiment(),loadRealYield()},2e3)}),updateMarketStatus(),setInterval(updateMarketStatus,6e4),addPostRefreshHook(()=>{}),window.addEventListener("load",()=>{const _hash=window.location.hash.replace('#','');const _savedPage=_hash&&['dashboard','journal','portfolio','news','calendar'].includes(_hash)?_hash:null;try{const e=_savedPage||localStorage.getItem("fxdesk_page");if(e&&"dashboard"!==e)switchPage(e,null)}catch(e){}}),window.addEventListener("unhandledrejection",e=>{const t=e?.reason?.message||"";(t.includes("Failed to fetch")||t.includes("NetworkError")||t.includes("Load failed"))&&e.preventDefault()});</script>
+<script>
+/* ── Session Countdown (B3) ── */
+(function(){
+  var SESSIONS=[
+    {id:'sessSydney',cdId:'sessSydneyCD',open:21*60,close:6*60},
+    {id:'sessTokyo',cdId:'sessTokyoCD',open:23*60,close:8*60},
+    {id:'sessLondon',cdId:'sessLondonCD',open:7*60,close:16*60},
+    {id:'sessNewYork',cdId:'sessNewYorkCD',open:12*60,close:21*60}
+  ];
+  function fmt2(n){return String(Math.floor(n)).padStart(2,'0');}
+  function updateSessionCountdowns(){
+    var now=new Date();
+    var cur=now.getUTCHours()*60+now.getUTCMinutes();
+    SESSIONS.forEach(function(s){
+      var el=document.getElementById(s.cdId);if(!el)return;
+      var pill=document.getElementById(s.id);
+      var isOpen=s.close<s.open?(cur>=s.open||cur<s.close):(cur>=s.open&&cur<s.close);
+      var target,label;
+      if(isOpen){target=s.close;label='closes';} else {target=s.open;label='opens';}
+      var mins;
+      if(isOpen){
+        mins=target>cur?target-cur:target+1440-cur;
+      } else {
+        mins=target>cur?target-cur:target+1440-cur;
+      }
+      var h=Math.floor(mins/60),m=mins%60;
+      el.textContent=h>0?label+' in '+h+'h '+fmt2(m)+'m':label+' in '+fmt2(m)+'m';
+      if(pill){pill.style.flexDirection='column';pill.style.alignItems='flex-start';pill.style.lineHeight='1.1';}
+    });
+  }
+  updateSessionCountdowns();
+  setInterval(updateSessionCountdowns,60000);
+})();
+</script>
 <!-- KEYBOARD SHORTCUTS OVERLAY -->
 <div class="kbd-overlay" id="kbdOverlay" onclick="hideKbd()">
   <div class="kbd-box" onclick="event.stopPropagation()">

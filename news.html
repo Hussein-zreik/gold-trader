@@ -258,6 +258,13 @@ body.light-mode .error-retry-btn:hover { background: rgba(0,0,0,.08) !important;
 /* Feed grid — no color changes needed, just transparency is fine */
 body.light-mode .enews-grid { background: transparent !important; }
 
+/* Bookmark button */
+.bkmk-btn{background:none;border:none;cursor:pointer;font-size:14px;line-height:1;padding:3px 6px;border-radius:5px;transition:transform .15s,opacity .15s;opacity:.5;color:var(--muted)}
+.bkmk-btn:hover{opacity:1;transform:scale(1.2)}
+.bkmk-btn.saved{opacity:1;color:#F85149}
+.enews-read-time{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:.4px}
+.port-btn.saved-active{background:rgba(94,106,210,.22)!important;border-color:var(--lx-accent)!important;color:var(--text)!important}
+
 /* Source pill — dark accent bg/color needs to flip to light tokens */
 body.light-mode .enews-source { background: rgba(79,70,229,.08) !important; border-color: rgba(79,70,229,.18) !important; color: #4F46E5 !important; }
 
@@ -300,6 +307,7 @@ body.light-mode .enews-skel::after { background: linear-gradient(90deg,transpare
         <option value="stocks">Stocks</option>
       </select>
       <button type="button" class="port-btn" onclick="fetchEconomyNews()">🔄 Refresh</button>
+      <button type="button" class="port-btn" id="savedFilterBtn" onclick="toggleSavedFilter(this)">♥ Saved</button>
     </div>
     <div class="enews-status" id="enewsStatus">Loading news…</div>
     <div class="enews-grid" id="enewsFeed"></div>
@@ -315,8 +323,28 @@ function localTs(e){return e?e.toLocaleString("en-US",{month:"short",day:"numeri
 const ENEWS_BACKEND_URL='https://economy-news-hub.onrender.com';
 const ENEWS_CACHE_KEY='fxdesk_enews_cache_v1';
 const ENEWS_CACHE_TTL=10*60*1000;
+const BOOKMARKS_KEY='fxdesk_bookmarks_v1';
 let enewsArticles=[];
 let enewsLoaded=false;
+let showingSaved=false;
+
+function getBookmarks(){try{return JSON.parse(localStorage.getItem(BOOKMARKS_KEY))||[];}catch(e){return[];}}
+function saveBookmarks(bks){try{localStorage.setItem(BOOKMARKS_KEY,JSON.stringify(bks));}catch(e){}}
+function isBookmarked(url){return getBookmarks().some(b=>b.url===url);}
+function toggleBookmark(url,articleObj){
+  let bks=getBookmarks();
+  const idx=bks.findIndex(b=>b.url===url);
+  if(idx>-1){bks.splice(idx,1);}else{bks.unshift(articleObj);}
+  saveBookmarks(bks);
+  document.querySelectorAll(`.bkmk-btn[data-url="${CSS.escape(url)}"]`).forEach(btn=>{btn.classList.toggle('saved',idx===-1);btn.title=idx===-1?'Remove bookmark':'Save article';});
+  if(showingSaved)renderEconomyNews();
+}
+function toggleSavedFilter(btn){
+  showingSaved=!showingSaved;
+  btn.classList.toggle('saved-active',showingSaved);
+  btn.textContent=showingSaved?'♥ All News':'♥ Saved';
+  renderEconomyNews();
+}
 
 function populateNewsPage(){
   if(!enewsLoaded){ enewsLoaded=true; fetchEconomyNews(); }
@@ -378,9 +406,11 @@ function renderEconomyNews(){
   const feed=$('enewsFeed'), search=$('enewsSearch');
   if(!feed) return;
   const term=(search?.value||'').toLowerCase();
-  const filtered=enewsArticles.filter(n=>n.title?.toLowerCase().includes(term) || n.description?.toLowerCase().includes(term));
+  let source=showingSaved?getBookmarks():enewsArticles;
+  const filtered=source.filter(n=>n.title?.toLowerCase().includes(term)||n.description?.toLowerCase().includes(term));
   if(!filtered.length){
-    feed.innerHTML='<div class="enews-empty"><div class="ico">🔍</div><div>No articles found</div><div style="margin-top:6px;font-size:10px;">Try a different search term or category</div></div>';
+    const msg=showingSaved?'No saved articles yet. Click ♥ on any article to bookmark it.':'No articles found';
+    feed.innerHTML=`<div class="enews-empty"><div class="ico">${showingSaved?'♥':'🔍'}</div><div>${msg}</div></div>`;
     return;
   }
   const esc=s=>(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -392,12 +422,17 @@ function renderEconomyNews(){
     const src=esc((n.source?.name||'Unknown').substring(0,30));
     const sent=goldSentiment(n.title,n.description);
     const href=safeUrl(n.url||'');
-    return `<article class="enews-card lx-reveal" tabindex="0" role="link" aria-label="${esc(n.title?.substring(0,120)||'News article')}" onclick="window.open('${href}','_blank','noopener noreferrer')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();window.open('${href}','_blank','noopener noreferrer')}">
+    const words=((n.title||'')+(n.description||'')).split(/\s+/).length;
+    const readTime=Math.max(1,Math.ceil(words/200));
+    const bkmkd=isBookmarked(n.url||'');
+    const safeHref=href.replace(/'/g,'%27');
+    const articleJson=esc(JSON.stringify({url:n.url,title:n.title,description:n.description,source:n.source,publishedAt:n.publishedAt,urlToImage:n.urlToImage}));
+    return `<article class="enews-card lx-reveal" tabindex="0" role="link" aria-label="${esc(n.title?.substring(0,120)||'News article')}" onclick="window.open('${safeHref}','_blank','noopener noreferrer')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();window.open('${safeHref}','_blank','noopener noreferrer')}">
       ${img}
-      <div class="enews-card-hdr"><span class="enews-source">${src}</span><span class="enews-sent ${sent.cls}">⬤ ${sent.label}</span></div>
+      <div class="enews-card-hdr"><span class="enews-source">${src}</span><span class="enews-sent ${sent.cls}">⬤ ${sent.label}</span><button class="bkmk-btn${bkmkd?' saved':''}" data-url="${esc(n.url||'')}" title="${bkmkd?'Remove bookmark':'Save article'}" aria-label="${bkmkd?'Remove bookmark':'Save article'}" onclick="event.stopPropagation();toggleBookmark(this.dataset.url,${articleJson})">♥</button></div>
       <div class="enews-title">${esc(n.title||'')}</div>
       <div class="enews-summary">${esc(n.description||'No description available')}</div>
-      <div class="enews-footer"><span>📅 ${isNaN(dt)?'—':timeAgo(dt)}</span><span class="rd">Read full story →</span></div>
+      <div class="enews-footer"><span>📅 ${isNaN(dt)?'—':timeAgo(dt)}</span><span class="enews-read-time">${readTime} min read</span><span class="rd">Read full story →</span></div>
     </article>`;
   }).join('');
   lxObserveCards();

@@ -1112,9 +1112,22 @@ body.light-mode textarea:focus { border-color: #4F46E5 !important; box-shadow: 0
 /* Accent highlights */
 body.light-mode .hl-blue { color: #4F46E5 !important; }
 body.light-mode .hl-red  { color: #DC2626 !important; }
+
+/* ── Skip link ── */
+.skip-link-lnd{position:absolute;top:8px;left:8px;z-index:10000;padding:8px 16px;background:#5E6AD2;color:#fff;font-size:13px;font-weight:600;border-radius:6px;text-decoration:none;transform:translateY(-120%);transition:transform .2s;outline:none}
+.skip-link-lnd:focus{transform:translateY(0)}
+body.light-mode .skip-link-lnd{background:#4F46E5}
+/* ── Page-load curtain ── */
+#lx-curtain{position:fixed;inset:0;z-index:9999;background:#050506;pointer-events:none;opacity:1;transition:opacity 500ms ease}
+body.light-mode #lx-curtain{background:#EBEBF0}
+@keyframes lx-page-leave{from{opacity:1}to{opacity:0}}
+html.page-leaving{animation:lx-page-leave 200ms ease forwards}
+@media(prefers-reduced-motion:reduce){html.page-leaving{animation:none}}
 </style>
 </head>
 <body>
+<div id="lx-curtain"></div>
+<a class="skip-link-lnd" href="#main-content">Skip to main content</a>
 <div class="lx-blob b1" aria-hidden="true"></div>
 <div class="lx-blob b2" aria-hidden="true"></div>
 <div class="lx-blob b3" aria-hidden="true"></div>
@@ -1163,7 +1176,7 @@ body.light-mode .hl-red  { color: #DC2626 !important; }
 </nav>
 
 <!-- ── HERO ── -->
-<section class="hero" aria-label="Hero">
+<section class="hero" aria-label="Hero" id="main-content">
   <div class="orb-red" aria-hidden="true"></div>
   <div class="hero-inner">
     <div class="hero-content lx-reveal-group">
@@ -1450,6 +1463,31 @@ document.addEventListener('click', function(e){
   },{passive:true});
   if(document.readyState!=='loading')addSpots();else document.addEventListener('DOMContentLoaded',addSpots);
   setTimeout(addSpots,1500);setTimeout(addSpots,4000);
+})();
+</script>
+<script>
+(function(){
+  var _ct;try{_ct=localStorage.getItem('fxdesk_theme_v1');}catch(e){}
+  var cur=document.getElementById('lx-curtain');
+  if(cur&&_ct==='light')cur.style.background='#EBEBF0';
+  requestAnimationFrame(function(){requestAnimationFrame(function(){
+    var c=document.getElementById('lx-curtain');
+    if(c){c.style.opacity='0';c.addEventListener('transitionend',function(){c.remove();},{once:true});}
+  });});
+  // Page transitions
+  document.addEventListener('click',function(e){
+    var a=e.target.closest('a[href]');
+    if(!a)return;
+    var href=a.getAttribute('href');
+    if(!href||href.startsWith('#')||href.startsWith('mailto:')||href.startsWith('javascript:'))return;
+    if(a.target==='_blank'||e.ctrlKey||e.metaKey||e.shiftKey||e.altKey)return;
+    try{var url=new URL(href,location.href);if(url.origin!==location.origin)return;if(!/\.html(\?|#|$)/.test(url.pathname)&&url.pathname!=='/'&&!url.pathname.endsWith('/'))return;}catch(err){return;}
+    e.preventDefault();
+    var dest=a.href;
+    if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches){location.href=dest;return;}
+    document.documentElement.classList.add('page-leaving');
+    setTimeout(function(){location.href=dest;},200);
+  });
 })();
 </script>
 </body>

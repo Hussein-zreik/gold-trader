@@ -22,5 +22,44 @@
       "type": "image/svg+xml",
       "purpose": "any maskable"
     }
+  ],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "description": "Open the live trading dashboard",
+      "url": "dashboard.html",
+      "icons": [{ "src": "favicon.svg", "sizes": "96x96" }]
+    },
+    {
+      "name": "New Trade",
+      "short_name": "New Trade",
+      "description": "Log a new trade in the journal",
+      "url": "journal.html",
+      "icons": [{ "src": "favicon.svg", "sizes": "96x96" }]
+    },
+    {
+      "name": "Portfolio",
+      "short_name": "Portfolio",
+      "description": "View open positions and P&L",
+      "url": "portfolio.html",
+      "icons": [{ "src": "favicon.svg", "sizes": "96x96" }]
+    },
+    {
+      "name": "Economic Calendar",
+      "short_name": "Calendar",
+      "description": "View upcoming economic events",
+      "url": "calendar.html",
+      "icons": [{ "src": "favicon.svg", "sizes": "96x96" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "og-image.svg",
+      "sizes": "1200x630",
+      "type": "image/svg+xml",
+      "form_factor": "wide",
+      "label": "Forex Desk Trading Dashboard"
+    }
   ]
 }
