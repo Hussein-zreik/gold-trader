@@ -1,0 +1,849 @@
+================================================================================
+  FOREX DESK — COMPLETE TECHNICAL REFERENCE
+  Project: hussein-zreik/gold-trader
+  Last Updated: 2026-06-20
+================================================================================
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. OVERVIEW
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Name            : Forex Desk
+Short Name      : FxDesk
+Tagline         : Professional Gold & Forex Trading Command Center
+Repository      : hussein-zreik/gold-trader
+Deployed URL    : https://hussein-zreik.github.io/gold-trader/
+Primary Page    : dashboard.html
+Tech Stack      : Vanilla HTML5 / CSS3 / JavaScript (ES6+) — NO build step
+Architecture    : Static multi-page site, served via GitHub Pages
+Offline Support : Progressive Web App (Service Worker + offline.html fallback)
+Data Storage    : localStorage only (no backend, no database)
+External APIs   : Yahoo Finance, FRED, MyFXBook, RSS2JSON, Telegram Bot API,
+                  Cloudflare Workers proxy, TradingView embed
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2. FILE INVENTORY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+HTML PAGES
+----------
+  index.html       Marketing landing page — hero, features, stats, testimonials, CTA
+  landing.html     Alternative/secondary landing page
+  dashboard.html   Main trading dashboard — live prices, signals, news, calendar
+  journal.html     Trade journal — logging, analytics, CSV import/export
+  portfolio.html   Open positions tracker — equity, exposure, risk
+  news.html        Aggregated financial news feed (RSS from multiple sources)
+  calendar.html    Economic calendar — events, forecasts, impact ratings
+  404.html         404 not-found error page
+  500.html         500 server error page
+  offline.html     PWA offline fallback page
+
+SHARED CORE
+-----------
+  shared.css       Global styles, design system, color tokens, animations,
+                   dark/light mode, Linear Modern skin, blob effects
+  shared.js        Shared logic: header/footer inject, theme toggle, search,
+                   mobile nav, toast system, clock, PWA init, spotlight tracking
+
+PWA
+---
+  manifest.json    PWA manifest (name, icons, start_url, display settings)
+  sw.js            Service Worker — cache strategy, offline fallback, update detection
+  favicon.svg      App icon (SVG, referenced by manifest)
+
+GENERATED AT RUNTIME
+--------------------
+  No build output. All files are source files served directly.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3. DESIGN SYSTEM — COLOR TOKENS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Design System   : "Linear / Modern" — glass morphism, animated blobs,
+                  mouse-tracking spotlight, multi-layer shadows, near-black canvas
+
+───────────────────────────────
+3A. DARK MODE (default) — :root
+───────────────────────────────
+  --bg           : #050506     Background base (near-black, neutral)
+  --bg2          : #0a0a0c     Background elevated (cards, panels)
+  --bg3          : #101014     Background deep (input wells, inset sections)
+  --bg4          : #16161c     Background deepest
+  --card         : #0a0a0c     Card surface
+  --border       : #1c1d24     Default border
+  --border-gold  : rgba(94,106,210,0.30)   Accent border (indigo)
+  --text         : #EDEDEF     Foreground (primary text)
+  --muted        : #8A8F98     Foreground muted (secondary text)
+  --muted2       : #A6ACB8     Foreground extra-muted (tertiary text)
+  --blue         : #5E6AD2     Accent / primary action (indigo)
+  --blue2        : #6872D9     Accent bright
+  --accent-blue  : #5E6AD2     Alias for --blue
+  --btn-blue-bg  : #5E6AD2     Button background
+  --gold         : #5E6AD2     Site "gold" (remapped to indigo accent)
+  --gold-dim     : #6872D9
+  --gold-bright  : #8A93E0
+  --green        : #3FB950     Positive / bullish
+  --red          : #F85149     Negative / bearish
+  --orange       : #E0A341     Warning / caution
+  --purple       : #8B5CF6     Alternative accent
+  --badge-blue   : #8A93E0     Badge — blue variant
+  --badge-purple : #B79DF0     Badge — purple variant
+  --badge-red    : #F87171     Badge — red variant
+
+──────────────────────────────────────────────────────────────────────
+3B. LIGHT MODE — body.light-mode  (all values declared with !important)
+──────────────────────────────────────────────────────────────────────
+  --bg           : #EBEBF0     Background base (cool light grey — clearly ≠ white)
+  --bg2          : #FFFFFF     Background elevated (white cards)
+  --bg3          : #F4F4F6     Background deep
+  --bg4          : #EFEFEF     Background deepest
+  --card         : #FFFFFF     Card surface
+  --border       : rgba(0,0,0,0.06)    Default border
+  --border-gold  : rgba(79,70,229,0.25)  Accent border
+  --text         : #09090B     Foreground (primary text)
+  --muted        : #52525B     Foreground muted
+  --muted2       : #71717A     Foreground extra-muted
+  --blue         : #4F46E5     Accent (deeper indigo for light bg)
+  --blue2        : #4338CA     Accent bright
+  --accent-blue  : #4F46E5
+  --btn-blue-bg  : #4F46E5
+  --gold         : #4F46E5
+  --gold-dim     : #6366F1
+  --gold-bright  : #818CF8
+  --green        : #16A34A     Positive / bullish
+  --red          : #DC2626     Negative / bearish
+  --orange       : #D97706     Warning
+  --purple       : #7C3AED
+  --accent-glow  : rgba(79,70,229,0.12)
+  --badge-blue   : #4F46E5
+  --badge-purple : #7C3AED
+  --badge-red    : #DC2626
+
+──────────────────────────
+3C. HTML/BODY BACKGROUNDS
+──────────────────────────
+  Dark  — html : #050506  (explicit, !important)
+          body : transparent (html canvas floors the scroll)
+
+  Light — html : #EBEBF0  (explicit, !important via html.light-mode selector)
+          body : #EBEBF0  (explicit, !important via body.light-mode selector)
+
+  Class toggled by JS: both document.documentElement AND document.body
+  get the 'light-mode' class via applyTheme() in shared.js.
+
+────────────────────────────────────
+3D. SPACING & TYPOGRAPHY TOKENS
+────────────────────────────────────
+  --sp-1 : 4px       --radius-sm : 8px
+  --sp-2 : 8px       --radius-md : 14px
+  --sp-3 : 12px      --radius-lg : 18px
+  --sp-4 : 16px
+  --sp-5 : 24px
+  --sp-6 : 32px
+
+  --sans    : 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif
+  --mono    : 'Inter', monospace
+  --display : Syne, 'Plus Jakarta Sans', sans-serif
+  --heading : 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif
+
+────────────────────────────────────
+3E. ANIMATED BACKGROUND BLOBS
+────────────────────────────────────
+  4 fixed-position radial gradient blobs, z-index: -1, pointer-events: none
+  ALL blobs use a single indigo hue (no purple/blue/amber tints):
+
+  Dark mode:
+    .lx-blob.b1  top:-220px  1000x1000px  rgba(94,106,210, 0.15)  blur:55px  anim: lxf1 9s
+    .lx-blob.b2  top:24%     650x800px    rgba(94,106,210, 0.10)  blur:45px  anim: lxf2 11s
+    .lx-blob.b3  top:14%     560x720px    rgba(94,106,210, 0.08)  blur:40px  anim: lxf3 10s
+    .lx-blob.b4  bottom:     760x520px    rgba(94,106,210, 0.07)  blur:50px  anim: lxpulse 8s
+
+  Light mode (all via body.light-mode):
+    .lx-blob.b1 → rgba(79,70,229, 0.05)
+    .lx-blob.b2 → rgba(79,70,229, 0.04)
+    .lx-blob.b3 → rgba(79,70,229, 0.04)
+    .lx-blob.b4 → rgba(79,70,229, 0.03)
+
+────────────────────────────────────
+3F. MOUSE-TRACKING SPOTLIGHT (.lx-spot)
+────────────────────────────────────
+  Position: absolute inset:0, z-index: -1, inside each .card / .cal-card / .enews-card
+  Dark:  radial-gradient(200px circle at var(--mx) var(--my), rgba(94,106,210,0.07), transparent 60%)
+  Light: radial-gradient(200px circle at var(--mx) var(--my), rgba(79,70,229,0.06), transparent 60%)
+  Visible only on hover (opacity: 0 → 1, transition 0.3s)
+  --mx / --my CSS vars updated via rAF-throttled mousemove listener in shared.js
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4. FONTS & ICONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Google Fonts (loaded with preconnect):
+  Plus Jakarta Sans — weights 400, 500, 600, 700, 800  → body, headings
+  Inter             — weights 300, 400, 500, 600        → body text, mono
+  Syne              — weights 700, 800, 900             → display/hero titles
+
+Icons:
+  Unicode emoji only (🌙 ☀️ ✓ ✕ ℹ 📊 📓 💼 📰 📅 🔍 ☰, etc.)
+  No icon font library (Font Awesome, Material Icons, etc. — NOT used)
+  SVG icons only in manifest.json (base64 encoded bar-chart graphics)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5. EXTERNAL APIS & DATA SOURCES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+─────────────────────────────────────────────────────────────────
+5A. LIVE PRICE DATA — Yahoo Finance
+─────────────────────────────────────────────────────────────────
+  Endpoint : https://query1.finance.yahoo.com/v8/finance/chart/{symbol}
+  Params   : interval=1d&range=5d&includePrePost=true
+  Auth     : None (public API, rate-limited)
+  Returns  : open, close, high, low, volume, previousClose
+  Via Proxy: Cloudflare Workers (primary) → CodeTabs (fallback) — CORS bypass
+  Used By  : Dashboard ticker strip, hero price cards, news page
+
+  Symbols tracked:
+    XAU=F     — Gold (spot)
+    XAG=F     — Silver (spot)
+    EURUSD=X  — Euro / US Dollar
+    GBPUSD=X  — British Pound / US Dollar
+    USDJPY=X  — US Dollar / Japanese Yen
+    USDCHF=X  — US Dollar / Swiss Franc
+    AUDUSD=X  — Australian Dollar / US Dollar
+    USDCAD=X  — US Dollar / Canadian Dollar
+    DX-Y.NYB  — US Dollar Index (DXY)
+    ^VIX      — CBOE Volatility Index
+    BTC-USD   — Bitcoin / US Dollar
+    GC=F      — Gold Futures (COMEX)
+    CL=F      — Crude Oil WTI Futures
+    ^GSPC     — S&P 500 Index
+
+─────────────────────────────────────────────────────────────────
+5B. CORS PROXY — Cloudflare Workers
+─────────────────────────────────────────────────────────────────
+  Primary  : https://forex-desk-proxy.zreik111.workers.dev/?url={encodedURL}
+  Fallback : https://api.codetabs.com/v1/proxy/?quest={url}
+  Purpose  : Bypass browser CORS restrictions for Yahoo Finance, Forex Factory,
+             BabyPips scraping, CBOE data scraping
+
+─────────────────────────────────────────────────────────────────
+5C. NEWS AGGREGATION — RSS via RSS2JSON
+─────────────────────────────────────────────────────────────────
+  RSS-to-JSON converter: https://api.rss2json.com/v1/api.json?rss_url={encoded}&count=5
+  Auth     : None (public tier, rate-limited)
+  Used By  : news.html, dashboard.html (gold news widget)
+
+  RSS Feeds:
+    Kitco Gold News    : https://www.kitco.com/rss/kitco-news.rss
+    FXStreet Gold      : https://www.fxstreet.com/markets/commodities/metals/gold/rss
+    Investing.com Gold : https://www.investing.com/rss/commodities_Gold.rss
+    DailyFX Gold       : https://www.dailyfx.com/feeds/gold
+
+─────────────────────────────────────────────────────────────────
+5D. ECONOMIC CALENDAR — MyFXBook
+─────────────────────────────────────────────────────────────────
+  Endpoint : https://www.myfxbook.com/api/get-economic-calendar.json
+  Params   : start={YYYY-MM-DD}&end={YYYY-MM-DD}
+  Auth     : None (public API)
+  Returns  : event name, forecast, actual, previous, impact (low/medium/high), country
+  Used By  : calendar.html
+
+─────────────────────────────────────────────────────────────────
+5E. ECONOMIC CALENDAR — BabyPips (HTML scrape)
+─────────────────────────────────────────────────────────────────
+  URL      : https://www.babypips.com/economic-calendar?week={weekStr}
+  Fetched via proxy (CORS)
+  Returns  : HTML page — scrape for event rows
+  Fallback : Forex Factory XML (see 5F)
+  Used By  : calendar.html
+
+─────────────────────────────────────────────────────────────────
+5F. ECONOMIC CALENDAR — Forex Factory XML
+─────────────────────────────────────────────────────────────────
+  Endpoint : https://nfs.faireconomy.media/ff_calendar_thisweek.xml
+  Format   : RSS/XML
+  Auth     : None
+  Used By  : calendar.html (fallback when BabyPips/MyFXBook unavailable)
+
+─────────────────────────────────────────────────────────────────
+5G. FEAR & GREED INDEX — alternative.me
+─────────────────────────────────────────────────────────────────
+  Endpoint : https://api.alternative.me/fng/?limit=35
+  Auth     : None (public API)
+  Returns  : Daily score (0–100), classification, timestamp (35 days history)
+  Used By  : Dashboard (Fear & Greed gauge widget)
+
+─────────────────────────────────────────────────────────────────
+5H. REAL YIELD / INFLATION — FRED (Federal Reserve)
+─────────────────────────────────────────────────────────────────
+  Endpoint : https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFII10&vintage_date={date}
+  Series   : DFII10 — 10-Year Treasury Inflation-Indexed Security yield
+  Auth     : None (public)
+  Returns  : CSV with date,value columns
+  Used By  : Dashboard (Real Yield & Macro Regime panel)
+
+─────────────────────────────────────────────────────────────────
+5I. OPTIONS SENTIMENT — CBOE
+─────────────────────────────────────────────────────────────────
+  URL      : https://www.cboe.com/us/options/market_statistics/daily/
+  Method   : HTML scrape via CodeTabs proxy
+  Returns  : Put/Call ratio data scraped from daily stats table
+  Used By  : Dashboard (Options Sentiment widget)
+
+─────────────────────────────────────────────────────────────────
+5J. CHARTING — TradingView Widget Embed
+─────────────────────────────────────────────────────────────────
+  URL Template:
+    https://www.tradingview.com/widgetembed/?frameElementId=tvChart
+    &symbol={sym}&interval={interval}&theme=dark&style=1
+    &studies=BB@tv-basicstudies,RSI@tv-basicstudies,MACD@tv-basicstudies
+    &timezone=exchange&locale=en
+  Auth     : None (public embed)
+  Returns  : Interactive iframe chart
+  Symbols  : XAUUSD, EURUSD, GBPUSD, USDJPY, DXY, BTCUSD, USOIL, SPX500USD
+  Intervals: 1, 5, 15, 60, 240, D, W
+  Used By  : Dashboard (main chart panel, switchable symbol + timeframe)
+
+─────────────────────────────────────────────────────────────────
+5K. PRICE ALERTS — Telegram Bot API
+─────────────────────────────────────────────────────────────────
+  Endpoint : https://api.telegram.org/bot{TOKEN}/sendMessage
+  Method   : POST
+  Body     : { chat_id, text, parse_mode: 'HTML' }
+  Auth     : User-supplied Bot Token + Chat ID (stored in localStorage)
+  Returns  : Telegram delivery confirmation
+  Used By  : Dashboard (Alerts panel — notify when price level is hit)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6. PAGE-BY-PAGE BREAKDOWN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+─────────────────────────────────────────────────────────────────
+6A. INDEX.HTML — Marketing Landing Page
+─────────────────────────────────────────────────────────────────
+  Title    : Forex Desk — Professional Gold & Forex Trading Command Center
+  Purpose  : Convert visitors to users; links to dashboard.html
+  Sections :
+    1. Header / Nav       (logo, nav links, dark/light toggle, CTA button)
+    2. Hero               (animated headline, sub-copy, 2 CTA buttons, animated
+                           dashboard preview card with live-updating mini prices)
+    3. Ticker Strip       (horizontally scrolling live prices bar)
+    4. Features Grid      (3-column: Live Prices, Trade Journal, Smart Money,
+                           Economic Calendar, Technical Analysis, Forex News)
+    5. How It Works       (3-step: 1 Dashboard → 2 Analyze → 3 Execute)
+    6. Stats Band         (4 metrics: 20+ Pairs, Real-time Data, 40k+ News Sources,
+                           100+ Calendar Events/week)
+    7. Testimonials       (3-column cards, fictional trader quotes)
+    8. CTA Band           (final conversion section — "Start Trading Smarter")
+    9. Footer             (brand, copyright, nav links)
+  Animated background blobs: 4 blobs (b1–b4), indigo-only
+  Mouse spotlight: yes (on feature cards)
+  Uses shared.js: NO (standalone inline JS)
+  Uses shared.css: NO (standalone inline styles)
+
+─────────────────────────────────────────────────────────────────
+6B. LANDING.HTML — Alternative Landing Page
+─────────────────────────────────────────────────────────────────
+  Title    : Forex Desk — Live Gold & Forex Rates
+  Purpose  : Secondary entry point / SEO variant
+  Sections :
+    1. Header / Nav       (same as index)
+    2. Hero               (alternate headline, live price ticker)
+    3. Dashboard Preview  (animated card showing EUR/USD, XAU/USD, BTC prices
+                           with bias tags: BULLISH / BEARISH / NEUTRAL)
+    4. Features           (cards: Live Prices, Smart Money Concepts, Trade Journal)
+    5. Ticker Strip       (scrolling live prices, fades left/right to match bg)
+    6. Footer
+  Uses shared.js: NO (standalone)
+  Uses shared.css: NO (standalone)
+
+─────────────────────────────────────────────────────────────────
+6C. DASHBOARD.HTML — Main Trading Dashboard
+─────────────────────────────────────────────────────────────────
+  Title    : Forex Desk — Dashboard
+  Purpose  : Live trading command center
+  Uses     : Inline <style id="lx-skin"> for design overrides
+             Own embedded <script> for all logic (no shared.js for page logic,
+             but injects header/footer via shared.js inject())
+
+  WIDGETS & PANELS (top to bottom, left to right):
+
+  [HEADER]
+    • Sticky header with logo, nav links (Dashboard, Journal, Portfolio, News,
+      Calendar), search bar, theme toggle (🌙/☀️), UTC clock (live)
+
+  [TICKER STRIP]
+    • Horizontally scrolling bar — 20+ symbols with live bid price + % change
+    • Color-coded: green (up), red (down), muted (neutral)
+
+  [MARKET SESSIONS BAR]
+    • 4 session indicators: SYDNEY, TOKYO, LONDON, NEW YORK
+    • Shows OPEN (green dot) or CLOSED (grey dot) based on current UTC time
+
+  [MAIN GRID — Top Row]
+    1. EUR/USD HERO CARD
+       Label   : "EUR / USD"
+       Shows   : Live price, 24h change, 24h % change, bid/ask/spread,
+                 24h high, 24h low, session open
+
+    2. XAU/USD HERO CARD (Gold)
+       Label   : "XAU / USD  GOLD"
+       Shows   : Live price, 24h change + %, bid/ask/spread, high/low/open
+                 5-bar mini sparkline chart
+
+    3. DXY CARD
+       Label   : "DXY  US DOLLAR INDEX"
+       Shows   : Index level, 24h change + %
+
+  [COMPOSITE BIAS CARD]
+    Label   : "COMPOSITE BIAS"
+    Shows   :
+      • Bias needle gauge (BEARISH ←→ BULLISH, animated CSS slider)
+      • Verdict text (STRONG BULLISH / BULLISH / NEUTRAL / BEARISH / STRONG BEARISH)
+      • Sub-label (score e.g. "+2 confluence")
+    Calculated from: multi-timeframe RSI + MA cross + price position signals
+
+  [MULTI-TIMEFRAME CONFLUENCE MATRIX]
+    Label   : "MULTI-TIMEFRAME CONFLUENCE"
+    Layout  : 4 columns × N rows
+    Timeframes: D1 (Daily), H4 (4-Hour), H1 (1-Hour), M15 (15-Min)
+    Each cell shows: ↑ BUY (green) / ↓ SELL (red) / → NEUTRAL (grey)
+    Signals computed client-side from Yahoo Finance OHLC data
+
+  [SMC PANEL]
+    Label   : "SMART MONEY CONCEPTS"
+    Shows   :
+      • Key support / resistance levels (price values)
+      • Order blocks (OB HIGH / OB LOW levels)
+      • Fair Value Gaps (FVG)
+      • Market structure (BOS / CHOCH labels)
+
+  [MACRO REGIME PANEL]
+    Label   : "MACRO REGIME"
+    Shows   :
+      • Risk Regime: RISK-ON or RISK-OFF (with color indicator)
+      • Business Cycle: EXPANSION / CONTRACTION / RECESSION
+      • Recession probability bar (0–100%)
+      • Sub-indicators: VIX level, real yield, DXY trend
+
+  [REAL YIELD & INFLATION]
+    Label   : "REAL YIELD & INFLATION"
+    Shows   :
+      • 10Y TIPS real yield (from FRED DFII10)
+      • Breakeven inflation rate
+      • Trend direction indicator
+
+  [FEAR & GREED INDEX]
+    Label   : "FEAR & GREED INDEX"
+    Source  : alternative.me/fng
+    Shows   :
+      • Gauge (0 = Extreme Fear, 100 = Extreme Greed)
+      • Score + classification label
+      • 35-day history sparkline
+
+  [OPTIONS SENTIMENT]
+    Label   : "OPTIONS SENTIMENT"
+    Source  : CBOE daily stats (HTML scrape)
+    Shows   :
+      • Put/Call ratio (PCR)
+      • Delta positioning
+      • Interpretation: BULLISH / NEUTRAL / BEARISH
+
+  [ECONOMIC SURPRISES INDEX]
+    Label   : "ECO SURPRISES INDEX"
+    Shows   :
+      • Per-currency beat/miss tracker (USD, EUR, GBP, JPY, AUD, CAD, CHF, NZD)
+      • Each cell: number of beats vs misses, running surprise score
+      • Manually updated by user via +/- buttons per currency
+
+  [TRADINGVIEW CHART]
+    Label   : "CHART"
+    Shows   :
+      • Full interactive TradingView candlestick chart (iframe embed)
+      • Symbol switcher: XAU/USD, EUR/USD, GBP/USD, USD/JPY, DXY, BTC/USD,
+                         US OIL, S&P 500
+      • Interval switcher: 1m, 5m, 15m, 1h, 4h, D, W
+      • Indicators: Bollinger Bands, RSI, MACD (pre-loaded)
+      • Theme: matches page dark/light mode
+      • Last selected symbol + interval persisted to localStorage
+
+  [GOLD NEWS WIDGET]
+    Label   : "LATEST GOLD NEWS"
+    Source  : RSS2JSON ← Kitco, FXStreet, Investing.com, DailyFX
+    Shows   :
+      • 5 latest articles: headline, source logo, relative timestamp, link
+      • Auto-refreshes every 10 minutes
+      • Cached in localStorage to reduce API calls
+
+  [ECONOMIC CALENDAR WIDGET]
+    Label   : "ECONOMIC CALENDAR"
+    Source  : MyFXBook, BabyPips, Forex Factory (waterfall)
+    Shows   :
+      • Upcoming 7-day events: date, time, currency, event name,
+        forecast, previous, actual, impact rating (HIGH/MED/LOW)
+      • Impact color: red (high), orange (medium), yellow (low)
+
+  [PRICE ALERTS PANEL]
+    Label   : "PRICE ALERTS"
+    Shows   :
+      • User-configured alerts: symbol, direction (ABOVE/BELOW), target price
+      • Status badge: ACTIVE (blue) / HIT (green)
+      • Delete button per alert
+      • Telegram notification: user enters Bot Token + Chat ID once (saved to
+        localStorage), gets Telegram message when alert fires
+      • Add alert form inline in panel
+
+─────────────────────────────────────────────────────────────────
+6D. JOURNAL.HTML — Trade Journal
+─────────────────────────────────────────────────────────────────
+  Title    : Trade Journal
+  Purpose  : Log and analyze trades locally
+  Uses     : shared.js, shared.css
+
+  WIDGETS:
+  [STATS BAR]   — Total Trades | Win Rate % | Total P&L ($) | Avg R:R
+
+  [NEW ENTRY FORM]
+    Fields   : Pair (text), Direction (BUY/SELL), Outcome (WIN/LOSS/OPEN),
+               P&L ($), Entry Price, Exit Price, Risk:Reward Ratio,
+               Notes (textarea), Mistake Tags (checkboxes: fomo, revenge,
+               no-plan, moved-sl, news-trade, over-leveraged, etc.)
+
+  [ANALYTICS SECTION] (toggle on/off)
+    Panels   :
+      • Summary Stats: Avg Win, Avg Loss, Profit Factor, Best Pair
+      • Equity Curve: bar chart of cumulative P&L over time
+      • Mistake Breakdown: tag frequency + total P&L cost per tag
+      • Monthly Returns: bar chart by calendar month
+
+  [FILTER BAR]
+    Filters  : ALL, WINS, LOSSES, OPEN, BUYS, SELLS + Month dropdown
+
+  [ENTRY LIST]
+    Shows    : Each trade as a card — pair, direction, outcome badge,
+               P&L, entry/exit, R:R, date, notes, mistake tags, delete button
+
+  [CSV IMPORT/EXPORT]
+    Export   : Downloads all entries as .csv
+    Import   : Parses MT4/MT5 statement CSV files and maps columns to entries
+
+─────────────────────────────────────────────────────────────────
+6E. PORTFOLIO.HTML — Open Positions Tracker
+─────────────────────────────────────────────────────────────────
+  Title    : Portfolio
+  Purpose  : Track live open positions, equity, exposure, risk
+  Uses     : shared.js, shared.css
+
+  WIDGETS:
+  [ACCOUNT STATS]  — Balance, Equity, Margin Used, Free Margin, Margin Level %
+
+  [ADD POSITION FORM]
+    Fields   : Symbol, Direction (BUY/SELL), Entry Price, Lot Size,
+               Stop Loss, Take Profit
+
+  [OPEN POSITIONS TABLE]
+    Columns  : Symbol, Dir, Entry, Current Price, P&L, Pips, Lots,
+               Stop Loss, Take Profit, Age, Delete button
+    Live P&L updates from Yahoo Finance price feed
+
+  [EXPOSURE CHART]
+    Shows    : Current open exposure by currency pair (bar chart)
+
+─────────────────────────────────────────────────────────────────
+6F. NEWS.HTML — Financial News Feed
+─────────────────────────────────────────────────────────────────
+  Title    : Economy News
+  Purpose  : Aggregated news from 40k+ sources via RSS
+  Uses     : shared.js, shared.css
+
+  WIDGETS:
+  [FILTER BAR]
+    Filters  : Category dropdown (Gold, Forex, Commodities, Crypto, Macro, etc.)
+               + Refresh button
+
+  [NEWS GRID]
+    Each card shows: Article image, source name, publication date (relative),
+                     headline (linked), short description snippet
+    Pagination or infinite scroll for more articles
+
+  [ERROR/RETRY STATE]
+    If all RSS sources fail: shows error banner with retry button
+
+─────────────────────────────────────────────────────────────────
+6G. CALENDAR.HTML — Economic Calendar
+─────────────────────────────────────────────────────────────────
+  Title    : Economic Calendar
+  Purpose  : Upcoming macro events with impact ratings
+  Uses     : shared.js, shared.css
+  Sources  : MyFXBook (primary) → BabyPips (fallback) → Forex Factory (fallback)
+
+  WIDGETS:
+  [FILTER BAR]
+    Filters  : Country (ALL, USD, EUR, GBP, JPY, AUD, CAD, CHF, NZD)
+               Impact (ALL, HIGH, MEDIUM, LOW)
+               View mode buttons
+
+  [CALENDAR TABLE]
+    Columns  : Date/Time, Currency, Impact (colored dot), Event Name,
+               Previous, Forecast, Actual
+    Color coding:
+      🔴 RED    — High impact events
+      🟠 ORANGE — Medium impact events
+      🟡 YELLOW — Low impact events
+    Special   : "Actual" cell turns green (beat) or red (miss) vs forecast
+
+  [STATUS BAR]
+    Shows     : Last update time, total events count, active filters summary
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7. SHARED COMPONENTS (shared.js + shared.css)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+shared.js — FUNCTIONS
+────────────────────
+  inject()            Injects site header, footer, and 4 blob divs (.lx-blob b1–b4)
+                      into the DOM. Called once on DOMContentLoaded for all app pages.
+
+  initTheme()         Reads localStorage('fxdesk_theme_v1'); calls applyTheme().
+                      Default: dark if no preference saved.
+
+  applyTheme(dark)    Toggles 'light-mode' class on BOTH document.body AND
+                      document.documentElement (html element). Updates theme button
+                      icon (🌙 = dark, ☀️ = light). Saves preference to localStorage.
+
+  toggleTheme()       Public API — called by header theme button click handler.
+
+  initSearch()        Attaches '/' keyboard shortcut for search focus.
+                      Populates SEARCH_INDEX with page names and labels.
+                      Shows dropdown results on input.
+
+  setupSearch(inp,res) Handles arrow key navigation + Enter to navigate in results.
+
+  toggleMobile()      Opens/closes mobile nav slide-down panel.
+  toggleMobileSearch() Shows/hides mobile search overlay.
+
+  initToast()         Creates the toast stack container (#fxToastStack) with
+                      aria-live="polite", max 3 visible toasts.
+
+  toast(msg, type, duration)  Shows a dismissible toast notification.
+                              type: 'success' | 'error' | 'info'
+                              duration: default 4000ms
+
+  tickClock()         Updates #hdrTime element with live UTC time every 1s.
+
+  initPWA()           Registers sw.js service worker. Adds <link rel="manifest">,
+                      <link rel="icon">, <link rel="apple-touch-icon"> to <head>.
+                      Listens for 'updatefound' event; shows toast when new version
+                      of the app is ready.
+
+  buildHeader()       Returns HTML string for the full site header (detects current
+                      page from URL to set the active nav link).
+
+  buildFooter()       Returns HTML string for site footer.
+
+  Spotlight tracking:
+    addSpots()        Injects a .lx-spot div as the first child of every
+                      .card, .cal-card, .enews-card element.
+    mousemove listener Updates --mx / --my CSS custom properties on each card
+                      to position the mouse-tracking radial gradient.
+                      Throttled with requestAnimationFrame to prevent scroll lag.
+                      Uses e.target at event time (no layout read in event handler).
+
+shared.css — KEY CLASSES
+────────────────────────
+  Layout & Structure:
+    .site-header          Sticky header, backdrop-blur, glass effect
+    .site-nav             Navigation link container
+    .nav-link             Nav item (with .active state + indigo underline indicator)
+    .nav-cta              Primary CTA button in nav (indigo bg)
+    .hdr-search           Desktop search bar + dropdown results
+    .hdr-search-kbd       "/" keyboard hint badge
+    .mobile-menu-btn      Hamburger/close button
+    .mobile-nav           Slide-down mobile navigation panel
+    .site-footer          Bottom footer with links
+
+  Card System:
+    .card                 Glass morphism card — gradient bg, thin border, 16px radius,
+                          multi-layer box-shadow, overflow:hidden, hover lift
+    .card-header          Card top section with bottom border
+    .card-title           Card heading text
+    .cal-card             Calendar-page card variant
+    .enews-card           News-page card variant
+
+  Badges:
+    .badge                Base pill badge
+    .b-blue               Indigo text + bg
+    .b-green              Green text + bg
+    .b-red                Red text + bg
+    .b-purple             Purple text + bg
+
+  Form:
+    .field-input          Styled form input (dark: #0F0F12 bg; light: white bg)
+    .btn-primary          Primary action button (indigo)
+    .btn-secondary        Secondary/ghost button
+
+  Feedback:
+    .empty-state          Centered empty message with icon and sub-text
+    .skel / .skel-line / .skel-price / .skel-block   Shimmer loading skeletons
+    .price-flash-up       Brief green flash on price increase
+    .price-flash-dn       Brief red flash on price decrease
+    .error-retry-banner   Error message strip with retry button
+    .fx-toast             Toast notification (success=green, error=red, info=blue)
+
+  Linear Skin Animations:
+    .lx-blob.b1/b2/b3/b4  Animated radial gradient blobs (background ambience)
+    .lx-spot               Mouse-tracking spotlight inside cards
+    @keyframes lxf1        Blob 1 — vertical float, 9s
+    @keyframes lxf2        Blob 2 — float + 1° rotation, 11s
+    @keyframes lxf3        Blob 3 — float + -1° rotation, 10s
+    @keyframes lxpulse     Blob 4 — opacity pulse + scale, 8s
+
+  Utilities:
+    .u-mono                font-family: var(--mono)
+    .u-heading             font-family: var(--heading)
+    .u-muted               color: var(--muted)
+    .u-muted2              color: var(--muted2)
+    .u-gold / .u-green / .u-red / .u-blue   Accent text colors
+    .u-bold                font-weight: 600
+    .u-upper               text-transform: uppercase; letter-spacing: .08em
+    .u-flex                display: flex
+    .u-gap-2/4/6/8         gap shorthand classes
+    .u-align-c             align-items: center
+    .u-wrap                flex-wrap: wrap
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+8. LOCAL STORAGE KEYS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Key                        Type        Purpose
+  ─────────────────────────────────────────────────────────────────────────────
+  fxdesk_theme_v1            string      'dark' | 'light' — user theme pref
+  fxdesk_journal_v1          JSON array  Trade journal entries
+                                           { id, pair, dir, outcome, pnl,
+                                             entry, exit, rr, note, mistakes[],
+                                             date }
+  fxdesk_alerts              JSON array  Price alerts
+                                           { id, sym, dir, price, active,
+                                             created, triggered }
+  fxdesk_telegram_v1         JSON obj    Telegram bot config { token, chatId }
+  fxdesk_eco_surprises_v1    JSON array  Economic surprise tracker entries
+                                           { cur, event, level, ts }
+  fxdesk_chart_sym           string      Last selected TradingView symbol
+  fxdesk_chart_intv          string      Last selected TradingView interval
+  economy-news (cache key)   JSON obj    { ts, category, articles[] } — news cache
+  fxdesk_calendar_cache_{c}  JSON obj    { ts, data[] } — calendar cache per country
+  fxdesk_page                string      Last visited page (navigation memory)
+  CORR_CACHE_KEY             JSON obj    { ts, vals } — correlation matrix cache
+
+  Storage Quota: ~5–10 MB (browser localStorage limit)
+  No backend sync. All data is local to the browser/device.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+9. PWA (PROGRESSIVE WEB APP) DETAILS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+manifest.json:
+  Name            : Forex Desk
+  Short Name      : FxDesk
+  Description     : Professional gold & forex trading command center —
+                    live prices, journal, portfolio, news.
+  Start URL       : dashboard.html
+  Scope           : /
+  Display         : standalone
+  Orientation     : any
+  Background color: #04080F (dark near-black)
+  Theme color     : #04080F
+  Categories      : finance, productivity
+  Icons           : 192×192 and 512×512 (SVG, base64-encoded bar chart graphic)
+
+sw.js — Service Worker:
+  Cache Name      : fxdesk-v3
+  App Shell Files :
+    /, /index.html, /dashboard.html, /journal.html, /portfolio.html,
+    /news.html, /calendar.html, /shared.css, /shared.js,
+    /manifest.json, /favicon.svg, /offline.html
+
+  Cache Strategy:
+    Install       : Pre-cache all app shell files; skipWaiting()
+    Activate      : Delete old cache versions; clients.claim()
+    Fetch         :
+      - Only handles same-origin GET requests
+      - Cache-first: return cached if available, fetch network in background
+      - Navigation failures → serve /offline.html
+      - External requests pass through unhandled
+
+  Update Detection:
+    Listens to 'updatefound' on the new service worker
+    Shows a toast notification ("New version available — reload to update")
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+10. LOGO / BRAND ELEMENT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  The site logo is a CSS-animated element, NOT an image file:
+  .logo-bars  — container for 5 vertical bars (.logo-bar × 5)
+  Each bar has a different breathing animation (bar-breathe-1 through bar-breathe-5)
+  creating a live "equalizer / chart" animation effect.
+  Colors: bar heights and opacities vary; bars glow in indigo (#5E6AD2 dark mode).
+
+  Text logo: "FOREX DESK" (in --heading font, gradient or solid based on mode)
+  Sub-label: "PRO" tag or variant label beside the logo
+
+  IMPORTANT: The logo bar rules are protected from global color remapping
+  (they use dedicated variables, not the generic color palette).
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+11. DEPLOYMENT & HOSTING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Platform    : GitHub Pages (static hosting, no server-side code)
+  URL         : https://hussein-zreik.github.io/gold-trader/
+  Repository  : https://github.com/hussein-zreik/gold-trader
+  Branch      : main (production)
+  CORS proxy  : Cloudflare Workers (separate Worker deployment)
+                URL: https://forex-desk-proxy.zreik111.workers.dev/
+
+  Build step  : None. Files are served as-is. No npm, webpack, or bundler.
+  Deploy      : git push to origin main → GitHub Pages auto-publishes
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+12. KNOWN LIMITATIONS / NOTES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  • Yahoo Finance API is unofficial/undocumented. It may break or rate-limit
+    without notice. The Cloudflare Worker proxy provides a buffer.
+
+  • RSS2JSON free tier is rate-limited (~60 requests/hour). Cache is used to
+    mitigate this (news articles are cached per session).
+
+  • All trade journal + portfolio data lives in localStorage only —
+    no cloud backup. Clearing browser data loses all entries.
+
+  • Telegram alerts require the user to manually create a Telegram Bot via
+    @BotFather and supply the token + chat ID in the dashboard alerts panel.
+
+  • index.html and landing.html do NOT use shared.js or shared.css —
+    they are fully standalone with all styles and scripts inline. The theme
+    toggle on those pages does NOT persist between sessions (no localStorage
+    integration on those two standalone pages).
+
+  • The TradingView chart is a sandboxed iframe embed. It does not
+    communicate with the surrounding page beyond symbol/interval URL params.
+
+  • BabyPips and CBOE data are HTML scrapes — they are fragile and may
+    break if those sites change their markup.
+
+================================================================================
+  END OF REFERENCE
+================================================================================
