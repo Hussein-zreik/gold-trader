@@ -1105,7 +1105,7 @@ a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid 
 body.light-mode {
   /* Linear / Modern — Light Mode tokens. !important so these beat the dark
      :root block above, which also declares these vars with !important. */
-  --bg:         #FAF8F6!important;  /* background-base  */
+  --bg:         #EBEBF0!important;  /* background-base  */
   --bg2:        #FFFFFF!important;  /* background-elevated */
   --bg3:        #F4F4F6!important;  /* background-deep  */
   --bg4:        #EFEFEF!important;
@@ -1133,8 +1133,8 @@ body.light-mode {
 }
 
 /* Light canvas — uses html.light-mode toggled by applyTheme() */
-html.light-mode { background: #FAF8F6 !important; }
-body.light-mode  { background: #FAF8F6 !important; }
+html.light-mode { background: #EBEBF0 !important; }
+body.light-mode  { background: #EBEBF0 !important; }
 
 /* Ambient mists — light mode (very low opacity, warm tones) */
 body.light-mode .lx-blob.b1 { background: radial-gradient(circle, rgba(79,70,229,.05), transparent 70%) !important; filter: blur(55px) !important; }
